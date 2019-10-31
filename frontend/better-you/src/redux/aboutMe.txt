@@ -1,0 +1,18 @@
+This folder will contain the whole redux architecture:
+
+/actions
+types.ts - the type of the actions (consts and interfaces)
+actions.ts - the actions (functions) that will be dispatched when an event occurs
+           - they will be type-checked with the prev types
+
+/reducers - contains the reducers for each action
+          - for better clarity we can have the handlers for each reducer in another file
+
+/sagas - folder for saga middleware
+       - a file with sagas and a file with listeners (will have an instance of HttpService)
+       - not part of redux, but we need a middleware between this and back-end
+
+/store
+store.ts - the global state of the app (preferably completed setted from start)
+configure-store.ts - file to configure the store
+                   - it is setted the middleware, the reducer and built the store

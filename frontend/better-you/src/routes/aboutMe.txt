@@ -1,0 +1,2 @@
+This folder containes the routes of the app.
+There is Route component or we can have a custom component for protected routes.

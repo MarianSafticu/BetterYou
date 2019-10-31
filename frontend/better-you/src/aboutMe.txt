@@ -1,0 +1,4 @@
+index.tsx - should be the entry point of the app
+          - it will render the App component to "root" HTML element and initiliaze the store (provider)
+
+App.tsx - it will render the routes (wrapped by Router) and other static components

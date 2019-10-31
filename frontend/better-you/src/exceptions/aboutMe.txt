@@ -1,0 +1,2 @@
+This folder contains custom exceptions.
+Usually used for forms validations (to mark red text fields etc.)

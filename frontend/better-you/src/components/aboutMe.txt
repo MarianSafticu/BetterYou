@@ -1,0 +1,2 @@
+This folder contains all the components of the app.
+It could be more organized but for start we can put them all here.
