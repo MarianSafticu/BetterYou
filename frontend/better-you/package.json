@@ -7,9 +7,16 @@
     "@types/node": "12.12.3",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
+    "@types/react-redux": "^7.1.5",
+    "@types/react-router-dom": "^5.1.2",
+    "@types/redux-logger": "^3.0.7",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
     "typescript": "3.6.4"
   },
   "scripts": {
@@ -32,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "redux-devtools": "^3.5.0"
   }
 }
