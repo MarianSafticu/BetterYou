@@ -1,5 +1,7 @@
 package Model;
 
+import utils.AppUtils;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -21,7 +23,10 @@ public class User implements HasId<Long> {
     @Column(name="BirthDate")
     @Temporal(TemporalType.DATE)
     private Date birthDate;
-
+    @Column(name="isVerified")
+    private boolean isVerified;
+    @Column(name="confirmCode")
+    private String confirmCode;
     // ??? imagine profil ???
     // private ??? imagine_profil
 
@@ -34,6 +39,9 @@ public class User implements HasId<Long> {
         this.password = password;
         this.email = email;
         this.birthDate = birthDate;
+        this.isVerified = false;
+
+        this.generateConfirmCode();
     }
 
     @Override
@@ -96,5 +104,21 @@ public class User implements HasId<Long> {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public String getConfirmCode() {
+        return confirmCode;
+    }
+
+    public void generateConfirmCode() {
+        this.confirmCode = AppUtils.generateCode();
     }
 }
