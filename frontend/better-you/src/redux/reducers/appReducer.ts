@@ -8,7 +8,7 @@ export const initialState: AppState = {
 const appReducer = (state = initialState, action: AppActionType) => {
     switch(action.type) {
         case TEST_TYPE:
-            doReduxTestHandler(state, action.payload);
+            return doReduxTestHandler(state, action.payload);
         default:
             return state;
     }
