@@ -39,13 +39,13 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public boolean register(@RequestBody RegisterRequest registerRequest ) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest ) {
         try{
-            boolean ok=service.register(registerRequest.getUsername(),registerRequest.getProfile_name(),registerRequest.getPassword(),registerRequest.getEmail(),registerRequest.getBirthDate());
-            return ok;
+            String token=service.register(registerRequest.getUsername(),registerRequest.getProfile_name(),registerRequest.getPassword(),registerRequest.getEmail(),registerRequest.getBirthDate());
+            return new ResponseEntity<String>(token, HttpStatus.OK);
         }
         catch (Exception e){
-            return false;
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
         }
     }
 

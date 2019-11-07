@@ -9,6 +9,7 @@ public class RegisterRequest {
     private String password;
     private String email;
     private Date BirthDate;
+    private String token;
 
     public RegisterRequest() {
     }
@@ -21,6 +22,14 @@ public class RegisterRequest {
         BirthDate = birthDate;
     }
 
+    public RegisterRequest(String username, String profile_name, String password, String email, Date birthDate, String token) {
+        this.username = username;
+        this.profile_name = profile_name;
+        this.password = password;
+        this.email = email;
+        BirthDate = birthDate;
+        this.token = token;
+    }
 
     public String getUsername() {
         return username;
@@ -60,5 +69,13 @@ public class RegisterRequest {
 
     public void setBirthDate(Date birthDate) {
         BirthDate = birthDate;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

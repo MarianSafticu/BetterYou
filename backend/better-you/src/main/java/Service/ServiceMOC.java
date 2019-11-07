@@ -12,8 +12,8 @@ public class ServiceMOC {
        return AppUtils.generateCode();
     }
 
-    public boolean register(String username, String profile_name, String password, String email, Date BirthDate){
-        return true;
+    public String register(String username, String profile_name, String password, String email, Date BirthDate){
+        return AppUtils.generateCode();
     }
 
     public boolean revocer(String email){
