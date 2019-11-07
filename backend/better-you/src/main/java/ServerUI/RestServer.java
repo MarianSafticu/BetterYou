@@ -49,6 +49,28 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/recover", method = RequestMethod.POST)
+    public ResponseEntity<?> recover(@RequestBody RecoverRequest registerRequest ) {
+        try{
+            boolean ok=service.revocer(registerRequest.getEmail());
+            return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/reset", method = RequestMethod.POST)
+    public ResponseEntity<?> reset(@RequestBody ResetRequest registerRequest ) {
+        try{
+            boolean ok=service.resetPassword(registerRequest.getPassword());
+            return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+        }
+    }
+
 
 }
 
