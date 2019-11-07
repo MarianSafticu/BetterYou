@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/app/better-you")
 @ComponentScan("Service")
@@ -25,17 +27,32 @@ public class RestServer {
         return String.format(template, name);
     }
 
-    @RequestMapping(value = "/{email}/{password}", method = RequestMethod.POST)
-    public ResponseEntity<?> loggin(@PathVariable String email, @PathVariable String password){
-        boolean ok=service.login(email,password);
-        if (!ok)
-            return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
-        else
-            return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<?> loggin(@RequestBody LoginRequest loginRequest){
+        try{
+            String token=service.login(loginRequest.getEmail(),loginRequest.getPassword());
+            return new ResponseEntity<String>(token, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public boolean register(@RequestBody RegisterRequest registerRequest ) {
+        try{
+            boolean ok=service.register(registerRequest.getUsername(),registerRequest.getProfile_name(),registerRequest.getPassword(),registerRequest.getEmail(),registerRequest.getBirthDate());
+            return ok;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
 
 }
+
+
 
 
 

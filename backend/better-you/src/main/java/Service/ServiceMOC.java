@@ -1,14 +1,15 @@
 package Service;
 
 import org.springframework.stereotype.Component;
+import utils.AppUtils;
 
 import java.util.Date;
 
 @Component
 public class ServiceMOC {
 
-    public boolean login(String email,String password){
-        return true;
+    public String login(String email,String password){
+       return AppUtils.generateCode();
     }
 
     public boolean register(String username, String profile_name, String password, String email, Date BirthDate){
