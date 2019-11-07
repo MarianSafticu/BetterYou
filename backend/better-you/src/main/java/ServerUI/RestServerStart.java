@@ -6,9 +6,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan("ServerUI")
 @SpringBootApplication
-class ResteServiceStart {
+public class RestServerStart {
     public static void main(String[] args) {
-        SpringApplication.run(ResteServiceStart.class,args);
+        SpringApplication.run(RestServerStart.class,args);
 
     }
 }
