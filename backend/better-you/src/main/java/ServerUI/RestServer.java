@@ -1,16 +1,12 @@
 package ServerUI;
 
-import Model.User;
-import Service.ServiceMOC;
+import Service.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 
 @RestController
 @RequestMapping("/app/better-you")
@@ -18,7 +14,7 @@ import java.util.Date;
 public class RestServer {
 
     @Autowired
-    private ServiceMOC service;
+    private ServiceImpl service;
 
     private static final String template = "Hello, %s!";
 
@@ -52,7 +48,7 @@ public class RestServer {
     @RequestMapping(value = "/recover", method = RequestMethod.POST)
     public ResponseEntity<?> recover(@RequestBody RecoverRequest registerRequest ) {
         try{
-            boolean ok=service.revocer(registerRequest.getEmail());
+            boolean ok=service.recoverPassword(registerRequest.getEmail());
             return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
         }
         catch (Exception e){
