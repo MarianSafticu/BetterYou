@@ -1,0 +1,30 @@
+@import "./_colors.scss";
+
+.spacer{
+    background-color: $light_blue;
+    height: 50vh;
+    max-height: calc(50vh - 325px);
+}
+
+.tab-bar-background{
+    background-color: $light_blue;
+    width: 100%;
+}
+
+.tab-bar{
+    max-width: 500px;
+    margin: auto;
+    
+    height: 50px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+
+    padding: 0;
+    position: static;
+    background-color: $green_blue;
+}
+
+.upper-tab-bar{
+    //width: 100%;
+    margin: auto;
+}

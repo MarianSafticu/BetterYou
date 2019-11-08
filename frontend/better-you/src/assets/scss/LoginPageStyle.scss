@@ -1,0 +1,47 @@
+@import "./_colors.scss";
+
+.login-background{
+    width: 100%;
+    height: calc(50vh + 275px);
+    max-height: calc(100vh - 50px);
+    background-color: inherit;
+}
+
+.login-container{
+    width: 100%;
+    max-width: 500px;
+    //min-height: 500px;
+    height: calc(100vh - 50px);
+    max-height: 600px;
+
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+
+    padding: 0;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, calc(-50% + 25px));
+
+    background-color: $green_blue;
+}
+
+.login-input{
+    width: 80%;
+    //padding: 10px;
+    margin-bottom: 3vh;
+    margin-left: 10%;
+    margin-right: 0;
+}
+
+.login-button{
+    min-width: 50%;
+    max-width: 75%;
+    width: 25%;
+    border: 3px solid $light_blue;
+    margin-top: 10vh;
+    margin-left: 25%;
+    margin-right: 0;
+}
