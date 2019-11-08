@@ -1,6 +1,6 @@
 import React, { Component, FormEvent, Props } from "react";
 import "../assets/scss/LoginPageStyle.scss";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Link } from "@material-ui/core";
 import { TextFieldProps } from "@material-ui/core/TextField";
 
 export default function LoginComponent() /*extends Component*/ {
@@ -104,6 +104,20 @@ export default function LoginComponent() /*extends Component*/ {
                     color="primary"
                     onClick={handleOnClick}
                     >Login</Button>
+                <div className="login-help">
+                    Forgot your password?
+                    <br/>
+                    <Link href="/">
+                        Then this may help you.
+                    </Link>
+                    <br/>
+
+                    Forgot your email? I'm sorry to hear that.
+                    <br/>
+                    <Link href="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg">
+                        Here's a puppy to cheer you out.
+                    </Link>
+                </div>
             </form>
         </div>
         );

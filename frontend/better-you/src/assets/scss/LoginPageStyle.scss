@@ -34,14 +34,25 @@
     margin-bottom: 3vh;
     margin-left: 10%;
     margin-right: 0;
+
+    font-size: 3vh;
 }
 
 .login-button{
     min-width: 50%;
     max-width: 75%;
     width: 25%;
+
+    height: 400px;
+    max-height: 5vh;
+
     border: 3px solid $light_blue;
     margin-top: 10vh;
     margin-left: 25%;
     margin-right: 0;
+}
+
+.login-help{
+    text-align: center;
+    font-size: 2vh;
 }

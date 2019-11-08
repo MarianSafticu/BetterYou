@@ -7,7 +7,7 @@ export default class Routes extends Component {
     render() {
         return (
             <Switch>
-                <Route exact path="/" component={StartPageComponent}/>
+                <Route exact path="/" component={LoginRegisterTabComponent}/>
             </Switch>
         );
     }
