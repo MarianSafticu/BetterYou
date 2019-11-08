@@ -20,7 +20,7 @@ public class ServiceMOC {
         return true;
     }
 
-    public boolean resetPassword(String password) {
+    public boolean resetPassword(String emial,String password) {
         return true;
     }
 }
