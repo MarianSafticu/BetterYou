@@ -16,7 +16,9 @@ public class AppUtilsTest {
     @Test
     public void verifyPassword() {
         String password = "better-you";
+        String wrongPassword = "better";
         String encodedPassword = AppUtils.encode(password);
         assertTrue(AppUtils.verifyPassword(password,encodedPassword));
+        assertFalse(AppUtils.verifyPassword(wrongPassword,encodedPassword));
     }
 }
