@@ -9,8 +9,9 @@ import java.util.Objects;
 @Entity
 @Table(name="USERS")
 public class User implements HasId<Long> {
-    @Id @GeneratedValue
-    @Column(name="userID",nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="userID")
     private long id;
     @Column(name="username",nullable = false,unique = true)
     private String username;
