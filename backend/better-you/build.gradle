@@ -32,8 +32,22 @@ dependencies {
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.28.0'
 
+    compile 'org.postgresql:postgresql:42.2.2.jre7'
+
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.8.Final'
+
+    // https://mvnrepository.com/artifact/com.impossibl.pgjdbc-ng/pgjdbc-ng
+    compile group: 'com.impossibl.pgjdbc-ng', name: 'pgjdbc-ng', version: '0.8.3'
+
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-annotations
+    //    compile group: 'org.hibernate', name: 'hibernate-annotations', version: '3.5.6-Final'
+
+    // https://mvnrepository.com/artifact/org.hibernate.dialect/sqlite-dialect
+    compile group: 'com.zsoltfabok', name: 'sqlite-dialect', version: '1.0'
+
+    // https://mvnrepository.com/artifact/at.favre.lib/bcrypt
+    compile group: 'at.favre.lib', name: 'bcrypt', version: '0.8.0'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
