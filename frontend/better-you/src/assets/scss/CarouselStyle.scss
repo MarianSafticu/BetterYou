@@ -1,5 +1,7 @@
+@import "./colors.scss";
+
 .carousel-container {
-    height: calc(100% - 55px - 200px - 26px);
+    height: calc(100% - 55px - 170px - 26px);
     width: calc(100% - 50px);
     margin: 55px auto 0 auto;
 }
@@ -8,17 +10,42 @@
     height: 100%;
 }
 
-.slide {
-    display: flex !important;
-    justify-content: space-around;
+.slick-list {
+    background-color: $green_blue;
+    border-style: hidden;
+    border-radius: 10px;
+    box-shadow: 0px 0px 50px 50px $light_blue inset;
+}
+
+.slick-track {
+    display: flex;
     align-items: center;
 }
 
-.image-content {
-    height: 150px;
-    width: 150px;
+.slick-slide {
+    display: flex !important;
+    align-items: center;
+}
+
+.slide {
+    width: 80%;
+    margin-left: 10%;
+    display: flex !important;
+    align-items: center;
+}
+
+.image {
+    width: 50%;
+    padding: 50px;
 }
 
 .content {
+    width: 50%;
     padding: 50px;
+}
+
+.image-content {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
 }

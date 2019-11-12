@@ -13,10 +13,10 @@ export default function AppBarComponent() {
         <Link to="/" className={classes.icon}>
           <BuildIcon />
         </Link>
-        <Link to="/" className={classes.link}>
+        <Link to="/apps" className={classes.link}>
           Apps
         </Link>
-        <Link to="/" className={classes.link}>
+        <Link to="/about" className={classes.link}>
           About
         </Link>
         <Button className={classes.button}>Login</Button>

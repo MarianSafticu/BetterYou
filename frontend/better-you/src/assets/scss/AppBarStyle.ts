@@ -16,8 +16,10 @@ const AppBarStyles = makeStyles({
         color: "black"
     },
     button: {
+        width: "100px",
         marginLeft: "auto",
-        borderWidth: "2",
+        borderStyle: "solid",
+        borderWidth: 1,
         borderColor: "black"
     }
 });

@@ -8,22 +8,28 @@ import SlideComponent from "./SlideComponent";
 export default class CarouselComponent extends Component {
   render() {
     const slides = [];
-    for(let i = 0; i < 5; i++) {
-      slides.push(<SlideComponent index={i}/>);
+    for (let i = 0; i < 5; i++) {
+      slides.push(
+        // <div className="slide-container">
+          <SlideComponent index={i} />
+        // </div>
+      );
     }
 
     return (
       <div className="carousel-container">
         <Slider
           className="slider"
+          lazyLoad={"ondemand"}
           dots={true}
           fade={true}
           autoplay={true}
           infinite={true}
-          autoplaySpeed={2000}
+          autoplaySpeed={4000}
           centerMode={true}
-          centerPadding={'150px'}
+          centerPadding={"150px"}
           pauseOnHover={true}
+          
         >
           {slides}
         </Slider>
