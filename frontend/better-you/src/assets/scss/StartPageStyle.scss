@@ -3,4 +3,6 @@
 .start-page-container {
     height: 100%;
     background-color: $light_blue;
+    display: flex;
+    flex-direction: column;
 }

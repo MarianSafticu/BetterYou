@@ -2,9 +2,12 @@ import { makeStyles } from "@material-ui/core";
 
 const AppBarStyles = makeStyles({
     appBar: {
-        backgroundColor: "#c38d9e"
+        backgroundColor: "#c38d9e",
+        height: 55,
+        display: "flex",
+        justifyContent: "center"
     },
-    iconButton: {
+    icon: {
         color: "white"
     },
     link: {

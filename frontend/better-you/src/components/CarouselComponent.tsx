@@ -1,52 +1,33 @@
 import React, { Component } from "react";
 import "../assets/scss/CarouselStyle.scss";
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext
-} from "pure-react-carousel";
-import "pure-react-carousel/dist/react-carousel.es.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import SlideComponent from "./SlideComponent";
 
 export default class CarouselComponent extends Component {
   render() {
+    const slides = [];
+    for(let i = 0; i < 5; i++) {
+      slides.push(<SlideComponent index={i}/>);
+    }
+
     return (
-      <CarouselProvider
-        className="carousel-container"
-        naturalSlideHeight={50}
-        naturalSlideWidth={50}
-        totalSlides={5}
-        isPlaying={true}
-        interval={2000}
-        step={1}
-        playDirection={"forward"}
-        orientation={"vertical"}
-      >
-        <Slider className="carousel-slider">
-          <Slide index={0}>
-            I am the first Slide.
-            <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={1}>
-            I am the second Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={2}>
-            I am the third Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={3}>
-            I am the fourth Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={4}>
-            I am the fifth Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
+      <div className="carousel-container">
+        <Slider
+          className="slider"
+          dots={true}
+          fade={true}
+          autoplay={true}
+          infinite={true}
+          autoplaySpeed={2000}
+          centerMode={true}
+          centerPadding={'150px'}
+          pauseOnHover={true}
+        >
+          {slides}
         </Slider>
-      </CarouselProvider>
+      </div>
     );
   }
 }

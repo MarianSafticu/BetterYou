@@ -1,7 +1,7 @@
 import React from "react";
 import AppBarStyles from "../assets/scss/AppBarStyle";
 import AppBar from "@material-ui/core/AppBar";
-import { Toolbar, IconButton, Button } from "@material-ui/core";
+import { Toolbar, Button} from "@material-ui/core";
 import BuildIcon from "@material-ui/icons/Build";
 import { Link } from "react-router-dom";
 
@@ -10,9 +10,9 @@ export default function AppBarComponent() {
   return (
     <AppBar className={classes.appBar}>
       <Toolbar>
-        <IconButton className={classes.iconButton} edge="start">
+        <Link to="/" className={classes.icon}>
           <BuildIcon />
-        </IconButton>
+        </Link>
         <Link to="/" className={classes.link}>
           Apps
         </Link>

@@ -1,9 +1,24 @@
 .carousel-container {
-    height: calc(100% - 64px - 200px);
-    padding-top: 64px;
+    height: calc(100% - 55px - 200px - 26px);
+    width: calc(100% - 50px);
+    margin: 55px auto 0 auto;
 }
 
-.carousel-slider {
-    margin:0;
+.slider, .slick-list, .slick-track {
     height: 100%;
+}
+
+.slide {
+    display: flex !important;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.image-content {
+    height: 150px;
+    width: 150px;
+}
+
+.content {
+    padding: 50px;
 }
