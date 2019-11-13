@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../assets/scss/RegisterBarStyle.scss";
 import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 export default class RegisterBarComponent extends Component {
   render() {
@@ -11,10 +12,12 @@ export default class RegisterBarComponent extends Component {
             <h1>Start organise your life</h1>
           </div>
           <div className="register-bar-button">
-            <Button
-                size="large"
-                color="primary"
-            >Join now</Button>
+            <Link to="/register">
+              <Button
+                  size="large"
+                  color="primary"
+              >Join now</Button>
+            </Link>
           </div>
         </div>
       </div>

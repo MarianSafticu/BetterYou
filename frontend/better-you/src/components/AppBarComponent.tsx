@@ -19,7 +19,9 @@ export default function AppBarComponent() {
         <Link to="/" className={classes.link}>
           About
         </Link>
-        <Button className={classes.button}>Login</Button>
+        <Link to="/login" className={classes.button}>
+          <Button className={classes.button}>Login</Button>
+        </Link>
       </Toolbar>
     </AppBar>
   );

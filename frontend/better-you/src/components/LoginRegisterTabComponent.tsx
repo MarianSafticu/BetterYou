@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import "../assets/scss/LoginRegisterTabStyle.scss";
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ function TabPanel(props: any) {
         <Box p={3}>{children}</Box>
       </Typography>
     );
-  }
+}
   
   TabPanel.propTypes = {
     children: PropTypes.node,
@@ -39,39 +39,54 @@ function TabPanel(props: any) {
       'aria-controls': `simple-tabpanel-${index}`,
     };
   }
+
+  interface IProps {
+    isRegister?: boolean
+  }
   
-  /*const useStyles = makeStyles(theme => ({
-    root: {
-      flexGrow: 1,
-      backgroundColor: theme.palette.background.paper,
-    },
-  }));*/
-  
-export default function LoginRegisterTabComponent(selectedTab : number) {
-    //const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-  
-    const handleChange = (event : any, newValue : number) => {
-      setValue(newValue);
+  interface IState {
+    value?: number,
+  }
+
+export class LoginRegisterTabComponent extends Component<IProps, IState> {
+    constructor(prop:IProps){
+      super(prop);
+
+      var aux = 0;
+      if(this.props.isRegister)
+        aux = 1;
+
+      this.state = {
+        value: aux
+      };
+    }
+
+    handleChange = (event : any, newValue : number) => {
+      //setValue(newValue);
+      this.setState({
+        value:newValue
+      });
     };
   
-    return (
-        <div className="tab-bar-background">
-            <div className="spacer">
-
-            </div>
-            <AppBar className="tab-bar">
-                <Tabs value={value} onChange={handleChange}>
-                    <TabPane className="upper-tab-bar" label="Login" {...a11yProps(0)} />
-                    <TabPane className="upper-tab-bar" label="Register" {...a11yProps(1)} />
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                {LoginComponent}
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-        </div>
-    );
+    render(){
+      return (
+          <div className="tab-bar-background">
+              <div className="spacer">
+  
+              </div>
+              <AppBar className="tab-bar">
+                  <Tabs value={this.state.value} onChange={this.handleChange}>
+                      <TabPane className="upper-tab-bar" label="Login" {...a11yProps(0)} />
+                      <TabPane className="upper-tab-bar" label="Register" {...a11yProps(1)} />
+                  </Tabs>
+              </AppBar>
+              <TabPanel value={this.state.value} index={0}>
+                  <LoginComponent/>
+              </TabPanel>
+              <TabPanel value={this.state.value} index={1}>
+                  Item Two
+              </TabPanel>
+          </div>
+      );
+    }
 }

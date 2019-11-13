@@ -2,63 +2,89 @@ import React, { Component, FormEvent, Props } from "react";
 import "../assets/scss/LoginPageStyle.scss";
 import { Button, TextField, Link } from "@material-ui/core";
 import { TextFieldProps } from "@material-ui/core/TextField";
+import { thisExpression } from "@babel/types";
 
-export default function LoginComponent() /*extends Component*/ {
-    function getCookie(name : string) {
-        const value = "; " + document.cookie;
-        const parts = value.split("; " + name + "=");
-        
-        if (parts.length == 2) {
-            var aux = parts.pop();
-            if(aux != null)
-                return aux.split(";").shift();
-        }
-        return "Nu exista acest token";
+function getCookie(name : string) {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    
+    if (parts.length == 2) {
+        var aux = parts.pop();
+        if(aux != null)
+            return aux.split(";").shift();
+    }
+    return "Nu exista acest token";
+}
+
+interface IProps {
+}
+
+interface IState {
+  emailError?: string,
+  isEmailError?: boolean,
+  passwordError?: string,
+  isPasswordError?: boolean
+}
+
+export default class LoginComponent extends Component<IProps, IState> {
+    constructor(prop : IProps){
+        super(prop);
+        this.state = {
+            emailError: "",
+            isEmailError: false,
+            passwordError: "",
+            isPasswordError: false
+        };
     }
 
-    const [emailError, setEmailError] = React.useState('');
-    const [isError, setIsError] = React.useState(false);
-    const [passwordError, setPasswoedlError] = React.useState('');
-    const [isPasswordError, setIsPasswordError] = React.useState(false);
-    
-    
-
-    const onChangeHandler = (props : TextFieldProps) => {
+    onChangeHandler = (props : TextFieldProps) => {
         let input = (document.getElementById("Email")  as HTMLInputElement).value;
         
         if(input.length !== 0 && input.split('@').length == 2) {
-            setEmailError("");
-            setIsError(false);
+            this.setState({
+                emailError: "",
+                isEmailError: false
+            });
         }
         else {
-            setEmailError("This is not a valid email adress");
-            setIsError(true);
+            this.setState({
+                emailError: "This is not a valid email adress",
+                isEmailError: true
+            });
         }
     }
-    const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
     }
-    const handleOnClick = () => {
+    handleOnClick = () => {
         let email = (document.getElementById("Email")  as HTMLInputElement).value;
         let password = (document.getElementById("Password")  as HTMLInputElement).value;
 
 
         
         if(email.length !== 0 && email.split('@').length == 2) {
-            setEmailError("");
-            setIsError(false);
+            this.setState({
+                emailError: "",
+                isEmailError: false
+            });
         }
         else {
-            setEmailError("This is not a valid email adress");
-            setIsError(true);
+            this.setState({
+                emailError: "This is not a valid email adress",
+                isEmailError: true
+            });
         }
         if(password.length === 0){
-            setPasswoedlError("The password can't be nothing")
-            setIsPasswordError(true);
+            this.setState({
+                passwordError: "The password can't be nothing",
+                isPasswordError: true
+            });
         }
         else{
-            setPasswoedlError("")
-            setIsPasswordError(false);
+            this.setState({
+                passwordError: "",
+                isPasswordError: false
+            });
         }
 
 
@@ -71,21 +97,18 @@ export default function LoginComponent() /*extends Component*/ {
         date.setTime(date.getTime() + (1 * 60 * 1000));
         document.cookie = "token="+token+"; expires="+date.toUTCString()+"; path=/";
     }
-    //render() {
+    render() {
     return (
         <div className="login-background">
             <form className="login-container" action="">
-                <h1 className="login-input">
-                    Login
-                    </h1>
-                <h3 className="login-input">
-                    token : {getCookie("token")}</h3>
+                <h1 className="login-input"> Login </h1>
+                
                 <TextField
                     id = "Email"
-                    onChange={onChangeHandler}
+                    onChange={this.onChangeHandler}
                     className="login-input"
-                    error={isError}
-                    helperText={emailError}
+                    error={this.state.isEmailError}
+                    helperText={this.state.emailError}
                     label="Email:"/>
                 <br/>
 
@@ -93,8 +116,8 @@ export default function LoginComponent() /*extends Component*/ {
                     id="Password"
                     className="login-input"
                     type="password"
-                    error={isPasswordError}
-                    helperText={passwordError}
+                    error={this.state.isPasswordError}
+                    helperText={this.state.passwordError}
                     label="Password:"/>
                 <br/>
 
@@ -102,7 +125,7 @@ export default function LoginComponent() /*extends Component*/ {
                     className="login-button"
                     size="large"
                     color="primary"
-                    onClick={handleOnClick}
+                    onClick={this.handleOnClick}
                     >Login</Button>
                 <div className="login-help">
                     Forgot your password?
@@ -121,5 +144,5 @@ export default function LoginComponent() /*extends Component*/ {
             </form>
         </div>
         );
-    //}
+    }
  }
