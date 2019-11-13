@@ -3,6 +3,8 @@ import "../assets/scss/StartPageStyle.scss";
 import AppBarComponent from "./AppBarComponent";
 import CarouselComponent from "./CarouselComponent";
 import RegisterBarComponent from "./RegisterBarComponent";
+import { Breakpoint } from "react-socks";
+import AppBarMobileComponent from "./AppBarMobileComponent";
 
 interface StartPageComponentProps {
 }
@@ -14,7 +16,12 @@ export class StartPageComponent extends Component<StartPageComponentProps, Start
     render() {
         return (
             <div className="start-page-container">
-                <AppBarComponent/>
+                <Breakpoint large up>
+                    <AppBarComponent/>
+                </Breakpoint>
+                <Breakpoint medium down>
+                    <AppBarMobileComponent/>
+                </Breakpoint>
                 <CarouselComponent/>
                 <RegisterBarComponent/>
             </div>
