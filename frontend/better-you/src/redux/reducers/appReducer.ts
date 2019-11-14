@@ -6,7 +6,7 @@ export const initialState: AppState = {
     currentUser: undefined
 }
 
-const appReducer = (state = initialState, action: AppActionType) => {
+export const appReducer = (state = initialState, action: AppActionType) => {
     switch(action.type) {
         case SET_CURRENT_USER:
             return setCurrentUserHandler(state, action.payload);
@@ -14,5 +14,3 @@ const appReducer = (state = initialState, action: AppActionType) => {
             return state;
     }
 }
-
-export default appReducer;

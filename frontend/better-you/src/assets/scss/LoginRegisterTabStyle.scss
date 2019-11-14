@@ -1,30 +1,29 @@
 @import "./_colors.scss";
 
-.spacer{
-    background-color: $light_blue;
-    height: 50vh;
-    max-height: calc(50vh - 325px);
+.MuiTabs-centered {
+  justify-content: space-evenly;
 }
 
-.tab-bar-background{
-    background-color: $light_blue;
-    width: 100%;
+.MuiTabs-indicator {
+  background-color: #b95374;
 }
 
-.tab-bar{
-    max-width: 500px;
-    margin: auto;
-    
-    height: 50px;
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
-
-    padding: 0;
-    position: relative;
-    background-color: $green_blue;
+.MuiTab-wrapper {
+  color: black;
 }
 
-.upper-tab-bar{
-    //width: 100%;
-    margin: auto;
+.Mui-selected {
+  background-color: #b48292;
+}
+
+@media (min-width: 600px) {
+  .MuiTab-root {
+    width: 50%;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+}
+
+.react-swipeable-view-container {
+  height: 100%;
 }

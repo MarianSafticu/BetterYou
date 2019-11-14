@@ -1,76 +1,28 @@
 @import "./_colors.scss";
 
-.login-background{
-    width: 100%;
-    height: calc(100vh - 50px);
-    max-height: calc(600px + (100vh - 650px) / 10);
-    background-color: inherit;
+.login-background {
+  height: 100%;
 }
 
-.login-container{
-    width: 100%;
-    max-width: 500px;
-    //min-height: 500px;
+.login-container {
+  height: 100%;
 
-    height: calc(100vh - 50px);
-    max-height: 600px;
-
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-
-    padding: 0;
-    margin: auto;
-    
-    //position: absolute;
-    //@at-roottop: 50%;
-    //left: 50%;
-    //-ms-transform: translate(-50%, -50%);
-    //transform: translate(-50%, calc(-50% + 25px));
-
-    background-color: $green_blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.login-input{
-    width: 80%;
-    //padding: 10px;
-    margin-bottom: 3vh;
-    margin-left: 10%;
-    margin-right: 0;
-
-    font-size: 3vh;
+.login-input {
+  width: 80%;
+  margin-top: 20px;
 }
 
-h1{
-    padding: 0;
-    margin: 0;
+.login-button {
+  background-color: #c38d9e;
+  width: 50%;
+  border: 1px solid black;
 }
 
-.login-button{
-    min-width: 50%;
-    max-width: 75%;
-    width: 25%;
-
-    height: 75px;
-    //max-height: 5vh;
-
-    border: 3px solid $light_blue;
-    margin-top: 10%;
-    margin-left: 25%;
-    margin-right: 0;
-}
-
-.login-help{
-    text-align: center;
-    font-size: 100%;
-}
-
-@media only screen and (max-width: 500px){
-    .login-container{
-        height: calc(100vh - 50px);
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .login-background{
-        height: 0;
-    }
+.login-button:hover {
+  background-color: #b48292;
 }
