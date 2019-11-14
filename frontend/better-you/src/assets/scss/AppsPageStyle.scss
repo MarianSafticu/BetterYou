@@ -1,8 +1,13 @@
 @import "./_colors.scss";
 
-.start-page-container {
+.apps-page-container {
     height: 100%;
     background-color: $light_blue;
     display: flex;
     flex-direction: column;
+}
+
+.page-content {
+    height: calc(100% - 55px);
+    margin-top: 55px;
 }
