@@ -8,7 +8,7 @@ export default function RegisterBarComponent() {
     <div className={classes.container}>
       <div className={classes.components}>
         <div className={classes.header}>
-          <h1>Start organise your life</h1>
+          <h1>Start organizing your life</h1>
         </div>
         <Button className={classes.button}>Join now</Button>
       </div>

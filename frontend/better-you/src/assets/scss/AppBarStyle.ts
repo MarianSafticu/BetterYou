@@ -3,13 +3,14 @@ import { makeStyles } from "@material-ui/core";
 const AppBarStyles = makeStyles({
   appBar: {
     backgroundColor: "#c38d9e",
-    height: 55,
+    height: 45,
     display: "flex",
     justifyContent: "center"
   },
   toolbar: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    height: 45
   },
   links: {
     height: "38px",
