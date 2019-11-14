@@ -1,8 +1,10 @@
-export const TEST_TYPE = "TEST_TYPE";
+import { User } from "../../models/User";
 
-export interface TestType {
-    type: typeof TEST_TYPE;
-    payload: string;
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+
+export interface SetCurrentUserType {
+    type: typeof SET_CURRENT_USER;
+    payload: User;
 }
 
-export type AppActionType = TestType;
+export type AppActionType = SetCurrentUserType;

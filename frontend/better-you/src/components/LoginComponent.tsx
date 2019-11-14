@@ -1,148 +1,135 @@
-import React, { Component, FormEvent, Props } from "react";
+import React, { Component, FormEvent, Props, ChangeEvent } from "react";
 import "../assets/scss/LoginPageStyle.scss";
 import { Button, TextField, Link } from "@material-ui/core";
 import { TextFieldProps } from "@material-ui/core/TextField";
-import { thisExpression } from "@babel/types";
-
-function getCookie(name : string) {
-    const value = "; " + document.cookie;
-    const parts = value.split("; " + name + "=");
-    
-    if (parts.length == 2) {
-        var aux = parts.pop();
-        if(aux != null)
-            return aux.split(";").shift();
-    }
-    return "Nu exista acest token";
-}
+import { connect } from "react-redux";
+import AppState from "../redux/store/store";
+import { User } from "../models/User";
+import { setCurrentUser } from "../redux/actions/actions";
 
 interface IProps {
+    loginUser: Function;
 }
 
 interface IState {
-  emailError?: string,
-  isEmailError?: boolean,
-  passwordError?: string,
-  isPasswordError?: boolean
+    user: User,
+    emailError?: string,
+    isEmailError?: boolean,
+    passwordError?: string,
+    isPasswordError?: boolean
 }
 
-export default class LoginComponent extends Component<IProps, IState> {
-    constructor(prop : IProps){
+class LoginComponent extends Component<IProps, IState> {
+    constructor(prop: IProps) {
         super(prop);
         this.state = {
+            user: {
+                username: "",
+                profileName: "",
+                birthDate: new Date(),
+                email: "",
+                isVerified: false,
+                password: "",
+                token: ""
+            },
             emailError: "",
             isEmailError: false,
             passwordError: "",
             isPasswordError: false
         };
+
     }
 
-    onChangeHandler = (props : TextFieldProps) => {
-        let input = (document.getElementById("Email")  as HTMLInputElement).value;
-        
-        if(input.length !== 0 && input.split('@').length == 2) {
-            this.setState({
-                emailError: "",
-                isEmailError: false
-            });
-        }
-        else {
-            this.setState({
-                emailError: "This is not a valid email adress",
-                isEmailError: true
-            });
-        }
+    onChangeEmail(event: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            user: {
+                username:  this.state.user.username,
+                profileName: this.state.user.profileName,
+                birthDate: this.state.user.birthDate,
+                email: event.target.value,
+                isVerified: this.state.user.isVerified,
+                password: this.state.user.password,
+                token: this.state.user.token
+            }
+        })
     }
-    handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
+
+    onChangePassword(event: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            user: {
+                username: this.state.user.username,
+                profileName: this.state.user.profileName,
+                birthDate: this.state.user.birthDate,
+                email: this.state.user.email,
+                isVerified: this.state.user.isVerified,
+                password: event.target.value,
+                token: this.state.user.token
+            }
+        })
     }
+
     handleOnClick = () => {
-        let email = (document.getElementById("Email")  as HTMLInputElement).value;
-        let password = (document.getElementById("Password")  as HTMLInputElement).value;
-
-
-        
-        if(email.length !== 0 && email.split('@').length == 2) {
-            this.setState({
-                emailError: "",
-                isEmailError: false
-            });
-        }
-        else {
-            this.setState({
-                emailError: "This is not a valid email adress",
-                isEmailError: true
-            });
-        }
-        if(password.length === 0){
-            this.setState({
-                passwordError: "The password can't be nothing",
-                isPasswordError: true
-            });
-        }
-        else{
-            this.setState({
-                passwordError: "",
-                isPasswordError: false
-            });
-        }
-
-
-
-        let token = 123123123;
-        alert("S-a introdus emailul:" + email + " si parola:" + password + " with token:" + token);
-
-        const date = new Date();
-        // Set it expire in 1 min
-        date.setTime(date.getTime() + (1 * 60 * 1000));
-        document.cookie = "token="+token+"; expires="+date.toUTCString()+"; path=/";
+        this.props.loginUser(this.state.user);
     }
+
     render() {
-    return (
-        <div className="login-background">
-            <form className="login-container" action="">
-                <h1 className="login-input"> Login </h1>
-                
-                <TextField
-                    id = "Email"
-                    onChange={this.onChangeHandler}
-                    className="login-input"
-                    error={this.state.isEmailError}
-                    helperText={this.state.emailError}
-                    label="Email:"/>
-                <br/>
+        return (
+            <div className="login-background">
+                <form className="login-container" action="">
+                    <TextField
+                        id="Email"
+                        onChange={this.onChangeEmail.bind(this)}
+                        className="login-input"
+                        error={this.state.isEmailError}
+                        helperText={this.state.emailError}
+                        label="Email:" />
+                    <br />
 
-                <TextField
-                    id="Password"
-                    className="login-input"
-                    type="password"
-                    error={this.state.isPasswordError}
-                    helperText={this.state.passwordError}
-                    label="Password:"/>
-                <br/>
+                    <TextField
+                        id="Password"
+                        onChange={this.onChangePassword.bind(this)}
+                        className="login-input"
+                        type="password"
+                        error={this.state.isPasswordError}
+                        helperText={this.state.passwordError}
+                        label="Password:" />
+                    <br />
 
-                <Button
-                    className="login-button"
-                    size="large"
-                    color="primary"
-                    onClick={this.handleOnClick}
+                    <Button
+                        className="login-button"
+                        size="large"
+                        color="primary"
+                        onClick={this.handleOnClick.bind(this)}
                     >Login</Button>
-                <div className="login-help">
-                    Forgot your password?
-                    <br/>
-                    <Link href="/">
-                        Then this may help you.
+                    <div className="login-help">
+                        Forgot your password?
+                    <br />
+                        <Link href="/">
+                            Then this may help you.
                     </Link>
-                    <br/>
+                        <br />
 
-                    Forgot your email? I'm sorry to hear that.
-                    <br/>
-                    <Link href="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg">
-                        Here's a puppy to cheer you out.
+                        Forgot your email? I'm sorry to hear that.
+                    <br />
+                        <Link href="https://cdn1-www.dogtime.com/assets/uploads/2011/03/puppy-development.jpg">
+                            Here's a puppy to cheer you up.
                     </Link>
-                </div>
-            </form>
-        </div>
+                    </div>
+                </form>
+            </div>
         );
     }
- }
+}
+
+const mapStateToProps = (state: AppState) => {
+    return {
+    }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        loginUser: (user: User) => dispatch(setCurrentUser(user))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

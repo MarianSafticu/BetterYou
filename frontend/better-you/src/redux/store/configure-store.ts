@@ -6,7 +6,7 @@ import appReducer from "../reducers/appReducer";
 const rootReducer = combineReducers(appReducer);
 
 export default function configureStore() {
-    const store: Store<AppState> = createStore(
+    const store = createStore(
         rootReducer,
         applyMiddleware(logger)
     );

@@ -1,7 +1,8 @@
 import AppState from "../store/store";
+import { User } from "../../models/User";
 
-export function doReduxTestHandler(oldState: AppState, test: String): AppState {
+export function setCurrentUserHandler(oldState: AppState, user: User): AppState {
     const newState = {...oldState};
-    console.log(test);
+    newState.currentUser = user;
     return newState;
 }
