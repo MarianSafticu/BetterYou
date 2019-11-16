@@ -1,16 +1,19 @@
 import { makeStyles } from "@material-ui/core";
 
-const AppBarStyles = makeStyles({
+const AppBarMobileStyles = makeStyles({
   appBar: {
     backgroundColor: "#c38d9e",
-    height: 45,
+    height: 55,
     display: "flex",
     justifyContent: "center"
   },
   toolbar: {
     display: "flex",
-    justifyContent: "space-between",
-    height: 45
+    justifyContent: "space-between"
+  },
+  drawerList: {
+    backgroundColor: "#f2eaf9",
+    width: "150px"
   },
   links: {
     height: "38px",
@@ -29,7 +32,9 @@ const AppBarStyles = makeStyles({
   },
   link: {
     textDecoration: "none",
-    color: "black"
+    color: "black",
+    width: "100%",
+    textAlign: "center"
   },
   button: {
     width: "100px",
@@ -39,4 +44,4 @@ const AppBarStyles = makeStyles({
   }
 });
 
-export default AppBarStyles;
+export default AppBarMobileStyles;

@@ -1,24 +1,33 @@
 import React from "react";
 import AppBarStyles from "../assets/scss/AppBarStyle";
+import "../assets/scss/AppBarStyle.scss";
 import AppBar from "@material-ui/core/AppBar";
-import { Toolbar, IconButton, Button } from "@material-ui/core";
+import { Toolbar, Button } from "@material-ui/core";
 import BuildIcon from "@material-ui/icons/Build";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function AppBarComponent() {
   const classes = AppBarStyles();
   return (
     <AppBar className={classes.appBar}>
-      <Toolbar>
-        <IconButton className={classes.iconButton} edge="start">
-          <BuildIcon />
-        </IconButton>
-        <Link to="/" className={classes.link}>
-          Apps
-        </Link>
-        <Link to="/" className={classes.link}>
-          About
-        </Link>
+      <Toolbar className={classes.toolbar}>
+        <div className={classes.links}>
+          <div className={classes.iconContainer}>
+            <NavLink to="/" className={classes.icon}>
+              <BuildIcon />
+            </NavLink>
+          </div>
+          <div className="link-container">
+            <NavLink to="/apps" className={classes.link}>
+              Apps
+            </NavLink>
+          </div>
+          <div className="link-container">
+            <NavLink to="/about" className={classes.link}>
+              About
+            </NavLink>
+          </div>
+        </div>
         <Link to="/login" className={classes.button}>
           <Button className={classes.button}>Login</Button>
         </Link>

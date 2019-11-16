@@ -1,52 +1,55 @@
 import React, { Component } from "react";
 import "../assets/scss/CarouselStyle.scss";
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext
-} from "pure-react-carousel";
-import "pure-react-carousel/dist/react-carousel.es.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import SlideComponent from "./SlideComponent";
+import { Breakpoint } from "react-socks";
 
 export default class CarouselComponent extends Component {
   render() {
+    const slidesForDesktop = [];
+    for (let i = 0; i < 10; i+=2) {
+      slidesForDesktop.push(<SlideComponent key={i} index={i} />);
+    }
+
+    const slidesForMobile = [];
+    for (let i = 0; i < 10; i++) {
+      slidesForMobile.push(<SlideComponent key={i} index={i} />);
+    }
+
     return (
-      <CarouselProvider
-        className="carousel-container"
-        naturalSlideHeight={50}
-        naturalSlideWidth={50}
-        totalSlides={5}
-        isPlaying={true}
-        interval={2000}
-        step={1}
-        playDirection={"forward"}
-        orientation={"vertical"}
-      >
-        <Slider className="carousel-slider">
-          <Slide index={0}>
-            I am the first Slide.
-            <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={1}>
-            I am the second Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={2}>
-            I am the third Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={3}>
-            I am the fourth Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-          <Slide index={4}>
-            I am the fifth Slide. <ButtonBack>Back</ButtonBack>
-            <ButtonNext>Next</ButtonNext>
-          </Slide>
-        </Slider>
-      </CarouselProvider>
+      <div className="carousel-container">
+        <Breakpoint medium up className="breakpoint">
+          <Slider
+            className="slider"
+            lazyLoad={"ondemand"}
+            dots={true}
+            fade={true}
+            autoplay={true}
+            infinite={true}
+            autoplaySpeed={4000}
+            centerMode={true}
+            centerPadding={"150px"}
+            pauseOnHover={true}
+          >
+            {slidesForDesktop}
+          </Slider>
+        </Breakpoint>
+        <Breakpoint small down className="breakpoint">
+          <Slider
+            className="slider"
+            lazyLoad={"ondemand"}
+            dots={true}
+            fade={true}
+            infinite={true}
+            centerMode={true}
+            centerPadding={"50px"}
+          >
+            {slidesForMobile}
+          </Slider>
+        </Breakpoint>
+      </div>
     );
   }
 }
