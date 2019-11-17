@@ -1,0 +1,13 @@
+Dear %s,
+
+We are VERY excited that you have decided to join our platform!
+
+Please enter the link bellow to confirm your registration:
+
+%s
+
+If you were not expecting  this email please ignore it.
+
+Hope you will accomplish all of your dreams!
+
+Better You team
