@@ -11,6 +11,7 @@ import java.util.Map;
 public class JWTTokenRepo {
     private final Map<Long, String> tokensMap = new HashMap<>();
 
+
     /**
      * Saves a token for an user
      *
