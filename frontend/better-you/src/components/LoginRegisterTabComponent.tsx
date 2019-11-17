@@ -10,6 +10,7 @@ import LoginComponent from "./LoginComponent";
 import { Breakpoint } from "react-socks";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@material-ui/core/styles";
+import RegisterComponent from "./RegisterComponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -96,7 +97,7 @@ export default function LoginRegisterTabComponent(
             <LoginComponent />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            <RegisterComponent />
           </TabPanel>
         </div>
       </Breakpoint>
@@ -132,7 +133,7 @@ export default function LoginRegisterTabComponent(
               <LoginComponent />
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
-              Item Two
+              <RegisterComponent />
             </TabPanel>
           </SwipeableViews>
         </div>
