@@ -4,7 +4,7 @@ import "../assets/scss/AppBarStyle.scss";
 import AppBar from "@material-ui/core/AppBar";
 import { Toolbar, Button } from "@material-ui/core";
 import BuildIcon from "@material-ui/icons/Build";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 export default function AppBarComponent() {
   const classes = AppBarStyles();
@@ -28,7 +28,9 @@ export default function AppBarComponent() {
             </NavLink>
           </div>
         </div>
-        <Button className={classes.button}>Login</Button>
+        <Link to="/login" className={classes.link}>
+          <Button className={classes.button}>Login</Button>
+        </Link>
       </Toolbar>
     </AppBar>
   );

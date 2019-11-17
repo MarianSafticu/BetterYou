@@ -1,0 +1,29 @@
+@import "./_colors.scss";
+
+.MuiTabs-centered {
+  justify-content: space-evenly;
+}
+
+.MuiTabs-indicator {
+  background-color: #b95374 !important;
+}
+
+.MuiTab-wrapper {
+  color: black;
+}
+
+.Mui-selected {
+  background-color: #b48292;
+}
+
+@media (min-width: 600px) {
+  .MuiTab-root {
+    width: 50%;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+}
+
+.react-swipeable-view-container {
+  height: 100%;
+}

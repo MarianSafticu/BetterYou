@@ -1,0 +1,28 @@
+@import "./_colors.scss";
+
+.login-background {
+  height: 100%;
+}
+
+.login-container {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.login-input {
+  width: 80%;
+  margin-top: 20px;
+}
+
+.login-button {
+  background-color: #c38d9e !important;
+  width: 50% !important;
+  border: 1px solid black !important;
+}
+
+.login-button:hover {
+  background-color: #b48292;
+}

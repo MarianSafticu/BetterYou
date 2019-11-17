@@ -1,6 +1,7 @@
 import React from "react";
 import RegisterBarStyles from "../assets/scss/RegisterBarStyle";
 import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 export default function RegisterBarComponent() {
   const classes = RegisterBarStyles();
@@ -10,7 +11,9 @@ export default function RegisterBarComponent() {
         <div className={classes.header}>
           <h1>Start organizing your life</h1>
         </div>
-        <Button className={classes.button}>Join now</Button>
+        <Link to="/register" className={classes.link}>
+          <Button className={classes.button}>Join now</Button>
+        </Link>
       </div>
     </div>
   );
