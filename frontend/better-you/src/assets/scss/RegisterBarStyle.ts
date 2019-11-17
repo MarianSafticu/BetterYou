@@ -15,6 +15,10 @@ const RegisterBarStyles = makeStyles({
   },
   components: {},
   header: {},
+  link: {
+    textDecoration: "none",
+    color: "black"
+  },
   button: {
     backgroundColor: "#c38d9e",
     width: "50%",

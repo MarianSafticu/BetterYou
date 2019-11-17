@@ -11,7 +11,7 @@ export default function RegisterBarComponent() {
         <div className={classes.header}>
           <h1>Start organizing your life</h1>
         </div>
-        <Link to="/register">
+        <Link to="/register" className={classes.link}>
           <Button className={classes.button}>Join now</Button>
         </Link>
       </div>
