@@ -1,7 +1,6 @@
 import React, { Component, ChangeEvent } from 'react'
 import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
-import DatePicker from 'react-date-picker';
 
 interface IProps {
     registerUser?: Function;
@@ -10,15 +9,10 @@ interface IProps {
 interface IState {
     user: User;
     usernameError?: string;
-    isUsernameError?: boolean;
     profileNameError?: string;
-    isProfileNameError?: boolean;
     emailError?: string,
-    isEmailError?: boolean,
     passwordError?: string,
-    isPasswordError?: boolean,
     birthDateError?: string,
-    isBirthDateError?: boolean;
 }
 
 export default class RegisterComponent extends Component<IProps, IState> {
@@ -35,15 +29,10 @@ export default class RegisterComponent extends Component<IProps, IState> {
                 token: ""
             },
             usernameError: "",
-            isUsernameError: false,
             profileNameError: "",
-            isProfileNameError: false,
             emailError: "",
-            isEmailError: false,
             passwordError: "",
-            isPasswordError: false,
             birthDateError: "",
-            isBirthDateError: false
         };
         console.log(this.state.user);
     }
@@ -57,7 +46,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <TextField
                             className="login-input"
                             onChange={this.onChangeUsername.bind(this)}
-                            error={this.state.isUsernameError}
                             helperText={this.state.usernameError}
                             label="Username:"
                         />
@@ -66,7 +54,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <TextField
                             className="login-input"
                             onChange={this.onChangeProfileName.bind(this)}
-                            error={this.state.isProfileNameError}
                             helperText={this.state.profileNameError}
                             label="Profile name:"
                         />
@@ -75,7 +62,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <TextField
                             className="login-input"
                             onChange={this.onChangeEmail.bind(this)}
-                            error={this.state.isEmailError}
                             helperText={this.state.emailError}
                             label="Email:"
                         />
@@ -85,7 +71,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
                             className="login-input"
                             onChange={this.onChangePassword.bind(this)}
                             type="password"
-                            error={this.state.isPasswordError}
                             helperText={this.state.passwordError}
                             label="Password:"
                         />
@@ -95,7 +80,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
                             className="login-input"
                             onChange={this.onChangeBirthdate.bind(this)}
                             type="date"
-                            error={this.state.isBirthDateError}
                             helperText={this.state.birthDateError}
                             label="Birthdate:"
                             InputLabelProps={{shrink: true}}                            
