@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import AppState from "../redux/store/store";
 import { User } from "../models/User";
 import { setCurrentUser } from "../redux/actions/actions";
+import { Link } from "react-router-dom";
 
 interface IProps {
   loginUser: Function;
@@ -106,7 +107,7 @@ class LoginComponent extends Component<IProps, IState> {
 
           <div className="help-links">
             <p>I've forgot my password.</p>
-            <p>I don't have an account.</p>
+            <Link to="/register" className="link">I don't have an account...</Link>
           </div>
         </form>
       </div>
