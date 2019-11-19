@@ -35,7 +35,7 @@ public class AppUtils {
      * @param id - the user id/username
      * @return A string containing our JWT
      */
-    public static String createJWT(String id) {
+    public String createJWT(String id) {
 
         // JWT Signature Algorithm
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -68,7 +68,7 @@ public class AppUtils {
      * @param jwt
      * @return claims (a JSON map) based on the given JWT
      */
-    public static Claims decodeJWT(String jwt) {
+    public Claims decodeJWT(String jwt) {
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(getSecretKey()))
                 .parseClaimsJws(jwt).getBody();
@@ -79,7 +79,7 @@ public class AppUtils {
      * Reading the secret key from the file - used for JWT
      * @return The secret key (type String)
      */
-    private static String getSecretKey(){
+    private String getSecretKey(){
         File file;
         String SECRET_KEY = null;
 
@@ -101,7 +101,7 @@ public class AppUtils {
      * @param password - type : String
      * @return the encoded version of the password - type : String
      */
-    public static String encode(String password)
+    public String encode(String password)
     {
         BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
         return crypt.encode(password);
@@ -114,7 +114,7 @@ public class AppUtils {
      * @return true - if they match
      *          false - otherwise
      */
-    public static Boolean verifyPassword(String password, String encodedPassword)
+    public Boolean verifyPassword(String password, String encodedPassword)
     {
         BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
         return crypt.matches(password,encodedPassword);

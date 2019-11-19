@@ -8,21 +8,22 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class AppUtilsTest {
+    AppUtils appUtils = new AppUtils();
 
     @Test
     public void encode() {
         String password = "better-you";
-        String encodedPassword = AppUtils.encode(password);
-        assertNotEquals(password,encodedPassword);
+        String encodedPassword = appUtils.encode(password);
+        assertNotEquals(password, encodedPassword);
     }
 
     @Test
     public void verifyPassword() {
         String password = "better-you";
         String wrongPassword = "better";
-        String encodedPassword = AppUtils.encode(password);
-        assertTrue(AppUtils.verifyPassword(password,encodedPassword));
-        assertFalse(AppUtils.verifyPassword(wrongPassword,encodedPassword));
+        String encodedPassword = appUtils.encode(password);
+        assertTrue(appUtils.verifyPassword(password, encodedPassword));
+        assertFalse(appUtils.verifyPassword(wrongPassword, encodedPassword));
     }
 
 
@@ -31,11 +32,11 @@ public class AppUtilsTest {
 
         String jwtId = "SOMEID1234";
 
-        String jwt = AppUtils.createJWT(
+        String jwt = appUtils.createJWT(
                 jwtId // claim = jti
         );
 
-        Claims claims = AppUtils.decodeJWT(jwt);
+        Claims claims = appUtils.decodeJWT(jwt);
 
         assertEquals(jwtId, claims.getId());
     }
@@ -49,7 +50,7 @@ public class AppUtilsTest {
         String notAJwt = "This is not a JWT";
 
         // This will fail with expected exception listed above
-        AppUtils.decodeJWT(notAJwt);
+        appUtils.decodeJWT(notAJwt);
     }
 
     /*
@@ -60,7 +61,7 @@ public class AppUtilsTest {
 
         String jwtId = "SOMEID1234";
 
-        String jwt = AppUtils.createJWT(
+        String jwt = appUtils.createJWT(
                 jwtId // claim = jti
         );
 
@@ -73,6 +74,6 @@ public class AppUtilsTest {
 
         // this will fail with a SignatureException
 
-        AppUtils.decodeJWT(tamperedJwt.toString());
+        appUtils.decodeJWT(tamperedJwt.toString());
     }
 }
