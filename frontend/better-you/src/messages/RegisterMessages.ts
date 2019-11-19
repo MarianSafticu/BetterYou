@@ -11,3 +11,7 @@ export enum RegisterErrorMessages {
     BIRTHDATE_EMPTY_STRING = "Please enter your birthdate.",
     BIRTHDATE_INVALID = "Please enter a valid birthdate."
 }
+
+export enum RegisterToastMessages {
+    SUCCESSFULLY_REGISTERED = "Your account is successfully created."
+}

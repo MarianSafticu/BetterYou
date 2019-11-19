@@ -1,7 +1,10 @@
 import React, { Component, ChangeEvent } from 'react'
 import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
-import {RegisterErrorMessages} from "../messages/RegisterMessages";
+import {RegisterErrorMessages, RegisterToastMessages} from "../messages/RegisterMessages";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "../assets/scss/RegisterPageStyle.scss";
 
 interface IProps {
     registerUser?: Function;
@@ -35,12 +38,12 @@ export default class RegisterComponent extends Component<IProps, IState> {
             passwordError: "",
             birthDateError: "",
         };
-        console.log(this.state.user);
     }
 
     render(){
         return (
             <div className="login-background">
+                <ToastContainer />
                 <form className="login-container" action="">
                     <div className="login-input-container">
 
@@ -180,7 +183,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     
     handleOnClick = () => {
         if (this.validateForm()) {
-            
+            this.showSuccessToast();
         }
     };
 
@@ -343,6 +346,14 @@ export default class RegisterComponent extends Component<IProps, IState> {
             })
         }
         return isValid;
+    }
+
+    showSuccessToast() {
+        let messageToast = RegisterToastMessages;
+        toast(messageToast.SUCCESSFULLY_REGISTERED, {
+            position: toast.POSITION.TOP_CENTER,
+            className: "topToast"
+        });
     }
 
 }
