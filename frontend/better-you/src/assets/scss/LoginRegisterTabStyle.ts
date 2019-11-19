@@ -64,7 +64,7 @@ const LoginRegisterTabStyle = makeStyles({
   },
   typography: {
     width: "100%",
-    height: "100%",
+    // height: "100%",
     padding: 0,
     "@media (max-width: 576px)": {
       paddingTop: "48px"

@@ -1,6 +1,10 @@
 import React, { Component, ChangeEvent } from 'react'
 import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
+<<<<<<< HEAD
+=======
+// import DatePicker from 'react-date-picker';
+>>>>>>> 3ecb508ee893b5e2aa020102102bbe01dbac568d
 
 interface IProps {
     registerUser?: Function;
