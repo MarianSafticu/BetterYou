@@ -1,10 +1,7 @@
 import React, { Component, ChangeEvent } from 'react'
 import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
-<<<<<<< HEAD
-=======
-// import DatePicker from 'react-date-picker';
->>>>>>> 3ecb508ee893b5e2aa020102102bbe01dbac568d
+import {RegisterErrorMessages} from "../messages/RegisterMessages";
 
 interface IProps {
     registerUser?: Function;
@@ -94,13 +91,14 @@ export default class RegisterComponent extends Component<IProps, IState> {
 
                     <div className="login-button-container">
                         <Button
-                            className="login-button">
+                            className="login-button"
+                            onClick={this.handleOnClick.bind(this)}>
                             Register
                         </Button>
                     </div>
 
                     <div className="help-links">
-                        <p>Already have an account? Sign in write now!</p>
+                        <p>Already have an account? Sign in right now!</p>
                     </div>
 
                 </form>
@@ -177,6 +175,174 @@ export default class RegisterComponent extends Component<IProps, IState> {
                 token: this.state.user.token
             }
         });
+    }
+
+    
+    handleOnClick = () => {
+        if (this.validateForm()) {
+            
+        }
+    };
+
+    validateForm() {
+        let isValid = true;
+
+        if (!this.validateUsername()){
+            isValid = false;
+        }
+        if (!this.validateProfilename()) {
+            isValid = false;
+        }
+        if (!this.validateEmail()) {
+            isValid = false;
+        }
+        if (!this.validatePassword()) {
+            isValid = false;
+        }
+        if (!this.validateBirthdate()) {
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    validateUsername() {
+        let isValid = true;
+        let errors = RegisterErrorMessages;
+
+        if (this.state.user.username === ""){
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                usernameError: errors.USERNAME_EMPTY_STRING
+            });
+        } 
+        else if (!this.state.user.username.match(/(^[a-zA-Z]+$)|(^[a-zA-Z]+[0-9]+$)/)) {
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                usernameError: errors.OTHER_SYMBOLS
+            });
+        }
+        else {
+            this.setState({
+                user: this.state.user,
+                usernameError: errors.EMPTY_STRING
+            })
+        }
+        return isValid;
+    }
+
+    validateProfilename(){
+        let isValid = true;
+        let errors = RegisterErrorMessages;
+
+        if (this.state.user.profileName === ""){
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                profileNameError: errors.PROFILENAME_EMPTY_STRING
+            });
+        } 
+        else if (!this.state.user.profileName.match(/(^[a-zA-Z]+$)|(^[a-zA-Z]+[0-9]+$)/)) {
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                profileNameError: errors.OTHER_SYMBOLS
+            });
+        }
+        else {
+            this.setState({
+                user: this.state.user,
+                profileNameError: errors.EMPTY_STRING
+            })
+        }
+        return isValid;
+    }
+
+    validateEmail() {
+        let isValid = true;
+        let errors = RegisterErrorMessages;
+
+        if (this.state.user.email === ""){
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                emailError: errors.EMAIL_EMPTY_STRING
+            });
+        } 
+        else if (!this.state.user.email.match(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/)) {
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                emailError: errors.EMAIL_INVALID
+            });
+        }
+        else {
+            this.setState({
+                user: this.state.user,
+                emailError: errors.EMPTY_STRING
+            })
+        }
+        return isValid;
+    }
+
+    validatePassword() {
+        let isValid = true;
+        let errors = RegisterErrorMessages;
+
+        if (this.state.user.password === ""){
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                passwordError: errors.PASSWORD_EMPTY_STRING
+            });
+        } 
+        else if (!this.state.user.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/)) {
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                passwordError: errors.PASSWORD_INVALID
+            });
+        }
+        else {
+            this.setState({
+                user: this.state.user,
+                passwordError: errors.EMPTY_STRING
+            })
+        }
+        return isValid;
+    }
+
+    validateBirthdate() {
+        let isValid = true;
+        let errors = RegisterErrorMessages;
+
+        let now = new Date();
+        now.setDate(now.getDate() - 1);
+        let yesterday = now.getDate();
+
+        if (this.state.user.birthDate.toString() === ""){
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                birthDateError: errors.BIRTHDATE_EMPTY_STRING
+            });
+        } 
+        else if (this.state.user.birthDate.getDate() > yesterday) {
+            isValid = false;
+            this.setState({
+                user: this.state.user,
+                birthDateError: errors.BIRTHDATE_INVALID
+            });
+        }
+        else {
+            this.setState({
+                user: this.state.user,
+                birthDateError: errors.EMPTY_STRING
+            })
+        }
+        return isValid;
     }
 
 }
