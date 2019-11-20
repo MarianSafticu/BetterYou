@@ -11,6 +11,7 @@ import { Breakpoint } from "react-socks";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@material-ui/core/styles";
 import RegisterComponent from "./RegisterComponent";
+import { useHistory } from "react-router-dom";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -63,15 +64,24 @@ interface LoginRegisterTabComponentProps {
 export default function LoginRegisterTabComponent(
   props: LoginRegisterTabComponentProps
 ) {
+  let history = useHistory();
   const classes = LoginRegisterTabStyle();
   const theme = useTheme();
   const [value, setValue] = React.useState(props.isRegister ? 1 : 0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    if(newValue == 0)
+      history.push("/login");
+    else
+      history.push("/register");
     setValue(newValue);
   };
 
   const handleChangeIndex = (index: number) => {
+    if(index == 0)
+      history.push("/login");
+    else
+      history.push("/register");
     setValue(index);
   };
 
