@@ -4,6 +4,7 @@ import { Button, TextField } from "@material-ui/core";
 import {RegisterErrorMessages, RegisterToastMessages} from "../messages/RegisterMessages";
 import { ToastContainer, toast } from 'react-toastify';
 import { Link } from "react-router-dom";
+import { red } from '@material-ui/core/colors';
 
 interface IProps {
     registerUser?: Function;
@@ -47,6 +48,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                     <div className="login-input-container">
 
                         <TextField
+                            error={this.state.usernameError ? true : false}
                             className="login-input"
                             onChange={this.onChangeUsername.bind(this)}
                             helperText={this.state.usernameError}
@@ -55,6 +57,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.profileNameError ? true : false}
                             className="login-input"
                             onChange={this.onChangeProfileName.bind(this)}
                             helperText={this.state.profileNameError}
@@ -63,6 +66,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.emailError ? true : false}
                             className="login-input"
                             onChange={this.onChangeEmail.bind(this)}
                             helperText={this.state.emailError}
@@ -71,6 +75,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.passwordError ? true : false}
                             className="login-input"
                             onChange={this.onChangePassword.bind(this)}
                             type="password"
@@ -80,6 +85,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.birthDateError ? true : false}
                             className="login-input"
                             onChange={this.onChangeBirthdate.bind(this)}
                             type="date"
@@ -187,7 +193,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         }
     };
 
-    validateForm() {
+    validateForm(): boolean {
         let isValid = true;
 
         if (!this.validateUsername()){
@@ -209,7 +215,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateUsername() {
+    validateUsername(): boolean{
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -236,7 +242,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateProfilename(){
+    validateProfilename(): boolean {
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -263,7 +269,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateEmail() {
+    validateEmail(): boolean {
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -290,7 +296,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validatePassword() {
+    validatePassword(): boolean {
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -317,7 +323,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateBirthdate() {
+    validateBirthdate(): boolean{
         let isValid = true;
         let errors = RegisterErrorMessages;
 
