@@ -1,5 +1,7 @@
 package Service;
 
+import Model.Goal;
+import Model.Habit;
 import Model.User;
 import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 import utils.AppUtils;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Component
@@ -63,5 +66,15 @@ public class ServiceImpl implements Service {
     @Override
     public boolean resetPassword(final String email, final String newPassword) {
         return false;
+    }
+
+    @Override
+    public List<Goal> getUserGoals(String jwtToken) {
+        return null;
+    }
+
+    @Override
+    public List<Habit> getUserHabits(String jwtToken) {
+        return null;
     }
 }

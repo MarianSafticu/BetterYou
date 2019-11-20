@@ -4,10 +4,10 @@ package Model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "habbits")
-public class Habbit implements HasId<Long> {
+@Table(name = "habits")
+public class Habit implements HasId<Long> {
     @Id @GeneratedValue
-    @Column(name = "habbitID")
+    @Column(name = "habitID")
     private long id;
 
     @Override
