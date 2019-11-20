@@ -7,9 +7,8 @@ import java.util.Date;
 @Entity
 @Table(name = "GOALS")
 public class Goal {
-    // TODO: adaugat categorie
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "goalID")
     private long id;
     @Column(name="title")
@@ -26,19 +25,22 @@ public class Goal {
     @Temporal(TemporalType.DATE)
     @Column(name="EndDate")
     private Date endDate;
+    @Column(name="category")
+    private Category category;
     @Column(name="isPublic")
     private boolean isPublic;
 
     public Goal() {
     }
 
-    public Goal(String title, String description, int currentProgress, int progressToReach, Date startDate, Date endDate, boolean isPublic) {
+    public Goal(String title, String description, int currentProgress, int progressToReach, Date startDate, Date endDate, Category category, boolean isPublic) {
         this.title = title;
         this.description = description;
         this.currentProgress = currentProgress;
         this.progressToReach = progressToReach;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.category = category;
         this.isPublic = isPublic;
     }
 
