@@ -3,8 +3,7 @@ import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
 import {RegisterErrorMessages, RegisterToastMessages} from "../messages/RegisterMessages";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import "../assets/scss/RegisterPageStyle.scss";
+import { Link } from "react-router-dom";
 
 interface IProps {
     registerUser?: Function;
@@ -101,7 +100,8 @@ export default class RegisterComponent extends Component<IProps, IState> {
                     </div>
 
                     <div className="help-links">
-                        <p>Already have an account? Sign in right now!</p>
+                        <p>Already have an account?</p>
+                        <Link to="/login" className="link">Sign in </Link>right now!
                     </div>
 
                 </form>
@@ -183,7 +183,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     
     handleOnClick = () => {
         if (this.validateForm()) {
-            this.showSuccessToast();
+            //form-ul e valid
         }
     };
 
@@ -346,14 +346,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
             })
         }
         return isValid;
-    }
-
-    showSuccessToast() {
-        let messageToast = RegisterToastMessages;
-        toast(messageToast.SUCCESSFULLY_REGISTERED, {
-            position: toast.POSITION.TOP_CENTER,
-            className: "topToast"
-        });
     }
 
 }
