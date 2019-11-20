@@ -14,9 +14,7 @@ interface IProps {
 interface IState {
   user: User;
   emailError?: string;
-  isEmailError?: boolean;
   passwordError?: string;
-  isPasswordError?: boolean;
 }
 
 class LoginComponent extends Component<IProps, IState> {
@@ -33,9 +31,7 @@ class LoginComponent extends Component<IProps, IState> {
         token: ""
       },
       emailError: "",
-      isEmailError: false,
       passwordError: "",
-      isPasswordError: false
     };
   }
 
@@ -79,7 +75,6 @@ class LoginComponent extends Component<IProps, IState> {
             <TextField
               className="login-input"
               onChange={this.onChangeEmail.bind(this)}
-              error={this.state.isEmailError}
               helperText={this.state.emailError}
               label="Email:"
             />
@@ -89,7 +84,6 @@ class LoginComponent extends Component<IProps, IState> {
               className="login-input"
               onChange={this.onChangePassword.bind(this)}
               type="password"
-              error={this.state.isPasswordError}
               helperText={this.state.passwordError}
               label="Password:"
             />
