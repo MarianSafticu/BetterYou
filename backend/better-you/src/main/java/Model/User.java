@@ -3,7 +3,7 @@ package Model;
 import utils.AppUtils;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -22,8 +22,7 @@ public class User implements HasId<Long> {
     @Column(name="email")
     private String email;
     @Column(name="BirthDate")
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    private LocalDate birthDate;
     @Column(name="isVerified")
     private boolean isVerified;
     @Column(name="confirmCode")
@@ -34,7 +33,7 @@ public class User implements HasId<Long> {
     public User(){
     }
 
-    public User(String username, String profile_name, String password, String email, Date birthDate) {
+    public User(String username, String profile_name, String password, String email, LocalDate birthDate) {
         this.username = username;
         this.profile_name = profile_name;
         this.password = password;
@@ -99,11 +98,11 @@ public class User implements HasId<Long> {
         this.email = email;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

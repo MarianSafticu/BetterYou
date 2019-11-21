@@ -1,8 +1,8 @@
 package Model;
 
-
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "HABBITS")
@@ -16,20 +16,18 @@ public class Habbit implements HasId<Long> {
     @Column(name="description")
     private String description;
     @Column(name="StartDate")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private LocalDate startDate;
     @Column(name="RepetitionType")
     private Repetition repetitionType;
     @Column(name="category")
     private Category category;
-    @Column(name="dates")
-    @Temporal(TemporalType.DATE)
-    private Date[] dates;
+    @ElementCollection
+    private List<LocalDate> dates;
 
     public Habbit() {
     }
 
-    public Habbit(String title, String description, Date startDate, Repetition repetitionType, Category category, Date[] dates) {
+    public Habbit(String title, String description, LocalDate startDate, Repetition repetitionType, Category category, List<LocalDate> dates) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -63,11 +61,11 @@ public class Habbit implements HasId<Long> {
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
@@ -87,11 +85,11 @@ public class Habbit implements HasId<Long> {
         this.category = category;
     }
 
-    public Date[] getDates() {
+    public List<LocalDate> getDates() {
         return dates;
     }
 
-    public void setDates(Date[] dates) {
+    public void setDates(List<LocalDate> dates) {
         this.dates = dates;
     }
 }

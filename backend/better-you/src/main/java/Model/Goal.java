@@ -2,7 +2,7 @@ package Model;
 
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "GOALS")
@@ -20,11 +20,9 @@ public class Goal {
     @Column(name="progressToReach")
     private int progressToReach;
     @Column(name="StartDate")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
-    @Temporal(TemporalType.DATE)
+    private LocalDate startDate;
     @Column(name="EndDate")
-    private Date endDate;
+    private LocalDate endDate;
     @Column(name="category")
     private Category category;
     @Column(name="isPublic")
@@ -33,7 +31,7 @@ public class Goal {
     public Goal() {
     }
 
-    public Goal(String title, String description, int currentProgress, int progressToReach, Date startDate, Date endDate, Category category, boolean isPublic) {
+    public Goal(String title, String description, int currentProgress, int progressToReach, LocalDate startDate, LocalDate endDate, Category category, boolean isPublic) {
         this.title = title;
         this.description = description;
         this.currentProgress = currentProgress;
@@ -84,19 +82,19 @@ public class Goal {
         this.progressToReach = progressToReach;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
