@@ -7,6 +7,7 @@ import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import utils.AppUtils;
 
@@ -15,6 +16,8 @@ import java.util.List;
 
 
 @Component
+@ComponentScan("Repository")
+@ComponentScan("utils")
 public class ServiceImpl implements Service {
     private static final Logger LOG = LogManager.getLogger(ServiceImpl.class);
 

@@ -4,28 +4,30 @@
 
 <hibernate-configuration>
     <session-factory>
-
         <property name = "hibernate.dialect">
-            org.hibernate.dialect.MySQL5Dialect
+            org.hibernate.dialect.PostgreSQL10Dialect
         </property>
 
         <property name = "hibernate.connection.driver_class">
-            org.sqlite.JDBC
+            org.postgresql.Driver
         </property>
 
-        <!-- Assume students is the database name -->
-
         <property name = "hibernate.connection.url">
-<!--            jdbc:mysql://localhost/test-->
+            jdbc:postgresql://localhost:5432/PC
         </property>
 
         <property name = "hibernate.connection.username">
-<!--            root-->
+            postgres
         </property>
 
         <property name = "hibernate.connection.password">
-<!--            cohondob-->
+            toor
         </property>
+        <property name="hbm2ddl.auto">update</property>
+<!--        <property name="show_sql">true</property>-->
+
+        <mapping class="Model.User"/>
+<!--        <mapping class="Model.Habbit"/>-->
 
     </session-factory>
 </hibernate-configuration>
