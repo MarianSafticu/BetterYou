@@ -253,7 +253,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                 profileNameError: errors.PROFILENAME_EMPTY_STRING
             });
         } 
-        else if (!this.state.user.profileName.match(/(^[a-zA-Z]+$)|(^[a-zA-Z]+[0-9]+$)/)) {
+        else if (!this.state.user.profileName.match(/(^[a-zA-Z ]+$)|(^[a-zA-Z ]+[0-9 ]+$)/)) {
             isValid = false;
             this.setState({
                 user: this.state.user,
