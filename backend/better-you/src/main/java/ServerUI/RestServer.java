@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@EnableWebSecurity
 @RequestMapping("/app/better-you") //the address of the server
 @ComponentScan("Service")
 public class RestServer {
@@ -34,8 +36,9 @@ public class RestServer {
      * @return An string with the token if the login is successful or the error message
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> loggin(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         try{
+            System.out.println("Ceva");
             String token=service.login(loginRequest.getEmail(),loginRequest.getPassword());
             return new ResponseEntity<String>(token, HttpStatus.OK);
         }

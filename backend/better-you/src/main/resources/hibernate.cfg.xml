@@ -28,7 +28,7 @@
 
         <mapping class="Model.User"/>
         <mapping class="Model.Goal"/>
-        <mapping class="Model.Habbit"/>
+        <mapping class="Model.Habit"/>
 
     </session-factory>
 </hibernate-configuration>

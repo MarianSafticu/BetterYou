@@ -3,6 +3,7 @@ package Repository;
 import Model.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Component;
 import utils.HibernateSesionFactory;
 
 import javax.persistence.NoResultException;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 
+@Component
 public class UserRepo extends AbstractRepo<Long, User> {
     private static final String EMAIL_FIELD = "email";
 
