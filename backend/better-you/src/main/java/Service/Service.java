@@ -2,7 +2,7 @@ package Service;
 
 
 import Model.Goal;
-import Model.Habit;
+import Model.Habbit;
 
 import java.util.Date;
 import java.util.List;
@@ -65,5 +65,5 @@ public interface Service {
      * @param jwtToken user's token
      * @return the goals list
      */
-    List<Habit> getUserHabits(final String jwtToken);
+    List<Habbit> getUserHabits(final String jwtToken);
 }
