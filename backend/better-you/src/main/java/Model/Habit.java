@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "HABBITS")
-public class Habbit implements HasId<Long> {
+public class Habit implements HasId<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "habbitID")
@@ -24,10 +24,10 @@ public class Habbit implements HasId<Long> {
     @ElementCollection
     private List<LocalDate> dates;
 
-    public Habbit() {
+    public Habit() {
     }
 
-    public Habbit(String title, String description, LocalDate startDate, Repetition repetitionType, Category category, List<LocalDate> dates) {
+    public Habit(String title, String description, LocalDate startDate, Repetition repetitionType, Category category, List<LocalDate> dates) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
