@@ -28,7 +28,7 @@
 
         <mapping class="Model.User"/>
         <mapping class="Model.Goal"/>
-        <mapping class="Model.Habbit"/>
+        <mapping class="Model.Habit"/>
         <mapping class="Model.RegistrationLink"/>
 
     </session-factory>
