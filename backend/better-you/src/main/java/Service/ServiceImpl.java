@@ -1,7 +1,5 @@
 package Service;
 
-import Model.Goal;
-import Model.Habit;
 import Model.User;
 import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
