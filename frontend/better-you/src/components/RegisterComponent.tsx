@@ -3,8 +3,8 @@ import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
 import {RegisterErrorMessages, RegisterToastMessages} from "../messages/RegisterMessages";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import "../assets/scss/RegisterPageStyle.scss";
+import { Link } from "react-router-dom";
+import { red } from '@material-ui/core/colors';
 
 interface IProps {
     registerUser?: Function;
@@ -48,6 +48,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                     <div className="login-input-container">
 
                         <TextField
+                            error={this.state.usernameError ? true : false}
                             className="login-input"
                             onChange={this.onChangeUsername.bind(this)}
                             helperText={this.state.usernameError}
@@ -56,6 +57,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.profileNameError ? true : false}
                             className="login-input"
                             onChange={this.onChangeProfileName.bind(this)}
                             helperText={this.state.profileNameError}
@@ -64,6 +66,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.emailError ? true : false}
                             className="login-input"
                             onChange={this.onChangeEmail.bind(this)}
                             helperText={this.state.emailError}
@@ -72,6 +75,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.passwordError ? true : false}
                             className="login-input"
                             onChange={this.onChangePassword.bind(this)}
                             type="password"
@@ -81,6 +85,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <br />
 
                         <TextField
+                            error={this.state.birthDateError ? true : false}
                             className="login-input"
                             onChange={this.onChangeBirthdate.bind(this)}
                             type="date"
@@ -101,7 +106,8 @@ export default class RegisterComponent extends Component<IProps, IState> {
                     </div>
 
                     <div className="help-links">
-                        <p>Already have an account? Sign in right now!</p>
+                        <p>Already have an account?</p>
+                        <Link to="/login" className="link">Sign in </Link>right now!
                     </div>
 
                 </form>
@@ -183,11 +189,11 @@ export default class RegisterComponent extends Component<IProps, IState> {
     
     handleOnClick = () => {
         if (this.validateForm()) {
-            this.showSuccessToast();
+            //form-ul e valid
         }
     };
 
-    validateForm() {
+    validateForm(): boolean {
         let isValid = true;
 
         if (!this.validateUsername()){
@@ -209,7 +215,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateUsername() {
+    validateUsername(): boolean{
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -236,7 +242,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateProfilename(){
+    validateProfilename(): boolean {
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -247,7 +253,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
                 profileNameError: errors.PROFILENAME_EMPTY_STRING
             });
         } 
-        else if (!this.state.user.profileName.match(/(^[a-zA-Z]+$)|(^[a-zA-Z]+[0-9]+$)/)) {
+        else if (!this.state.user.profileName.match(/(^[a-zA-Z ]+$)|(^[a-zA-Z ]+[0-9 ]+$)/)) {
             isValid = false;
             this.setState({
                 user: this.state.user,
@@ -263,7 +269,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateEmail() {
+    validateEmail(): boolean {
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -290,7 +296,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validatePassword() {
+    validatePassword(): boolean {
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -317,7 +323,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         return isValid;
     }
 
-    validateBirthdate() {
+    validateBirthdate(): boolean{
         let isValid = true;
         let errors = RegisterErrorMessages;
 
@@ -346,14 +352,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
             })
         }
         return isValid;
-    }
-
-    showSuccessToast() {
-        let messageToast = RegisterToastMessages;
-        toast(messageToast.SUCCESSFULLY_REGISTERED, {
-            position: toast.POSITION.TOP_CENTER,
-            className: "topToast"
-        });
     }
 
 }
