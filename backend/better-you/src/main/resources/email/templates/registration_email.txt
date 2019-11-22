@@ -1,10 +1,10 @@
-Dear %s,
+Dear <username>,
 
 We are VERY excited that you have decided to join our platform!
 
 Please enter the link bellow to confirm your registration:
 
-%s
+<link>
 
 If you were not expecting  this email please ignore it.
 
