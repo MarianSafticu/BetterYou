@@ -31,5 +31,6 @@
         <mapping class="Model.Habit"/>
         <mapping class="Model.RegistrationLink"/>
 
+
     </session-factory>
 </hibernate-configuration>
