@@ -1,7 +1,7 @@
 package Service;
 
 import Model.Goal;
-import Model.Habbit;
+import Model.Habit;
 import Model.User;
 import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
@@ -77,7 +77,7 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public List<Habbit> getUserHabits(String jwtToken) {
+    public List<Habit> getUserHabits(String jwtToken) {
         return null;
     }
 }
