@@ -1,28 +1,45 @@
 package Service;
 
+import Model.RegistrationLink;
 import Model.User;
+import Model.validator.UserValidator;
+import Model.validator.UserValidatorException;
+import Repository.RegistrationLinkRepo;
+import Repository.RepoException;
 import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import utils.AppUtils;
+import utils.mail.MailUtils;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @ComponentScan("Repository")
 @ComponentScan("utils")
 public class ServiceImpl implements Service {
     private static final Logger LOG = LogManager.getLogger(ServiceImpl.class);
+    private static final String REGISTER_CONFIRM_PATH = "localhost:8080/register/confirm/"; // Should be replaced
 
     private final UserRepo userRepo;
+    private final RegistrationLinkRepo registrationLinkRepo;
     private final AppUtils appUtils;
+    private final UserValidator userValidator;
+    private final MailUtils mailUtils;
 
     @Autowired
-    public ServiceImpl(UserRepo userRepo, AppUtils appUtils) {
+    public ServiceImpl(final UserRepo userRepo,
+                       final AppUtils appUtils,
+                       final UserValidator userValidator,
+                       final MailUtils mailUtils,
+                       final RegistrationLinkRepo registrationLinkRepo) {
         this.userRepo = userRepo;
         this.appUtils = appUtils;
+        this.userValidator = userValidator;
+        this.mailUtils = mailUtils;
+        this.registrationLinkRepo = registrationLinkRepo;
     }
 
     @Override
@@ -51,10 +68,41 @@ public class ServiceImpl implements Service {
         return appUtils.createJWT(String.valueOf(user.getId()));
     }
 
+
     @Override
-    public String register(final String username, final String profileName, final String password, final String email, final Date birthDate) {
-        return null;
+    public String register(final String username, final String profileName, final String password, final String email, final LocalDate birthDate) {
+        LOG.info("New user wants to register with email {}, username {} and profile name {}", email, username, profileName);
+
+        User newUser = new User(username, profileName, password, email, birthDate);
+
+        LOG.info("Validating user input data");
+        try {
+            userValidator.validateUser(newUser);
+            LOG.info("User validation completed successfully");
+        } catch (UserValidatorException e) {
+            LOG.info("User data is invalid: " + e.getMessage());
+            throw new ServiceException("User data is invalid", e);
+        }
+
+        try {
+            userRepo.add(newUser);
+        } catch (RepoException e) {
+            LOG.error(e.getMessage());
+            throw new ServiceException("Something went wrong while saving the user", e);
+        }
+
+        try {
+            long newUserId = userRepo.getUserByEmail(newUser.getEmail()).getId();
+            String registrationConfirmLink = REGISTER_CONFIRM_PATH + AppUtils.generateCode();
+            registrationLinkRepo.add(new RegistrationLink(newUserId, registrationConfirmLink));
+            mailUtils.sendRegistrationEmail(newUser, registrationConfirmLink);
+            return appUtils.createJWT(String.valueOf(newUserId));
+        } catch (RepoException e) {
+            LOG.error("Something went wrong while creating and sending registration link");
+            throw new ServiceException("Something went wrong while creating and sending registration link", e);
+        }
     }
+
 
     @Override
     public boolean recoverPassword(final String email) {
