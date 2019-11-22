@@ -1,0 +1,47 @@
+.wrapper {
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.bar {
+  width: 0;
+  height: 20px;
+  transition: width 0.3s;
+  border-radius: 5;
+  position: relative;
+  text-align: center;
+}
+
+#label {
+  line-height: 20px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.title {
+  color: rgba(255, 255, 255, 0.9);
+  padding-top: 10px;
+  padding-left: 20px;
+  font-weight: bold;
+  font-family: "Lucida Sans";
+}
+
+.card {
+  position: relative;
+  width: 400px;
+  font-family: "Lucida Sans";
+  border-radius: 4px;
+  background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+}
+
+.category {
+  position: absolute;
+  width: 10px;
+  height: 100px;
+  background-color: #000591;
+}
