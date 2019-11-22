@@ -1,14 +1,18 @@
 import React from "react";
-import {
-  lighten,
-  makeStyles,
-  createStyles,
-  withStyles,
-  Theme
-} from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import "../assets/scss/GoalListStyle.scss";
 
-const rgbList = ["", "", "", "", "", "", "", "", "", ""];
+const rgbList = [
+  "#C70900",
+  "#B31A00",
+  "#BF5400",
+  "#BB7800",
+  "#B79A00",
+  "#ABB200",
+  "#84AF00",
+  "#5FAB00",
+  "#3BA700",
+  "#1AA200"
+];
 
 class ProgressBar extends React.Component<
   {},
@@ -18,35 +22,42 @@ class ProgressBar extends React.Component<
     super(props);
     this.state = {
       progress: 0,
-      color: "#E53400"
+      color: "#C70900"
     };
   }
 
   render() {
     const style = {
-      progress: this.state.progress + "%"
+      width: this.state.progress + "%",
+      background: this.state.color
     };
 
     return (
       <div
         className="wrapper"
         onClick={e => {
-          this.handleClick(e);
+          this.handleClick();
         }}
       >
-        {"Score: " + this.state.score} <br />
-        {this.state.progress + "%"}
-        <div className="bar" style={style} />
+        <div className="bar" style={style}>
+          <div id="label">{this.state.progress}%</div>
+        </div>
       </div>
     );
   }
 
-  handleClick(e) {
+  handleClick() {
     this.setState(state => {
-      if (state.progress + 10 === 100) {
-        return { progress: 0, score: state.score + 1 };
+      console.log(this.state.color);
+      if (state.progress + 10 > 100) {
+        return { progress: 0, color: "#C70900" };
       }
-      return { progress: state.progress + 10 };
+      return {
+        progress: state.progress + 10,
+        color: rgbList[state.progress / 10]
+      };
     });
   }
 }
+
+export default ProgressBar;
