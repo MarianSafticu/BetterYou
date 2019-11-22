@@ -2,6 +2,7 @@ package Model.validator;
 
 import Model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -67,8 +68,8 @@ public class UserValidator {
         }
     }
 
-    private void validateBirthDate(final Date birthDate, final StringBuilder errorsStringBuilder) {
-        if (birthDate == null || birthDate.after(new Date())) {
+    private void validateBirthDate(final LocalDate birthDate, final StringBuilder errorsStringBuilder) {
+        if (birthDate == null || birthDate.isAfter(LocalDate.now())) {
             errorsStringBuilder.append("Birth date must be before current date\n");
         }
     }

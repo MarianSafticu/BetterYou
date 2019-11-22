@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -21,8 +22,8 @@ public class UserValidatorTest {
     private static final String INVALID_PASSWORD = "123";
     private static final String VALID_PROFILE_NAME = "Daniel Cucusleac";
     private static final String INVALID_PROFILE_NAME = "fu";
-    private static final Date VALID_BIRTH_DATE = Date.from(Instant.now().minusSeconds(100000));
-    private static final Date INVALID_BIRTH_DATE = Date.from(Instant.now().plusSeconds(100000));
+    private static final LocalDate VALID_BIRTH_DATE = LocalDate.now().minusWeeks(1);
+    private static final LocalDate INVALID_BIRTH_DATE = LocalDate.now().plusWeeks(1);
 
     private static final String INVALID_USERNAME_ERROR = "Username must have at least 3 characters\n";
     private static final String INVALID_EMAIL_ERROR = "Email is invalid\n";
