@@ -8,6 +8,10 @@
   }
 }
 
+.MuiTab-root {
+  max-width: none !important;
+}
+
 .MuiTabs-centered {
   justify-content: space-evenly;
 }
