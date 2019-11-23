@@ -1,6 +1,7 @@
 package Model.validator;
 
 import Model.User;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.Date;
 /**
  * Validator class for {@link User}.
  */
+@Component
 public class UserValidator {
     private static final String PASSWORD_REGEX = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
 

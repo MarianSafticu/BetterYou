@@ -24,6 +24,7 @@ import java.util.List;
 @Component
 @ComponentScan("Repository")
 @ComponentScan("utils")
+@ComponentScan("Model")
 public class ServiceImpl implements Service {
     private static final Logger LOG = LogManager.getLogger(ServiceImpl.class);
     private static final String REGISTER_CONFIRM_PATH = "localhost:8080/register/confirm/"; // Should be replaced
