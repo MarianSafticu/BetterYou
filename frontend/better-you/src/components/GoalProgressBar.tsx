@@ -11,18 +11,26 @@ const rgbList = [
   "#84AF00",
   "#5FAB00",
   "#3BA700",
+  "#1AA200",
   "#1AA200"
 ];
 
-class ProgressBar extends React.Component<
-  {},
-  { progress: number; color: string }
-> {
+interface IProps {
+  progress: number;
+  step: number;
+}
+
+interface IState {
+  progress: number;
+  color: string;
+}
+
+class ProgressBar extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      progress: 0,
-      color: "#C70900"
+      progress: this.props.progress,
+      color: rgbList[this.props.progress / 10 - 1]
     };
   }
 
@@ -49,12 +57,14 @@ class ProgressBar extends React.Component<
   handleClick() {
     this.setState(state => {
       console.log(this.state.color);
-      if (state.progress + 10 > 100) {
+      if (state.progress + this.props.step >= 100 + this.props.step) {
         return { progress: 0, color: "#C70900" };
+      } else if (state.progress + this.props.step > 100) {
+        return { progress: 100, color: "#1AA200" };
       }
       return {
-        progress: state.progress + 10,
-        color: rgbList[state.progress / 10]
+        progress: state.progress + this.props.step,
+        color: rgbList[parseInt((state.progress + this.props.step) / 10 + "")]
       };
     });
   }

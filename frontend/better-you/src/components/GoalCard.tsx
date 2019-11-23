@@ -5,16 +5,19 @@ import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../assets/scss/GoalListStyle.scss";
 
-class GoalCard extends React.Component<
-  {},
-  { title: string; description: string; progress: number }
-> {
-  constructor(prop: any) {
+interface IProps {
+  goal: { title: string; description: string; progress: number; step: number };
+}
+
+class GoalCard extends React.Component<IProps, {}> {
+  constructor(prop: IProps) {
     super(prop);
     this.state = {
-      title: "No title",
-      description: "",
-      progress: 0
+      goal: {
+        title: prop.goal.title,
+        description: prop.goal.description,
+        progress: prop.goal.progress
+      }
     };
   }
 
@@ -24,10 +27,13 @@ class GoalCard extends React.Component<
         <div className="category" />
         <CardActionArea>
           <Typography variant="h5" className="title">
-            {this.state.title}
+            {this.props.goal.title}
           </Typography>
         </CardActionArea>
-        <GoalProgressBar />
+        <GoalProgressBar
+          progress={this.props.goal.progress}
+          step={this.props.goal.step}
+        />
       </Card>
     );
   }
