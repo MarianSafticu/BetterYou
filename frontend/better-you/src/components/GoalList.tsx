@@ -1,26 +1,29 @@
 import React from "react";
 import GoalCard from "./GoalCard";
+import "../assets/scss/GoalListStyle.scss";
 
-const goal1 = <GoalCard></GoalCard>;
+const goalsList = [
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />,
+  <GoalCard />
+];
 
-class GoalList extends React.Component<
-  {},
-  { progress: number; color: string }
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      progress: 0,
-      color: "#E53400"
-    };
-  }
-
+class GoalList extends React.Component {
   render() {
-    const style = {
-      progress: this.state.progress + "%"
-    };
-
-    return <div>{goal1}</div>;
+    return (
+      <div className="list">
+        {goalsList.map(function(goal, index) {
+          return <div>{goal}</div>;
+        })}
+      </div>
+    );
   }
 
   handleClick(e: any) {}
