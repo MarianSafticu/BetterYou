@@ -1,8 +1,9 @@
-@import "./colors.scss";
+@import "./_colors.scss";
+@import "./_global.scss";
 
 @media only screen and (min-width: 768px) {
   .carousel-container {
-    height: calc(100% - 55px - 170px - 26px);
+    height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
     width: calc(100% - 50px);
     margin: 55px auto 0 auto;
   }
@@ -10,15 +11,8 @@
   .slider,
   .slick-list,
   .slick-track,
-  .breakpoint {
+  .carousel-breakpoint {
     height: 100%;
-  }
-
-  .slick-list {
-    background-color: $green_blue;
-    border-style: hidden;
-    border-radius: 10px;
-    box-shadow: 0px 0px 50px 50px $light_blue inset;
   }
 
   .slick-track {
@@ -64,7 +58,7 @@
 
 @media only screen and (max-width: 576px) {
   .carousel-container {
-    height: calc(100% - 55px - 170px - 26px);
+    height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
     width: calc(100% - 50px);
     margin: 55px auto 0 auto;
   }
@@ -72,15 +66,8 @@
   .slider,
   .slick-list,
   .slick-track,
-  .breakpoint {
+  .carousel-breakpoint {
     height: 100%;
-  }
-
-  .slick-list {
-    background-color: $green_blue;
-    border-style: hidden;
-    border-radius: 10px;
-    box-shadow: 0px 0px 35px 30px $light_blue inset;
   }
 
   .slick-track {

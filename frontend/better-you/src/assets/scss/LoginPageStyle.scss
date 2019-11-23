@@ -18,11 +18,13 @@
 }
 
 .login-button {
-  background-color: #c38d9e !important;
   width: 50% !important;
-  border: 1px solid black !important;
 }
 
-.login-button:hover {
-  background-color: #b48292;
+.help-link-register {
+  text-decoration: none;
+  color: black;
+  &:hover {
+    color: $color6;
+  }
 }
