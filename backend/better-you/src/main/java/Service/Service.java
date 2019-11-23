@@ -1,11 +1,11 @@
 package Service;
 
-
 import Model.Goal;
 import Model.Habit;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+
 
 
 public interface Service {
@@ -30,7 +30,7 @@ public interface Service {
      * @return the session token
      * @throws ServiceException if the register fails
      */
-    String register(final String username, final String profileName, final String password, final String email, final Date birthDate);
+    String register(final String username, final String profileName, final String password, final String email, final LocalDate birthDate);
 
     /**
      * Checks if an user with the given email exists and sends a "recover password" email to it.
