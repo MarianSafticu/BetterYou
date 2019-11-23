@@ -1,17 +1,18 @@
 package Model.validator;
 
 import Model.User;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 
 /**
  * Validator class for {@link User}.
  */
+@Component
 public class UserValidator {
     private static final String PASSWORD_REGEX = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
+    private static final String EMAIL_REGEX = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
 
     /**
      * Validates the details of a given user and throws {@link UserValidatorException} if there are any problems.
@@ -63,7 +64,7 @@ public class UserValidator {
     }
 
     private void validateEmail(final String email, final StringBuilder errorsStringBuilder) {
-        if (email == null || !email.matches("^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$")) {
+        if (email == null || !email.matches(EMAIL_REGEX)) {
             errorsStringBuilder.append("Email is invalid\n");
         }
     }

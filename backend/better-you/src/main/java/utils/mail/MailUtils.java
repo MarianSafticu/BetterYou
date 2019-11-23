@@ -4,6 +4,9 @@ package utils.mail;
 import Model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,6 +17,7 @@ import java.nio.file.Paths;
 /**
  * Class which contains specific email tasks (e.g. sends email for newly registered user)
  */
+@Component
 public class MailUtils {
     private static final Logger LOG = LogManager.getLogger(MailUtils.class);
     private static final String REGISTRATION_EMAIL_HEADER = "Confirm Better You registration!";
@@ -32,9 +36,11 @@ public class MailUtils {
      * @throws URISyntaxException if anything goes wrong while reading the email content files
      * @throws IOException        if anything goes wrong while reading the email content files
      */
+    @Autowired
     public MailUtils(final MailSender mailSender,
-                     final String registrationEmailPath,
-                     final String resetPasswordEmailPath) throws URISyntaxException, IOException {
+                     @Value("${utils.mail.registration.email.path}") final String registrationEmailPath,
+                     @Value("${utils.mail.reset.password.email.path}") final String resetPasswordEmailPath)
+            throws URISyntaxException, IOException {
         this.mailSender = mailSender;
         this.registrationEmailContent = new String(Files.readAllBytes(Paths.get(
                 getClass().getResource(registrationEmailPath).toURI())));
