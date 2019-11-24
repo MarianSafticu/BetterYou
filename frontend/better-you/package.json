@@ -24,6 +24,7 @@
     "react-slick": "^0.25.2",
     "react-socks": "^2.1.0",
     "react-swipeable-views": "^0.13.3",
+    "react-toastify": "^5.4.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "slick-carousel": "^1.8.1",
