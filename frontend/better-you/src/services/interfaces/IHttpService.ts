@@ -1,3 +1,5 @@
+import { UserLoginDTO } from "../../models/UserLoginDTO";
+
 export default interface IHttpService {
-    // loginAdmin(admin: Admin): Promise<Admin>;
+    loginUser(user: UserLoginDTO): Promise<string>;
 }

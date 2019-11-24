@@ -1,5 +1,8 @@
 import { User } from "../../models/User";
+import { UserLoginDTO } from "../../models/UserLoginDTO";
 
 export default interface AppState {
-    currentUser: User | undefined;
+    loading: boolean;
+    error: string;
+    currentUser: UserLoginDTO | undefined;
 }

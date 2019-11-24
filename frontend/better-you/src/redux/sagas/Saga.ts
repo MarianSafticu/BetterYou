@@ -1,8 +1,7 @@
+import { SET_CURRENT_USER_BEGIN } from "../actions/types";
+import { takeLeading } from "@redux-saga/core/effects";
+import { loginUserHandler } from "./Listeners";
+
 export function* generalSaga(): IterableIterator<any> {
-    // yield takeEvery(START_QUIZ, startQuiz);
-    // yield takeEvery(END_QUIZ, endQuiz);
-    // yield takeEvery(SEND_ANSWER, sendAnswer);
-    // yield takeLeading(FETCH_NEXT_QUESTION, fetchQuestion);
-    // yield takeEvery(FETCH_RESULTS, fetchResults);
-    // yield takeEvery(RESET_RESULTS, resetResults);
+    yield takeLeading(SET_CURRENT_USER_BEGIN, loginUserHandler);
 }

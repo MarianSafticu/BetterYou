@@ -3,46 +3,44 @@ import "../assets/scss/LoginPageStyle.scss";
 import { Button, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import AppState from "../redux/store/store";
-import { User } from "../models/User";
-import { setCurrentUser } from "../redux/actions/actions";
+import { setCurrentUserBegin } from "../redux/actions/actions";
 import { Link } from "react-router-dom";
+import Service from "../services/Service";
+import { LoginException } from "../exceptions/LoginException";
+import { UserLoginDTO } from "../models/UserLoginDTO";
 
 interface IProps {
   loginUser: Function;
 }
 
 interface IState {
-  user: User;
-  emailError?: string;
-  passwordError?: string;
+  user: UserLoginDTO;
+  error: LoginException;
 }
 
 class LoginComponent extends Component<IProps, IState> {
+  service: Service;
+
   constructor(prop: IProps) {
     super(prop);
+    this.service = Service.getInstance();
     this.state = {
       user: {
-        username: "",
-        profileName: "",
-        birthDate: new Date(),
         email: "",
-        isVerified: false,
         password: "",
         token: ""
       },
-      emailError: "",
-      passwordError: ""
+      error: {
+        emailError: "",
+        passwordError: ""
+      }
     };
   }
 
   onChangeEmail(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
       user: {
-        username: this.state.user.username,
-        profileName: this.state.user.profileName,
-        birthDate: this.state.user.birthDate,
         email: event.target.value,
-        isVerified: this.state.user.isVerified,
         password: this.state.user.password,
         token: this.state.user.token
       }
@@ -52,20 +50,30 @@ class LoginComponent extends Component<IProps, IState> {
   onChangePassword(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
       user: {
-        username: this.state.user.username,
-        profileName: this.state.user.profileName,
-        birthDate: this.state.user.birthDate,
         email: this.state.user.email,
-        isVerified: this.state.user.isVerified,
         password: event.target.value,
         token: this.state.user.token
       }
     });
   }
 
-  handleOnClick = () => {
-    this.props.loginUser(this.state.user);
-  };
+  async handleOnClick() {
+    let validationResult: LoginException = this.service.validateLoginUser(
+      this.state.user
+    );
+    if (
+      validationResult.emailError.length > 0 ||
+      validationResult.passwordError.length > 0
+    ) {
+      this.setState({
+        error: validationResult
+      });
+    } else {
+      // let result = await this.service.loginUser(this.state.user);
+      this.props.loginUser(this.state.user);
+      // console.log(result);
+    }
+  }
 
   render() {
     return (
@@ -75,7 +83,7 @@ class LoginComponent extends Component<IProps, IState> {
             <TextField
               className="login-input"
               onChange={this.onChangeEmail.bind(this)}
-              helperText={this.state.emailError}
+              helperText={this.state.error.emailError}
               label="Email:"
             />
             <br />
@@ -84,7 +92,7 @@ class LoginComponent extends Component<IProps, IState> {
               className="login-input"
               onChange={this.onChangePassword.bind(this)}
               type="password"
-              helperText={this.state.passwordError}
+              helperText={this.state.error.passwordError}
               label="Password:"
             />
             <br />
@@ -100,7 +108,7 @@ class LoginComponent extends Component<IProps, IState> {
           </div>
 
           <div className="help-links">
-            <p>I've forgot my password.</p>
+            <p>I've forgot my password</p>
             <Link to="/register" className="help-link-register">
               I don't have an account
             </Link>
@@ -117,7 +125,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    loginUser: (user: User) => dispatch(setCurrentUser(user))
+    loginUser: (user: UserLoginDTO) => dispatch(setCurrentUserBegin(user))
   };
 };
 
