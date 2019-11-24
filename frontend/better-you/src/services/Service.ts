@@ -31,7 +31,7 @@ export default class Service {
       error.emailError = "Email is invalid!";
 
     if (user.password.length === 0)
-      error.emailError = "Password field cannot be empty!";
+      error.passwordError = "Password field cannot be empty!";
 
     return error;
   }

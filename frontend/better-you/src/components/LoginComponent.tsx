@@ -84,6 +84,7 @@ class LoginComponent extends Component<IProps, IState> {
               className="login-input"
               onChange={this.onChangeEmail.bind(this)}
               helperText={this.state.error.emailError}
+              error={this.state.error.emailError ? true : false}
               label="Email:"
             />
             <br />
@@ -93,6 +94,7 @@ class LoginComponent extends Component<IProps, IState> {
               onChange={this.onChangePassword.bind(this)}
               type="password"
               helperText={this.state.error.passwordError}
+              error={this.state.error.passwordError ? true : false}
               label="Password:"
             />
             <br />
