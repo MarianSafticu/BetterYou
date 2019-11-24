@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 
-@ComponentScan({"Repository", "Service", "utils", "Model"})
+//@ComponentScan({"Repository", "Service", "utils", "Model"})
 @SpringBootApplication
 public class RestServerStart {
     public static void main(String[] args) {

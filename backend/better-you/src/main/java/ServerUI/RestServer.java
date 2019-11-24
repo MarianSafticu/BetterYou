@@ -2,6 +2,7 @@ package ServerUI;
 
 import Service.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @EnableWebSecurity
+@ComponentScan("Service")
 @RequestMapping("/app/better-you") //the address of the server
 public class RestServer {
 
