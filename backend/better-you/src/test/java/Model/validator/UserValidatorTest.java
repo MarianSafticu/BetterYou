@@ -81,17 +81,6 @@ public class UserValidatorTest {
     }
 
     @Test
-    public void WHEN_UserHasInvalidPassword_THEN_UserValidatorExceptionIsThrown() {
-        try {
-            user.setPassword(INVALID_PASSWORD);
-            userValidator.validateUser(user);
-            fail("Expected UserValidatorException to be thrown");
-        } catch (UserValidatorException e) {
-            assertThat(e.getMessage(), equalTo(INVALID_PASSWORD_ERROR));
-        }
-    }
-
-    @Test
     public void WHEN_UserHasInvalidBirthDate_THEN_UserValidatorExceptionIsThrown() {
         try {
             user.setBirthDate(INVALID_BIRTH_DATE);
@@ -111,7 +100,7 @@ public class UserValidatorTest {
             fail("Expected UserValidatorException to be thrown");
         } catch (UserValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_USERNAME_ERROR + INVALID_PROFILE_NAME_ERROR
-                    + INVALID_PASSWORD_ERROR + INVALID_EMAIL_ERROR + INVALID_BIRTH_DATE_ERROR));
+                    + INVALID_EMAIL_ERROR + INVALID_BIRTH_DATE_ERROR));
         }
     }
 }
