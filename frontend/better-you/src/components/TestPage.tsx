@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "../assets/scss/StartPageStyle.scss";
-import GoalCard from "./GoalCard";
 import GoalList from "./GoalList";
 
 interface TestPageComponentProps {}
