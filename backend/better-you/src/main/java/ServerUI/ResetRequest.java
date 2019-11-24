@@ -2,7 +2,6 @@ package ServerUI;
 
 public class ResetRequest {
     private String password;
-    private String email;
     private String token;
 
     public ResetRequest() {
@@ -29,11 +28,4 @@ public class ResetRequest {
         this.token = token;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
