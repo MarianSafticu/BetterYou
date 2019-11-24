@@ -31,7 +31,7 @@ class LoginComponent extends Component<IProps, IState> {
         token: ""
       },
       emailError: "",
-      passwordError: "",
+      passwordError: ""
     };
   }
 
@@ -101,7 +101,9 @@ class LoginComponent extends Component<IProps, IState> {
 
           <div className="help-links">
             <p>I've forgot my password.</p>
-            <Link to="/register" className="link">I don't have an account...</Link>
+            <Link to="/register" className="help-link-register">
+              I don't have an account
+            </Link>
           </div>
         </form>
       </div>
