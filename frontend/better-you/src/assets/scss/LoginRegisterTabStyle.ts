@@ -2,42 +2,37 @@ import { makeStyles } from "@material-ui/styles";
 
 const LoginRegisterTabStyle = makeStyles({
   pageContainer: {
-    height: "100%"
+    height: "calc(100% - 45px)"
   },
   breakpoint: {
     height: "100%"
   },
   root: {
-    backgroundColor: "#85dcbe",
     height: "100%",
     display: "flex",
     justifyContent: "center"
   },
   tabBar: {
-    backgroundColor: "#c38d9e",
     "@media (max-width: 576px)": {
-      width: "100%"
+      width: "100%",
+      top: "45px"
     },
     "@media (min-width: 575px && max-width: 769px)": {
       width: "50%",
-      top: "50px",
+      top: "45px",
       left: "auto",
       right: "auto",
-      borderTopLeftRadius: "30px",
-      borderTopRightRadius: "30px"
     },
     "@media (min-width: 770px)": {
       width: "35%",
-      top: "50px",
+      top: "calc(45px + 30px)",
       left: "auto",
       right: "auto",
-      borderTopLeftRadius: "30px",
-      borderTopRightRadius: "30px"
     }
   },
   tab: {},
   tabPanel: {
-    backgroundColor: "#41b3a3",
+    backgroundColor: "#9173ca",
     "@media (max-width: 576px)": {
       width: "100%",
       height: "100%"
@@ -64,16 +59,16 @@ const LoginRegisterTabStyle = makeStyles({
   },
   typography: {
     width: "100%",
-    // height: "100%",
     padding: 0,
     "@media (max-width: 576px)": {
-      paddingTop: "48px"
+      height: "100%",
+      paddingTop: "45px"
     },
     "@media (min-width: 575px && max-width: 769px)": {
-      paddingTop: "calc(48px + 50px)"
+      paddingTop: "calc(45px + 30px)"
     },
     "@media (min-width: 770px)": {
-      paddingTop: "calc(48px + 50px)"
+      paddingTop: "calc(45px + 30px)"
     }
   },
   swipeableView: {

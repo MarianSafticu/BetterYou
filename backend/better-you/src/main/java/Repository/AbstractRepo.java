@@ -17,11 +17,16 @@ import java.util.List;
 public abstract class AbstractRepo<ID,E extends HasId<ID>> {
     private Class<E> clazz;
 
+    public AbstractRepo() {
+    }
+
     /***
      * The constructor contains the class of entity that is used for common queries
      * all classes that extend this class must call "super(Entity.class)" where entity is the concrete entity class
      * @param clazz is the class of entity
      */
+
+
     public AbstractRepo(Class<E> clazz){
         this.clazz = clazz;
     }

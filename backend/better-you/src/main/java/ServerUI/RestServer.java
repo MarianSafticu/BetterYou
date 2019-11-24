@@ -1,12 +1,17 @@
 package ServerUI;
 
+import Model.Goal;
 import Service.ServiceImpl;
+import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -76,8 +81,9 @@ public class RestServer {
         try {
             boolean ok = service.recoverPassword(registerRequest.getEmail());
             return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
         }
     }
 
@@ -91,8 +97,25 @@ public class RestServer {
         try {
             boolean ok = service.resetPassword(registerRequest.getEmail(), registerRequest.getPassword());
             return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+        }
+    }
+
+    /***
+     * This method receives a JSON with an token an return all the goals of that user
+     * @param getGoalRequest- a JSON with an token
+     * @return all the goals if the token si ok or the error message
+     */
+    @RequestMapping(value = "/getGoals", method = RequestMethod.POST)
+    public ResponseEntity<?> getGoals(@RequestBody GetGoalRequest getGoalRequest ) {
+        try{
+            List<Goal> all=service.getUserGoals(getGoalRequest.getToken());
+            return new ResponseEntity<List<Goal>>(all, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
         }
     }
 
