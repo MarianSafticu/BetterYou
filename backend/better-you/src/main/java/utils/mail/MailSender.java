@@ -2,6 +2,8 @@ package utils.mail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
@@ -9,12 +11,16 @@ import java.util.Properties;
 /**
  * Mail utils class
  */
+@Component
 public class MailSender {
     private static final Logger LOG = LogManager.getLogger(MailSender.class);
 
-    private final String senderEmail;
-    private final String senderPassword;
-    private final Properties properties;
+    private  String senderEmail;
+    private  String senderPassword;
+    private  Properties properties;
+
+    public MailSender() {
+    }
 
     /**
      * @param senderEmail    the email address used to send emails

@@ -4,6 +4,7 @@ package utils.mail;
 import Model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,14 +15,18 @@ import java.nio.file.Paths;
 /**
  * Class which contains specific email tasks (e.g. sends email for newly registered user)
  */
+@Component
 public class MailUtils {
     private static final Logger LOG = LogManager.getLogger(MailUtils.class);
     private static final String REGISTRATION_EMAIL_HEADER = "Confirm Better You registration!";
     private static final String RESET_PASSWORD_EMAIL_HEADER = "Reset password Better You";
 
-    private final MailSender mailSender;
-    private final String registrationEmailContent;
-    private final String resetPasswordEmailContent;
+    private  MailSender mailSender;
+    private  String registrationEmailContent;
+    private  String resetPasswordEmailContent;
+
+    public MailUtils() {
+    }
 
     /**
      * @param mailSender             the core class for sending emails

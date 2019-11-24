@@ -1,19 +1,27 @@
 @import "./_colors.scss";
+@import "./global";
+
+@media (min-width: 575px) {
+  .MuiTabs-root {
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+}
+
+.MuiTab-root {
+  max-width: none !important;
+}
 
 .MuiTabs-centered {
   justify-content: space-evenly;
 }
 
 .MuiTabs-indicator {
-  background-color: #b95374 !important;
+  background-color: darken($color6, 20%) !important;
 }
 
 .MuiTab-wrapper {
   color: black;
-}
-
-.Mui-selected {
-  background-color: #b48292;
 }
 
 @media (min-width: 600px) {

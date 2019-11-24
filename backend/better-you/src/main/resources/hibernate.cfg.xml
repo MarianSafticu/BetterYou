@@ -29,6 +29,8 @@
         <mapping class="Model.User"/>
         <mapping class="Model.Goal"/>
         <mapping class="Model.Habit"/>
+        <mapping class="Model.RegistrationLink"/>
+
 
     </session-factory>
 </hibernate-configuration>
