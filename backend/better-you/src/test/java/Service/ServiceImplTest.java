@@ -137,9 +137,7 @@ public class ServiceImplTest {
             service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);
             fail("Expected ServiceException to be thrown");
         } catch (ServiceException e) {
-            assertThat(e.getMessage(), equalTo("User data is invalid"));
-            assertThat(e.getCause(), instanceOf(UserValidatorException.class));
-            assertThat(e.getCause().getMessage(), equalTo(error_message));
+            assertThat(e.getMessage(), equalTo("User data is invalid: " + error_message));
         }
 
         verify(userValidator, times(1)).validateUser(any());

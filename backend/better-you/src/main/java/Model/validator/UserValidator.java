@@ -20,8 +20,6 @@ public class UserValidator {
      * Verification criteria:
      * - username must have at least 3 characters
      * - profile name must have at least 3 characters
-     * - Password must be at least 8 characters long and contain at least one digit,
-     * on lowercase char, one uppercase character and a special character (@#$%^&+=) and no whitespaces or tabs
      * - email must be a valid address
      * - Birth date must be before current date
      *
@@ -34,7 +32,6 @@ public class UserValidator {
 
         validateUsername(user.getUsername(), errorsStringBuilder);
         validateProfileName(user.getProfile_name(), errorsStringBuilder);
-        validatePassword(user.getPassword(), errorsStringBuilder);
         validateEmail(user.getEmail(), errorsStringBuilder);
         validateBirthDate(user.getBirthDate(), errorsStringBuilder);
 
@@ -53,14 +50,6 @@ public class UserValidator {
     private void validateProfileName(final String profileName, final StringBuilder errorsStringBuilder) {
         if (profileName == null || profileName.length() < 3) {
             errorsStringBuilder.append("Profile name must have at least 3 characters\n");
-        }
-    }
-
-    private void validatePassword(final String password, final StringBuilder errorsStringBuilder) {
-        if (password == null || !password.matches(PASSWORD_REGEX)) {
-            errorsStringBuilder.append("Password must be at least 8 characters long and contain at least one digit,"
-                    + "on lowercase char, one uppercase character, a special character (@#$%^&+=) and no"
-                    + "whitespaces or tabs\n");
         }
     }
 

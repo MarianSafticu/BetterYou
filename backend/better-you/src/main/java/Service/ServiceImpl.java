@@ -79,15 +79,15 @@ public class ServiceImpl implements Service {
     public String register(final String username, final String profileName, final String password, final String email, final LocalDate birthDate) {
         LOG.info("New user wants to register with email {}, username {} and profile name {}", email, username, profileName);
 
-        User newUser = new User(username, profileName, password, email, birthDate);
+        User newUser = new User(username, profileName, appUtils.encode(password), email, birthDate);
 
         LOG.info("Validating user input data");
         try {
             userValidator.validateUser(newUser);
             LOG.info("User validation completed successfully");
         } catch (UserValidatorException e) {
-            LOG.info("User data is invalid: " + e.getMessage());
-            throw new ServiceException("User data is invalid", e);
+            LOG.info("User data is invalid: {}", e.getMessage());
+            throw new ServiceException("User data is invalid: " + e.getMessage());
         }
 
         try {
@@ -104,7 +104,7 @@ public class ServiceImpl implements Service {
             mailUtils.sendRegistrationEmail(newUser, registrationConfirmLink);
             return appUtils.createJWT(String.valueOf(newUserId));
         } catch (RepoException e) {
-            LOG.error("Something went wrong while creating and sending registration link");
+            LOG.error("Something went wrong while creating and sending registration link: {}", e.getMessage());
             throw new ServiceException("Something went wrong while creating and sending registration link", e);
         }
     }
