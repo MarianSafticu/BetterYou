@@ -12,7 +12,7 @@ import {
   Divider
 } from "@material-ui/core";
 import BuildIcon from "@material-ui/icons/Build";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 
 export default function AppBarMobileComponent() {
@@ -37,7 +37,10 @@ export default function AppBarMobileComponent() {
               </NavLink>
             </div>
           </div>
-          <Button className={classes.button}>Login</Button>
+          
+          <Link to="/login" className={classes.link} style={{width:"auto"}}>
+            <Button className={classes.button}>Login</Button>
+          </Link>
         </Toolbar>
       </AppBar>
 

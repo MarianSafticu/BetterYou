@@ -1,0 +1,26 @@
+@import "./_colors.scss";
+
+.message-background{
+    background: $light_purple;
+    height: 100%;
+    width: 100%;   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.message-container{
+    background: whitesmoke;
+    border: 3px solid $green_blue;
+    padding: 30px;
+    width: 45%;
+    max-width: 100%;
+    border-radius: 25px;
+}
+
+@media screen and (max-width: 500px) {
+    .message-container {
+      width: 100%;
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+  }

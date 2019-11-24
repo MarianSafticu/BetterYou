@@ -109,7 +109,6 @@ export default class RegisterComponent extends Component<IProps, IState> {
                         <p>Already have an account?</p>
                         <Link to="/login" className="link">Sign in </Link>right now!
                     </div>
-
                 </form>
             </div>
         );

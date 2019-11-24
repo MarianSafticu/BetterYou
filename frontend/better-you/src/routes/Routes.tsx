@@ -4,6 +4,7 @@ import { StartPageComponent } from "../components/StartPageComponent";
 import LoginRegisterTabComponent from "../components/LoginRegisterTabComponent";
 import AppsPageComponent from "../components/AppsPageComponent";
 import AboutPageComponent from "../components/AboutPageComponent";
+import { ShowMessageComponent } from "../components/ShowMessageComponent";
         
 export default class Routes extends Component {
   render() {
@@ -22,6 +23,8 @@ export default class Routes extends Component {
           path="/register"
           component={() => <LoginRegisterTabComponent isRegister={true} />}
         />
+        <Route exact path="/confirm-account" component={()=> <ShowMessageComponent type="confirm-account"/>}/>
+        <Route exact path="/recover-account" component={()=> <ShowMessageComponent type="recover-account"/>}/>
       </Switch>
     );
   }
