@@ -93,7 +93,7 @@ public class RestServer {
     @RequestMapping(value = "/reset", method = RequestMethod.POST)
     public ResponseEntity<?> reset(@RequestBody ResetRequest registerRequest ) {
         try{
-            boolean ok=service.resetPassword(registerRequest.getEmail(),registerRequest.getPassword());
+            boolean ok=service.resetPassword(registerRequest.getEmail(),registerRequest.getPassword()); //AICI FLORINELEEEEEEE (.y.)
             return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
         }
         catch (Exception e){

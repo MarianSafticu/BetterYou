@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-
 public interface Service {
     /**
      * Logs in the given user
@@ -44,12 +43,12 @@ public interface Service {
     /**
      * Resets the password for a given user
      *
-     * @param email       the users email
+     * @param jwtToken    the users JWT token
      * @param newPassword the users new password
      * @return true if the password is reset successfully, false otherwise
      * @throws ServiceException if the reset password process fails
      */
-    boolean resetPassword(final String email, final String newPassword);
+    boolean resetPassword(final String jwtToken, final String newPassword);
 
     /**
      * Returns the list of goals of the user which has the given token

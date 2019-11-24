@@ -9,6 +9,7 @@ import Model.validator.UserValidatorException;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
+import io.jsonwebtoken.Claims;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,8 +117,39 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public boolean resetPassword(final String email, final String newPassword) {
-        return false;
+    public boolean resetPassword(final String jwtToken, final String newPassword) {
+        LOG.info("Updating password for user attempt");
+
+        Claims claims = appUtils.decodeJWT(jwtToken);
+        long userId = Long.parseLong(claims.getId());
+
+        LOG.info("Fetching user with id \"{}\"", userId);
+        User user = null;
+        try {
+            user = userRepo.get(userId);
+        } catch (RepoException e) {
+            e.printStackTrace();
+        }
+
+        if (user == null) {
+            LOG.info("User with id \"{}\" does not exist", userId);
+            throw new ServiceException("User with id \"" + userId + "\" does not exist");
+        }
+
+        LOG.info("Setting up new password for user with id \"{}\"", userId);
+        user.setPassword(appUtils.encode(newPassword));
+
+        try {
+            LOG.info("Saving the new password of user with id \"{}\" to repository", userId);
+            userRepo.update(user.getId(), user);
+        } catch (RepoException e) {
+            LOG.error("Something went wrong while saving the new password for user with id \"{}\": {}",
+                    userId, e.getMessage());
+            throw new ServiceException("Something went wrong while saving the new password for user with id \""
+                    + userId + "\"", e);
+        }
+
+        return true;
     }
 
     @Override
