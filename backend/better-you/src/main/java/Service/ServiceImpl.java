@@ -124,14 +124,10 @@ public class ServiceImpl implements Service {
         long userId = Long.parseLong(claims.getId());
 
         LOG.info("Fetching user with id \"{}\"", userId);
-        User user = null;
+        User user;
         try {
             user = userRepo.get(userId);
         } catch (RepoException e) {
-            e.printStackTrace();
-        }
-
-        if (user == null) {
             LOG.info("User with id \"{}\" does not exist", userId);
             throw new ServiceException("User with id \"" + userId + "\" does not exist");
         }
@@ -141,7 +137,7 @@ public class ServiceImpl implements Service {
 
         try {
             LOG.info("Saving the new password of user with id \"{}\" to repository", userId);
-            userRepo.update(user.getId(), user);
+            userRepo.update(userId, user);
         } catch (RepoException e) {
             LOG.error("Something went wrong while saving the new password for user with id \"{}\": {}",
                     userId, e.getMessage());
