@@ -22,7 +22,7 @@ export class ShowMessageComponent extends Component<IProps, IState>{
                 break;
                 }
             case "confirm-account":{
-                text="A confirmation email was send on your email adress"
+                text="An email has been sent to the specified address. Please check your email and click on the provided link to recover your account."
                 break;
             }
             default:{
@@ -34,7 +34,9 @@ export class ShowMessageComponent extends Component<IProps, IState>{
         return(
             <div className="message-background">
                 <div className="message-container">
-                    {text}
+                    <p className="message-module">
+                        {text}
+                    </p>
                 </div>
             </div>
         );
