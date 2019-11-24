@@ -4,14 +4,15 @@ import { StartPageComponent } from "../components/StartPageComponent";
 import LoginRegisterTabComponent from "../components/LoginRegisterTabComponent";
 import AppsPageComponent from "../components/AppsPageComponent";
 import AboutPageComponent from "../components/AboutPageComponent";
-        
+import TestPageComponent from "../components/TestPage";
+
 export default class Routes extends Component {
   render() {
     return (
       <Switch>
         <Route exact path="/" component={StartPageComponent} />
-        <Route exact path="/apps" component={AppsPageComponent}/>
-        <Route exact path="/about" component={AboutPageComponent}/>
+        <Route exact path="/apps" component={AppsPageComponent} />
+        <Route exact path="/about" component={AboutPageComponent} />
         <Route
           exact
           path="/login"
@@ -22,6 +23,7 @@ export default class Routes extends Component {
           path="/register"
           component={() => <LoginRegisterTabComponent isRegister={true} />}
         />
+        <Route exact path="/test" component={TestPageComponent} />
       </Switch>
     );
   }
