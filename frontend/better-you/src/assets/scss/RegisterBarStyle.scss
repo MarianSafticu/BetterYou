@@ -1,0 +1,20 @@
+@import "./_colors.scss";
+@import "./_global.scss";
+
+.register-bar-container {
+  background-color: $footer_color;
+  position: fixed;
+  height: $footer_height;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.register-link {
+  text-decoration: none;
+  color: black;
+}

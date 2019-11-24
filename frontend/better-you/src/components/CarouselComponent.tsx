@@ -9,7 +9,7 @@ import { Breakpoint } from "react-socks";
 export default class CarouselComponent extends Component {
   render() {
     const slidesForDesktop = [];
-    for (let i = 0; i < 10; i+=2) {
+    for (let i = 0; i < 10; i += 2) {
       slidesForDesktop.push(<SlideComponent key={i} index={i} />);
     }
 
@@ -20,7 +20,7 @@ export default class CarouselComponent extends Component {
 
     return (
       <div className="carousel-container">
-        <Breakpoint medium up className="breakpoint">
+        <Breakpoint medium up className="carousel-breakpoint">
           <Slider
             className="slider"
             lazyLoad={"ondemand"}
@@ -36,7 +36,7 @@ export default class CarouselComponent extends Component {
             {slidesForDesktop}
           </Slider>
         </Breakpoint>
-        <Breakpoint small down className="breakpoint">
+        <Breakpoint small down className="carousel-breakpoint">
           <Slider
             className="slider"
             lazyLoad={"ondemand"}

@@ -1,5 +1,6 @@
 package ServerUI;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class RegisterRequest {
@@ -8,13 +9,13 @@ public class RegisterRequest {
     private String profile_name;
     private String password;
     private String email;
-    private Date BirthDate;
+    private LocalDate BirthDate;
     private String token;
 
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String username, String profile_name, String password, String email, Date birthDate) {
+    public RegisterRequest(String username, String profile_name, String password, String email, LocalDate birthDate) {
         this.username = username;
         this.profile_name = profile_name;
         this.password = password;
@@ -22,7 +23,7 @@ public class RegisterRequest {
         BirthDate = birthDate;
     }
 
-    public RegisterRequest(String username, String profile_name, String password, String email, Date birthDate, String token) {
+    public RegisterRequest(String username, String profile_name, String password, String email, LocalDate birthDate, String token) {
         this.username = username;
         this.profile_name = profile_name;
         this.password = password;
@@ -63,11 +64,11 @@ public class RegisterRequest {
         this.email = email;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return BirthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         BirthDate = birthDate;
     }
 

@@ -1,14 +1,21 @@
 package ServerUI;
 
+import Model.Goal;
 import Service.ServiceImpl;
+import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
+@EnableWebSecurity
 @RequestMapping("/app/better-you") //the address of the server
 @ComponentScan("Service")
 public class RestServer {
@@ -34,8 +41,9 @@ public class RestServer {
      * @return An string with the token if the login is successful or the error message
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> loggin(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         try{
+            System.out.println("Ceva");
             String token=service.login(loginRequest.getEmail(),loginRequest.getPassword());
             return new ResponseEntity<String>(token, HttpStatus.OK);
         }
@@ -73,7 +81,7 @@ public class RestServer {
             return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
         }
     }
 
@@ -89,7 +97,23 @@ public class RestServer {
             return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+        }
+    }
+
+    /***
+     * This method receives a JSON with an token an return all the goals of that user
+     * @param getGoalRequest- a JSON with an token
+     * @return all the goals if the token si ok or the error message
+     */
+    @RequestMapping(value = "/getGoals", method = RequestMethod.POST)
+    public ResponseEntity<?> getGoals(@RequestBody GetGoalRequest getGoalRequest ) {
+        try{
+            List<Goal> all=service.getUserGoals(getGoalRequest.getToken());
+            return new ResponseEntity<List<Goal>>(all, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
         }
     }
 

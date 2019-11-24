@@ -70,7 +70,7 @@ export default function LoginRegisterTabComponent(
   const [value, setValue] = React.useState(props.isRegister ? 1 : 0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    if(newValue == 0)
+    if(newValue === 0)
       history.push("/login");
     else
       history.push("/register");
@@ -78,7 +78,7 @@ export default function LoginRegisterTabComponent(
   };
 
   const handleChangeIndex = (index: number) => {
-    if(index == 0)
+    if(index === 0)
       history.push("/login");
     else
       history.push("/register");

@@ -16,8 +16,10 @@ import io.jsonwebtoken.*;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
+@Component
 public class AppUtils {
 
     /**

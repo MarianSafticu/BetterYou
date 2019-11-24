@@ -2,16 +2,25 @@ package Service;
 
 
 import Model.User;
+import Model.validator.UserValidator;
+import Model.validator.UserValidatorException;
+import Repository.RegistrationLinkRepo;
+import Repository.RepoException;
 import Repository.UserRepo;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import utils.AppUtils;
+import utils.mail.MailUtils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,6 +29,7 @@ import static org.mockito.Mockito.when;
 public class ServiceImplTest {
     private static final String USER_EMAIL = "user@test.com";
     private static final String USER_PASSWORD = "plain_pass";
+    private static final String USER_USERNAME = "username";
     private static final String USER_HASHED_PASSWORD = "hashed_pass";
     private static final long USER_ID = 69;
     private static final String JWT_TOKEN = "12s346.23f41.423g43";
@@ -27,16 +37,23 @@ public class ServiceImplTest {
     @Mock
     private UserRepo userRepoMock;
     @Mock
+    private RegistrationLinkRepo registrationLinkRepo;
+    @Mock
     private User userMock;
     @Mock
     private AppUtils appUtils;
+    @Mock
+    private MailUtils mailUtils;
+    @Mock
+    private UserValidator userValidator;
+
 
     private ServiceImpl service;
 
     @Before
     public void beforeTest() {
         MockitoAnnotations.initMocks(this);
-        service = new ServiceImpl(userRepoMock, appUtils);
+        service = new ServiceImpl(userRepoMock, appUtils, userValidator, mailUtils, registrationLinkRepo);
     }
 
     @Test
@@ -109,5 +126,82 @@ public class ServiceImplTest {
         verify(appUtils, times(1)).verifyPassword(USER_PASSWORD, USER_HASHED_PASSWORD);
         verify(userMock, times(1)).getId();
         verify(appUtils, times(1)).createJWT(String.valueOf(USER_ID));
+    }
+
+    @Test
+    public void WHEN_InvalidUserOnRegistration_THEN_ServiceExceptionIsThrown() {
+        final String error_message = "ERROR_MESSAGE";
+        doThrow(new UserValidatorException(error_message)).when(userValidator).validateUser(any());
+
+        try {
+            service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("User data is invalid: " + error_message));
+        }
+
+        verify(userValidator, times(1)).validateUser(any());
+    }
+
+    @Test
+    public void WHEN_RepoExceptionIsThrown_THEN_ServiceExceptionIsPropagated() throws RepoException {
+        final String error_message = "ERROR_MESSAGE";
+        doNothing().when(userValidator).validateUser(any());
+        doThrow(new RepoException(error_message)).when(userRepoMock).add(any());
+
+        try {
+            service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Something went wrong while saving the user"));
+            assertThat(e.getCause(), instanceOf(RepoException.class));
+            assertThat(e.getCause().getMessage(), equalTo(error_message));
+        }
+
+        verify(userValidator, times(1)).validateUser(any());
+        verify(userRepoMock, times(1)).add(any());
+    }
+
+    @Test
+    public void WHEN_RegistrationLinkRepoThrowsRepoException_THEN_ServiceExceptionIsPropagated() throws RepoException {
+        final String error_message = "ERROR_MESSAGE";
+        doNothing().when(userValidator).validateUser(any());
+        doNothing().when(userRepoMock).add(any());
+        when(userRepoMock.getUserByEmail(USER_EMAIL)).thenReturn(userMock);
+        when(userMock.getId()).thenReturn(USER_ID);
+        doThrow(new RepoException(error_message)).when(registrationLinkRepo).add(any());
+
+        try {
+            service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Something went wrong while creating and sending registration "
+                    + "link"));
+            assertThat(e.getCause(), instanceOf(RepoException.class));
+            assertThat(e.getCause().getMessage(), equalTo(error_message));
+        }
+
+        verify(userValidator, times(1)).validateUser(any());
+        verify(userRepoMock, times(1)).add(any());
+        verify(registrationLinkRepo, times(1)).add(any());
+    }
+
+    @Test
+    public void WHEN_SuccessfulRegistrationDone_THEN_ValidValueIsReturned() throws RepoException {
+        final String expectedJWT = "(-_-)";
+        doNothing().when(userValidator).validateUser(any());
+        doNothing().when(userRepoMock).add(any());
+        when(userRepoMock.getUserByEmail(USER_EMAIL)).thenReturn(userMock);
+        when(userMock.getId()).thenReturn(USER_ID);
+        when(appUtils.createJWT(String.valueOf(USER_ID))).thenReturn(expectedJWT);
+
+        String actualJWT = service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);
+        assertThat(actualJWT, equalTo(expectedJWT));
+
+        verify(userValidator, times(1)).validateUser(any());
+        verify(userRepoMock, times(1)).add(any());
+        verify(userMock, times(1)).getId();
+        verify(appUtils, times(1)).createJWT(String.valueOf(USER_ID));
+        verify(userRepoMock, times(1)).getUserByEmail(USER_EMAIL);
     }
 }
