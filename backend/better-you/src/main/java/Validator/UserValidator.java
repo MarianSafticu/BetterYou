@@ -1,4 +1,4 @@
-package Model.validator;
+package Validator;
 
 import Model.User;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class UserValidator {
     private static final String EMAIL_REGEX = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
 
     /**
-     * Validates the details of a given user and throws {@link UserValidatorException} if there are any problems.
+     * Validates the details of a given user and throws {@link ValidatorException} if there are any problems.
      * Verification criteria:
      * - username must have at least 3 characters
      * - profile name must have at least 3 characters
@@ -23,7 +23,7 @@ public class UserValidator {
      * - Birth date must be before current date
      *
      * @param user the user to be verified
-     * @throws UserValidatorException if there are any inconsistencies regarding the user's details (e.g. the username
+     * @throws ValidatorException if there are any inconsistencies regarding the user's details (e.g. the username
      *                                is null or the profile name has less than 3 characters)
      */
     public void validateUser(final User user) {
@@ -36,7 +36,7 @@ public class UserValidator {
 
         String errors = errorsStringBuilder.toString();
         if (errors.length() > 0) {
-            throw new UserValidatorException(errors);
+            throw new ValidatorException(errors);
         }
     }
 
