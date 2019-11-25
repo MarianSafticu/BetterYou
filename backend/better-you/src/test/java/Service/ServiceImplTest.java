@@ -2,8 +2,8 @@ package Service;
 
 
 import Model.User;
-import Model.validator.UserValidator;
-import Model.validator.UserValidatorException;
+import Validator.UserValidator;
+import Validator.ValidatorException;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
@@ -131,7 +131,7 @@ public class ServiceImplTest {
     @Test
     public void WHEN_InvalidUserOnRegistration_THEN_ServiceExceptionIsThrown() {
         final String error_message = "ERROR_MESSAGE";
-        doThrow(new UserValidatorException(error_message)).when(userValidator).validateUser(any());
+        doThrow(new ValidatorException(error_message)).when(userValidator).validateUser(any());
 
         try {
             service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);

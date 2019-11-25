@@ -4,8 +4,8 @@ import Model.RegistrationLink;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
-import Model.validator.UserValidator;
-import Model.validator.UserValidatorException;
+import Validator.UserValidator;
+import Validator.ValidatorException;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
@@ -85,7 +85,7 @@ public class ServiceImpl implements Service {
         try {
             userValidator.validateUser(newUser);
             LOG.info("User validation completed successfully");
-        } catch (UserValidatorException e) {
+        } catch (ValidatorException e) {
             LOG.info("User data is invalid: {}", e.getMessage());
             throw new ServiceException("User data is invalid: " + e.getMessage());
         }

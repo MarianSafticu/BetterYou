@@ -1,13 +1,13 @@
-package Model.validator;
+package Validator;
 
 
 import Model.User;
+import Validator.UserValidator;
+import Validator.ValidatorException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -53,7 +53,7 @@ public class UserValidatorTest {
             user.setUsername(INVALID_USERNAME);
             userValidator.validateUser(user);
             fail("Expected UserValidatorException to be thrown");
-        } catch (UserValidatorException e) {
+        } catch (ValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_USERNAME_ERROR));
         }
     }
@@ -64,7 +64,7 @@ public class UserValidatorTest {
             user.setEmail(INVALID_EMAIL);
             userValidator.validateUser(user);
             fail("Expected UserValidatorException to be thrown");
-        } catch (UserValidatorException e) {
+        } catch (ValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_EMAIL_ERROR));
         }
     }
@@ -75,7 +75,7 @@ public class UserValidatorTest {
             user.setProfile_name(INVALID_PROFILE_NAME);
             userValidator.validateUser(user);
             fail("Expected UserValidatorException to be thrown");
-        } catch (UserValidatorException e) {
+        } catch (ValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_PROFILE_NAME_ERROR));
         }
     }
@@ -86,7 +86,7 @@ public class UserValidatorTest {
             user.setBirthDate(INVALID_BIRTH_DATE);
             userValidator.validateUser(user);
             fail("Expected UserValidatorException to be thrown");
-        } catch (UserValidatorException e) {
+        } catch (ValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_BIRTH_DATE_ERROR));
         }
     }
@@ -98,7 +98,7 @@ public class UserValidatorTest {
                     INVALID_BIRTH_DATE);
             userValidator.validateUser(invalidUser);
             fail("Expected UserValidatorException to be thrown");
-        } catch (UserValidatorException e) {
+        } catch (ValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_USERNAME_ERROR + INVALID_PROFILE_NAME_ERROR
                     + INVALID_EMAIL_ERROR + INVALID_BIRTH_DATE_ERROR));
         }

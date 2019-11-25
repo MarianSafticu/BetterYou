@@ -105,4 +105,8 @@ public class Goal implements HasId<Long> {
     public void setPublic(boolean aPublic) {
         isPublic = aPublic;
     }
+
+    public Category getCategory() { return category; }
+
+    public void setCategory(Category category) { this.category = category; }
 }
