@@ -1,6 +1,9 @@
 package ServerUI;
 
+import Model.Category;
 import Model.Goal;
+import Model.Habit;
+import Model.Repetition;
 import Service.ServiceImpl;
 import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,6 +117,22 @@ public class RestServer {
         try{
             List<Goal> all=service.getUserGoals(getGoalRequest.getToken());
             return new ResponseEntity<List<Goal>>(all, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+        }
+    }
+
+    /***
+     * This method receives a JSON with an token an return all the habits of that user
+     * @param getHabitsRequest- a JSON with an token
+     * @return all the goals if the token si ok or the error message
+     */
+    @RequestMapping(value = "/getHabits", method = RequestMethod.POST)
+    public ResponseEntity<?> getHabits(@RequestBody GetHabitsRequest getHabitsRequest ) {
+        try{
+            List<Habit> all=service.getUserHabits(getHabitsRequest.getToken());
+            return new ResponseEntity<List<Habit>>(all, HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
