@@ -35,7 +35,7 @@ public class GoalValidatorTest {
     private static final String INVALID_PROGRESS_TO_REACH_ERROR = "ProgressToReach must have a positive value.\n";
     private static final String INVALID_START_DATE_ERROR = "StartDate must be before or equal to the current date.\n";
     private static final String INVALID_END_DATE_ERROR = "EndDate must be after the startDate.\n";
-    private static final String INVALID_CATEGORY_ERROR = "Category should be definied.\n";
+    private static final String INVALID_CATEGORY_ERROR = "Category should be defined.\n";
 
     private Goal goal;
     private GoalValidator goalValidator;
@@ -129,12 +129,12 @@ public class GoalValidatorTest {
     }
 
     @Test
-    public void WHEN_UserHasNoValidData_THEN_UserValidatorExceptionIsThrown() {
+    public void WHEN_GoalHasNoValidData_THEN_GoalValidatorExceptionIsThrown() {
         try {
             Goal invalidGoal = new Goal(INVALID_TITLE,INVALID_DESCRIPTION,INVALID_CURRENT_PROGRESS,
                     INVALID_PROGRESS_TO_REACH,INVALID_START_DATE,INVALID_END_DATE,INVALID_CATEGORY,IS_PUBLIC);
             goalValidator.validateGoal(invalidGoal);
-            fail("Expected UserValidatorException to be thrown");
+            fail("Expected ValidatorException to be thrown");
         } catch (ValidatorException e) {
             assertThat(e.getMessage(), equalTo(INVALID_TITLE_ERROR + INVALID_DESCRIPTION_ERROR + INVALID_CURRENT_PROGRESS_ERROR
                     + INVALID_PROGRESS_TO_REACH_ERROR + INVALID_START_DATE_ERROR + INVALID_END_DATE_ERROR + INVALID_CATEGORY_ERROR));

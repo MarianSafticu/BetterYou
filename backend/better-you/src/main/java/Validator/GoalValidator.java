@@ -21,7 +21,7 @@ public class GoalValidator {
      * - category should not be null
      *
      * @param goal - the goal to be verified
-     * @throws ValidatorException if there are any inconsistencies regarding the user's details (e.g. the title
+     * @throws ValidatorException if there are any inconsistencies regarding the goal's details (e.g. the title
      *                                  is null or the description  has less than 3 characters)
      */
     public void validateGoal(final Goal goal)
@@ -80,7 +80,7 @@ public class GoalValidator {
     private void validateCategory(Category category, StringBuilder errorStringBuilder)
     {
         if(category == null)
-            errorStringBuilder.append("Category should be definied.\n");
+            errorStringBuilder.append("Category should be defined.\n");
 
     }
 }
