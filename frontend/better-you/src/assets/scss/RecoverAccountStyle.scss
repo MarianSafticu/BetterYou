@@ -1,0 +1,25 @@
+.recover-container {
+    width: 35%;
+    height: 45%;
+    background-color: #f2eaf9;
+    position: fixed;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1.5mm outset lightblue;
+    border-radius: 1.5rem;
+    text-align: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.recover-input-email {
+    margin-top: 10px;
+    width: 80%;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+}
