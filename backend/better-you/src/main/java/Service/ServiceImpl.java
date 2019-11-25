@@ -120,8 +120,21 @@ public class ServiceImpl implements Service {
     public boolean resetPassword(final String jwtToken, final String newPassword) {
         LOG.info("Updating password for user attempt");
 
-        Claims claims = appUtils.decodeJWT(jwtToken);
-        long userId = Long.parseLong(claims.getId());
+        Claims claims;
+        try {
+            claims = appUtils.decodeJWT(jwtToken);
+        } catch (Exception e) {
+            LOG.info("Invalid JWT token: {}", e.getMessage());
+            throw new ServiceException("Invalid JWT token", e);
+        }
+
+        long userId;
+        try {
+            userId = Long.parseLong(claims.getId());
+        } catch (NumberFormatException e) {
+            LOG.error("JWT token contains id with invalid format for long values: {}", e.getMessage());
+            throw new ServiceException("Invalid JWT token", e);
+        }
 
         LOG.info("Fetching user with id \"{}\"", userId);
         User user;

@@ -211,6 +211,38 @@ public class ServiceImplTest {
 
 
     @Test
+    public void WHEN_InvalidTokenOnResetPassword_THEN_ServiceExceptionIsThrown() {
+        final String error = "Something went wrong";
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenThrow(new RuntimeException(error));
+
+        try {
+            service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Invalid JWT token"));
+        }
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+    }
+
+    @Test
+    public void WHEN_InvalidTokenIdFormat_THEN_ServiceExceptionIsThrown() {
+        final String invalidId = "**";
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(invalidId);
+
+        try {
+            service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Invalid JWT token"));
+        }
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
+    }
+
+    @Test
     public void WHEN_InvalidUserIdWhileResettingPassword_THEN_ServiceExceptionIsThrown() throws RepoException {
         final String error = "Something went wrong";
         when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
