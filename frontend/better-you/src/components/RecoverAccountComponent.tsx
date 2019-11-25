@@ -27,9 +27,9 @@ export default class RecoverAccountComponent extends Component<IProps, IState> {
 
     render() {
         return (
-            <div className="start-page-container">
-               <div className="recover-container">
-                    <form className="login-container" action="">
+            <div className="main-div">
+               <div className="second-div">
+                    <form className="form-module" action="">
                         <div>
                             Please enter your email address to recover your account:
                         </div>
