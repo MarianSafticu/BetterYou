@@ -10,7 +10,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 
 
 /**
@@ -24,7 +23,7 @@ public class MailSenderThread implements Runnable {
     private final String sendTo;
     private final String mailHeader;
     private final String message;
-    private final Properties properties;
+    private final SmtpProperties smtpProperties;
 
     /**
      * @param senderEmail    the email address used to send emails
@@ -32,20 +31,20 @@ public class MailSenderThread implements Runnable {
      * @param sendTo         the destination email address
      * @param mailHeader     the title of the email to be sent
      * @param message        the content of the email to be sent
-     * @param properties     the properties used for {@link javax.mail}
+     * @param smtpProperties the properties used for {@link javax.mail}
      */
     public MailSenderThread(final String senderEmail,
                             final String senderPassword,
                             final String sendTo,
                             final String mailHeader,
                             final String message,
-                            final Properties properties) {
+                            final SmtpProperties smtpProperties) {
         this.senderEmail = senderEmail;
         this.senderPassword = senderPassword;
         this.sendTo = sendTo;
         this.mailHeader = mailHeader;
         this.message = message;
-        this.properties = properties;
+        this.smtpProperties = smtpProperties;
     }
 
 
@@ -55,7 +54,7 @@ public class MailSenderThread implements Runnable {
             LOG.info("Configuring email to send to \"{}\" with header \"{}\"", sendTo, mailHeader);
 
             LOG.info("Getting session instance");
-            Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            Session session = Session.getInstance(smtpProperties, new javax.mail.Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(senderEmail, senderPassword);
                 }
