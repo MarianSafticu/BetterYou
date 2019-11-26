@@ -112,7 +112,7 @@ public class RestServer {
      * @param getGoalRequest- a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
-    @RequestMapping(value = "/getGoals", method = RequestMethod.POST)
+    @RequestMapping(value = "/goals", method = RequestMethod.POST)
     public ResponseEntity<?> getGoals(@RequestBody GetGoalRequest getGoalRequest ) {
         try{
             List<Goal> all=service.getUserGoals(getGoalRequest.getToken());
@@ -128,7 +128,7 @@ public class RestServer {
      * @param getHabitsRequest- a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
-    @RequestMapping(value = "/getHabits", method = RequestMethod.POST)
+    @RequestMapping(value = "/habits", method = RequestMethod.POST)
     public ResponseEntity<?> getHabits(@RequestBody GetHabitsRequest getHabitsRequest ) {
         try{
             List<Habit> all=service.getUserHabits(getHabitsRequest.getToken());
