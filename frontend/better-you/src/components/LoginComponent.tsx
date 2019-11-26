@@ -110,7 +110,10 @@ class LoginComponent extends Component<IProps, IState> {
           </div>
 
           <div className="help-links">
-            <p>I've forgot my password</p>
+            <Link to="/recover-account" className="help-link-register">
+              I've forgot my password.
+            </Link>
+            <br/>
             <Link to="/register" className="help-link-register">
               I don't have an account
             </Link>

@@ -2,6 +2,7 @@ package utils.mail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,22 +16,21 @@ import java.util.Properties;
 public class MailSender {
     private static final Logger LOG = LogManager.getLogger(MailSender.class);
 
-    private  String senderEmail;
-    private  String senderPassword;
-    private  Properties properties;
-
-    public MailSender() {
-    }
+    private final String senderEmail;
+    private final String senderPassword;
+    private final SmtpProperties smtpProperties;
 
     /**
      * @param senderEmail    the email address used to send emails
      * @param senderPassword the password for the email address used to send emails
-     * @param properties     the properties used for {@link javax.mail}
+     * @param smtpProperties the properties used for {@link javax.mail}
      */
-    public MailSender(final String senderEmail, final String senderPassword, final Properties properties) {
+    public MailSender(@Value("${utils.mail.sender.email}") final String senderEmail,
+                      @Value("${utils.mail.sender.password}") final String senderPassword,
+                      final SmtpProperties smtpProperties) {
         this.senderEmail = senderEmail;
         this.senderPassword = senderPassword;
-        this.properties = properties;
+        this.smtpProperties = smtpProperties;
     }
 
     /**
@@ -43,7 +43,7 @@ public class MailSender {
      */
     public void sendEmail(final String sendTo, final String mailHeader, final String message) {
         LOG.info("Send email synchronous to \"{}\"", sendTo);
-        Thread emailThread = new Thread(new MailSenderThread(senderEmail, senderPassword, sendTo, mailHeader, message, properties));
+        Thread emailThread = new Thread(new MailSenderThread(senderEmail, senderPassword, sendTo, mailHeader, message, smtpProperties));
         emailThread.start();
         try {
             emailThread.join();
@@ -63,8 +63,7 @@ public class MailSender {
      */
     public void sendEmailAsync(final String sendTo, final String mailHeader, final String message) {
         LOG.info("Send email async to \"{}\"", sendTo);
-        Thread emailThread = new Thread(new MailSenderThread(senderEmail, senderPassword, sendTo, mailHeader, message, properties));
+        Thread emailThread = new Thread(new MailSenderThread(senderEmail, senderPassword, sendTo, mailHeader, message, smtpProperties));
         emailThread.start();
     }
 }
-
