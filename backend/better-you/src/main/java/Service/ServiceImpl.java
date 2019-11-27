@@ -9,6 +9,7 @@ import Model.validator.UserValidatorException;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
+import io.jsonwebtoken.Claims;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,8 +117,48 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public boolean resetPassword(final String email, final String newPassword) {
-        return false;
+    public boolean resetPassword(final String jwtToken, final String newPassword) {
+        LOG.info("Updating password for user attempt");
+
+        Claims claims;
+        try {
+            claims = appUtils.decodeJWT(jwtToken);
+        } catch (Exception e) {
+            LOG.info("Invalid JWT token: {}", e.getMessage());
+            throw new ServiceException("Invalid JWT token", e);
+        }
+
+        long userId;
+        try {
+            userId = Long.parseLong(claims.getId());
+        } catch (NumberFormatException e) {
+            LOG.error("JWT token contains id with invalid format for long values: {}", e.getMessage());
+            throw new ServiceException("Invalid JWT token", e);
+        }
+
+        LOG.info("Fetching user with id \"{}\"", userId);
+        User user;
+        try {
+            user = userRepo.get(userId);
+        } catch (RepoException e) {
+            LOG.info("User with id \"{}\" does not exist", userId);
+            throw new ServiceException("User with id \"" + userId + "\" does not exist");
+        }
+
+        LOG.info("Setting up new password for user with id \"{}\"", userId);
+        user.setPassword(appUtils.encode(newPassword));
+
+        try {
+            LOG.info("Saving the new password of user with id \"{}\" to repository", userId);
+            userRepo.update(userId, user);
+        } catch (RepoException e) {
+            LOG.error("Something went wrong while saving the new password for user with id \"{}\": {}",
+                    userId, e.getMessage());
+            throw new ServiceException("Something went wrong while saving the new password for user with id \""
+                    + userId + "\"", e);
+        }
+
+        return true;
     }
 
     @Override
