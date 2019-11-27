@@ -5,19 +5,15 @@ import Model.Goal;
 import Model.Habit;
 import Model.Repetition;
 import Service.ServiceImpl;
-import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-
+@CrossOrigin
 @RestController
 @EnableWebSecurity
 @ComponentScan("Service")
