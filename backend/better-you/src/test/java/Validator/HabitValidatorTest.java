@@ -19,7 +19,7 @@ public class HabitValidatorTest {
     private static final String DESCRIPTION = "TO DO ..";
     private static final String INVALID_DESCRIPTION = null;
     private static final LocalDate START_DATE = LocalDate.now().minusDays(10);
-    private static final LocalDate INVALID_START_DATE = LocalDate.now().plusDays(3);
+    private static final LocalDate INVALID_START_DATE = null;
     private static final Repetition REPETITION = Repetition.DAILY;
     private static final Repetition INVALID_REPETITION = null;
     private static final Category CATEGORY = Category.PERSONAL;
@@ -28,7 +28,7 @@ public class HabitValidatorTest {
 
     private static final String INVALID_TITLE_ERROR = "Title must have at least 3 characters.\n";
     private static final String INVALID_DESCRIPTION_ERROR = "Description must have at least 3 characters.\n";
-    private static final String INVALID_START_DATE_ERROR = "StartDate must be before or equal to the current date.\n";
+    private static final String INVALID_START_DATE_ERROR = "StartDate must be defined.\n";
     private static final String INVALID_REPETITION_ERROR = "RepetitionType must be defined.\n";
     private static final String INVALID_CATEGORY_ERROR = "Category must be defined.\n";
 

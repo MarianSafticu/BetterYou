@@ -16,7 +16,7 @@ public class GoalValidator {
      * - description must have at least 3 characters
      * - currentProgress must be positive number and smaller or equal to progressToReach
      * - progressToReach must be a positive number
-     * - startDate must be before or equals to the currentDate
+     * - startDate must be defined
      * - endDate must be after the the startDate
      * - category should not be null
      *
@@ -68,13 +68,18 @@ public class GoalValidator {
     }
     private void validateStartDate(LocalDate startDate, StringBuilder errorStringBuilder)
     {
-        if(startDate == null || startDate.isAfter(LocalDate.now()))
-            errorStringBuilder.append("StartDate must be before or equal to the current date.\n");
+        if(startDate == null)
+            errorStringBuilder.append("StartDate should be defined.\n");
     }
     private void validateEndDate(LocalDate endData, LocalDate startDate, StringBuilder errorStringBuilder)
     {
-        if(endData == null || endData.isBefore(startDate))
-            errorStringBuilder.append("EndDate must be after the startDate.\n");
+        if(endData != null ){
+            if(startDate !=null && endData.isBefore(startDate))
+                errorStringBuilder.append("EndDate must be after the startDate.\n");
+        }
+        else {
+            errorStringBuilder.append("EndDate should be defined.\n");
+        }
 
     }
     private void validateCategory(Category category, StringBuilder errorStringBuilder)

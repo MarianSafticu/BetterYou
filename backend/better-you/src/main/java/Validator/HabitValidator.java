@@ -16,7 +16,7 @@ public class HabitValidator {
      * Verification criteria :
      * - title must have at least 3 characters
      * - description must have at least 3 characters
-     * - startDate must be before or equal to the current date
+     * - startDate must be defined
      * - repetitionType must be defined
      * - category must be defined
      * @param habit - the habit to be verified
@@ -52,8 +52,8 @@ public class HabitValidator {
 
     private void validateStartDate(LocalDate startDate, StringBuilder errorStringBuilder)
     {
-        if(startDate == null || startDate.isAfter(LocalDate.now()))
-            errorStringBuilder.append("StartDate must be before or equal to the current date.\n");
+        if(startDate == null )
+            errorStringBuilder.append("StartDate must be defined.\n");
     }
 
     private void validateRepetitionType(Repetition repetitionType, StringBuilder errorStringBuilder)
