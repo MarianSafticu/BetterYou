@@ -4,7 +4,7 @@ import { Button, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import AppState from "../redux/store/store";
 import { setCurrentUserBegin } from "../redux/actions/actions";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Service from "../services/Service";
 import { LoginException } from "../exceptions/LoginException";
 import { UserLoginDTO } from "../models/UserLoginDTO";
@@ -16,6 +16,7 @@ interface IProps {
 interface IState {
   user: UserLoginDTO;
   error: LoginException;
+  willRedirect: boolean;
 }
 
 class LoginComponent extends Component<IProps, IState> {
@@ -33,7 +34,8 @@ class LoginComponent extends Component<IProps, IState> {
       error: {
         emailError: "",
         passwordError: ""
-      }
+      },
+      willRedirect: false
     };
   }
 
@@ -69,58 +71,66 @@ class LoginComponent extends Component<IProps, IState> {
         error: validationResult
       });
     } else {
-      // let result = await this.service.loginUser(this.state.user);
-      this.props.loginUser(this.state.user);
-      // console.log(result);
+      let result = await this.service.loginUser(this.state.user);
+      if (result) {
+        this.props.loginUser(this.state.user);
+        this.setState({
+          willRedirect: true
+        });
+      }
     }
   }
 
   render() {
-    return (
-      <div className="login-background">
-        <form className="login-container" action="">
-          <div className="login-input-container">
-            <TextField
-              className="login-input"
-              onChange={this.onChangeEmail.bind(this)}
-              helperText={this.state.error.emailError}
-              error={this.state.error.emailError ? true : false}
-              label="Email:"
-            />
-            <br />
+    if (this.state.willRedirect) {
+      return <Redirect to="/dashboard" />;
+    } else {
+      return (
+        <div className="login-background">
+          <form className="login-container" action="">
+            <div className="login-input-container">
+              <TextField
+                className="login-input"
+                onChange={this.onChangeEmail.bind(this)}
+                helperText={this.state.error.emailError}
+                error={this.state.error.emailError ? true : false}
+                label="Email:"
+              />
+              <br />
 
-            <TextField
-              className="login-input"
-              onChange={this.onChangePassword.bind(this)}
-              type="password"
-              helperText={this.state.error.passwordError}
-              error={this.state.error.passwordError ? true : false}
-              label="Password:"
-            />
-            <br />
-          </div>
+              <TextField
+                className="login-input"
+                onChange={this.onChangePassword.bind(this)}
+                type="password"
+                helperText={this.state.error.passwordError}
+                error={this.state.error.passwordError ? true : false}
+                label="Password:"
+              />
+              <br />
+            </div>
 
-          <div className="login-button-container">
-            <Button
-              className="login-button"
-              onClick={this.handleOnClick.bind(this)}
-            >
-              Login
-            </Button>
-          </div>
+            <div className="login-button-container">
+              <Button
+                className="login-button"
+                onClick={this.handleOnClick.bind(this)}
+              >
+                Login
+              </Button>
+            </div>
 
-          <div className="help-links">
-            <Link to="/recover-account" className="help-link-register">
-              I've forgot my password.
-            </Link>
-            <br/>
-            <Link to="/register" className="help-link-register">
-              I don't have an account
-            </Link>
-          </div>
-        </form>
-      </div>
-    );
+            <div className="help-links">
+              <Link to="/recover-account" className="help-link-register">
+                I've forgot my password.
+              </Link>
+              <br />
+              <Link to="/register" className="help-link-register">
+                I don't have an account
+              </Link>
+            </div>
+          </form>
+        </div>
+      );
+    }
   }
 }
 

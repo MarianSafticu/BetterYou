@@ -37,8 +37,8 @@ export default class Service {
   }
 
   async loginUser(user: UserLoginDTO) {
-    return user;
-    //const result = await this.httpService.loginUser(user);
-    // return result;
+    // return user;
+    return await this.httpService.loginUser(user);
+    
   }
 }

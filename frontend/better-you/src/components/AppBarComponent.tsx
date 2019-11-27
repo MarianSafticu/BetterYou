@@ -43,13 +43,13 @@ class AppBarComponent extends Component<IProps, IState> {
   render() {
     if (this.props.loggedUser !== undefined) {
       return (
-        <div>
-          {/* <Breakpoint large up>
+        <div className="app-bar-container">
+          <Breakpoint large up className="app-bar-breakpoint">
             <AppBar className="appBar">
-              <Toolbar className={classes.toolbar}>
-                <div className={classes.links}>
-                  <div className={classes.iconContainer}>
-                    <NavLink to="/" className={classes.icon}>
+              <Toolbar className={"toolbar"}>
+                <div className={"links-container"}>
+                  <div className={"logo-container"}>
+                    <NavLink to="/" className={"logo"}>
                       <BuildIcon />
                     </NavLink>
                   </div>
@@ -57,15 +57,15 @@ class AppBarComponent extends Component<IProps, IState> {
               </Toolbar>
             </AppBar>
           </Breakpoint>
-          <Breakpoint medium down>
-            <AppBar className={classes.appBar}>
-              <Toolbar className={classes.toolbar}>
+          <Breakpoint medium down className="app-bar-breakpoint">
+            <AppBar className={"appBar"}>
+              <Toolbar className={"toolbar"}>
                 <IconButton onClick={() => this.toggleDrawer(true)}>
                   <MenuIcon />
                 </IconButton>
-                <div className={classes.links}>
-                  <div className={classes.iconContainer}>
-                    <NavLink to="/" className={classes.icon}>
+                <div className={"links-container"}>
+                  <div className={"logo-container"}>
+                    <NavLink to="/" className={"logo"}>
                       <BuildIcon />
                     </NavLink>
                   </div>
@@ -83,11 +83,11 @@ class AppBarComponent extends Component<IProps, IState> {
                 onClick={() => this.toggleDrawer(false)}
                 onKeyDown={() => this.toggleDrawer(false)}
               >
-                <List className={classes.drawerList}>
+                <List className="drawer-list">
                 </List>
               </div>
             </SwipeableDrawer>
-          </Breakpoint> */}
+          </Breakpoint>
         </div>
       );
     } else {

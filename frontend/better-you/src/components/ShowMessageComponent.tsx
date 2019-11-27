@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import "../assets/scss/ShowMessageStyle.scss";
-import { Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
 
 interface IProps {
     type: string
@@ -11,9 +9,6 @@ interface IState {
 }
 
 export class ShowMessageComponent extends Component<IProps, IState>{
-    constructor(prop: IProps){
-        super(prop);
-    }
     render(){
         let text:string = "";
         switch(this.props.type){
