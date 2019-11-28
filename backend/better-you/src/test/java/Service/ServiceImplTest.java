@@ -2,11 +2,12 @@ package Service;
 
 
 import Model.User;
-import Model.validator.UserValidator;
-import Model.validator.UserValidatorException;
+import Validator.UserValidator;
+import Validator.ValidatorException;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
+import io.jsonwebtoken.Claims;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import utils.mail.MailUtils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
@@ -46,6 +48,8 @@ public class ServiceImplTest {
     private MailUtils mailUtils;
     @Mock
     private UserValidator userValidator;
+    @Mock
+    private Claims claims;
 
 
     private ServiceImpl service;
@@ -131,7 +135,7 @@ public class ServiceImplTest {
     @Test
     public void WHEN_InvalidUserOnRegistration_THEN_ServiceExceptionIsThrown() {
         final String error_message = "ERROR_MESSAGE";
-        doThrow(new UserValidatorException(error_message)).when(userValidator).validateUser(any());
+        doThrow(new ValidatorException(error_message)).when(userValidator).validateUser(any());
 
         try {
             service.register(USER_USERNAME, USER_USERNAME, USER_PASSWORD, USER_EMAIL, null);
@@ -203,5 +207,103 @@ public class ServiceImplTest {
         verify(userMock, times(1)).getId();
         verify(appUtils, times(1)).createJWT(String.valueOf(USER_ID));
         verify(userRepoMock, times(1)).getUserByEmail(USER_EMAIL);
+    }
+
+
+    @Test
+    public void WHEN_InvalidTokenOnResetPassword_THEN_ServiceExceptionIsThrown() {
+        final String error = "Something went wrong";
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenThrow(new RuntimeException(error));
+
+        try {
+            service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Invalid JWT token"));
+        }
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+    }
+
+    @Test
+    public void WHEN_InvalidTokenIdFormat_THEN_ServiceExceptionIsThrown() {
+        final String invalidId = "**";
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(invalidId);
+
+        try {
+            service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Invalid JWT token"));
+        }
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
+    }
+
+    @Test
+    public void WHEN_InvalidUserIdWhileResettingPassword_THEN_ServiceExceptionIsThrown() throws RepoException {
+        final String error = "Something went wrong";
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(String.valueOf(USER_ID));
+        when(userRepoMock.get(USER_ID)).thenThrow(new RepoException(error));
+
+        try {
+            service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("User with id \"" + USER_ID + "\" does not exist"));
+        }
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
+        verify(userRepoMock, times(1)).get(USER_ID);
+    }
+
+    @Test
+    public void WHEN_RepoExceptionIsThrownOnUpdate_THEN_ServiceExceptionIsPropagated() throws RepoException {
+        final String error = "Something went wrong";
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(String.valueOf(USER_ID));
+        when(userRepoMock.get(USER_ID)).thenReturn(userMock);
+        when(appUtils.encode(USER_PASSWORD)).thenReturn(USER_HASHED_PASSWORD);
+        doNothing().when(userMock).setPassword(USER_HASHED_PASSWORD);
+        doThrow(new RepoException(error)).when(userRepoMock).update(USER_ID, userMock);
+
+        try {
+            service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Something went wrong while saving the new password for user"
+                    + " with id \"" + USER_ID + "\""));
+        }
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
+        verify(userRepoMock, times(1)).get(USER_ID);
+        verify(appUtils, times(1)).encode(USER_PASSWORD);
+        verify(userMock, times(1)).setPassword(USER_HASHED_PASSWORD);
+        verify(userRepoMock, times(1)).update(USER_ID, userMock);
+    }
+
+    @Test
+    public void WHEN_ResetPasswordEndsSuccessfully_THEN_TrueIsReturned() throws RepoException {
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(String.valueOf(USER_ID));
+        when(userRepoMock.get(USER_ID)).thenReturn(userMock);
+        when(appUtils.encode(USER_PASSWORD)).thenReturn(USER_HASHED_PASSWORD);
+        doNothing().when(userMock).setPassword(USER_HASHED_PASSWORD);
+        doNothing().when(userRepoMock).update(USER_ID, userMock);
+
+        boolean actualResult = service.resetPassword(JWT_TOKEN, USER_PASSWORD);
+        assertThat(actualResult, is(true));
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
+        verify(userRepoMock, times(1)).get(USER_ID);
+        verify(appUtils, times(1)).encode(USER_PASSWORD);
+        verify(userMock, times(1)).setPassword(USER_HASHED_PASSWORD);
+        verify(userRepoMock, times(1)).update(USER_ID, userMock);
     }
 }

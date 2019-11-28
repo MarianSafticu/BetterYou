@@ -1,14 +1,17 @@
 package ServerUI;
 
+import Model.Category;
 import Model.Goal;
+import Model.Habit;
+import Model.Repetition;
 import Service.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @CrossOrigin
@@ -42,14 +45,14 @@ public class RestServer {
      * @param loginRequest- here are the email and password stored
      * @return An string with the token if the login is successful or the error message
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             System.out.println("Ceva");
             String token = service.login(loginRequest.getEmail(), loginRequest.getPassword());
-            return new ResponseEntity<String>(token, HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(token), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -58,13 +61,13 @@ public class RestServer {
      * @param registerRequest- here are all the information about the user
      * @return An string with the token if the register is successful or the error message
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         try {
             String token = service.register(registerRequest.getUsername(), registerRequest.getProfile_name(), registerRequest.getPassword(), registerRequest.getEmail(), registerRequest.getBirthDate());
-            return new ResponseEntity<String>(token, HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(token), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -74,14 +77,14 @@ public class RestServer {
      * @param registerRequest- a JSON with an email
      * @return true if the recover is done and false if the email is invalid
      */
-    @RequestMapping(value = "/recover", method = RequestMethod.POST)
+    @RequestMapping(value = "/recover", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> recover(@RequestBody RecoverRequest registerRequest) {
         try {
             boolean ok = service.recoverPassword(registerRequest.getEmail());
-            return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
+            return new ResponseEntity<BooleanResponse>(new BooleanResponse(ok), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -90,14 +93,14 @@ public class RestServer {
      * @param registerRequest- a JSON with an email and a password
      * @return true if the reset is done and false if the email is invalid
      */
-    @RequestMapping(value = "/reset", method = RequestMethod.POST)
+    @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> reset(@RequestBody ResetRequest registerRequest) {
         try {
-            boolean ok = service.resetPassword(registerRequest.getEmail(), registerRequest.getPassword());
-            return new ResponseEntity<Boolean>(ok, HttpStatus.OK);
+            boolean ok = service.resetPassword(registerRequest.getToken(), registerRequest.getPassword());
+            return new ResponseEntity<BooleanResponse>(new BooleanResponse(ok), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -106,14 +109,30 @@ public class RestServer {
      * @param getGoalRequest- a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
-    @RequestMapping(value = "/getGoals", method = RequestMethod.POST)
+    @RequestMapping(value = "/goals", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getGoals(@RequestBody GetGoalRequest getGoalRequest ) {
         try{
             List<Goal> all=service.getUserGoals(getGoalRequest.getToken());
             return new ResponseEntity<List<Goal>>(all, HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+        }
+    }
+
+    /***
+     * This method receives a JSON with an token an return all the habits of that user
+     * @param getHabitsRequest- a JSON with an token
+     * @return all the goals if the token si ok or the error message
+     */
+    @RequestMapping(value = "/habits", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getHabits(@RequestBody GetHabitsRequest getHabitsRequest ) {
+        try{
+            List<Habit> all=service.getUserHabits(getHabitsRequest.getToken());
+            return new ResponseEntity<List<Habit>>(all, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
