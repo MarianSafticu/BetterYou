@@ -1,4 +1,4 @@
-package Service;
+package Service.lower;
 
 import Model.Goal;
 import Model.Habit;
