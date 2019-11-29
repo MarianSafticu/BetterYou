@@ -1,4 +1,4 @@
-package ServerUI;
+package ServerUI.Requests;
 
 import java.time.LocalDate;
 import java.util.Date;

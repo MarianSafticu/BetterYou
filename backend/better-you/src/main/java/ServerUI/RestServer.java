@@ -1,9 +1,11 @@
 package ServerUI;
 
-import Model.Category;
 import Model.Goal;
 import Model.Habit;
-import Model.Repetition;
+import ServerUI.Requests.*;
+import ServerUI.Responses.BooleanResponse;
+import ServerUI.Responses.ErrorResponse;
+import ServerUI.Responses.TokenResponse;
 import Service.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -50,9 +52,9 @@ public class RestServer {
         try {
             System.out.println("Ceva");
             String token = service.login(loginRequest.getEmail(), loginRequest.getPassword());
-            return new ResponseEntity<StringResponse>(new StringResponse(token), HttpStatus.OK);
+            return new ResponseEntity<TokenResponse>(new TokenResponse(token), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -65,9 +67,9 @@ public class RestServer {
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         try {
             String token = service.register(registerRequest.getUsername(), registerRequest.getProfile_name(), registerRequest.getPassword(), registerRequest.getEmail(), registerRequest.getBirthDate());
-            return new ResponseEntity<StringResponse>(new StringResponse(token), HttpStatus.OK);
+            return new ResponseEntity<TokenResponse>(new TokenResponse(token), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -84,7 +86,7 @@ public class RestServer {
             return new ResponseEntity<BooleanResponse>(new BooleanResponse(ok), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -100,7 +102,7 @@ public class RestServer {
             return new ResponseEntity<BooleanResponse>(new BooleanResponse(ok), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -116,7 +118,7 @@ public class RestServer {
             return new ResponseEntity<List<Goal>>(all, HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
@@ -132,7 +134,7 @@ public class RestServer {
             return new ResponseEntity<List<Habit>>(all, HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<StringResponse>(new StringResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         }
     }
 
