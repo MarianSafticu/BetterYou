@@ -3,9 +3,11 @@ package Service.lower;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
+import Service.ServiceException;
 import Validator.GoalValidator;
 import Validator.HabitValidator;
 import Validator.UserValidator;
+import Validator.ValidatorException;
 
 
 /**
@@ -33,29 +35,41 @@ public class ValidationService {
      * Checks if an user is valid.
      *
      * @param user the user to be validated
-     * @throws Validator.ValidatorException if the user is invalid
+     * @throws Service.ServiceException if the user is invalid
      */
     public void validateUser(final User user) {
-        userValidator.validateUser(user);
+        try {
+            userValidator.validateUser(user);
+        } catch (ValidatorException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     /**
      * Checks if a habit is valid.
      *
      * @param habit the habit to be validated
-     * @throws Validator.ValidatorException if the habit is invalid
+     * @throws Service.ServiceException if the habit is invalid
      */
     public void validateHabit(final Habit habit) {
-        habitValidator.validateHabit(habit);
+        try {
+            habitValidator.validateHabit(habit);
+        } catch (ValidatorException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     /**
      * Checks if a goal is valid.
      *
      * @param goal the goal to be validated
-     * @throws Validator.ValidatorException if the goal is invalid
+     * @throws Service.ServiceException if the goal is invalid
      */
     public void validateGoal(final Goal goal) {
-        goalValidator.validateGoal(goal);
+        try {
+            goalValidator.validateGoal(goal);
+        } catch (ValidatorException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 }
