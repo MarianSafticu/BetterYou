@@ -4,36 +4,57 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../assets/scss/GoalListStyle.scss";
+import { Goal } from "../models/Goal";
+import GeneralGoalViewPopupComponent from "./GeneralGoalViewPopupComponent";
 
 interface IProps {
-  goal: { title: string; description: string; progress: number; step: number };
+  goal: Goal,
+}
+interface IState {
+  goal: Goal,
+  showGoalView: boolean
 }
 
-class GoalCard extends React.Component<IProps, {}> {
+class GoalCard extends React.Component<IProps, IState> {
   constructor(prop: IProps) {
     super(prop);
     this.state = {
-      goal: {
-        title: prop.goal.title,
-        description: prop.goal.description,
-        progress: prop.goal.progress
-      }
+      goal: this.props.goal,
+      showGoalView: false
     };
+  }
+
+  handleOpneGoal = () => {
+    this.setState({
+      goal:this.state.goal,
+      showGoalView: true
+    })
+  }
+
+  handleCloseGoal = () => {
+    this.setState({
+      goal:this.state.goal,
+      showGoalView: false
+    })
   }
 
   render() {
     return (
       <Card className="card">
         <div className="category" />
-        <CardActionArea>
+        <CardActionArea onClick={this.handleOpneGoal}>
           <Typography variant="h5" className="title">
             {this.props.goal.title}
-          </Typography>
+            </Typography>
         </CardActionArea>
         <GoalProgressBar
-          progress={this.props.goal.progress}
-          step={this.props.goal.step}
+          progress={this.props.goal.currentProgress}
+          step={1}
         />
+        <GeneralGoalViewPopupComponent
+          selfDistructFunction={this.handleCloseGoal}
+          open={this.state.showGoalView}
+          goal={this.state.goal}/>
       </Card>
     );
   }
