@@ -2,6 +2,7 @@ package utils.mail;
 
 
 import Model.User;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 
 /**
@@ -22,6 +20,7 @@ public class MailUtils {
     private static final Logger LOG = LogManager.getLogger(MailUtils.class);
     private static final String REGISTRATION_EMAIL_HEADER = "Confirm Better You registration!";
     private static final String RESET_PASSWORD_EMAIL_HEADER = "Reset password Better You";
+    private static final String ENCODING = "UTF-8";
 
     private final MailSender mailSender;
     private final String registrationEmailContent;
@@ -33,19 +32,16 @@ public class MailUtils {
      *                               must contain <username> and <link> placeholders
      * @param resetPasswordEmailPath path to the file which contains the content of the reset password email;
      *                               must contain <username> and <link> placeholders
-     * @throws URISyntaxException if anything goes wrong while reading the email content files
-     * @throws IOException        if anything goes wrong while reading the email content files
+     * @throws IOException if anything goes wrong while reading the email content files
      */
     @Autowired
     public MailUtils(final MailSender mailSender,
                      @Value("${utils.mail.registration.email.path}") final String registrationEmailPath,
                      @Value("${utils.mail.reset.password.email.path}") final String resetPasswordEmailPath)
-            throws URISyntaxException, IOException {
+            throws IOException {
         this.mailSender = mailSender;
-        this.registrationEmailContent = new String(Files.readAllBytes(Paths.get(
-                getClass().getResource(registrationEmailPath).toURI())));
-        this.resetPasswordEmailContent = new String(Files.readAllBytes(Paths.get(
-                getClass().getResource(resetPasswordEmailPath).toURI())));
+        registrationEmailContent = IOUtils.toString(getClass().getResourceAsStream(registrationEmailPath), ENCODING);
+        resetPasswordEmailContent = IOUtils.toString(getClass().getResourceAsStream(resetPasswordEmailPath), ENCODING);
     }
 
     /**
