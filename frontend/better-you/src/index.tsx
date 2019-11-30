@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import configureStore from "./redux/store/configure-store";
 import "./assets/scss/indexStyle.scss";
 import { BreakpointProvider, setDefaultBreakpoints } from "react-socks";
+import { CookiesProvider } from 'react-cookie';
 
 setDefaultBreakpoints([
   { xsmall: 0 }, // all mobile devices
@@ -19,9 +20,11 @@ const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <BreakpointProvider>
-      <App />
-    </BreakpointProvider>
+    <CookiesProvider>
+      <BreakpointProvider>
+        <App />
+      </BreakpointProvider>
+    </CookiesProvider>
   </Provider>,
   document.getElementById("root")
 );

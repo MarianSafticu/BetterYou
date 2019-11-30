@@ -8,8 +8,13 @@ import { Link, Redirect } from "react-router-dom";
 import Service from "../services/Service";
 import { LoginException } from "../exceptions/LoginException";
 import { UserLoginDTO } from "../models/UserLoginDTO";
+import SnackbarComponent from "./SnackbarComponent";
+import { withCookies, ReactCookieProps } from "react-cookie";
 
 interface IProps {
+  loading: boolean;
+  error: string;
+  loggedUser: UserLoginDTO | undefined;
   loginUser: Function;
 }
 
@@ -19,7 +24,7 @@ interface IState {
   willRedirect: boolean;
 }
 
-class LoginComponent extends Component<IProps, IState> {
+class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
   service: Service;
 
   constructor(prop: IProps) {
@@ -37,6 +42,7 @@ class LoginComponent extends Component<IProps, IState> {
       },
       willRedirect: false
     };
+    console.log("in constructor ", this.props.cookies);
   }
 
   onChangeEmail(event: ChangeEvent<HTMLInputElement>) {
@@ -63,20 +69,27 @@ class LoginComponent extends Component<IProps, IState> {
     let validationResult: LoginException = this.service.validateLoginUser(
       this.state.user
     );
-    if (
-      validationResult.emailError.length > 0 ||
-      validationResult.passwordError.length > 0
-    ) {
+    if (this.service.validateValidationResult(validationResult)) {
       this.setState({
         error: validationResult
       });
     } else {
-      let result = await this.service.loginUser(this.state.user);
-      if (result) {
-        this.props.loginUser(this.state.user);
-        this.setState({
-          willRedirect: true
-        });
+      this.props.loginUser(this.state.user);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.loggedUser) {
+      if (this.service.validateLoggedUser(this.props.loggedUser)) {
+        if (this.props.cookies) {
+          this.props.cookies.set("token", this.props.loggedUser.token, {
+            path: "/",
+            httpOnly: true
+          });
+          this.setState({
+            willRedirect: true
+          });
+        }
       }
     }
   }
@@ -87,6 +100,11 @@ class LoginComponent extends Component<IProps, IState> {
     } else {
       return (
         <div className="login-background">
+          {this.props.error ? (
+            <SnackbarComponent message={this.props.error} />
+          ) : (
+            <div></div>
+          )}
           <form className="login-container" action="">
             <div className="login-input-container">
               <TextField
@@ -135,7 +153,11 @@ class LoginComponent extends Component<IProps, IState> {
 }
 
 const mapStateToProps = (state: AppState) => {
-  return {};
+  return {
+    error: state.error,
+    loading: state.loading,
+    loggedUser: state.currentUser
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -144,4 +166,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withCookies(LoginComponent));

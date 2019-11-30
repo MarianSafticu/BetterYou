@@ -1,4 +1,3 @@
-import { User } from "../../models/User";
 import { UserLoginDTO } from "../../models/UserLoginDTO";
 
 export default interface AppState {

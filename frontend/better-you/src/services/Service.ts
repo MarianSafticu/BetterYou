@@ -36,7 +36,22 @@ export default class Service {
     return error;
   }
 
-  async loginUser(user: UserLoginDTO) {
-    return await this.httpService.loginUser(user);
+  validateValidationResult(result: LoginException): boolean {
+    if (result.emailError.length > 0 || result.passwordError.length > 0)
+      return true;
+    return false;
+  }
+
+  validateLoggedUser(user: UserLoginDTO | undefined): boolean {
+    if (user) {
+      if (
+        user.email.length > 0 &&
+        user.password.length > 0 &&
+        user.token.length > 0
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -19,11 +19,8 @@ export default class HttpService implements IHttpService {
       },
       body: JSON.stringify(user)
     })
-      .then(response => 
-          response.json()
-      )
+      .then(response => response.json())
       .then(body => {
-        console.log(body)
         return body;
       })
       .catch(error => {
