@@ -1,4 +1,4 @@
-package ServerUI;
+package ServerUI.Responses;
 
 public class BooleanResponse {
     private boolean aBoolean;
