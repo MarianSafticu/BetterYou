@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../assets/scss/StartPageStyle.scss";
-import GoalCard from "./GoalCard";
 import GoalList from "./GoalList";
+import HabitList from "./HabitList";
 
 interface TestPageComponentProps {}
 
@@ -14,7 +14,12 @@ export default class TestPageComponent extends Component<
   render() {
     return (
       <div>
-        <GoalList />
+        <div>
+          <GoalList />
+        </div>
+        <div>
+          <HabitList />
+        </div>
       </div>
     );
   }
