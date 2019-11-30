@@ -7,7 +7,7 @@ import "../assets/scss/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
 import { TextField } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -71,7 +71,7 @@ class GoalCard extends React.Component<IProps, IState> {
           >
             <TextField
               type="number"
-              defaultValue="1"
+              defaultValue="+1"
               className="input_progress"
               onChange={(text: any) => {
                 this.setState({
@@ -83,7 +83,7 @@ class GoalCard extends React.Component<IProps, IState> {
 
           <Tooltip title="Modify" aria-label="add">
             <Fab color="inherit" className="add_button_progress">
-              <AddIcon
+              <Done
                 onClick={e => {
                   this.handleClick();
                 }}
@@ -97,6 +97,16 @@ class GoalCard extends React.Component<IProps, IState> {
 
   handleClick() {
     this.setState(state => {
+      if (state.goal.currentProgress + state.input_progress < 0) {
+        return {
+          goal: {
+            title: this.props.goal.title,
+            description: this.props.goal.description,
+            currentProgress: 0
+          },
+          input_progress: this.state.input_progress
+        };
+      }
       if (
         state.goal.currentProgress + state.input_progress <=
         this.props.goal.progressToReach
