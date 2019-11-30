@@ -1,12 +1,12 @@
-package ServerUI;
+package ServerUI.Responses;
 
-public class GetHabitsRequest {
+public class TokenResponse {
     private String token;
 
-    public GetHabitsRequest() {
+    public TokenResponse() {
     }
 
-    public GetHabitsRequest(String token) {
+    public TokenResponse(String token) {
         this.token = token;
     }
 

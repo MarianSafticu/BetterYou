@@ -1,4 +1,4 @@
-package ServerUI;
+package ServerUI.Requests;
 
 public class RecoverRequest {
     private String email;
