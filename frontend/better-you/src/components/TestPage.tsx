@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../assets/scss/StartPageStyle.scss";
 import GoalList from "./GoalList";
 import NewsfeedList from "./NewsfeedList";
+import HabitList from "./HabitList";
 
 interface TestPageComponentProps {}
 
@@ -15,6 +16,7 @@ export default class TestPageComponent extends Component<
     return (
       <div>
         <GoalList />
+        <HabitList />
         <NewsfeedList />
       </div>
     );

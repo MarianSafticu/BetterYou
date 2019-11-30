@@ -85,6 +85,19 @@
 .category {
   position: absolute;
   width: 10px;
-  height: 100px;
+  height: 100%;
   background-color: #000591;
+}
+
+.typeRepetition {
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+
 }
