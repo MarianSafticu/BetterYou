@@ -4,15 +4,15 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 // singleton for DB
-public class HibernateSesionFactory {
+public class HibernateSesionFactoryTest {
 
     private static SessionFactory factory= null;
-    private HibernateSesionFactory(){
+    private HibernateSesionFactoryTest(){
 
     }
     public static SessionFactory getFactory() {
         if (factory == null) {
-            HibernateSesionFactory cls = new HibernateSesionFactory();
+            HibernateSesionFactoryTest cls = new HibernateSesionFactoryTest();
             //configurare hibernate
             factory = new Configuration()
                     .configure(cls.getClass().getClassLoader().getResource("hibernate.cfg.xml"))

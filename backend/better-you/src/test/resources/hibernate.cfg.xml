@@ -13,7 +13,7 @@
         </property>
 
         <property name = "hibernate.connection.url">
-            jdbc:postgresql://better-you-db.cggixv6cscjm.us-east-1.rds.amazonaws.com:5432/betterYouDB
+            jdbc:postgresql://better-you-db.cggixv6cscjm.us-east-1.rds.amazonaws.com:5432/betterYouDB_TEST
         </property>
 
         <property name = "hibernate.connection.username">
