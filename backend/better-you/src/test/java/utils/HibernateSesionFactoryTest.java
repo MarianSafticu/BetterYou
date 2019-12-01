@@ -21,7 +21,7 @@ public class HibernateSesionFactoryTest {
         return factory;
     }
     public static void shutdown() {
-        // Close caches and connection pools
+        // Close caches and connection pools:
         getFactory().close();
     }
 }
