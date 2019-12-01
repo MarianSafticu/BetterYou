@@ -42,7 +42,9 @@ export default class Routes extends Component {
           path="/recover-account-message"
           component={<ShowMessageComponent type="recover-account" />}
         />
-        <Route exact path="/dashboard" component={DashboardComponent} />
+        <Route exact path="/confirm-account-message" component={()=> <ShowMessageComponent type="confirm-account"/>}/>
+        <Route exact path="/recover-account-message" component={()=> <ShowMessageComponent type="recover-account"/>}/>
+        <Route exact path="/dashboard" component={DashboardComponent}/>
         <Route exact path="/test" component={TestPageComponent} />
       </Switch>
     );
