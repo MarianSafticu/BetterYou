@@ -21,16 +21,18 @@ const LoginRegisterTabStyle = makeStyles({
       width: "50%",
       top: "45px",
       left: "auto",
-      right: "auto",
+      right: "auto"
     },
     "@media (min-width: 770px)": {
       width: "35%",
       top: "calc(45px + 30px)",
       left: "auto",
-      right: "auto",
+      right: "auto"
     }
   },
-  tab: {},
+  tab: {
+    backgroundColor: "#ecc169" //lighten($color6, 5%) = #ecc169
+  },
   tabPanel: {
     backgroundColor: "#9173ca",
     "@media (max-width: 576px)": {

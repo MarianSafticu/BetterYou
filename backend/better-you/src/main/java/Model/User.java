@@ -121,4 +121,9 @@ public class User implements HasId<Long> {
     public void generateConfirmCode() {
         this.confirmCode = AppUtils.generateCode();
     }
+
+    @Override
+    public String toString() {
+        return "<User id=\"" + id + "\" email=\"" + email + "\">";
+    }
 }
