@@ -4,6 +4,8 @@ import Model.RegistrationLink;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
+import Repository.GoalRepo;
+import Repository.HabitsRepo;
 import Validator.UserValidator;
 import Validator.ValidatorException;
 import Repository.RegistrationLinkRepo;
@@ -33,6 +35,8 @@ public class ServiceImpl implements Service {
 
     private final UserRepo userRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
+    private final GoalRepo goalRepo;
+    private final HabitsRepo habitsRepo;
     private final AppUtils appUtils;
     private final UserValidator userValidator;
     private final MailUtils mailUtils;
@@ -42,12 +46,16 @@ public class ServiceImpl implements Service {
                        final AppUtils appUtils,
                        final UserValidator userValidator,
                        final MailUtils mailUtils,
-                       final RegistrationLinkRepo registrationLinkRepo) {
+                       final RegistrationLinkRepo registrationLinkRepo,
+                       final GoalRepo goalRepo,
+                       final HabitsRepo habitsRepo) {
         this.userRepo = userRepo;
         this.appUtils = appUtils;
         this.userValidator = userValidator;
         this.mailUtils = mailUtils;
         this.registrationLinkRepo = registrationLinkRepo;
+        this.goalRepo = goalRepo;
+        this.habitsRepo = habitsRepo;
     }
 
     @Override
@@ -121,21 +129,7 @@ public class ServiceImpl implements Service {
     public boolean resetPassword(final String jwtToken, final String newPassword) {
         LOG.info("Updating password for user attempt");
 
-        Claims claims;
-        try {
-            claims = appUtils.decodeJWT(jwtToken);
-        } catch (Exception e) {
-            LOG.info("Invalid JWT token: {}", e.getMessage());
-            throw new ServiceException("Invalid JWT token", e);
-        }
-
-        long userId;
-        try {
-            userId = Long.parseLong(claims.getId());
-        } catch (NumberFormatException e) {
-            LOG.error("JWT token contains id with invalid format for long values: {}", e.getMessage());
-            throw new ServiceException("Invalid JWT token", e);
-        }
+        long userId = getUserIdFromJWT(jwtToken);
 
         LOG.info("Fetching user with id \"{}\"", userId);
         User user;
@@ -164,11 +158,33 @@ public class ServiceImpl implements Service {
 
     @Override
     public List<Goal> getUserGoals(String jwtToken) {
-        return null;
+        LOG.info("Get user goals based on JWT token");
+        long userId = getUserIdFromJWT(jwtToken);
+        return goalRepo.getUsersGoals(userId);
     }
 
     @Override
     public List<Habit> getUserHabits(String jwtToken) {
-        return null;
+        LOG.info("Get user habits based on JWT token");
+        long userId = getUserIdFromJWT(jwtToken);
+        return habitsRepo.getUsersHabits(userId);
+    }
+
+    private long getUserIdFromJWT(final String jwtToken) {
+        LOG.info("Checking JWT token");
+        Claims claims;
+        try {
+            claims = appUtils.decodeJWT(jwtToken);
+        } catch (Exception e) {
+            LOG.info("Invalid JWT token: {}", e.getMessage());
+            throw new ServiceException("Invalid JWT token", e);
+        }
+
+        try {
+            return Long.parseLong(claims.getId());
+        } catch (NumberFormatException e) {
+            LOG.error("JWT token contains id with invalid format for long values: {}", e.getMessage());
+            throw new ServiceException("Invalid JWT token", e);
+        }
     }
 }
