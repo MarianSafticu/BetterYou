@@ -18,10 +18,10 @@ const habitsList = [
 class HabitList extends React.Component {
   render() {
     return (
-      <div className="list">
+      <div className="container">
         {habitsList.map(function(habit, index) {
           return (
-            <div>
+            <div key={index}>
               <HabitCard habit={habit} />
             </div>
           );
