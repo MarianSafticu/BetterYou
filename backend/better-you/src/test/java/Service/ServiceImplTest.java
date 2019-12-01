@@ -1,7 +1,11 @@
 package Service;
 
 
+import Model.Goal;
+import Model.Habit;
 import Model.User;
+import Repository.GoalRepo;
+import Repository.HabitsRepo;
 import Validator.UserValidator;
 import Validator.ValidatorException;
 import Repository.RegistrationLinkRepo;
@@ -14,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import utils.AppUtils;
 import utils.mail.MailUtils;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -41,6 +47,10 @@ public class ServiceImplTest {
     @Mock
     private RegistrationLinkRepo registrationLinkRepo;
     @Mock
+    private GoalRepo goalRepo;
+    @Mock
+    private HabitsRepo habitsRepo;
+    @Mock
     private User userMock;
     @Mock
     private AppUtils appUtils;
@@ -50,6 +60,10 @@ public class ServiceImplTest {
     private UserValidator userValidator;
     @Mock
     private Claims claims;
+    @Mock
+    private List<Goal> goalList;
+    @Mock
+    private List<Habit> habitList;
 
 
     private ServiceImpl service;
@@ -57,7 +71,8 @@ public class ServiceImplTest {
     @Before
     public void beforeTest() {
         MockitoAnnotations.initMocks(this);
-        service = new ServiceImpl(userRepoMock, appUtils, userValidator, mailUtils, registrationLinkRepo);
+        service = new ServiceImpl(userRepoMock, appUtils, userValidator, mailUtils, registrationLinkRepo, goalRepo,
+                habitsRepo);
     }
 
     @Test
@@ -305,5 +320,31 @@ public class ServiceImplTest {
         verify(appUtils, times(1)).encode(USER_PASSWORD);
         verify(userMock, times(1)).setPassword(USER_HASHED_PASSWORD);
         verify(userRepoMock, times(1)).update(USER_ID, userMock);
+    }
+
+    @Test
+    public void WHEN_GetUserGoalsCalled_THEN_ExpectedResultReturned() {
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(String.valueOf(USER_ID));
+        when(goalRepo.getUsersGoals(USER_ID)).thenReturn(goalList);
+
+        List<Goal> actualList = service.getUserGoals(JWT_TOKEN);
+        assertThat(actualList, equalTo(goalList));
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
+    }
+
+    @Test
+    public void WHEN_GetUserHabitsCalled_THEN_ExpectedResultReturned() {
+        when(appUtils.decodeJWT(JWT_TOKEN)).thenReturn(claims);
+        when(claims.getId()).thenReturn(String.valueOf(USER_ID));
+        when(habitsRepo.getUsersHabits(USER_ID)).thenReturn(habitList);
+
+        List<Habit> actualList = service.getUserHabits(JWT_TOKEN);
+        assertThat(actualList, equalTo(habitList));
+
+        verify(appUtils, times(1)).decodeJWT(JWT_TOKEN);
+        verify(claims, times(1)).getId();
     }
 }

@@ -53,4 +53,9 @@ public class RegistrationLink implements HasId<Long> {
     public void setLink(String link) {
         this.link = link;
     }
+
+    @Override
+    public String toString() {
+        return "<RegistrationLink user_id=\"" + userId + "\" link=\"" + link + "\">";
+    }
 }

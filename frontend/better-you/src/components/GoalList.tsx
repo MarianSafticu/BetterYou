@@ -81,10 +81,10 @@ const goalsList:Goal[] = [
 class GoalList extends React.Component {
   render() {
     return (
-      <div className="list">
+      <div className="container">
         {goalsList.map(function(goal, index) {
           return (
-            <div>
+            <div key={index}>
               <GoalCard goal={goal} />
             </div>
           );
