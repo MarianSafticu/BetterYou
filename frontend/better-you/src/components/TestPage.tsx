@@ -15,7 +15,16 @@ export default class TestPageComponent extends Component<
   render() {
     return (
       <div>
-        <NewsfeedList />
+        <div>
+          <NewsfeedList />
+        </div>
+        <div>
+          <HabitList />
+        </div>
+        <div>
+          <GoalList />
+        </div>
+
       </div>
     );
   }
