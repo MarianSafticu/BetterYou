@@ -15,10 +15,10 @@ export default class TestPageComponent extends Component<
     return (
       <div>
         <div>
-          <GoalList />
+          <HabitList />
         </div>
         <div>
-          <HabitList />
+          <GoalList />
         </div>
       </div>
     );
