@@ -33,7 +33,7 @@ export default class TestPageComponent extends Component<
       showGoal: aux
     });
   }
-  handleCloseGoal = (index: number) => {
+  handleCloseGoal = () => {
     const aux = this.state.showGoal.map(l => Object.assign({}, l));
     for (var i = 0; i < aux.length; i++) {
       aux[i] = false;
@@ -47,10 +47,10 @@ export default class TestPageComponent extends Component<
     return (
       <div>
         <div>
-          <Button onClick={() => { this.handleShowGoal(0) }}>
+          <Button onClick={() => { this.handleShowGoal(0); }}>
             test add
           </Button>
-          <GeneralGoalViewPopupComponent selfDistructFunction={() => { this.handleCloseGoal(0) }} open={this.state.showGoal[0]} />
+          <GeneralGoalViewPopupComponent selfDistructFunction={this.handleCloseGoal} open={this.state.showGoal[0]} />
         </div>
         <GoalList />
         <div>

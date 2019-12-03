@@ -1,11 +1,16 @@
+@import "./_colors.scss";
+
 .general-goal-container{
     width: 75vw;
+    //background-color: lighten($color1, 10%);
+    border-radius: 15px;
 }
 .general-goal-input{
     width: 50vw;
     margin-left: 5vw !important;
     margin-top: 10px !important;
     margin-bottom: 25px !important;
+    color: red;
 }
 .general-goal-button-container{
     display: flex;
@@ -20,7 +25,7 @@
 
 @media screen and (max-width: 500px) {
     .general-goal-container{
-        width: 100vw;
+        width: 80vw;
     }
     .general-goal-button{
         width: 100vw;

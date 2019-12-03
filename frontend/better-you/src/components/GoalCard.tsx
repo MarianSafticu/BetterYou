@@ -45,7 +45,7 @@ class GoalCard extends React.Component<IProps, IState> {
       goal: this.state.goal,
       showGoalView: false,
       input_progress: this.state.input_progress
-    })
+    });
   }
 
   render() {
@@ -56,10 +56,6 @@ class GoalCard extends React.Component<IProps, IState> {
           <Typography variant="h5" className="title">
             {this.props.goal.title}
           </Typography>
-          <GeneralGoalViewPopupComponent
-            selfDistructFunction={this.handleCloseGoal}
-            open={this.state.showGoalView}
-            goal={this.state.goal} />
 
           <Tooltip title="Delete">
             <IconButton aria-label="delete" className="delete_button">
@@ -99,6 +95,10 @@ class GoalCard extends React.Component<IProps, IState> {
               />
             </Fab>
           </Tooltip>
+          <GeneralGoalViewPopupComponent
+            selfDistructFunction={this.handleCloseGoal}
+            open={this.state.showGoalView}
+            goal={this.state.goal} />
         </div>
       </Card>
     );

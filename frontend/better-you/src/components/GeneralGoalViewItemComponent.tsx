@@ -140,7 +140,10 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                         onChange={this.onChangeTitle}
                         className="general-goal-input"
                         disabled={this.state.edditingIsDisabled}
-                        value={this.state.goal.title}>
+                        value={this.state.goal.title}
+                        variant="filled"
+                        label="title"
+                    >
                     </TextField>
                 </h1>
                 <br />
@@ -166,9 +169,8 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     onChange={this.onChangeDateStart}
                     className="general-goal-input"
                     label="ending date"
-                    type="date"
                     InputLabelProps={{ shrink: true }}
-                    value={this.state.goal.endDate}
+                    defaultValue={this.state.goal.endDate.toLocaleDateString()}
                     disabled={this.state.edditingIsDisabled}>
                 </TextField>
                 {
@@ -177,13 +179,14 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     <TextField
                         onChange={this.onChangeCurentProgress}
                         className="general-goal-input"
-                        label="progress to reach"
+                        label="curent progress"
                         type="number"
                         InputLabelProps={{ shrink: true }}
                         value={this.state.goal.currentProgress}
                         disabled={this.state.edditingIsDisabled}>
                     </TextField>
                 }
+              />
                 <TextField
                     onChange={this.onChangeProgressToReach}
                     className="general-goal-input"
