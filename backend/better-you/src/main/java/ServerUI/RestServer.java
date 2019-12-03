@@ -138,5 +138,16 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/goal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getHabits(@RequestBody GetHabitsRequest getHabitsRequest ) {
+        try{
+            List<Habit> all=service.getUserHabits(getHabitsRequest.getToken());
+            return new ResponseEntity<List<Habit>>(all, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        }
+    }
+
 
 }
