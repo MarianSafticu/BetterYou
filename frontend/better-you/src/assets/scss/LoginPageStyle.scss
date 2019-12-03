@@ -28,3 +28,10 @@
     color: $color6;
   }
 }
+
+.Mui-error {
+  color: $error_color !important;
+  &:after {
+    border-bottom-color: $error_color !important;
+  }
+}

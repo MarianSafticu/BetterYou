@@ -1,2 +1,0 @@
-This folder contains all the classes and DTOs.
-If they will be too many we can make 2 more folders.

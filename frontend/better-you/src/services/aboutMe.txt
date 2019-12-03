@@ -1,8 +1,0 @@
-This folder contains the service(s) of the app.
-
-/interfaces - interfaces for the defined services
-IHttpService
-
-/services
-HttpService - singleton, makes requests to api
-Service - singleton, receive an instance of HttpService
