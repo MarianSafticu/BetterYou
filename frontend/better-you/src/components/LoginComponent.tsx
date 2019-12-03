@@ -3,46 +3,52 @@ import "../assets/scss/LoginPageStyle.scss";
 import { Button, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import AppState from "../redux/store/store";
-import { User } from "../models/User";
-import { setCurrentUser } from "../redux/actions/actions";
-import { Link } from "react-router-dom";
+import { setCurrentUserBegin } from "../redux/actions/actions";
+import { Link, Redirect } from "react-router-dom";
+import Service from "../services/Service";
+import { LoginException } from "../exceptions/LoginException";
+import { UserLoginDTO } from "../models/UserLoginDTO";
+import SnackbarComponent from "./SnackbarComponent";
+import { withCookies, ReactCookieProps } from "react-cookie";
 
 interface IProps {
+  loading: boolean;
+  error: string;
+  loggedUser: UserLoginDTO | undefined;
   loginUser: Function;
 }
 
 interface IState {
-  user: User;
-  emailError?: string;
-  passwordError?: string;
+  user: UserLoginDTO;
+  error: LoginException;
+  willRedirect: boolean;
 }
 
-class LoginComponent extends Component<IProps, IState> {
+class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
+  service: Service;
+
   constructor(prop: IProps) {
     super(prop);
+    this.service = Service.getInstance();
     this.state = {
       user: {
-        username: "",
-        profileName: "",
-        birthDate: new Date(),
         email: "",
-        isVerified: false,
         password: "",
         token: ""
       },
-      emailError: "",
-      passwordError: ""
+      error: {
+        emailError: "",
+        passwordError: ""
+      },
+      willRedirect: false
     };
+    console.log("in constructor ", this.props.cookies);
   }
 
   onChangeEmail(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
       user: {
-        username: this.state.user.username,
-        profileName: this.state.user.profileName,
-        birthDate: this.state.user.birthDate,
         email: event.target.value,
-        isVerified: this.state.user.isVerified,
         password: this.state.user.password,
         token: this.state.user.token
       }
@@ -52,76 +58,115 @@ class LoginComponent extends Component<IProps, IState> {
   onChangePassword(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
       user: {
-        username: this.state.user.username,
-        profileName: this.state.user.profileName,
-        birthDate: this.state.user.birthDate,
         email: this.state.user.email,
-        isVerified: this.state.user.isVerified,
         password: event.target.value,
         token: this.state.user.token
       }
     });
   }
 
-  handleOnClick = () => {
-    this.props.loginUser(this.state.user);
-  };
+  async handleOnClick() {
+    let validationResult: LoginException = this.service.validateLoginUser(
+      this.state.user
+    );
+    if (this.service.validateValidationResult(validationResult)) {
+      this.setState({
+        error: validationResult
+      });
+    } else {
+      this.props.loginUser(this.state.user);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.loggedUser) {
+      if (this.service.validateLoggedUser(this.props.loggedUser)) {
+        if (this.props.cookies) {
+          this.props.cookies.set("token", this.props.loggedUser.token, {
+            path: "/",
+            httpOnly: true
+          });
+          this.setState({
+            willRedirect: true
+          });
+        }
+      }
+    }
+  }
 
   render() {
-    return (
-      <div className="login-background">
-        <form className="login-container" action="">
-          <div className="login-input-container">
-            <TextField
-              className="login-input"
-              onChange={this.onChangeEmail.bind(this)}
-              helperText={this.state.emailError}
-              label="Email:"
-            />
-            <br />
+    if (this.state.willRedirect) {
+      return <Redirect to="/dashboard" />;
+    } else {
+      return (
+        <div className="login-background">
+          {this.props.error ? (
+            <SnackbarComponent message={this.props.error} />
+          ) : (
+            <div></div>
+          )}
+          <form className="login-container" action="">
+            <div className="login-input-container">
+              <TextField
+                className="login-input"
+                onChange={this.onChangeEmail.bind(this)}
+                helperText={this.state.error.emailError}
+                error={this.state.error.emailError ? true : false}
+                label="Email:"
+              />
+              <br />
 
-            <TextField
-              className="login-input"
-              onChange={this.onChangePassword.bind(this)}
-              type="password"
-              helperText={this.state.passwordError}
-              label="Password:"
-            />
-            <br />
-          </div>
+              <TextField
+                className="login-input"
+                onChange={this.onChangePassword.bind(this)}
+                type="password"
+                helperText={this.state.error.passwordError}
+                error={this.state.error.passwordError ? true : false}
+                label="Password:"
+              />
+              <br />
+            </div>
 
-          <div className="login-button-container">
-            <Button
-              className="login-button"
-              onClick={this.handleOnClick.bind(this)}
-            >
-              Login
-            </Button>
-          </div>
+            <div className="login-button-container">
+              <Button
+                className="login-button"
+                onClick={this.handleOnClick.bind(this)}
+              >
+                Login
+              </Button>
+            </div>
 
-          <div className="help-links">
-            <Link to="/recover-account" className="help-link-register">
-              I've forgot my password.
-            </Link>
-            <br />
-            <Link to="/register" className="help-link-register">
-              I don't have an account
-            </Link>
-          </div>
-        </form>
-      </div>
-    );
+            <div className="help-links">
+              <Link to="/recover-account" className="help-link-register">
+                I've forgot my password.
+              </Link>
+              <br />
+              <Link to="/register" className="help-link-register">
+                I don't have an account
+              </Link>
+            </div>
+          </form>
+        </div>
+      );
+    }
   }
 }
 
 const mapStateToProps = (state: AppState) => {
-  return {};
+  return {
+    error: state.error,
+    loading: state.loading,
+    loggedUser: state.currentUser
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    loginUser: (user: User) => dispatch(setCurrentUser(user))
+    loginUser: (user: UserLoginDTO) => dispatch(setCurrentUserBegin(user))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withCookies(LoginComponent));

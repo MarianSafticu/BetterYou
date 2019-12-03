@@ -4,6 +4,7 @@ import GoalList from "./GoalList";
 import { Button } from "@material-ui/core";
 import GeneralGoalViewPopupComponent from "./GeneralGoalViewPopupComponent";
 import { Goal } from "../models/Goal";
+import NewsfeedList from "./NewsfeedList";
 import HabitList from "./HabitList";
 
 interface TestPageComponentProps { }
@@ -52,10 +53,15 @@ export default class TestPageComponent extends Component<
           </Button>
           <GeneralGoalViewPopupComponent selfDistructFunction={this.handleCloseGoal} open={this.state.showGoal[0]} />
         </div>
+          <NewsfeedList />
         <GoalList />
         <div>
           <HabitList />
         </div>
+        <div>
+          <GoalList />
+        </div>
+
       </div>
     );
   }
