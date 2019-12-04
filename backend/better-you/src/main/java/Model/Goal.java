@@ -4,6 +4,7 @@ package Model;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+
 @Entity
 @Table(name = "GOALS")
 public class Goal implements HasId<Long> {
@@ -11,27 +12,46 @@ public class Goal implements HasId<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "goalID")
     private long id;
-    @Column(name="title")
+
+    @Column(name = "title")
     private String title;
-    @Column(name="description")
+
+    @Column(name = "description")
     private String description;
-    @Column(name="currentProgress")
+
+    @Column(name = "currentProgress")
     private int currentProgress;
-    @Column(name="progressToReach")
+
+    @Column(name = "progressToReach")
     private int progressToReach;
-    @Column(name="StartDate")
+
+    @Column(name = "StartDate")
     private LocalDate startDate;
-    @Column(name="EndDate")
+
+    @Column(name = "EndDate")
     private LocalDate endDate;
-    @Column(name="category")
+
+    @Column(name = "category")
     private Category category;
-    @Column(name="isPublic")
+
+    @Column(name = "isPublic")
     private boolean isPublic;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userID")
+    private User user;
 
     public Goal() {
     }
 
-    public Goal(String title, String description, int currentProgress, int progressToReach, LocalDate startDate, LocalDate endDate, Category category, boolean isPublic) {
+    public Goal(String title,
+                String description,
+                int currentProgress,
+                int progressToReach,
+                LocalDate startDate,
+                LocalDate endDate,
+                Category category,
+                boolean isPublic) {
         this.title = title;
         this.description = description;
         this.currentProgress = currentProgress;
@@ -106,7 +126,15 @@ public class Goal implements HasId<Long> {
         isPublic = aPublic;
     }
 
-    public Category getCategory() { return category; }
+    public User getUser() {
+        return user;
+    }
 
-    public void setCategory(Category category) { this.category = category; }
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
