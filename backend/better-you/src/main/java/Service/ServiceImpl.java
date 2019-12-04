@@ -187,4 +187,19 @@ public class ServiceImpl implements Service {
             throw new ServiceException("Invalid JWT token", e);
         }
     }
+
+    @Override
+    public void addGoal(Goal goal, String jwtToken) {
+
+    }
+
+    @Override
+    public void deleteGoal(Goal goal, String jwtToken) {
+
+    }
+
+    @Override
+    public void updateGoal(Goal goal, String jwtToken) {
+
+    }
 }

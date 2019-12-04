@@ -65,4 +65,9 @@ public interface Service {
      * @return the goals list
      */
     List<Habit> getUserHabits(final String jwtToken);
+
+    /* Toate arunca service exception daca crapa ceva */
+    void addGoal(final Goal goal, final  String jwtToken);
+    void deleteGoal(final Goal goal, final  String jwtToken);
+    void updateGoal(final Goal goal, final  String jwtToken);
 }
