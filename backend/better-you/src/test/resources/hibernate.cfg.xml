@@ -1,0 +1,36 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name = "hibernate.dialect">
+            org.hibernate.dialect.PostgreSQL10Dialect
+        </property>
+
+        <property name = "hibernate.connection.driver_class">
+            org.postgresql.Driver
+        </property>
+
+        <property name = "hibernate.connection.url">
+            jdbc:postgresql://better-you-db.cggixv6cscjm.us-east-1.rds.amazonaws.com:5432/betterYouDB_TEST
+        </property>
+
+        <property name = "hibernate.connection.username">
+            betteryoudb
+        </property>
+
+        <property name = "hibernate.connection.password">
+            qdyXxneJB3tt3ryoubb8Nsr5w
+        </property>
+        <property name="hbm2ddl.auto">update</property>
+<!--        <property name="show_sql">true</property>-->
+
+        <mapping class="Model.User"/>
+        <mapping class="Model.Goal"/>
+        <mapping class="Model.Habit"/>
+        <mapping class="Model.RegistrationLink"/>
+
+
+    </session-factory>
+</hibernate-configuration>
