@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * Class which offers create, read, write and delete operations to the repositories.
+ * Class which offers create, read, write and delete operations to repositories.
  */
 public class CRUDServices {
     private static final Logger LOG = LogManager.getLogger(CRUDServices.class);
@@ -67,7 +67,7 @@ public class CRUDServices {
      * @param id the user's id
      * @return the user if exists, null otherwise
      */
-    public User getUserById(final long id) {
+    public User getUserFromId(final long id) {
         LOG.info("Getting user with id {}", id);
         try {
             return userRepo.get(id);
@@ -84,7 +84,7 @@ public class CRUDServices {
      * @return the user's id if exists
      * @throws ServiceException if there is no user with the given email
      */
-    public long getUserIdByEmail(final String email) {
+    public long getUserIdFromEmail(final String email) {
         LOG.info("Getting user id for email {}", email);
         User user = userRepo.getUserByEmail(email);
         if (user == null) {
@@ -100,7 +100,7 @@ public class CRUDServices {
      * @param email the email for the user to be searched
      * @return the user with the given id if exists, null otherwise
      */
-    public User getUserByEmail(final String email) {
+    public User getUserFromEmail(final String email) {
         LOG.info("Getting user with email {}", email);
         return userRepo.getUserByEmail(email);
     }

@@ -12,6 +12,10 @@ import Validator.ValidatorException;
 
 /**
  * Class which offers validation utilities for the models inside the application.
+ * Validation offered for:
+ * - {@link User}
+ * - {@link Habit}
+ * - {@link Goal}
  */
 public class ValidationService {
     private final UserValidator userValidator;

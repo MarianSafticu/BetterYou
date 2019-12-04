@@ -78,21 +78,21 @@ public class CRUDServicesTest {
     @Test
     public void WHEN_UserWithGivenIdDoesNotExist_THEN_NullIsReturned() throws RepoException {
         doThrow(new RepoException(ERROR_MESSAGE)).when(userRepo).get(USER_ID);
-        User actualUser = crudServices.getUserById(USER_ID);
+        User actualUser = crudServices.getUserFromId(USER_ID);
         assertThat(actualUser, is(nullValue()));
     }
 
     @Test
     public void WHEN_UserWithGivenIdExist_THEN_ExpectedUserReturned() throws RepoException {
         when(userRepo.get(USER_ID)).thenReturn(user);
-        User actualUser = crudServices.getUserById(USER_ID);
+        User actualUser = crudServices.getUserFromId(USER_ID);
         assertThat(actualUser, equalTo(user));
     }
 
     @Test
     public void WHEN_GetUserByEmailCalled_THEN_ExpectedResultIsReturned() {
         when(userRepo.getUserByEmail(USER_EMAIL)).thenReturn(user);
-        User actualUser = crudServices.getUserByEmail(USER_EMAIL);
+        User actualUser = crudServices.getUserFromEmail(USER_EMAIL);
         assertThat(actualUser, equalTo(user));
     }
 
@@ -100,7 +100,7 @@ public class CRUDServicesTest {
     public void WHEN_EmailNotExists_THEN_GetUserIdByEmailThrowsServiceException() {
         when(userRepo.getUserByEmail(USER_EMAIL)).thenReturn(null);
         try {
-            crudServices.getUserIdByEmail(USER_EMAIL);
+            crudServices.getUserIdFromEmail(USER_EMAIL);
             fail("Expected ServiceException to be thrown");
         } catch (ServiceException e) {
             assertThat(e.getMessage(), equalTo("No user found with email " + USER_EMAIL));
@@ -111,7 +111,7 @@ public class CRUDServicesTest {
     public void WHEN_EmailExists_THEN_GetUserIdByEmailReturnExpectedValue() {
         when(userRepo.getUserByEmail(USER_EMAIL)).thenReturn(user);
         when(user.getId()).thenReturn(USER_ID);
-        long actualId = crudServices.getUserIdByEmail(USER_EMAIL);
+        long actualId = crudServices.getUserIdFromEmail(USER_EMAIL);
         assertThat(actualId, equalTo(USER_ID));
     }
 
