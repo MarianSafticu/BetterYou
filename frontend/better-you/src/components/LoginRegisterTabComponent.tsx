@@ -10,8 +10,8 @@ import LoginComponent from "./LoginComponent";
 import { Breakpoint } from "react-socks";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@material-ui/core/styles";
-import RegisterComponent from "./RegisterComponent";
 import { useHistory } from "react-router-dom";
+import RegisterComponent from "./RegisterComponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
