@@ -1,4 +1,5 @@
 export enum RegisterErrorMessages {
+  EMPTY_STRING = "",
   USERNAME_ERROR = "Username field cannot be empty!",
   PROFILE_NAME_ERROR = "Profile name field cannot be empty!",
   EMAIL_ERROR = "Email field cannot be empty!",
@@ -7,5 +8,5 @@ export enum RegisterErrorMessages {
   INVALID_USERNAME = "Username is invalid!",
   INVALID_PROFILE_NAME = "Profile name is invalid!",
   INVALID_EMAIL = "Email is invalid!",
-  INVALID_BIRTH_DATE = "Birth date is invalid!";
+  INVALID_BIRTH_DATE = "Birth date is invalid!"
 }

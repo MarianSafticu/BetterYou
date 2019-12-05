@@ -93,7 +93,7 @@ export default class RecoverAccountComponent extends Component<IProps, IState> {
           this.setState({
             email: this.state.email,
             isRestriction: this.state.isRestriction,
-            emailError: errors.EMAIL_EMPTY_STRING
+            emailError: errors.EMPTY_STRING
           });
         } else if (
           !this.state.email.match(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/)
@@ -102,7 +102,7 @@ export default class RecoverAccountComponent extends Component<IProps, IState> {
           this.setState({
             email: this.state.email,
             isRestriction: this.state.isRestriction,
-            emailError: errors.EMAIL_INVALID
+            emailError: errors.INVALID_EMAIL
           });
         } else {
           this.setState({
