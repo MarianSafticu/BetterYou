@@ -3,6 +3,8 @@ import { LoginException } from "../exceptions/LoginException";
 import { UserLoginDTO } from "../models/UserLoginDTO";
 import { UserRegisterDTO } from "../models/UserRegisterDTO";
 import { RegisterException } from "../exceptions/RegisterException";
+import { RegisterErrorMessages } from "../messages/RegisterMessages";
+import { LoginErrorMessages } from "../messages/LoginMessages";
 
 export default class Service {
   private static instance: Service;
@@ -28,14 +30,15 @@ export default class Service {
       emailError: "",
       passwordError: ""
     };
+    let messages = LoginErrorMessages;
     if (user.email.length === 0)
-      error.emailError = "Email field cannot be empty!";
+      error.emailError = messages.EMAIL_ERROR;
 
     if (!user.email.match(this.emailRegex))
-      error.emailError = "Email is invalid!";
+      error.emailError = messages.INVALID_ERROR;
 
     if (user.password.length === 0)
-      error.passwordError = "Password field cannot be empty!";
+      error.passwordError = messages.PASSWORD_ERROR;
 
     return error;
   }
@@ -67,32 +70,33 @@ export default class Service {
       passwordError: "",
       birthDateError: ""
     };
+    let messages = RegisterErrorMessages;
     if (user.username.length === 0){
-      error.usernameError = "Username field cannot be empty!";
+      error.usernameError = messages.USERNAME_ERROR;
     }
     if (user.profileName.length === 0){
-      error.profileNameError = "Profile name field cannot be empty!";
+      error.profileNameError = messages.PROFILE_NAME_ERROR;
     }
     if (user.email.length === 0){
-      error.emailError = "Email field cannot be empty!";
+      error.emailError = messages.EMAIL_ERROR;
     }
     if (user.password.length === 0){
-      error.passwordError = "Password field cannot be empty!";
+      error.passwordError = messages.PASSWORD_ERROR;
     }
     if (user.birthDate.toString().length === 0){
-      error.birthDateError = "Birth date field cannot be empty!";
+      error.birthDateError = messages.BIRTH_DATE_ERROR;
     }
     if (!user.username.match(this.usernameRegex)) {
-      error.usernameError = "Username is invalid!";
+      error.usernameError = messages.INVALID_USERNAME;
     }
     if (!user.profileName.match(this.profileNameRegex)) {
-      error.profileNameError = "Username is invalid!";
+      error.profileNameError = messages.INVALID_PROFILE_NAME;
     }
     if (!user.email.match(this.emailRegex)) {
-      error.emailError = "Username is invalid!";
+      error.emailError = messages.INVALID_EMAIL;
     }
     if (!this.validateBirthdate(user)) {
-      error.birthDateError = "Birth date is invalid!";
+      error.birthDateError = messages.INVALID_BIRTH_DATE;
     }
     return error;
   }
