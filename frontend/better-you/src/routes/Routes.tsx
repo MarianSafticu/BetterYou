@@ -16,12 +16,32 @@ export default class Routes extends Component {
         <Route exact path="/" component={StartPageComponent} />
         <Route exact path="/apps" component={AppsPageComponent} />
         <Route exact path="/about" component={AboutPageComponent} />
-        <Route exact path="/recover-account" component={RecoverAccountComponent}/>
-        <Route exact path="/login" component={() => <LoginRegisterTabComponent isRegister={false}/>}/>
-        <Route exact path="/register" component={() => <LoginRegisterTabComponent isRegister={true}/>}/>
-        <Route exact path="/confirm-account-message" component={()=> <ShowMessageComponent type="confirm-account"/>}/>
-        <Route exact path="/recover-account-message" component={()=> <ShowMessageComponent type="recover-account"/>}/>
-        <Route exact path="/dashboard" component={DashboardComponent}/>
+        <Route
+          exact
+          path="/recover-account"
+          component={RecoverAccountComponent}
+        />
+        <Route
+          exact
+          path="/login"
+          component={() => <LoginRegisterTabComponent isRegister={false} />}
+        />
+        <Route
+          exact
+          path="/register"
+          component={() => <LoginRegisterTabComponent isRegister={true} />}
+        />
+        <Route
+          exact
+          path="/confirm-account-message"
+          component={() => <ShowMessageComponent type="confirm-account" />}
+        />
+        <Route
+          exact
+          path="/recover-account-message"
+          component={() => <ShowMessageComponent type="recover-account" />}
+        />
+        <Route exact path="/dashboard" component={DashboardComponent} />
         <Route exact path="/test" component={TestPageComponent} />
       </Switch>
     );

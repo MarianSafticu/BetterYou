@@ -12,7 +12,7 @@ const habitsList = [
   { title: "Walk at least 30 minutes a day", repetitionType: "DAILY" },
   { title: "Do general cleaning", repetitionType: "WEEKLY" },
   { title: "Eat fast-food", repetitionType: "DAILY" },
-  { title: "Pay bills", repetitionType: "WEEKLY" },
+  { title: "Pay bills", repetitionType: "WEEKLY" }
 ];
 
 class HabitList extends React.Component {

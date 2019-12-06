@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/AppsPageStyle.scss";
+import "../../assets/scss/apps-page/AppsPageStyle.scss";
 
 export default class AppsPageComponent extends Component {
   render() {

@@ -1,8 +1,8 @@
-@import "./_colors.scss";
-@import "./_global.scss";
+@import "../globals/colors";
+@import "../globals/global";
 
 .start-page-container {
-    height: calc(100% - #{$app_bar_height});
-    display: flex;
-    flex-direction: column;
+  height: calc(100% - #{$app_bar_height});
+  display: flex;
+  flex-direction: column;
 }

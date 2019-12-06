@@ -1,5 +1,5 @@
-@import "./_colors.scss";
-@import "./_global.scss";
+@import "../globals/colors";
+@import "../globals/global";
 
 @media only screen and (min-width: 768px) {
   .carousel-container {

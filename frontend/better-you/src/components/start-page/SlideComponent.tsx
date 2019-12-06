@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/CarouselStyle.scss";
+import "../../assets/scss/start-page/CarouselStyle.scss";
 import { Breakpoint } from "react-socks";
 
 interface SlideComponentProps {

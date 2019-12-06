@@ -7,7 +7,9 @@ import { setCurrentUserSuccess, setCurrentUserError } from "../actions/actions";
 
 const httpService: IHttpService = HttpService.getInstance();
 
-export function* loginUserHandler(action: AppActionType): IterableIterator<any> {
+export function* loginUserHandler(
+  action: AppActionType
+): IterableIterator<any> {
   let user: UserLoginDTO = action.payload as UserLoginDTO;
   const response = yield call(httpService.loginUser, user);
   if (response) {
@@ -15,8 +17,7 @@ export function* loginUserHandler(action: AppActionType): IterableIterator<any> 
     if (token) {
       user.token = token;
       yield put(setCurrentUserSuccess(user));
-    } 
-    else if (massage) {
+    } else if (massage) {
       yield put(setCurrentUserError(massage));
     }
   }

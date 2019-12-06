@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/AboutPageStyle.scss";
+import "../../assets/scss/about-page/AboutPageStyle.scss";
 
 export default class AboutPageComponent extends Component {
   render() {

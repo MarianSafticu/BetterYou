@@ -1,5 +1,5 @@
 import { UserLoginDTO } from "../../models/UserLoginDTO";
 
 export default interface IHttpService {
-    loginUser(user: UserLoginDTO): Promise<string>;
+  loginUser(user: UserLoginDTO): Promise<string>;
 }

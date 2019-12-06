@@ -1,6 +1,6 @@
 import React, { Component, SyntheticEvent } from "react";
 import { Snackbar, IconButton } from "@material-ui/core";
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from "@material-ui/icons/Close";
 
 interface SnackbarProps {
   message: string;
@@ -38,8 +38,8 @@ export default class SnackbarComponent extends Component<
         autoHideDuration={5000}
         onClose={this.handleClose.bind(this)}
         anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
+          vertical: "bottom",
+          horizontal: "left"
         }}
         action={[
           <IconButton

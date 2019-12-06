@@ -3,5 +3,5 @@ import { takeLeading } from "@redux-saga/core/effects";
 import { loginUserHandler } from "./Listeners";
 
 export function* generalSaga(): IterableIterator<any> {
-    yield takeLeading(SET_CURRENT_USER_BEGIN, loginUserHandler);
+  yield takeLeading(SET_CURRENT_USER_BEGIN, loginUserHandler);
 }

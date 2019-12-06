@@ -1,5 +1,5 @@
-@import "./_colors.scss";
-@import "./_global.scss";
+@import "../globals/colors";
+@import "../globals/global";
 
 .app-bar-container {
   height: $app_bar_height;
@@ -132,6 +132,6 @@
   cursor: pointer;
   border-radius: 50%;
   border: 0;
-  margin-right: 25px !important; 
+  margin-right: 25px !important;
   background-size: 40px 40px;
 }

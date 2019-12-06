@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/RegisterBarStyle.scss";
+import "../../assets/scss/start-page/RegisterBarStyle.scss";
 import { Button, Divider } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ export default class RegisterBarComponent extends Component {
   render() {
     return (
       <div className="register-bar-container">
-        <Divider/>
+        <Divider />
         <div>
           <div>
             <h1>Start organizing your life</h1>

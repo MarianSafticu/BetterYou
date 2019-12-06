@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { UserRegisterDTO } from "../../models/UserRegisterDTO";
 import { RegisterException } from "../../exceptions/RegisterException";
 import Service from "../../services/Service";
-import { withCookies, ReactCookieProps } from "react-cookie";
 
 interface IProps {
   // loading: boolean;
@@ -202,5 +201,5 @@ export default class RegisterComponent extends Component<IProps, IState> {
     } else {
       // this.props.registerUser(this.state.user);
     }
-  };
+  }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/StartPageStyle.scss";
+import "../../assets/scss/start-page/StartPageStyle.scss";
 import CarouselComponent from "./CarouselComponent";
 import RegisterBarComponent from "./RegisterBarComponent";
 

@@ -1,4 +1,4 @@
-@import "./_colors.scss";
+@import "../globals/colors";
 
 .container {
   display: flex;
@@ -99,5 +99,4 @@
   padding-top: 10px;
   font-weight: bold;
   color: black;
-
 }

@@ -31,8 +31,7 @@ export default class Service {
       passwordError: ""
     };
     let messages = LoginErrorMessages;
-    if (user.email.length === 0)
-      error.emailError = messages.EMAIL_ERROR;
+    if (user.email.length === 0) error.emailError = messages.EMAIL_ERROR;
 
     if (!user.email.match(this.emailRegex))
       error.emailError = messages.INVALID_ERROR;
@@ -71,19 +70,19 @@ export default class Service {
       birthDateError: ""
     };
     let messages = RegisterErrorMessages;
-    if (user.username.length === 0){
+    if (user.username.length === 0) {
       error.usernameError = messages.USERNAME_ERROR;
     }
-    if (user.profileName.length === 0){
+    if (user.profileName.length === 0) {
       error.profileNameError = messages.PROFILE_NAME_ERROR;
     }
-    if (user.email.length === 0){
+    if (user.email.length === 0) {
       error.emailError = messages.EMAIL_ERROR;
     }
-    if (user.password.length === 0){
+    if (user.password.length === 0) {
       error.passwordError = messages.PASSWORD_ERROR;
     }
-    if (user.birthDate.toString().length === 0){
+    if (user.birthDate.toString().length === 0) {
       error.birthDateError = messages.BIRTH_DATE_ERROR;
     }
     if (!user.username.match(this.usernameRegex)) {
@@ -106,14 +105,18 @@ export default class Service {
     now.setDate(now.getDate() - 1);
     let yesterday = now.getDate();
 
-    if (user.birthDate.getDate() > yesterday)
-      return false
-    return true
+    if (user.birthDate.getDate() > yesterday) return false;
+    return true;
   }
 
   validateValidationResultRegister(result: RegisterException): boolean {
-    if (result.usernameError.length > 0 || result.profileNameError.length > 0 ||
-        result.emailError.length > 0 || result.passwordError.length > 0 || result.birthDateError.length > 0)
+    if (
+      result.usernameError.length > 0 ||
+      result.profileNameError.length > 0 ||
+      result.emailError.length > 0 ||
+      result.passwordError.length > 0 ||
+      result.birthDateError.length > 0
+    )
       return true;
     return false;
   }
@@ -132,6 +135,4 @@ export default class Service {
     }
     return false;
   }
-
 }
-

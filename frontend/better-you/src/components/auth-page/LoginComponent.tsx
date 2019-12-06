@@ -1,5 +1,5 @@
 import React, { Component, ChangeEvent } from "react";
-import "../assets/scss/LoginPageStyle.scss";
+import "../../assets/scss/auth-page/LoginPageStyle.scss";
 import { Button, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";

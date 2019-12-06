@@ -1,37 +1,36 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Menu, { MenuProps } from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import PersonIcon from '@material-ui/icons/Person';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Menu, { MenuProps } from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import PersonIcon from "@material-ui/icons/Person";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { NavLink } from "react-router-dom";
-import "../assets/scss/AppBarStyle.scss";
+import "../../assets/scss/generic/AppBarStyle.scss";
 
 const StyledMenu = withStyles({
   paper: {
-    border: 'none',
-    backgroundColor: 'rgba(235, 185, 83, 0.6)'
-  },
+    border: "none",
+    backgroundColor: "rgba(235, 185, 83, 0.6)"
+  }
 })((props: MenuProps) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
+      vertical: "bottom",
+      horizontal: "center"
     }}
     transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
+      vertical: "top",
+      horizontal: "center"
     }}
     {...props}
   />
 ));
 
-export default function MenuProfilePicture(props: { image: string; }) {
-
+export default function MenuProfilePicture(props: { image: string }) {
   let picture = {
     backgroundImage: 'url("' + props.image + '")'
   };
@@ -52,8 +51,7 @@ export default function MenuProfilePicture(props: { image: string; }) {
         className="profile-pic"
         style={picture}
         onClick={handleClick}
-      >
-      </a>
+      ></a>
       <StyledMenu
         id="customized-menu"
         anchorEl={anchorEl}
@@ -62,25 +60,25 @@ export default function MenuProfilePicture(props: { image: string; }) {
         onClose={handleClose}
       >
         <MenuItem>
-        <ListItemIcon>
-          <NavLink to="/dashboard" className="link">
-            <PersonIcon fontSize="small" /> My profile
-          </NavLink> 
-        </ListItemIcon>   
+          <ListItemIcon>
+            <NavLink to="/dashboard" className="link">
+              <PersonIcon fontSize="small" /> My profile
+            </NavLink>
+          </ListItemIcon>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <NavLink to="/settings" className="link">
               <SettingsIcon fontSize="small" /> Settings
-            </NavLink> 
+            </NavLink>
           </ListItemIcon>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <NavLink to="" className="link">
               <ExitToAppIcon fontSize="small" /> Sign out
-            </NavLink> 
-          </ListItemIcon> 
+            </NavLink>
+          </ListItemIcon>
         </MenuItem>
       </StyledMenu>
     </div>

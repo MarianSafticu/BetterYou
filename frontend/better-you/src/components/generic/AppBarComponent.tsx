@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/AppBarStyle.scss";
-import AppBar from "@material-ui/core/AppBar";
+import "../../assets/scss/generic/AppBarStyle.scss";
 import {
   Toolbar,
   Button,
@@ -8,7 +7,8 @@ import {
   SwipeableDrawer,
   List,
   Divider,
-  ListItem
+  ListItem,
+  AppBar
 } from "@material-ui/core";
 import BuildIcon from "@material-ui/icons/Build";
 import { NavLink, Link } from "react-router-dom";
@@ -83,8 +83,7 @@ class AppBarComponent extends Component<IProps, IState> {
                 onClick={() => this.toggleDrawer(false)}
                 onKeyDown={() => this.toggleDrawer(false)}
               >
-                <List className="drawer-list">
-                </List>
+                <List className="drawer-list"></List>
               </div>
             </SwipeableDrawer>
           </Breakpoint>
@@ -122,7 +121,10 @@ class AppBarComponent extends Component<IProps, IState> {
           <Breakpoint medium down className="app-bar-breakpoint">
             <AppBar>
               <Toolbar>
-                <IconButton className="menu-icon" onClick={() => this.toggleDrawer(true)}>
+                <IconButton
+                  className="menu-icon"
+                  onClick={() => this.toggleDrawer(true)}
+                >
                   <MenuIcon />
                 </IconButton>
                 <div className="links-container">

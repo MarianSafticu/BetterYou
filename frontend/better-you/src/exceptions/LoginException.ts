@@ -1,4 +1,4 @@
 export interface LoginException {
-    emailError: string;
-    passwordError: string;
+  emailError: string;
+  passwordError: string;
 }

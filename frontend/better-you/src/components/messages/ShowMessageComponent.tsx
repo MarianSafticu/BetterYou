@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../assets/scss/ShowMessageStyle.scss";
+import "../../assets/scss/messages/ShowMessageStyle.scss";
 
 interface IProps {
   type: string;
