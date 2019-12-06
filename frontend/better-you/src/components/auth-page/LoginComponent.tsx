@@ -138,7 +138,7 @@ class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
 
             <div className="help-links">
               <Link to="/recover-account" className="help-link-register">
-                I've forgot my password
+                I forgot my password
               </Link>
               <br />
               <Link to="/register" className="help-link-register">
