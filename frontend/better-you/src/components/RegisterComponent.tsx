@@ -1,43 +1,61 @@
 import React, { Component, ChangeEvent } from "react";
-import { User } from "../models/User";
 import { Button, TextField } from "@material-ui/core";
-import { RegisterErrorMessages } from "../messages/RegisterMessages";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+import { UserRegisterDTO } from "../models/UserRegisterDTO";
+import { RegisterException } from "../exceptions/RegisterException";
+import Service from "../services/Service";
+import { withCookies, ReactCookieProps } from "react-cookie";
 
 interface IProps {
+  // loading: boolean;
+  // error: string;
+  // registeredUser: UserRegisterDTO | undefined;
   registerUser?: Function;
 }
 
 interface IState {
-  user: User;
-  usernameError?: string;
-  profileNameError?: string;
-  emailError?: string;
-  passwordError?: string;
-  birthDateError?: string;
+  user: UserRegisterDTO;
+  error: RegisterException;
+  willRedirect: boolean;
 }
 
 export default class RegisterComponent extends Component<IProps, IState> {
+  service: Service;
+
   constructor(prop: IProps) {
     super(prop);
+    this.service = Service.getInstance();
     this.state = {
       user: {
         username: "",
         profileName: "",
-        birthDate: new Date(),
         email: "",
-        isVerified: false,
         password: "",
-        token: ""
+        birthDate: new Date()
       },
-      usernameError: "",
-      profileNameError: "",
-      emailError: "",
-      passwordError: "",
-      birthDateError: ""
+      error: {
+        usernameError: "",
+        profileNameError: "",
+        emailError: "",
+        passwordError: "",
+        birthDateError: ""
+      },
+      willRedirect: false
     };
   }
+
+  // componentDidUpdate() {
+  //   if (this.props.registeredUser) {
+  //     if (this.service.validateRegisteredUser(this.props.registeredUser)) {
+  //       if (this.props.cookies) {
+  //         this.setState({
+  //           willRedirect: true
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
   render() {
     return (
@@ -46,48 +64,48 @@ export default class RegisterComponent extends Component<IProps, IState> {
         <form className="login-container" action="">
           <div className="login-input-container">
             <TextField
-              error={this.state.usernameError ? true : false}
+              error={this.state.error.usernameError ? true : false}
               className="login-input"
               onChange={this.onChangeUsername.bind(this)}
-              helperText={this.state.usernameError}
+              helperText={this.state.error.usernameError}
               label="Username:"
             />
             <br />
 
             <TextField
-              error={this.state.profileNameError ? true : false}
+              error={this.state.error.profileNameError ? true : false}
               className="login-input"
               onChange={this.onChangeProfileName.bind(this)}
-              helperText={this.state.profileNameError}
+              helperText={this.state.error.profileNameError}
               label="Profile name:"
             />
             <br />
 
             <TextField
-              error={this.state.emailError ? true : false}
+              error={this.state.error.emailError ? true : false}
               className="login-input"
               onChange={this.onChangeEmail.bind(this)}
-              helperText={this.state.emailError}
+              helperText={this.state.error.emailError}
               label="Email:"
             />
             <br />
 
             <TextField
-              error={this.state.passwordError ? true : false}
+              error={this.state.error.passwordError ? true : false}
               className="login-input"
               onChange={this.onChangePassword.bind(this)}
               type="password"
-              helperText={this.state.passwordError}
+              helperText={this.state.error.passwordError}
               label="Password:"
             />
             <br />
 
             <TextField
-              error={this.state.birthDateError ? true : false}
+              error={this.state.error.birthDateError ? true : false}
               className="login-input"
               onChange={this.onChangeBirthdate.bind(this)}
               type="date"
-              helperText={this.state.birthDateError}
+              helperText={this.state.error.birthDateError}
               label="Birthdate:"
               InputLabelProps={{ shrink: true }}
             />
@@ -120,9 +138,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         profileName: this.state.user.profileName,
         birthDate: this.state.user.birthDate,
         email: this.state.user.email,
-        isVerified: this.state.user.isVerified,
-        password: this.state.user.password,
-        token: this.state.user.token
+        password: this.state.user.password
       }
     });
   }
@@ -134,9 +150,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         profileName: event.target.value,
         birthDate: this.state.user.birthDate,
         email: this.state.user.email,
-        isVerified: this.state.user.isVerified,
-        password: this.state.user.password,
-        token: this.state.user.token
+        password: this.state.user.password
       }
     });
   }
@@ -148,9 +162,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         profileName: this.state.user.profileName,
         birthDate: this.state.user.birthDate,
         email: event.target.value,
-        isVerified: this.state.user.isVerified,
-        password: this.state.user.password,
-        token: this.state.user.token
+        password: this.state.user.password
       }
     });
   }
@@ -162,9 +174,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
         profileName: this.state.user.profileName,
         birthDate: this.state.user.birthDate,
         email: this.state.user.email,
-        isVerified: this.state.user.isVerified,
-        password: event.target.value,
-        token: this.state.user.token
+        password: event.target.value
       }
     });
   }
@@ -176,177 +186,21 @@ export default class RegisterComponent extends Component<IProps, IState> {
         profileName: this.state.user.profileName,
         birthDate: new Date(event.target.value),
         email: this.state.user.email,
-        isVerified: this.state.user.isVerified,
-        password: this.state.user.password,
-        token: this.state.user.token
+        password: this.state.user.password
       }
     });
   }
 
-  handleOnClick = () => {
-    if (this.validateForm()) {
-      //form-ul e valid
+  async handleOnClick() {
+    let validationResult: RegisterException = this.service.validateRegisterUser(
+      this.state.user
+    );
+    if (this.service.validateValidationResultRegister(validationResult)) {
+      this.setState({
+        error: validationResult
+      });
+    } else {
+      // this.props.registerUser(this.state.user);
     }
   };
-
-  validateForm(): boolean {
-    let isValid = true;
-
-    if (!this.validateUsername()) {
-      isValid = false;
-    }
-    if (!this.validateProfilename()) {
-      isValid = false;
-    }
-    if (!this.validateEmail()) {
-      isValid = false;
-    }
-    if (!this.validatePassword()) {
-      isValid = false;
-    }
-    if (!this.validateBirthdate()) {
-      isValid = false;
-    }
-
-    return isValid;
-  }
-
-  validateUsername(): boolean {
-    let isValid = true;
-    let errors = RegisterErrorMessages;
-
-    if (this.state.user.username === "") {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        usernameError: errors.USERNAME_EMPTY_STRING
-      });
-    } else if (
-      !this.state.user.username.match(/(^[a-zA-Z]+$)|(^[a-zA-Z]+[0-9]+$)/)
-    ) {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        usernameError: errors.OTHER_SYMBOLS
-      });
-    } else {
-      this.setState({
-        user: this.state.user,
-        usernameError: errors.EMPTY_STRING
-      });
-    }
-    return isValid;
-  }
-
-  validateProfilename(): boolean {
-    let isValid = true;
-    let errors = RegisterErrorMessages;
-
-    if (this.state.user.profileName === "") {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        profileNameError: errors.PROFILENAME_EMPTY_STRING
-      });
-    } else if (
-      !this.state.user.profileName.match(/(^[a-zA-Z ]+$)|(^[a-zA-Z ]+[0-9 ]+$)/)
-    ) {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        profileNameError: errors.OTHER_SYMBOLS
-      });
-    } else {
-      this.setState({
-        user: this.state.user,
-        profileNameError: errors.EMPTY_STRING
-      });
-    }
-    return isValid;
-  }
-
-  validateEmail(): boolean {
-    let isValid = true;
-    let errors = RegisterErrorMessages;
-
-    if (this.state.user.email === "") {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        emailError: errors.EMAIL_EMPTY_STRING
-      });
-    } else if (
-      !this.state.user.email.match(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/)
-    ) {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        emailError: errors.EMAIL_INVALID
-      });
-    } else {
-      this.setState({
-        user: this.state.user,
-        emailError: errors.EMPTY_STRING
-      });
-    }
-    return isValid;
-  }
-
-  validatePassword(): boolean {
-    let isValid = true;
-    let errors = RegisterErrorMessages;
-
-    if (this.state.user.password === "") {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        passwordError: errors.PASSWORD_EMPTY_STRING
-      });
-    } else if (
-      !this.state.user.password.match(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/
-      )
-    ) {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        passwordError: errors.PASSWORD_INVALID
-      });
-    } else {
-      this.setState({
-        user: this.state.user,
-        passwordError: errors.EMPTY_STRING
-      });
-    }
-    return isValid;
-  }
-
-  validateBirthdate(): boolean {
-    let isValid = true;
-    let errors = RegisterErrorMessages;
-
-    let now = new Date();
-    now.setDate(now.getDate() - 1);
-    let yesterday = now.getDate();
-
-    if (this.state.user.birthDate.toString() === "") {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        birthDateError: errors.BIRTHDATE_EMPTY_STRING
-      });
-    } else if (this.state.user.birthDate.getDate() > yesterday) {
-      isValid = false;
-      this.setState({
-        user: this.state.user,
-        birthDateError: errors.BIRTHDATE_INVALID
-      });
-    } else {
-      this.setState({
-        user: this.state.user,
-        birthDateError: errors.EMPTY_STRING
-      });
-    }
-    return isValid;
-  }
 }
