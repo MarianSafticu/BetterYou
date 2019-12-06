@@ -12,9 +12,9 @@ import {
 } from "@material-ui/core";
 import BuildIcon from "@material-ui/icons/Build";
 import { NavLink, Link } from "react-router-dom";
-import AppState from "../redux/store/store";
+import AppState from "../../redux/store/store";
 import { connect } from "react-redux";
-import { User } from "../models/User";
+import { User } from "../../models/User";
 import { Breakpoint } from "react-socks";
 import MenuIcon from "@material-ui/icons/Menu";
 

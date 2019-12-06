@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
-import { StartPageComponent } from "../components/StartPageComponent";
-import LoginRegisterTabComponent from "../components/LoginRegisterTabComponent";
-import AppsPageComponent from "../components/AppsPageComponent";
-import AboutPageComponent from "../components/AboutPageComponent";
-import { ShowMessageComponent } from "../components/ShowMessageComponent";
-import TestPageComponent from "../components/TestPage";
-import RecoverAccountComponent from "../components/RecoverAccountComponent";
-import DashboardComponent from "../components/DashboardComponent";
+import { StartPageComponent } from "../components/start-page/StartPageComponent";
+import LoginRegisterTabComponent from "../components/auth-page/LoginRegisterTabComponent";
+import AppsPageComponent from "../components/apps-page/AppsPageComponent";
+import AboutPageComponent from "../components/about-page/AboutPageComponent";
+import { ShowMessageComponent } from "../components/messages/ShowMessageComponent";
+import TestPageComponent from "../components/test-pages/TestPage";
+import RecoverAccountComponent from "../components/settings/RecoverAccountComponent";
+import DashboardComponent from "../components/dashboard-page/DashboardComponent";
 
 export default class Routes extends Component {
   render() {

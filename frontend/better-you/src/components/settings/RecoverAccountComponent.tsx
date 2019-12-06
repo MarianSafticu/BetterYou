@@ -2,7 +2,7 @@ import React, {Component, ChangeEvent} from 'react';
 import "../assets/scss/StartPageStyle.scss";
 import "../assets/scss/RecoverAccountStyle.scss";
 import { TextField, Button } from "@material-ui/core";
-import { RegisterErrorMessages } from "../messages/RegisterMessages";
+import { RegisterErrorMessages } from "../../messages/RegisterMessages";
 import { Link } from "react-router-dom";
 
 interface IProps {

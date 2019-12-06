@@ -2,9 +2,9 @@ import React, { Component, ChangeEvent } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import { UserRegisterDTO } from "../models/UserRegisterDTO";
-import { RegisterException } from "../exceptions/RegisterException";
-import Service from "../services/Service";
+import { UserRegisterDTO } from "../../models/UserRegisterDTO";
+import { RegisterException } from "../../exceptions/RegisterException";
+import Service from "../../services/Service";
 import { withCookies, ReactCookieProps } from "react-cookie";
 
 interface IProps {

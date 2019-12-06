@@ -1,6 +1,6 @@
 import React from "react";
 import "../assets/scss/LoginRegisterTabStyle.scss";
-import LoginRegisterTabStyle from "../assets/scss/LoginRegisterTabStyle";
+import LoginRegisterTabStyle from "../../assets/scss/LoginRegisterTabStyle";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import TabPane from "@material-ui/core/Tab";

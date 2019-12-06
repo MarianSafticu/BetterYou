@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./routes/Routes";
 import "./assets/scss/AppStyle.scss";
-import AppBarComponent from './components/AppBarComponent';
+import AppBarComponent from './components/generic/AppBarComponent';
 
 export default class App extends Component {
   render() {

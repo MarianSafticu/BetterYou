@@ -2,13 +2,13 @@ import React, { Component, ChangeEvent } from "react";
 import "../assets/scss/LoginPageStyle.scss";
 import { Button, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
-import AppState from "../redux/store/store";
-import { setCurrentUserBegin } from "../redux/actions/actions";
+import AppState from "../../redux/store/store";
+import { setCurrentUserBegin } from "../../redux/actions/actions";
 import { Link, Redirect } from "react-router-dom";
-import Service from "../services/Service";
-import { LoginException } from "../exceptions/LoginException";
-import { UserLoginDTO } from "../models/UserLoginDTO";
-import SnackbarComponent from "./SnackbarComponent";
+import Service from "../../services/Service";
+import { LoginException } from "../../exceptions/LoginException";
+import { UserLoginDTO } from "../../models/UserLoginDTO";
+import SnackbarComponent from "../messages/SnackbarComponent";
 import { withCookies, ReactCookieProps } from "react-cookie";
 
 interface IProps {

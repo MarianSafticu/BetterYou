@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "../assets/scss/StartPageStyle.scss";
-import GoalList from "./GoalList";
-import NewsfeedList from "./NewsfeedList";
-import HabitList from "./HabitList";
-import MenuProfilePicture from "./MenuProfilePicture";
+import GoalList from "../dashboard-page/lists/goals/GoalList";
+import NewsfeedList from "../dashboard-page/lists/newsfeed/NewsfeedList";
+import HabitList from "../dashboard-page/lists/habits/HabitList";
+import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
 interface TestPageComponentProps {}
 
 interface TestPageComponentState {}
