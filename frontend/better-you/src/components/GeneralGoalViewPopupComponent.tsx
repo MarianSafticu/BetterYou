@@ -4,13 +4,17 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import GeneralGoalViewItemComponent from './GeneralGoalViewItemComponent';
 import { Goal } from '../models/Goal';
-import "../assets/scss/_colors.scss";
+import "../assets/scss/GeneralGoalPopupStyle.scss"
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         typography: {
             padding: theme.spacing(2),
+            backgroundColor: "#{$color1}"
         },
+        popup:{
+            backgroundColor: "rgba(0,0,0,0.6)",
+        }
     }),
 );
 
@@ -46,8 +50,9 @@ export default function GeneratGoalPopupComponent(props:IProps) {
                     horizontal: 'center',
                 }}
                 anchorEl={null}
+                className="genera-popup"
             >
-            <div className={classes.typography}>
+            <div className="general-popup-container">
                 <GeneralGoalViewItemComponent onFinnishAction={handleClose} goal={props.goal}/>
             </div>
             </Popover>

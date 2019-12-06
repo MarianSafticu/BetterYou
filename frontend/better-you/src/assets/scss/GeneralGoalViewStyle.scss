@@ -1,37 +1,37 @@
 @import "./_colors.scss";
 
 .general-goal-container{
-    width: 75vw;
-    //background-color: lighten($color1, 10%);
-    border-radius: 15px;
+    width: 65vw;
+    background-color: lighten($color5, 40%);
+    border-radius: 20px;
 }
 .general-goal-input{
-    width: 50vw;
+    width: 55vw;
     margin-left: 5vw !important;
     margin-top: 10px !important;
-    margin-bottom: 25px !important;
-    color: red;
+    margin-bottom: 5px !important;
 }
 .general-goal-button-container{
     display: flex;
-    width: 75vw;
+    width: 65vw;
 }
 .general-goal-button-container > Button:first-child{
     margin-left: auto !important;
 }
 .general-goal-button{
     margin-left: 2vw !important;
+    background-color: $color6 !important;
 }
 
 @media screen and (max-width: 500px) {
     .general-goal-container{
-        width: 80vw;
+        width: 100vw;
     }
     .general-goal-button{
         width: 100vw;
     }
     .general-goal-input{
-        width: calc(90vw - 50px);
+        width: calc(95vw - 50px);
         margin-left: 0 !important;
         margin-top: 10px !important;
         margin-bottom: 25px !important;

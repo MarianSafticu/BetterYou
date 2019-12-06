@@ -1,6 +1,8 @@
 import HttpService from "./HttpService";
 import { LoginException } from "../exceptions/LoginException";
 import { UserLoginDTO } from "../models/UserLoginDTO";
+import { Goal } from "../models/Goal";
+import { GoalException } from "../exceptions/GoalException";
 
 export default class Service {
   private static instance: Service;
@@ -17,6 +19,37 @@ export default class Service {
   static getInstance() {
     if (!Service.instance) Service.instance = new Service();
     return Service.instance;
+  }
+
+  validateGoal(goal: Goal): GoalException{
+    let err: GoalException = {
+      titleError: "",
+      descriptionError: "",
+      startDateError: "",
+      endDateError: "",
+      currentProgressError: "",
+      progressToReachError: "",
+      categoryError: ""
+    }
+
+    if(goal.title.length < 3)
+      err.titleError += "Title must have at least 3 characters.";
+      if(goal.description.length < 3)
+        err.descriptionError += "Description must have at least 3 characters.";
+
+    if(goal.currentProgress < 0)
+      err.currentProgressError += "Current progress can not be negative. ";
+    if(goal.currentProgress > goal.progressToReach)
+      err.currentProgressError += "Current progress can not be bigger then the progress to reach. ";
+    if(goal.progressToReach <= 0)
+      err.progressToReachError += "Progress to reach can not be zero or negative. ";
+
+    if(goal.endDate < goal.startDate){
+      err.endDateError += "Ending date must be after the starting date."
+      err.startDateError += "Ending date must be after the starting date."
+    }
+
+    return err;
   }
 
   validateLoginUser(user: UserLoginDTO): LoginException {
