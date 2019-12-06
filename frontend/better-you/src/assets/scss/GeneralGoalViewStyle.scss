@@ -1,25 +1,25 @@
 @import "./_colors.scss";
 
 .general-goal-container{
-    width: 65vw;
+    width: 55vw;
     background-color: lighten($color5, 40%);
-    border-radius: 20px;
+    border-radius: 5px;
 }
 .general-goal-input{
-    width: 55vw;
+    width: 45vw;
     margin-left: 5vw !important;
     margin-top: 10px !important;
     margin-bottom: 5px !important;
 }
 .general-goal-button-container{
     display: flex;
-    width: 65vw;
+    width: 55vw;
 }
 .general-goal-button-container > Button:first-child{
     margin-left: auto !important;
 }
 .general-goal-button{
-    margin-left: 2vw !important;
+    margin: 2vw !important;
     background-color: $color6 !important;
 }
 
@@ -35,5 +35,8 @@
         margin-left: 0 !important;
         margin-top: 10px !important;
         margin-bottom: 25px !important;
+    }
+    .general-goal-button-container > Button:last-child{
+        margin-right: auto !important;
     }
   }

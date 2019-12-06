@@ -110,18 +110,20 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         if (strs[1].length == 1)
             strs[1] = "0" + strs[1];
 
-        var strss: string = strs[2] + "-" + strs[1] + "-" + strs[0];
+        var strss: string = strs[2] + "-" + strs[0] + "-" + strs[1];
         return strss;
     }
 
 
     onSaveChanges = () => {
-        console.log("SE SALVEAZA SCHIMBARILE")
+        console.log("SE SALVEAZA SCHIMBARILE");
+        console.log(this.state.goal);
         if(this.verifyGoal(this.state.goal))
             this.props.onFinnishAction();
     }
     onSaveAdd = () => {
-        console.log("SE ADAUGA GOALUL")
+        console.log("SE ADAUGA GOALUL");
+        console.log(this.state.goal);
         if(this.verifyGoal(this.state.goal))
             this.props.onFinnishAction();
     }
@@ -184,7 +186,11 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
             return;
         }
         const goal: Goal = this.state.goal;
-        goal.startDate = new Date(event.target.value);
+        goal.startDate = new Date(Date.parse(event.target.value) + 86400000);
+
+        console.log(event.target.value);
+        console.log(goal.startDate);
+        console.log(goal);
 
         var err = this.service.validateGoal(goal).startDateError;
         var error = this.state.goalError;
@@ -202,7 +208,9 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
             return;
         }
         const goal: Goal = this.state.goal;
-        goal.endDate = new Date(event.target.value);
+        goal.endDate = new Date(Date.parse(event.target.value) + 86400000);
+
+        console.log("MEgA DICKS" + event.target.value);
 
         var err = this.service.validateGoal(goal).endDateError;
         var error = this.state.goalError;
@@ -310,8 +318,8 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     InputLabelProps={{ shrink: true }}
                     variant={this.state.textFieldVariant as any}
                     defaultValue={this.state.edditingIsDisabled ?
-                                        this.state.goal.endDate.toLocaleDateString() : 
-                                        this.getStringFromData(this.state.goal.endDate)}
+                                        this.state.goal.startDate.toLocaleDateString() : 
+                                        this.getStringFromData(this.state.goal.startDate)}
                     error={this.state.goalError.startDateError.length != 0}
                     helperText={this.state.goalError.startDateError}>
                 </TextField>
