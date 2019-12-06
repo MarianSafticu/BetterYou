@@ -26,6 +26,15 @@ interface IStatus {
 
 export default class GeneralGoalViewItemComponent extends Component<IProps, IStatus>{
     service: Service;
+    initialGoal: Goal = {
+        title: "",
+        description: "",
+        currentProgress: 0,
+        progressToReach: 1,
+        startDate: new Date(),
+        endDate: new Date(),
+        category: ""
+    };
     constructor(props: IProps) {
         super(props);
         this.service = Service.getInstance();
@@ -51,6 +60,15 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         }
 
         if (props.goal !== null && props.goal !== undefined) {
+            this.initialGoal = {
+                title: props.goal.title,
+                description: props.goal.description,
+                currentProgress: props.goal.currentProgress,
+                progressToReach: props.goal.progressToReach,
+                startDate: props.goal.startDate,
+                endDate: props.goal.endDate,
+                category: props.goal.category
+            };
             this.state = {
                 goal: props.goal,
                 edditingIsDisabled: true,
@@ -137,7 +155,16 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
             textFieldVariant: (this.state.edditingIsDisabled) ? "outlined" : "filled"
         });
     }
-
+    onCancelHangler = () => {
+        this.state.goal.title = this.initialGoal.title;
+        this.state.goal.description = this.initialGoal.description;
+        this.state.goal.category = this.initialGoal.category;
+        this.state.goal.currentProgress = this.initialGoal.currentProgress;
+        this.state.goal.endDate = this.initialGoal.endDate;
+        this.state.goal.progressToReach = this.initialGoal.progressToReach;
+        this.state.goal.startDate = this.initialGoal.startDate;
+        this.props.onFinnishAction();
+    }
 
 
     onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
@@ -197,7 +224,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         error.startDateError = err;
         this.setState({
             goalError: error
-        })
+        })  
         this.setState({
             goal: goal
         });
@@ -282,7 +309,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                             <Edit />
                         </Fab>
                     }
-                    <Fab className="general-goal-button" onClick={() => { this.props.onFinnishAction(); }} size="small">
+                    <Fab className="general-goal-button" onClick={() => { this.onCancelHangler(); }} size="small">
                         <Close />
                     </Fab>
                 </div>
@@ -367,7 +394,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     {
                         this.state.isForNewGoal === false
                         &&
-                        <Fab size="small" className="general-goal-button" disabled={this.state.edditingIsDisabled} onClick={() => { this.props.onFinnishAction(); }}>
+                        <Fab size="small" className="general-goal-button" disabled={this.state.edditingIsDisabled} onClick={() => { this.onCancelHangler(); }}>
                             <Cancel />
                         </Fab>
                     }
