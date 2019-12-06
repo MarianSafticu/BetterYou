@@ -2,6 +2,7 @@ package Repository;
 
 import Model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import utils.HibernateSesionFactory;
@@ -18,6 +19,9 @@ public class UserRepo extends AbstractRepo<Long, User> {
 
     public UserRepo() {
         super(User.class);
+    }
+    public UserRepo(SessionFactory sf) {
+        super(User.class,sf);
     }
 
     /**

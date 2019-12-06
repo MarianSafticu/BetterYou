@@ -2,6 +2,7 @@ package Repository;
 
 import Model.HasId;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import utils.HibernateSesionFactory;
@@ -9,15 +10,19 @@ import utils.HibernateSesionFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.PersistenceException;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 
 
 public abstract class AbstractRepo<ID,E extends HasId<ID>> {
     private Class<E> clazz;
-
+    protected SessionFactory sessionFactory;
     public AbstractRepo() {
+
     }
 
     /***
@@ -28,16 +33,20 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
 
 
     public AbstractRepo(Class<E> clazz){
+        sessionFactory = HibernateSesionFactory.getFactory();
+        this.clazz = clazz;
+    }
+    public AbstractRepo(Class<E> clazz, SessionFactory sf){
+        sessionFactory = sf;
         this.clazz = clazz;
     }
     /***
      * This method search and get an entity with given id
      * @param id is id of the searched entity
-     * @return the entity with given id
-     * @throws RepoException if there is no entity with given id in DB
+     * @return the entity with given id or null if the entity does not exist
      */
     public E get(ID id) throws RepoException{
-        Session s = HibernateSesionFactory.getFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         try {
             CriteriaBuilder cb = s.getCriteriaBuilder();
@@ -50,7 +59,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
             return e;
         }catch (NoResultException e){
             tx.rollback();
-            throw new RepoException("No user found in DB with given ID!\n");
+            return null;
         }finally {
             s.close();
         }
@@ -63,13 +72,13 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @throws RepoException if the params for entity violates any unique restriction
      */
     public void add(E e) throws RepoException {
-        Session s = HibernateSesionFactory.getFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         try{
 //            e.setId(null);
             s.save(e);
             tx.commit();
-        } catch (IllegalStateException ex) {
+        } catch (Exception ex) {
             if ( tx.getStatus() == TransactionStatus.ACTIVE
                     || tx.getStatus() == TransactionStatus.MARKED_ROLLBACK ) {
                 tx.rollback();
@@ -89,7 +98,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      *                       or the new params for entity violates any unique restriction
      */
     public void update(ID id,E e) throws RepoException{
-        Session s = HibernateSesionFactory.getFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         try {
             e.setId(id);
@@ -117,7 +126,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @throws RepoException if there is no entity with given id in db
      */
     public void delete(ID id) throws RepoException {
-        Session s = HibernateSesionFactory.getFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         CriteriaBuilder cb = s.getCriteriaBuilder();
         CriteriaDelete<E> criteriaQuery = cb.createCriteriaDelete(clazz);
@@ -137,7 +146,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @return a list with all entities (empty if the table in DB is empty)
      */
     public List<E> getAll(){
-        Session s = HibernateSesionFactory.getFactory().openSession();
+        Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
 
         CriteriaBuilder cb = s.getCriteriaBuilder();

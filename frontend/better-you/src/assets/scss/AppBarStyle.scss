@@ -124,3 +124,14 @@
   height: calc(100% - 45px);
   margin-top: 45px;
 }
+
+.profile-pic {
+  float: right;
+  height: 40px !important;
+  width: 40px !important;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 0;
+  margin-right: 25px !important; 
+  background-size: 40px 40px;
+}
