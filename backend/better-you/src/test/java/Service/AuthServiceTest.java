@@ -3,10 +3,6 @@ package Service;
 
 import Model.User;
 import Repository.RepoException;
-import Service.AuthService;
-import Service.CRUDServices;
-import Service.ServiceException;
-import Service.ValidationService;
 import io.jsonwebtoken.Claims;
 import org.junit.Before;
 import org.junit.Test;

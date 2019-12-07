@@ -4,8 +4,6 @@ package Service;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
-import Service.ServiceException;
-import Service.ValidationService;
 import Validator.GoalValidator;
 import Validator.HabitValidator;
 import Validator.UserValidator;
