@@ -1,7 +1,7 @@
-import { UserLoginDTO } from "../../models/UserLoginDTO";
+import UserDTO from "../../models/UserDTO";
 
 export default interface AppState {
   loading: boolean;
   error: string;
-  currentUser: UserLoginDTO | undefined;
+  userInfo: UserDTO | undefined;
 }

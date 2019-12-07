@@ -14,13 +14,13 @@ import BuildIcon from "@material-ui/icons/Build";
 import { NavLink, Link } from "react-router-dom";
 import AppState from "../../redux/store/store";
 import { connect } from "react-redux";
-import { User } from "../../models/User";
 import { Breakpoint } from "react-socks";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
+import UserDTO from "../../models/UserDTO";
 
 interface IProps {
-  loggedUser: User | undefined;
+  userInfo: UserDTO | undefined;
 }
 
 interface IState {
@@ -42,7 +42,10 @@ class AppBarComponent extends Component<IProps, IState> {
   }
 
   render() {
-    if (this.props.loggedUser !== undefined) {
+    if (
+      this.props.userInfo !== undefined &&
+      this.props.userInfo.isAuthenticated
+    ) {
       return (
         <div className="app-bar-container">
           <Breakpoint large up className="app-bar-breakpoint">
@@ -54,28 +57,38 @@ class AppBarComponent extends Component<IProps, IState> {
                       <BuildIcon />
                     </NavLink>
                   </div>
+                  <div className="link-container">
+                    <NavLink to="/apps" className="link">
+                      Apps
+                    </NavLink>
+                  </div>
+                  <div className="link-container">
+                    <NavLink to="/about" className="link">
+                      About
+                    </NavLink>
+                  </div>
                 </div>
                 <div className="profile-picture-container">
-                  <MenuProfilePicture image={"../assets/photos/profile-picture-test.jpg"} />
+                  <MenuProfilePicture />
                 </div>
               </Toolbar>
             </AppBar>
           </Breakpoint>
           <Breakpoint medium down className="app-bar-breakpoint">
-            <AppBar className={"appBar"}>
-              <Toolbar className={"toolbar"}>
+            <AppBar className="appBar">
+              <Toolbar className="toolbar">
                 <IconButton onClick={() => this.toggleDrawer(true)}>
                   <MenuIcon />
                 </IconButton>
-                <div className={"links-container"}>
-                  <div className={"logo-container"}>
-                    <NavLink to="/" className={"logo"}>
+                <div className="links-container">
+                  <div className="logo-container">
+                    <NavLink to="/" className="logo">
                       <BuildIcon />
                     </NavLink>
                   </div>
                 </div>
                 <div className="profile-picture-container">
-                  <MenuProfilePicture image={"../assets/photos/profile-picture-test.jpg"} />
+                  <MenuProfilePicture />
                 </div>
               </Toolbar>
             </AppBar>
@@ -181,7 +194,7 @@ class AppBarComponent extends Component<IProps, IState> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  loggedUser: state.currentUser
+  userInfo: state.userInfo
 });
 
 const mapDispatchToProps = (dispatch: any) => {

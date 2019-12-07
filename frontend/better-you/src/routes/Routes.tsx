@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
-import { StartPageComponent } from "../components/start-page/StartPageComponent";
+import StartPageComponent from "../components/start-page/StartPageComponent";
 import LoginRegisterTabComponent from "../components/auth-page/LoginRegisterTabComponent";
 import AppsPageComponent from "../components/apps-page/AppsPageComponent";
 import AboutPageComponent from "../components/about-page/AboutPageComponent";

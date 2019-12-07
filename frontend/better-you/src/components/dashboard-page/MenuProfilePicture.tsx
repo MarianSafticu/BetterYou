@@ -8,11 +8,10 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { NavLink } from "react-router-dom";
 import "../../assets/scss/generic/AppBarStyle.scss";
-import { useCookies } from "react-cookie";
-import { UserLoginDTO } from "../../models/UserLoginDTO";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
 import { unsetCurrentUser } from "../../redux/actions/actions";
+import UserDTO from "../../models/UserDTO";
 
 const StyledMenu = withStyles({
   paper: {
@@ -36,17 +35,21 @@ const StyledMenu = withStyles({
 ));
 
 interface IProps {
-  image: string;
-  loggedUser: UserLoginDTO | undefined;
+  image?: string;
+  userInfo: UserDTO | undefined;
   logoutUser: Function;
 }
 
 function MenuProfilePicture(props: IProps) {
   let picture = {
-    backgroundImage: 'url("' + props.image + '")'
+    backgroundImage:
+      'url("' +
+      (props.userInfo !== undefined
+        ? props.userInfo.profilePicture
+        : "../assets/photos/profile-picture-test.jpg") +
+      '")'
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -57,8 +60,7 @@ function MenuProfilePicture(props: IProps) {
   };
 
   const handleLogoutAction = () => {
-    removeCookie("token");
-    props.logoutUser(props.loggedUser);
+    props.logoutUser();
   };
 
   return (
@@ -104,13 +106,13 @@ function MenuProfilePicture(props: IProps) {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    loggedUser: state.currentUser
+    userInfo: state.userInfo
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    logoutUser: (user: UserLoginDTO) => dispatch(unsetCurrentUser(user))
+    logoutUser: () => dispatch(unsetCurrentUser())
   };
 };
 

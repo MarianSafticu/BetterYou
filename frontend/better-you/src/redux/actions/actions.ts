@@ -5,18 +5,19 @@ import {
   SET_CURRENT_USER_ERROR,
   UNSET_CURRENT_USER
 } from "./types";
-import { UserLoginDTO } from "../../models/UserLoginDTO";
+import LoginRequest from "../../models/requests/LoginRequest";
+import UserDTO from "../../models/UserDTO";
 
-export function setCurrentUserBegin(user: UserLoginDTO): AppActionType {
+export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
     type: SET_CURRENT_USER_BEGIN,
-    payload: user
+    payload: userInfo
   };
 }
-export function setCurrentUserSuccess(user: UserLoginDTO): AppActionType {
+export function setCurrentUserSuccess(userInfo: UserDTO): AppActionType {
   return {
     type: SET_CURRENT_USER_SUCCESS,
-    payload: user
+    payload: userInfo
   };
 }
 export function setCurrentUserError(error: string): AppActionType {
@@ -26,9 +27,9 @@ export function setCurrentUserError(error: string): AppActionType {
   };
 }
 
-export function unsetCurrentUser(user: UserLoginDTO): AppActionType {
+export function unsetCurrentUser(): AppActionType {
   return {
     type: UNSET_CURRENT_USER,
-    payload: user
+    payload: undefined
   }
 }

@@ -7,34 +7,33 @@ import { setCurrentUserBegin } from "../../redux/actions/actions";
 import { Link, Redirect } from "react-router-dom";
 import Service from "../../services/Service";
 import { LoginException } from "../../exceptions/LoginException";
-import { UserLoginDTO } from "../../models/UserLoginDTO";
 import SnackbarComponent from "../messages/SnackbarComponent";
-import { withCookies, ReactCookieProps } from "react-cookie";
+import UserDTO from "../../models/UserDTO";
+import LoginRequest from "../../models/requests/LoginRequest";
 
 interface IProps {
   loading: boolean;
   error: string;
-  loggedUser: UserLoginDTO | undefined;
+  userInfo: UserDTO | undefined;
   loginUser: Function;
 }
 
 interface IState {
-  user: UserLoginDTO;
+  typingUser: LoginRequest;
   error: LoginException;
   willRedirect: boolean;
 }
 
-class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
+class LoginComponent extends Component<IProps, IState> {
   service: Service;
 
   constructor(prop: IProps) {
     super(prop);
     this.service = Service.getInstance();
     this.state = {
-      user: {
+      typingUser: {
         email: "",
-        password: "",
-        token: ""
+        password: ""
       },
       error: {
         emailError: "",
@@ -42,55 +41,49 @@ class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
       },
       willRedirect: false
     };
-    console.log("in constructor ", this.props.cookies);
   }
 
   onChangeEmail(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
-      user: {
+      typingUser: {
         email: event.target.value,
-        password: this.state.user.password,
-        token: this.state.user.token
+        password: this.state.typingUser.password
       }
     });
   }
 
   onChangePassword(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
-      user: {
-        email: this.state.user.email,
-        password: event.target.value,
-        token: this.state.user.token
+      typingUser: {
+        email: this.state.typingUser.email,
+        password: event.target.value
       }
     });
   }
 
   async handleOnClick() {
     let validationResult: LoginException = this.service.validateLoginUser(
-      this.state.user
+      this.state.typingUser
     );
     if (this.service.validateValidationResult(validationResult)) {
       this.setState({
         error: validationResult
       });
     } else {
-      let encryptPassword = this.service.encryptPassword(this.state.user.password);
-      this.state.user.password = encryptPassword;
-      this.props.loginUser(this.state.user);
+      let encryptPassword = this.service.encryptPassword(
+        this.state.typingUser.password
+      );
+      this.state.typingUser.password = encryptPassword;
+      this.props.loginUser(this.state.typingUser);
     }
   }
 
   componentDidUpdate() {
-    if (this.props.loggedUser) {
-      if (this.service.validateLoggedUser(this.props.loggedUser)) {
-        if (this.props.cookies) {
-          this.props.cookies.set("token", this.props.loggedUser.token, {
-            path: "/"
-          });
-          this.setState({
-            willRedirect: true
-          });
-        }
+    if (this.props.userInfo) {
+      if (this.props.userInfo.isAuthenticated) {
+        this.setState({
+          willRedirect: true
+        });
       }
     }
   }
@@ -157,17 +150,14 @@ const mapStateToProps = (state: AppState) => {
   return {
     error: state.error,
     loading: state.loading,
-    loggedUser: state.currentUser
+    userInfo: state.userInfo
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    loginUser: (user: UserLoginDTO) => dispatch(setCurrentUserBegin(user))
+    loginUser: (user: LoginRequest) => dispatch(setCurrentUserBegin(user))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withCookies(LoginComponent));
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

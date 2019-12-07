@@ -1,25 +1,27 @@
 import AppState from "../store/store";
-import { UserLoginDTO } from "../../models/UserLoginDTO";
+import LoginRequest from "../../models/requests/LoginRequest";
+import UserDTO from "../../models/UserDTO";
+import { deleteCookie } from "../../services/CookieService";
 
 export function setCurrentUserBeginHandler(
   oldState: AppState,
-  user: UserLoginDTO
+  userInfo: LoginRequest 
 ): AppState {
   const newState = { ...oldState };
   newState.loading = true;
   newState.error = "";
-  newState.currentUser = undefined;
+  newState.userInfo= undefined;
   return newState;
 }
 
 export function setCurrentUserSuccessHandler(
   oldState: AppState,
-  user: UserLoginDTO
+  userInfo: UserDTO
 ): AppState {
   const newState = { ...oldState };
   newState.loading = false;
   newState.error = "";
-  newState.currentUser = user;
+  newState.userInfo = userInfo;
   return newState;
 }
 
@@ -30,17 +32,17 @@ export function setCurrentUserErrorHandler(
   const newState = { ...oldState };
   newState.loading = false;
   newState.error = error;
-  newState.currentUser = undefined;
+  newState.userInfo = undefined;
   return newState;
 }
 
 export function unsetCurrentUserHandler(
-  oldState: AppState,
-  user: UserLoginDTO
+  oldState: AppState
 ): AppState {
   const newState = { ...oldState };
   newState.loading = false;
   newState.error = "";
-  newState.currentUser = undefined;
+  newState.userInfo = undefined;
+  deleteCookie("token");
   return newState;
 }

@@ -1,6 +1,8 @@
 import IHttpService from "./interfaces/IHttpService";
-import { UserLoginDTO } from "../models/UserLoginDTO";
-import { UserRegisterDTO } from "../models/UserRegisterDTO";
+import LoginRequest from "../models/requests/LoginRequest";
+import RegisterRequest from "../models/requests/RegisterRequest";
+import LoginResponse from "../models/responses/LoginResponse";
+import RegisterResponse from "../models/responses/RegisterResponse";
 
 const url: string = "http://192.168.0.105:8080/app/better-you";
 
@@ -12,13 +14,13 @@ export default class HttpService implements IHttpService {
     return HttpService.instance;
   }
 
-  async loginUser(user: UserLoginDTO): Promise<string> {
+  async loginUser(requestData: LoginRequest): Promise<LoginResponse> {
     return await fetch(`${url}/login`, {
       method: "post",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(requestData)
     })
       .then(response => response.json())
       .then(body => {
@@ -29,13 +31,13 @@ export default class HttpService implements IHttpService {
       });
   }
 
-  async registerUser(user: UserRegisterDTO): Promise<string> {
+  async registerUser(requestData: RegisterRequest): Promise<RegisterResponse> {
     return await fetch(`${url}/register`, {
       method: "post",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(requestData)
     })
       .then(response => response.json())
       .then(body => {

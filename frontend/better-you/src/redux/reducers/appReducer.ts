@@ -16,7 +16,7 @@ import {
 export const initialState: AppState = {
   loading: false,
   error: "",
-  currentUser: undefined
+  userInfo: undefined
 };
 
 const appReducer = (state = initialState, action: AppActionType): AppState => {
@@ -28,7 +28,7 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case SET_CURRENT_USER_ERROR:
       return setCurrentUserErrorHandler(state, action.payload);
     case UNSET_CURRENT_USER:
-      return unsetCurrentUserHandler(state, action.payload);
+      return unsetCurrentUserHandler(state);
     default:
       return state;
   }

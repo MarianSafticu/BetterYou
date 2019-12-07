@@ -2,9 +2,9 @@ import React, { Component, ChangeEvent } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import { UserRegisterDTO } from "../../models/UserRegisterDTO";
 import { RegisterException } from "../../exceptions/RegisterException";
 import Service from "../../services/Service";
+import RegisterRequest from "../../models/requests/RegisterRequest";
 
 interface IProps {
   // loading: boolean;
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 interface IState {
-  user: UserRegisterDTO;
+  user: RegisterRequest;
   error: RegisterException;
   willRedirect: boolean;
 }
