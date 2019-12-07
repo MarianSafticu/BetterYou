@@ -132,10 +132,9 @@ public class ServiceImpl implements Service {
         long userId = getUserIdFromJWT(jwtToken);
 
         LOG.info("Fetching user with id \"{}\"", userId);
-        User user;
-        try {
-            user = userRepo.get(userId);
-        } catch (RepoException e) {
+        User user = userRepo.get(userId);
+
+        if (user == null) {
             LOG.info("User with id \"{}\" does not exist", userId);
             throw new ServiceException("User with id \"" + userId + "\" does not exist");
         }
