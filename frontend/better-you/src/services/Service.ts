@@ -5,6 +5,8 @@ import { UserRegisterDTO } from "../models/UserRegisterDTO";
 import { RegisterException } from "../exceptions/RegisterException";
 import { RegisterErrorMessages } from "../messages/RegisterMessages";
 import { LoginErrorMessages } from "../messages/LoginMessages";
+import aesjs from "aes-js";
+
 
 export default class Service {
   private static instance: Service;
@@ -23,6 +25,15 @@ export default class Service {
   static getInstance() {
     if (!Service.instance) Service.instance = new Service();
     return Service.instance;
+  }
+
+  encryptPassword(plainPassword: string): string {
+    let key: number[] = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+    let plainPasswordBytes: Uint8Array = aesjs.utils.utf8.toBytes(plainPassword);
+    let algorithm = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5));
+    let encryptPasswordBytes: Uint8Array = algorithm.encrypt(plainPasswordBytes);
+    let encryptPassword: string = aesjs.utils.hex.fromBytes(encryptPasswordBytes);
+    return encryptPassword;
   }
 
   validateLoginUser(user: UserLoginDTO): LoginException {

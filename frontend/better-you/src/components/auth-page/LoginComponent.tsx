@@ -74,6 +74,8 @@ class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
         error: validationResult
       });
     } else {
+      let encryptPassword = this.service.encryptPassword(this.state.user.password);
+      this.state.user.password = encryptPassword;
       this.props.loginUser(this.state.user);
     }
   }
