@@ -157,11 +157,40 @@ public class CRUDServicesTest {
     }
 
     @Test
+    public void WHEN_NonExistingIdOnGetGoals_THEN_ServiceExceptionThrown() {
+        when(userRepo.get(USER_ID)).thenReturn(null);
+
+        try {
+            crudServices.getUsersGoals(USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("No user found with given id!"));
+        }
+
+        verify(userRepo, times(1)).get(USER_ID);
+    }
+
+    @Test
     public void WHEN_GetUsersGoalsCalled_THEN_ExpectedResultReturned() {
         when(userRepo.get(USER_ID)).thenReturn(user);
         when(user.getGoals()).thenReturn(goalList);
         List<Goal> actualList = crudServices.getUsersGoals(USER_ID);
         assertThat(actualList, equalTo(goalList));
+        verify(userRepo, times(1)).get(USER_ID);
+    }
+
+    @Test
+    public void WHEN_NonExistingIdOnGetHabits_THEN_ServiceExceptionThrown() {
+        when(userRepo.get(USER_ID)).thenReturn(null);
+
+        try {
+            crudServices.getUsersHabits(USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("No user found with given id!"));
+        }
+
+        verify(userRepo, times(1)).get(USER_ID);
     }
 
     @Test
@@ -170,6 +199,7 @@ public class CRUDServicesTest {
         when(user.getHabits()).thenReturn(habitList);
         List<Habit> actualList = crudServices.getUsersHabits(USER_ID);
         assertThat(actualList, equalTo(habitList));
+        verify(userRepo, times(1)).get(USER_ID);
     }
 
     @Test
@@ -219,6 +249,22 @@ public class CRUDServicesTest {
     }
 
     @Test
+    public void WHEN_InvalidGoalIdOnUpdate_THEN_ServiceExceptionIsThrown() {
+        when(goal.getId()).thenReturn(GOAL_ID);
+        when(goalRepo.get(GOAL_ID)).thenReturn(null);
+
+        try {
+            crudServices.updateGoal(goal, USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("No goal found with given id"));
+        }
+
+        verify(goal, times(1)).getId();
+        verify(goalRepo, times(1)).get(GOAL_ID);
+    }
+
+    @Test
     public void WHEN_GoalUserNotSameWithUserOnUpdate_THEN_ServiceExceptionIsThrown() {
         when(goal.getId()).thenReturn(GOAL_ID);
         when(goalRepo.get(GOAL_ID)).thenReturn(originalGoal);
@@ -232,7 +278,7 @@ public class CRUDServicesTest {
             assertThat(e.getMessage(), equalTo("Goal not owned by the user!"));
         }
 
-        verify(goal, times(2)).getId();
+        verify(goal, times(1)).getId();
         verify(goalRepo, times(1)).get(GOAL_ID);
         verify(originalGoal, times(1)).getUser();
         verify(user, times(1)).getId();
@@ -254,7 +300,7 @@ public class CRUDServicesTest {
             assertThat(e.getMessage(), equalTo("Error occurred while updating goal in repo"));
         }
 
-        verify(goal, times(3)).getId();
+        verify(goal, times(1)).getId();
         verify(goalRepo, times(1)).get(GOAL_ID);
         verify(originalGoal, times(1)).getUser();
         verify(user, times(1)).getId();
@@ -271,12 +317,78 @@ public class CRUDServicesTest {
 
         crudServices.updateGoal(goal, USER_ID);
 
-        verify(goal, times(3)).getId();
+        verify(goal, times(1)).getId();
         verify(goalRepo, times(1)).get(GOAL_ID);
         verify(originalGoal, times(1)).getUser();
         verify(user, times(1)).getId();
         verify(goalRepo, times(1)).update(GOAL_ID, goal);
     }
 
-    //TODO: Delete goals
+    @Test
+    public void WHEN_InvalidGoalIdOnDeleteGoal_THEN_ServiceExceptionIsThrown() {
+        when(goalRepo.get(GOAL_ID)).thenReturn(null);
+
+        try {
+            crudServices.deleteGoal(GOAL_ID, USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("No goal found with the provided id"));
+        }
+
+        verify(goalRepo, times(1)).get(GOAL_ID);
+    }
+
+    @Test
+    public void WHEN_InvalidUserIdOnDeleteGoal_THEN_ServiceExceptionIsThrown() {
+        when(goalRepo.get(GOAL_ID)).thenReturn(goal);
+        when(goal.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID + 1);
+
+        try {
+            crudServices.deleteGoal(GOAL_ID, USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Goal not owned by the user!"));
+        }
+
+        verify(goalRepo, times(1)).get(GOAL_ID);
+        verify(goal, times(1)).getUser();
+        verify(user, times(1)).getId();
+    }
+
+    @Test
+    public void WHEN_GoalRepoFailsOnDelete_THEN_ServiceExceptionIsPropagated() throws RepoException {
+        final String error = "Something went very ... very ... dirty!";
+        when(goalRepo.get(GOAL_ID)).thenReturn(goal);
+        when(goal.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID);
+        doThrow(new RepoException(error)).when(goalRepo).delete(GOAL_ID);
+
+        try {
+            crudServices.deleteGoal(GOAL_ID, USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Error occurred while deleting goal in repo"));
+        }
+
+        verify(goalRepo, times(1)).get(GOAL_ID);
+        verify(goal, times(1)).getUser();
+        verify(user, times(1)).getId();
+        verify(goalRepo, times(1)).delete(GOAL_ID);
+    }
+
+    @Test
+    public void WHEN_GoalDeletedSuccessfully_THEN_NoExceptionIsThrown() throws RepoException {
+        when(goalRepo.get(GOAL_ID)).thenReturn(goal);
+        when(goal.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID);
+        doNothing().when(goalRepo).delete(GOAL_ID);
+
+        crudServices.deleteGoal(GOAL_ID, USER_ID);
+
+        verify(goalRepo, times(1)).get(GOAL_ID);
+        verify(goal, times(1)).getUser();
+        verify(user, times(1)).getId();
+        verify(goalRepo, times(1)).delete(GOAL_ID);
+    }
 }

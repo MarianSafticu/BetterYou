@@ -143,9 +143,13 @@ public class CRUDServices {
      * @return a list of all of the user's goals
      */
     public List<Goal> getUsersGoals(final long userId) {
-        // TODO: If userId invalid, then WHAT!>
         LOG.info("Getting all goals for user with id {}", userId);
-        return userRepo.get(userId).getGoals();
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.info("No user found with id {}", userId);
+            throw new ServiceException("No user found with given id!");
+        }
+        return user.getGoals();
     }
 
     /**
@@ -155,9 +159,13 @@ public class CRUDServices {
      * @return a list of all of the user's habits
      */
     public List<Habit> getUsersHabits(final long userId) {
-        // TODO: If userId invalid, then WHAT!>
         LOG.info("Getting all habits for user with id {}", userId);
-        return userRepo.get(userId).getHabits();
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.info("No user found with id {}", userId);
+            throw new ServiceException("No user found with given id!");
+        }
+        return user.getHabits();
     }
 
     /**
@@ -195,8 +203,14 @@ public class CRUDServices {
      * @throws ServiceException if any error occurs while updating the goal
      */
     public void updateGoal(final Goal goal, final long userId) {
-        LOG.info("Updating goal with id {}", goal.getId());
-        Goal originalGoal = goalRepo.get(goal.getId());
+        long goalId = goal.getId();
+        LOG.info("Updating goal with id {}", goalId);
+        Goal originalGoal = goalRepo.get(goalId);
+
+        if (originalGoal == null) {
+            LOG.warn("No goal was found with id {}", goalId);
+            throw new ServiceException("No goal found with given id");
+        }
 
         if (originalGoal.getUser().getId() != userId) {
             LOG.info("Goal {} is not owned by user with id {}", goal, userId);
@@ -204,7 +218,7 @@ public class CRUDServices {
         }
 
         try {
-            goalRepo.update(goal.getId(), goal);
+            goalRepo.update(goalId, goal);
             LOG.info("Successfully updated goal {}", goal);
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
@@ -222,6 +236,11 @@ public class CRUDServices {
         LOG.info("Deleting goal with id {}", goalId);
         Goal originalGoal = goalRepo.get(goalId);
 
+        if (originalGoal == null) {
+            LOG.warn("No goal found for id {}", goalId);
+            throw new ServiceException("No goal found with the provided id");
+        }
+
         if (originalGoal.getUser().getId() != userId) {
             LOG.info("Goal {} is not owned by user with id {}", goalId, userId);
             throw new ServiceException("Goal not owned by the user!");
@@ -232,7 +251,7 @@ public class CRUDServices {
             LOG.info("Successfully updated goal {}", goalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
-            throw new ServiceException("Error occurred while updating goal in repo");
+            throw new ServiceException("Error occurred while deleting goal in repo");
         }
     }
 }
