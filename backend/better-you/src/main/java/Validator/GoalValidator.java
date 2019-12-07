@@ -2,12 +2,15 @@ package Validator;
 
 import Model.Category;
 import Model.Goal;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+
 
 /**
  * Validator class for {@link Goal} .
  */
+@Component
 public class GoalValidator {
     /**
      * Validates the details of a given goal and throws {@link ValidatorException} if there are any problems.

@@ -1,6 +1,8 @@
 package Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Entity;
 import javax.persistence.GenerationType;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Entity
@@ -133,6 +136,7 @@ public class Goal implements HasId<Long> {
         isPublic = aPublic;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
@@ -152,5 +156,24 @@ public class Goal implements HasId<Long> {
     @Override
     public String toString() {
         return "<Goal id=\"" + id + "\" title=\"" + title + "\" userId=" + (user == null ? "null" : user.getId()) + ">";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Goal goal = (Goal) o;
+        return id == goal.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

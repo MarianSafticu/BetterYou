@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -89,7 +90,9 @@ public class CRUDServices {
             LOG.info("No user found with email {}", email);
             throw new ServiceException("No user found with email " + email);
         }
-        return user.getId();
+        long userId = user.getId();
+        LOG.info("Found id for email {}: {}", email, userId);
+        return userId;
     }
 
     /**
@@ -151,7 +154,7 @@ public class CRUDServices {
             LOG.info("No user found with id {}", userId);
             throw new ServiceException("No user found with given id!");
         }
-        return user.getGoals();
+        return new ArrayList<>(user.getGoals());
     }
 
     /**
@@ -167,7 +170,7 @@ public class CRUDServices {
             LOG.info("No user found with id {}", userId);
             throw new ServiceException("No user found with given id!");
         }
-        return user.getHabits();
+        return new ArrayList<>(user.getHabits());
     }
 
     /**
@@ -206,7 +209,7 @@ public class CRUDServices {
      */
     public void updateGoal(final Goal goal, final long userId) {
         long goalId = goal.getId();
-        LOG.info("Updating goal with id {}", goalId);
+        LOG.info("Updating goal with id {} for user with id {}", goalId, userId);
         Goal originalGoal = goalRepo.get(goalId);
 
         if (originalGoal == null) {
@@ -214,11 +217,13 @@ public class CRUDServices {
             throw new ServiceException("No goal found with given id");
         }
 
-        if (originalGoal.getUser().getId() != userId) {
+        User owner = originalGoal.getUser();
+        if (owner.getId() != userId) {
             LOG.info("Goal {} is not owned by user with id {}", goal, userId);
             throw new ServiceException("Goal not owned by the user!");
         }
 
+        goal.setUser(owner);
         try {
             goalRepo.update(goalId, goal);
             LOG.info("Successfully updated goal {}", goal);

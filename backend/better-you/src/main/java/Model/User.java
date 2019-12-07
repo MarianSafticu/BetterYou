@@ -1,5 +1,6 @@
 package Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utils.AppUtils;
 
 import javax.persistence.Column;
@@ -12,8 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GenerationType;
 import javax.persistence.FetchType;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -46,10 +47,10 @@ public class User implements HasId<Long> {
     private String confirmCode;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Goal> goals;
+    private Set<Goal> goals;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Habit> habits;
+    private Set<Habit> habits;
 
     public User() {
     }
@@ -140,11 +141,13 @@ public class User implements HasId<Long> {
         return confirmCode;
     }
 
-    public List<Goal> getGoals() {
+    @JsonIgnore
+    public Set<Goal> getGoals() {
         return goals;
     }
 
-    public List<Habit> getHabits() {
+    @JsonIgnore
+    public Set<Habit> getHabits() {
         return habits;
     }
 

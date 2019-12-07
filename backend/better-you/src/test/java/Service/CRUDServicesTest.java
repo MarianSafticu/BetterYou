@@ -15,7 +15,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,10 +49,6 @@ public class CRUDServicesTest {
     private User user;
     @Mock
     private RegistrationLink registrationLink;
-    @Mock
-    private List<Goal> goalList;
-    @Mock
-    private List<Habit> habitList;
     @Mock
     private Goal goal;
     @Mock
@@ -171,10 +169,21 @@ public class CRUDServicesTest {
 
     @Test
     public void WHEN_GetUsersGoalsCalled_THEN_ExpectedResultReturned() {
+        Set<Goal> goalSet = new HashSet<>();
+        Goal goal1 = new Goal();
+        goal1.setId(1L);
+        Goal goal2 = new Goal();
+        goal2.setId(2L);
+        Goal goal3 = new Goal();
+        goal3.setId(3L);
+        goalSet.add(goal1);
+        goalSet.add(goal2);
+        goalSet.add(goal3);
+
         when(userRepo.get(USER_ID)).thenReturn(user);
-        when(user.getGoals()).thenReturn(goalList);
+        when(user.getGoals()).thenReturn(goalSet);
         List<Goal> actualList = crudServices.getUsersGoals(USER_ID);
-        assertThat(actualList, equalTo(goalList));
+        assertThat(actualList.size(), equalTo(3));
         verify(userRepo, times(1)).get(USER_ID);
     }
 
@@ -194,10 +203,21 @@ public class CRUDServicesTest {
 
     @Test
     public void WHEN_GetUsersHabitsCalled_THEN_ExpectedResultReturned() {
+        Set<Habit> habitSet = new HashSet<>();
+        Habit habit1 = new Habit();
+        habit1.setId(1L);
+        Habit habit2 = new Habit();
+        habit2.setId(2L);
+        Habit habit3 = new Habit();
+        habit3.setId(3L);
+        habitSet.add(habit1);
+        habitSet.add(habit2);
+        habitSet.add(habit3);
+
         when(userRepo.get(USER_ID)).thenReturn(user);
-        when(user.getHabits()).thenReturn(habitList);
+        when(user.getHabits()).thenReturn(habitSet);
         List<Habit> actualList = crudServices.getUsersHabits(USER_ID);
-        assertThat(actualList, equalTo(habitList));
+        assertThat(actualList.size(), equalTo(3));
         verify(userRepo, times(1)).get(USER_ID);
     }
 
