@@ -33,3 +33,14 @@ export function setCurrentUserErrorHandler(
   newState.currentUser = undefined;
   return newState;
 }
+
+export function unsetCurrentUserHandler(
+  oldState: AppState,
+  user: UserLoginDTO
+): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
+  newState.currentUser = undefined;
+  return newState;
+}

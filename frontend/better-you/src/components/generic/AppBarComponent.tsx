@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { User } from "../../models/User";
 import { Breakpoint } from "react-socks";
 import MenuIcon from "@material-ui/icons/Menu";
+import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
 
 interface IProps {
   loggedUser: User | undefined;
@@ -46,13 +47,16 @@ class AppBarComponent extends Component<IProps, IState> {
         <div className="app-bar-container">
           <Breakpoint large up className="app-bar-breakpoint">
             <AppBar className="appBar">
-              <Toolbar className={"toolbar"}>
-                <div className={"links-container"}>
-                  <div className={"logo-container"}>
-                    <NavLink to="/" className={"logo"}>
+              <Toolbar className="toolbar">
+                <div className="links-container">
+                  <div className="logo-container">
+                    <NavLink to="/" className="logo">
                       <BuildIcon />
                     </NavLink>
                   </div>
+                </div>
+                <div className="profile-picture-container">
+                  <MenuProfilePicture image={"../assets/photos/profile-picture-test.jpg"} />
                 </div>
               </Toolbar>
             </AppBar>
@@ -69,6 +73,9 @@ class AppBarComponent extends Component<IProps, IState> {
                       <BuildIcon />
                     </NavLink>
                   </div>
+                </div>
+                <div className="profile-picture-container">
+                  <MenuProfilePicture image={"../assets/photos/profile-picture-test.jpg"} />
                 </div>
               </Toolbar>
             </AppBar>

@@ -8,6 +8,11 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { NavLink } from "react-router-dom";
 import "../../assets/scss/generic/AppBarStyle.scss";
+import { useCookies } from "react-cookie";
+import { UserLoginDTO } from "../../models/UserLoginDTO";
+import { connect } from "react-redux";
+import AppState from "../../redux/store/store";
+import { unsetCurrentUser } from "../../redux/actions/actions";
 
 const StyledMenu = withStyles({
   paper: {
@@ -30,11 +35,18 @@ const StyledMenu = withStyles({
   />
 ));
 
-export default function MenuProfilePicture(props: { image: string }) {
+interface IProps {
+  image: string;
+  loggedUser: UserLoginDTO | undefined;
+  logoutUser: Function;
+}
+
+function MenuProfilePicture(props: IProps) {
   let picture = {
     backgroundImage: 'url("' + props.image + '")'
   };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -42,6 +54,11 @@ export default function MenuProfilePicture(props: { image: string }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogoutAction = () => {
+    removeCookie("token");
+    props.logoutUser(props.loggedUser);
   };
 
   return (
@@ -75,7 +92,7 @@ export default function MenuProfilePicture(props: { image: string }) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <NavLink to="" className="link">
+            <NavLink to="/" className="link" onClick={handleLogoutAction}>
               <ExitToAppIcon fontSize="small" /> Sign out
             </NavLink>
           </ListItemIcon>
@@ -84,3 +101,17 @@ export default function MenuProfilePicture(props: { image: string }) {
     </div>
   );
 }
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    loggedUser: state.currentUser
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    logoutUser: (user: UserLoginDTO) => dispatch(unsetCurrentUser(user))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuProfilePicture);

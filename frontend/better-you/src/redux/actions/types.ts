@@ -4,6 +4,8 @@ export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
 export const SET_CURRENT_USER_ERROR = "SET_CURRENT_USER_ERROR";
 
+export const UNSET_CURRENT_USER = "UNSET_CURRENT_USER";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: UserLoginDTO;
@@ -17,7 +19,13 @@ export interface SetCurrentUserError {
   payload: string;
 }
 
+export interface UnserCurrentUser {
+  type: typeof UNSET_CURRENT_USER;
+  payload: UserLoginDTO;
+}
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
-  | SetCurrentUserError;
+  | SetCurrentUserError
+  | UnserCurrentUser;

@@ -2,7 +2,7 @@ import IHttpService from "./interfaces/IHttpService";
 import { UserLoginDTO } from "../models/UserLoginDTO";
 import { UserRegisterDTO } from "../models/UserRegisterDTO";
 
-const url: string = "http://localhost:8080/app/better-you";
+const url: string = "http://192.168.0.105:8080/app/better-you";
 
 export default class HttpService implements IHttpService {
   private static instance: HttpService;

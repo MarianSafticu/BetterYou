@@ -2,7 +2,8 @@ import {
   AppActionType,
   SET_CURRENT_USER_BEGIN,
   SET_CURRENT_USER_SUCCESS,
-  SET_CURRENT_USER_ERROR
+  SET_CURRENT_USER_ERROR,
+  UNSET_CURRENT_USER
 } from "./types";
 import { UserLoginDTO } from "../../models/UserLoginDTO";
 
@@ -23,4 +24,11 @@ export function setCurrentUserError(error: string): AppActionType {
     type: SET_CURRENT_USER_ERROR,
     payload: error
   };
+}
+
+export function unsetCurrentUser(user: UserLoginDTO): AppActionType {
+  return {
+    type: UNSET_CURRENT_USER,
+    payload: user
+  }
 }

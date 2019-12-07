@@ -85,8 +85,7 @@ class LoginComponent extends Component<IProps & ReactCookieProps, IState> {
       if (this.service.validateLoggedUser(this.props.loggedUser)) {
         if (this.props.cookies) {
           this.props.cookies.set("token", this.props.loggedUser.token, {
-            path: "/",
-            httpOnly: true
+            path: "/"
           });
           this.setState({
             willRedirect: true
