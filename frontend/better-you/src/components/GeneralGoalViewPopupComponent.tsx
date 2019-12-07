@@ -42,13 +42,13 @@ export default function GeneratGoalPopupComponent(props:IProps) {
                 open={isOpen}
                 onClose={handleClose}
                 anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
                     vertical: 'center',
                     horizontal: 'center',
-                }}
+                  }}
+                  transformOrigin={{
+                    vertical: 'center',
+                    horizontal: 'center',
+                  }}
                 anchorEl={null}
                 className="genera-popup"
             >

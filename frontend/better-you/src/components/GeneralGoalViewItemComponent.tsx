@@ -1,6 +1,6 @@
 import React, { Component, ChangeEvent } from "react";
 import "../assets/scss/GeneralGoalViewStyle.scss"
-import { Button, TextField, Fab } from "@material-ui/core";
+import { Button, TextField, Fab, Popover } from "@material-ui/core";
 import { Goal } from "../models/Goal";
 import Edit from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
@@ -21,7 +21,9 @@ interface IStatus {
     isForNewGoal: boolean,
     onSaveHandle: Function,
     goalError: GoalException,
-    textFieldVariant: "filled" | "outlined" 
+    textFieldVariant: "filled" | "outlined",
+    showDelete: boolean,
+    anchorEl: HTMLButtonElement | null
 }
 
 export default class GeneralGoalViewItemComponent extends Component<IProps, IStatus>{
@@ -75,7 +77,9 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                 isForNewGoal: false,
                 onSaveHandle: this.onSaveChanges,
                 goalError: err,
-                textFieldVariant: "filled"
+                textFieldVariant: "filled",
+                showDelete: false,
+                anchorEl: null
             };
         }
         else {
@@ -85,7 +89,9 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                 isForNewGoal: true,
                 onSaveHandle: this.onSaveAdd,
                 goalError: err,
-                textFieldVariant: "outlined"
+                textFieldVariant: "outlined",
+                showDelete: false,
+                anchorEl: null
             };
         }
 
@@ -117,7 +123,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         var str = data.toLocaleDateString()
         var strs = str.split("/", 3)
 
-        if(strs.length < 3){
+        if (strs.length < 3) {
             data = new Date();
             str = data.toLocaleDateString()
             strs = str.split("/", 3)
@@ -136,17 +142,21 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
     onSaveChanges = () => {
         console.log("SE SALVEAZA SCHIMBARILE");
         console.log(this.state.goal);
-        if(this.verifyGoal(this.state.goal))
+        if (this.verifyGoal(this.state.goal))
             this.props.onFinnishAction();
     }
     onSaveAdd = () => {
         console.log("SE ADAUGA GOALUL");
         console.log(this.state.goal);
-        if(this.verifyGoal(this.state.goal))
+        if (this.verifyGoal(this.state.goal))
             this.props.onFinnishAction();
     }
-    onDeletehandler = () => {
-
+    onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+        console.log("DICKS V2")
+        this.setState({
+            showDelete: true,
+            anchorEl: event.currentTarget
+        })
     }
     onModifyHandler = () => {
         this.setState({
@@ -165,10 +175,21 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         this.state.goal.startDate = this.initialGoal.startDate;
         this.props.onFinnishAction();
     }
+    onClosePopoverDelete = () => {
+        console.log("DICKS");
+        this.setState({
+            showDelete: false,
+            anchorEl: null
+        })
+        console.log(this.state.showDelete);
+    }
+    onDeleteHandle = () => {
+        console.log("I WANT TO DELETE THIS CRAP");
+    }
 
 
     onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
-        if(this.state.edditingIsDisabled){
+        if (this.state.edditingIsDisabled) {
             event.target.value = this.state.goal.title;
             return;
         }
@@ -189,7 +210,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
     }
 
     onChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
-        if(this.state.edditingIsDisabled){
+        if (this.state.edditingIsDisabled) {
             event.target.value = this.state.goal.description;
             return;
         }
@@ -208,7 +229,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         });
     }
     onChangeDateStart = (event: ChangeEvent<HTMLInputElement>) => {
-        if(this.state.edditingIsDisabled || event.target.value.length == 0){
+        if (this.state.edditingIsDisabled || event.target.value.length == 0) {
             event.target.value = this.state.goal.startDate.toLocaleDateString();
             return;
         }
@@ -224,13 +245,13 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         error.startDateError = err;
         this.setState({
             goalError: error
-        })  
+        })
         this.setState({
             goal: goal
         });
     }
     onChangeDateEnd = (event: ChangeEvent<HTMLInputElement>) => {
-        if(this.state.edditingIsDisabled || event.target.value.length == 0){ 
+        if (this.state.edditingIsDisabled || event.target.value.length == 0) {
             event.target.value = this.state.goal.endDate.toLocaleDateString();
             return;
         }
@@ -252,7 +273,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         });
     }
     onChangeCurentProgress = (event: ChangeEvent<HTMLInputElement>) => {
-        if(this.state.edditingIsDisabled){
+        if (this.state.edditingIsDisabled) {
             event.target.value = this.state.goal.currentProgress.toString();
             return;
         }
@@ -272,7 +293,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
         });
     }
     onChangeProgressToReach = (event: ChangeEvent<HTMLInputElement>) => {
-        if(this.state.edditingIsDisabled){
+        if (this.state.edditingIsDisabled) {
             event.target.value = this.state.goal.progressToReach.toString();
             return;
         }
@@ -298,10 +319,35 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     {
                         this.state.isForNewGoal === false
                         &&
-                        <Fab className="general-goal-button" onClick={this.onDeletehandler} size="small">
+                        <Fab className="general-goal-button" onClick={this.onDeleteShowHandler} size="small">
                             <Delete />
                         </Fab>
                     }
+                    <Popover
+                        open={this.state.showDelete}
+                        onClose={this.onClosePopoverDelete}
+                        anchorOrigin={{
+                            vertical: 'center',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'center',
+                            horizontal: 'center',
+                          }}
+                          anchorEl={this.state.anchorEl}
+                    >
+                        <div style={{padding: "15px"}}>
+                            <p>
+                                Are you sure you want to delete it?
+                            </p>
+                            <Button size="small" className="general-goal-button" onClick={this.onClosePopoverDelete}>
+                                Cancel
+                            </Button>
+                            <Button size="small" className="general-goal-button" onClick={this.onDeleteHandle}>
+                                Extra sure
+                            </Button>
+                        </div>
+                    </Popover>
                     {
                         this.state.isForNewGoal === false
                         &&
@@ -345,8 +391,8 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     InputLabelProps={{ shrink: true }}
                     variant={this.state.textFieldVariant as any}
                     defaultValue={this.state.edditingIsDisabled ?
-                                        this.state.goal.startDate.toLocaleDateString() : 
-                                        this.getStringFromData(this.state.goal.startDate)}
+                        this.state.goal.startDate.toLocaleDateString() :
+                        this.getStringFromData(this.state.goal.startDate)}
                     error={this.state.goalError.startDateError.length != 0}
                     helperText={this.state.goalError.startDateError}>
                 </TextField>
@@ -358,8 +404,8 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     type={this.state.edditingIsDisabled ? "" : "date"}
                     variant={this.state.textFieldVariant as any}
                     defaultValue={this.state.edditingIsDisabled ?
-                                        this.state.goal.endDate.toLocaleDateString() : 
-                                        this.getStringFromData(this.state.goal.endDate)}
+                        this.state.goal.endDate.toLocaleDateString() :
+                        this.getStringFromData(this.state.goal.endDate)}
                     error={this.state.goalError.endDateError.length != 0}
                     helperText={this.state.goalError.endDateError}>
                 </TextField>
@@ -383,7 +429,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                     className="general-goal-input"
                     label="progress to reach"
                     type="number"
-                    variant={this.state.textFieldVariant as any}    
+                    variant={this.state.textFieldVariant as any}
                     InputLabelProps={{ shrink: true }}
                     defaultValue={this.state.goal.progressToReach}
                     error={this.state.goalError.progressToReachError.length != 0}
