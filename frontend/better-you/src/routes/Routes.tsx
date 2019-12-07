@@ -8,6 +8,7 @@ import { ShowMessageComponent } from "../components/messages/ShowMessageComponen
 import TestPageComponent from "../components/test-pages/TestPage";
 import RecoverAccountComponent from "../components/settings/RecoverAccountComponent";
 import DashboardComponent from "../components/dashboard-page/DashboardComponent";
+import LoggedOutRoute from "./custom/LoggedOutRoute";
 
 export default class Routes extends Component {
   render() {
@@ -16,27 +17,27 @@ export default class Routes extends Component {
         <Route exact path="/" component={StartPageComponent} />
         <Route exact path="/apps" component={AppsPageComponent} />
         <Route exact path="/about" component={AboutPageComponent} />
-        <Route
+        <LoggedOutRoute
           exact
           path="/recover-account"
           component={RecoverAccountComponent}
         />
-        <Route
-          exact
+        <LoggedOutRoute
+          exact={true}
           path="/login"
-          component={() => <LoginRegisterTabComponent isRegister={false} />}
+          component={<LoginRegisterTabComponent isRegister={false} />}
         />
-        <Route
+        <LoggedOutRoute
           exact
           path="/register"
           component={() => <LoginRegisterTabComponent isRegister={true} />}
         />
-        <Route
+        <LoggedOutRoute
           exact
           path="/confirm-account-message"
           component={() => <ShowMessageComponent type="confirm-account" />}
         />
-        <Route
+        <LoggedOutRoute
           exact
           path="/recover-account-message"
           component={() => <ShowMessageComponent type="recover-account" />}
