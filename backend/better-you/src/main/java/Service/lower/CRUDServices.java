@@ -70,12 +70,7 @@ public class CRUDServices {
      */
     public User getUserFromId(final long id) {
         LOG.info("Getting user with id {}", id);
-        try {
-            return userRepo.get(id);
-        } catch (RepoException e) {
-            LOG.info("No user found with id {}", id);
-            return null;
-        }
+        return userRepo.get(id);
     }
 
     /**
