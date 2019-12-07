@@ -141,7 +141,6 @@ public class AuthService {
      * @throws ServiceException if jwtToken is invalid
      */
     public long getUserIdFromJWT(String jwtToken) {
-        System.out.println("FUck, godamt");
         LOG.info("Checking JWT token");
         Claims claims;
         try {
