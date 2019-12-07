@@ -28,7 +28,10 @@ public class AuthService {
      * @param appUtils
      * @param mailUtils
      */
-    public AuthService(CRUDServices crudServices, ValidationService validationService, AppUtils appUtils, MailUtils mailUtils) {
+    public AuthService(final CRUDServices crudServices,
+                       final ValidationService validationService,
+                       final AppUtils appUtils,
+                       final MailUtils mailUtils) {
         this.crudServices = crudServices;
         this.validationService = validationService;
         this.appUtils = appUtils;
@@ -92,16 +95,24 @@ public class AuthService {
     }
 
     /**
-     * @param jwtToken
-     * @param newPassword
+     * Used to reset the password for a logged in user.
+     *
+     * @param jwtToken    session token
+     * @param newPassword the new password to be set
+     * @throws ServiceException if the password reset fails
      */
     public void resetPassword(final String jwtToken, final String newPassword) {
-        LOG.info("Updating password for user attempt");
+        LOG.info("Updating password for user");
 
         long userId = getUserIdFromJWT(jwtToken);
 
         LOG.info("Fetching user with id \"{}\"", userId);
         User user = crudServices.getUserFromId(userId);
+
+        if (user == null) {
+            LOG.warn("User with id {} does not exist", userId);
+            throw new ServiceException("User does not exist");
+        }
 
         LOG.info("Setting up new password for user with id \"{}\"", userId);
         user.setPassword(appUtils.encode(newPassword));
@@ -111,7 +122,9 @@ public class AuthService {
     }
 
     /**
-     * @param email
+     * Sends an account recovery message to an email address.
+     *
+     * @param email the destination email
      * @throws ServiceException if any error occurs
      */
     public void recoverAccount(final String email) {
@@ -119,8 +132,11 @@ public class AuthService {
     }
 
     /**
-     * @param jwtToken
-     * @return
+     * Returns the user id from a JWT token
+     *
+     * @param jwtToken session token
+     * @return the user id
+     * @throws ServiceException if jwtToken is invalid
      */
     public long getUserIdFromJWT(String jwtToken) {
         LOG.info("Checking JWT token");
