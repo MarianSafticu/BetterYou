@@ -47,11 +47,10 @@ public class CRUDServices {
     /**
      * Adds an user to the repository
      *
-     * @param user the user to be added
+     * @param user the user to be added (THE USER MUST HAVE THE PASSWORD HASHED)
      * @throws ServiceException if the repository is unable to save the user
      */
     public void addUser(final User user) {
-        // TODO: Hash password!!!
         LOG.info("Adding user {}", user);
         try {
             userRepo.add(user);
