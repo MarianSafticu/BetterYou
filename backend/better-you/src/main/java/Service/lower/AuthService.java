@@ -83,15 +83,17 @@ public class AuthService {
 
         LOG.info("Validating user input data");
         validationService.validateUser(newUser);
-
         LOG.info("User validation completed successfully");
+
+        LOG.info("Hashing password for new user");
+        newUser.setPassword(appUtils.encode(newUser.getPassword()));
+        LOG.info("Saving new user");
         crudServices.addUser(newUser);
 
         long newUserId = crudServices.getUserIdFromEmail(newUser.getEmail());
         crudServices.addRegistrationLink(new RegistrationLink(newUserId, AppUtils.generateCode()));
         mailUtils.sendRegistrationEmail(newUser, AppUtils.generateCode());
         return appUtils.createJWT(String.valueOf(newUserId));
-
     }
 
     /**

@@ -142,6 +142,8 @@ public class AuthServiceTest {
     public void WHEN_RepoExceptionIsThrown_THEN_ServiceExceptionIsPropagated() {
         final String error_message = "ERROR_MESSAGE";
         doNothing().when(validationService).validateUser(userMock);
+        when(userMock.getPassword()).thenReturn(USER_PASSWORD);
+        when(appUtils.encode(USER_PASSWORD)).thenReturn(USER_HASHED_PASSWORD);
         doThrow(new ServiceException(error_message)).when(crudServices).addUser(userMock);
 
         try {
@@ -152,6 +154,8 @@ public class AuthServiceTest {
         }
 
         verify(validationService, times(1)).validateUser(any());
+        verify(userMock, times(1)).getPassword();
+        verify(appUtils, times(1)).encode(USER_PASSWORD);
         verify(crudServices, times(1)).addUser(userMock);
     }
 
@@ -159,6 +163,8 @@ public class AuthServiceTest {
     public void WHEN_RegistrationLinkRepoThrowsRepoException_THEN_ServiceExceptionIsPropagated() throws RepoException {
         final String error_message = "ERROR_MESSAGE";
         doNothing().when(validationService).validateUser(userMock);
+        when(userMock.getPassword()).thenReturn(USER_PASSWORD);
+        when(appUtils.encode(USER_PASSWORD)).thenReturn(USER_HASHED_PASSWORD);
         doNothing().when(crudServices).addUser(userMock);
         when(crudServices.getUserFromEmail(USER_EMAIL)).thenReturn(userMock);
         when(userMock.getId()).thenReturn(USER_ID);
@@ -172,6 +178,8 @@ public class AuthServiceTest {
         }
 
         verify(validationService, times(1)).validateUser(userMock);
+        verify(userMock, times(1)).getPassword();
+        verify(appUtils, times(1)).encode(USER_PASSWORD);
         verify(crudServices, times(1)).addUser(userMock);
         verify(crudServices, times(1)).addRegistrationLink(any());
     }
@@ -180,6 +188,8 @@ public class AuthServiceTest {
     public void WHEN_SuccessfulRegistrationDone_THEN_ValidValueIsReturned() throws RepoException {
         final String expectedJWT = "(-_-)";
         doNothing().when(validationService).validateUser(userMock);
+        when(userMock.getPassword()).thenReturn(USER_PASSWORD);
+        when(appUtils.encode(USER_PASSWORD)).thenReturn(USER_HASHED_PASSWORD);
         doNothing().when(crudServices).addUser(userMock);
         doNothing().when(crudServices).addRegistrationLink(any());
         when(userMock.getEmail()).thenReturn(USER_EMAIL);
@@ -191,6 +201,8 @@ public class AuthServiceTest {
         assertThat(actualJWT, equalTo(expectedJWT));
 
         verify(validationService, times(1)).validateUser(any());
+        verify(userMock, times(1)).getPassword();
+        verify(appUtils, times(1)).encode(USER_PASSWORD);
         verify(crudServices, times(1)).addRegistrationLink(any());
         verify(crudServices, times(1)).addUser(userMock);
         verify(appUtils, times(1)).createJWT(String.valueOf(USER_ID));
