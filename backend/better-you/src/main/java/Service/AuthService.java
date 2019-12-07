@@ -1,8 +1,7 @@
-package Service.lower;
+package Service;
 
 import Model.RegistrationLink;
 import Model.User;
-import Service.ServiceException;
 import io.jsonwebtoken.Claims;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

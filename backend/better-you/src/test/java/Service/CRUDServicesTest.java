@@ -1,4 +1,4 @@
-package Service.lower;
+package Service;
 
 
 import Model.Goal;
@@ -10,6 +10,7 @@ import Repository.HabitsRepo;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
+import Service.CRUDServices;
 import Service.ServiceException;
 import org.junit.Before;
 import org.junit.Test;

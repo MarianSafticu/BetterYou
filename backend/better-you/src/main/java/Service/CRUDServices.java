@@ -1,4 +1,4 @@
-package Service.lower;
+package Service;
 
 
 import Model.Goal;
@@ -10,7 +10,6 @@ import Repository.HabitsRepo;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
-import Service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.ComponentScan;
