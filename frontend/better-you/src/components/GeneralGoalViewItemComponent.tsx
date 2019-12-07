@@ -337,7 +337,7 @@ export default class GeneralGoalViewItemComponent extends Component<IProps, ISta
                           anchorEl={this.state.anchorEl}
                     >
                         <div style={{padding: "15px"}}>
-                            <p>
+                            <p style={{textAlign:"center"}}>
                                 Are you sure you want to delete it?
                             </p>
                             <Button size="small" className="general-goal-button" onClick={this.onClosePopoverDelete}>
