@@ -8,6 +8,7 @@ import Service.ServiceException;
 import Validator.GoalValidator;
 import Validator.HabitValidator;
 import Validator.UserValidator;
+import Validator.ValidatorException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -46,7 +47,7 @@ public class ValidationServiceTest {
 
     @Test
     public void WHEN_UserInvalid_THEN_ValidatorExceptionIsThrown() {
-        doThrow(new ServiceException(ERROR_MESSAGE)).when(userValidator).validateUser(user);
+        doThrow(new ValidatorException(ERROR_MESSAGE)).when(userValidator).validateUser(user);
         try {
             validationService.validateUser(user);
             fail("Expected ServiceException to be thrown");
@@ -63,7 +64,7 @@ public class ValidationServiceTest {
 
     @Test
     public void WHEN_GoalInvalid_THEN_ValidatorExceptionIsThrown() {
-        doThrow(new ServiceException(ERROR_MESSAGE)).when(goalValidator).validateGoal(goal);
+        doThrow(new ValidatorException(ERROR_MESSAGE)).when(goalValidator).validateGoal(goal);
         try {
             validationService.validateGoal(goal);
             fail("Expected ServiceException to be thrown");
@@ -80,7 +81,7 @@ public class ValidationServiceTest {
 
     @Test
     public void WHEN_HabitInvalid_THEN_ValidatorExceptionIsThrown() {
-        doThrow(new ServiceException(ERROR_MESSAGE)).when(habitValidator).validateHabit(habit);
+        doThrow(new ValidatorException(ERROR_MESSAGE)).when(habitValidator).validateHabit(habit);
         try {
             validationService.validateHabit(habit);
             fail("Expected ServiceException to be thrown");
