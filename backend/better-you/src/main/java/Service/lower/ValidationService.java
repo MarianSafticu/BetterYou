@@ -8,6 +8,8 @@ import Validator.GoalValidator;
 import Validator.HabitValidator;
 import Validator.UserValidator;
 import Validator.ValidatorException;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -17,6 +19,8 @@ import Validator.ValidatorException;
  * - {@link Habit}
  * - {@link Goal}
  */
+@Component
+@ComponentScan("Validator")
 public class ValidationService {
     private final UserValidator userValidator;
     private final HabitValidator habitValidator;

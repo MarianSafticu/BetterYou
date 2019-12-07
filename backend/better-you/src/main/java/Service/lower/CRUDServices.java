@@ -13,6 +13,8 @@ import Repository.UserRepo;
 import Service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ import java.util.List;
 /**
  * Class which offers create, read, write and delete operations to repositories.
  */
+@Component
+@ComponentScan("Repository")
 public class CRUDServices {
     private static final Logger LOG = LogManager.getLogger(CRUDServices.class);
 

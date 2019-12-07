@@ -6,6 +6,8 @@ import Service.ServiceException;
 import io.jsonwebtoken.Claims;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.AppUtils;
 import utils.mail.MailUtils;
@@ -14,6 +16,8 @@ import utils.mail.MailUtils;
 /**
  * Service class which contains all of the authentication business logic.
  */
+@Component
+@ComponentScan("utils")
 public class AuthService {
     private static final Logger LOG = LogManager.getLogger(AuthService.class);
 
@@ -23,10 +27,10 @@ public class AuthService {
     private final MailUtils mailUtils;
 
     /**
-     * @param crudServices
-     * @param validationService
-     * @param appUtils
-     * @param mailUtils
+     * @param crudServices      contains CRUD operations for the application's models
+     * @param validationService contains validations for the application's models
+     * @param appUtils          contains util functions for security
+     * @param mailUtils         contains util functions for emailing
      */
     public AuthService(final CRUDServices crudServices,
                        final ValidationService validationService,
