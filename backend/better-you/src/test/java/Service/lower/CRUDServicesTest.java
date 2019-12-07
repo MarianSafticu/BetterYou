@@ -157,10 +157,11 @@ public class CRUDServicesTest {
         assertThat(actualList, equalTo(goalList));
     }
 
-//    @Test
-//    public void WHEN_GetUsersHabitsCalled_THEN_ExpectedResultReturned() {
-//        when(habitsRepo.getUsersHabits(USER_ID)).thenReturn(habitList);
-//        List<Habit> actualList = crudServices.getUsersHabits(USER_ID);
-//        assertThat(actualList, equalTo(habitList));
-//    }
+    @Test
+    public void WHEN_GetUsersHabitsCalled_THEN_ExpectedResultReturned() {
+        when(userRepo.get(USER_ID)).thenReturn(user);
+        when(user.getHabits()).thenReturn(habitList);
+        List<Habit> actualList = crudServices.getUsersHabits(USER_ID);
+        assertThat(actualList, equalTo(habitList));
+    }
 }

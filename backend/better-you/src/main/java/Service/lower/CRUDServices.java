@@ -13,7 +13,6 @@ import Repository.UserRepo;
 import Service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
@@ -154,6 +153,7 @@ public class CRUDServices {
      * @return a list of all of the user's habits
      */
     public List<Habit> getUsersHabits(final long userId) {
-        throw new NotImplementedException();
+        LOG.info("Getting all habits for user with id {}", userId);
+        return userRepo.get(userId).getHabits();
     }
 }

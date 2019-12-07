@@ -2,7 +2,15 @@ package Model;
 
 import utils.AppUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+import javax.persistence.Entity;
+import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +47,9 @@ public class User implements HasId<Long> {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Goal> goals;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Habit> habits;
 
     public User() {
     }
@@ -131,6 +142,10 @@ public class User implements HasId<Long> {
 
     public List<Goal> getGoals() {
         return goals;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
     }
 
     public void generateConfirmCode() {
