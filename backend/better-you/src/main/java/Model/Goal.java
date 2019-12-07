@@ -137,11 +137,20 @@ public class Goal implements HasId<Long> {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "<Goal id=\"" + id + "\" title=\"" + title + "\" userId=" + (user == null ? "null" : user.getId()) + ">";
     }
 }

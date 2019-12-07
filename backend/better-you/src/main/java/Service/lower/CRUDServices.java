@@ -51,6 +51,7 @@ public class CRUDServices {
      * @throws ServiceException if the repository is unable to save the user
      */
     public void addUser(final User user) {
+        // TODO: Hash password!!!
         LOG.info("Adding user {}", user);
         try {
             userRepo.add(user);
@@ -142,6 +143,7 @@ public class CRUDServices {
      * @return a list of all of the user's goals
      */
     public List<Goal> getUsersGoals(final long userId) {
+        // TODO: If userId invalid, then WHAT!>
         LOG.info("Getting all goals for user with id {}", userId);
         return userRepo.get(userId).getGoals();
     }
@@ -153,7 +155,84 @@ public class CRUDServices {
      * @return a list of all of the user's habits
      */
     public List<Habit> getUsersHabits(final long userId) {
+        // TODO: If userId invalid, then WHAT!>
         LOG.info("Getting all habits for user with id {}", userId);
         return userRepo.get(userId).getHabits();
+    }
+
+    /**
+     * Adds a new goal for an user
+     *
+     * @param goal   the new goal to be added
+     * @param userId the owner's id of the goal (i.e. the user who owns the goal)
+     * @throws ServiceException if any error occurs while saving the goal
+     */
+    public void addGoal(final Goal goal, final long userId) {
+        LOG.info("Adding goal {} for user with id {}", goal, userId);
+        User goalOwner = userRepo.get(userId);
+
+        if (goalOwner == null) {
+            LOG.info("There is no user with id {}", userId);
+            throw new ServiceException("There is no user with id " + userId);
+        }
+
+        goal.setUser(goalOwner);
+
+        try {
+            goalRepo.add(goal);
+            LOG.info("Successfully saved goal to repo");
+        } catch (RepoException e) {
+            LOG.error("Error occurred while adding goal to repo: {}", e.getMessage());
+            throw new ServiceException("Error occurred while adding goal to repo");
+        }
+    }
+
+    /**
+     * Updates a goal.
+     *
+     * @param goal   the goal to be updated
+     * @param userId the id of the user who owns the goal
+     * @throws ServiceException if any error occurs while updating the goal
+     */
+    public void updateGoal(final Goal goal, final long userId) {
+        LOG.info("Updating goal with id {}", goal.getId());
+        Goal originalGoal = goalRepo.get(goal.getId());
+
+        if (originalGoal.getUser().getId() != userId) {
+            LOG.info("Goal {} is not owned by user with id {}", goal, userId);
+            throw new ServiceException("Goal not owned by the user!");
+        }
+
+        try {
+            goalRepo.update(goal.getId(), goal);
+            LOG.info("Successfully updated goal {}", goal);
+        } catch (RepoException e) {
+            LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
+            throw new ServiceException("Error occurred while updating goal in repo");
+        }
+    }
+
+    /**
+     * Deletes a goal.
+     *
+     * @param goalId the goal's to be deleted id
+     * @param userId the goal owner's id
+     */
+    public void deleteGoal(final long goalId, final long userId) {
+        LOG.info("Deleting goal with id {}", goalId);
+        Goal originalGoal = goalRepo.get(goalId);
+
+        if (originalGoal.getUser().getId() != userId) {
+            LOG.info("Goal {} is not owned by user with id {}", goalId, userId);
+            throw new ServiceException("Goal not owned by the user!");
+        }
+
+        try {
+            goalRepo.delete(goalId);
+            LOG.info("Successfully updated goal {}", goalId);
+        } catch (RepoException e) {
+            LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
+            throw new ServiceException("Error occurred while updating goal in repo");
+        }
     }
 }

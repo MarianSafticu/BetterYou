@@ -25,6 +25,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -32,6 +34,7 @@ public class CRUDServicesTest {
     private static final String ERROR_MESSAGE = "Error occurred";
     private static final String USER_EMAIL = "user@test.com";
     private static final long USER_ID = 69;
+    private static final long GOAL_ID = 13;
 
     @Mock
     private UserRepo userRepo;
@@ -49,6 +52,10 @@ public class CRUDServicesTest {
     private List<Goal> goalList;
     @Mock
     private List<Habit> habitList;
+    @Mock
+    private Goal goal;
+    @Mock
+    private Goal originalGoal;
 
     private CRUDServices crudServices;
 
@@ -164,4 +171,112 @@ public class CRUDServicesTest {
         List<Habit> actualList = crudServices.getUsersHabits(USER_ID);
         assertThat(actualList, equalTo(habitList));
     }
+
+    @Test
+    public void WHEN_AddGoalWithInvalidUserId_THEN_ServiceExceptionIsThrown() {
+        when(userRepo.get(USER_ID)).thenReturn(null);
+
+        try {
+            crudServices.addGoal(goal, USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("There is no user with id " + USER_ID));
+        }
+
+        verify(userRepo, times(1)).get(USER_ID);
+    }
+
+    @Test
+    public void WHEN_GoalRepoAddFails_THEN_ServiceExceptionIsThrown() throws RepoException {
+        final String error = "Repo add failed";
+        when(userRepo.get(USER_ID)).thenReturn(user);
+        doNothing().when(goal).setUser(user);
+        doThrow(new RepoException(error)).when(goalRepo).add(goal);
+
+        try {
+            crudServices.addGoal(goal, USER_ID);
+            fail("Expected ServiceException to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Error occurred while adding goal to repo"));
+        }
+
+        verify(userRepo, times(1)).get(USER_ID);
+        verify(goal, times(1)).setUser(user);
+        verify(goalRepo, times(1)).add(goal);
+    }
+
+    @Test
+    public void WHEN_GoalSuccessfullyAdded_THEN_NoExceptionIsThrown() throws RepoException {
+        when(userRepo.get(USER_ID)).thenReturn(user);
+        doNothing().when(goal).setUser(user);
+        doNothing().when(goalRepo).add(goal);
+
+        crudServices.addGoal(goal, USER_ID);
+
+        verify(userRepo, times(1)).get(USER_ID);
+        verify(goal, times(1)).setUser(user);
+        verify(goalRepo, times(1)).add(goal);
+    }
+
+    @Test
+    public void WHEN_GoalUserNotSameWithUserOnUpdate_THEN_ServiceExceptionIsThrown() {
+        when(goal.getId()).thenReturn(GOAL_ID);
+        when(goalRepo.get(GOAL_ID)).thenReturn(originalGoal);
+        when(originalGoal.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID - 2);
+
+        try {
+            crudServices.updateGoal(goal, USER_ID);
+            fail("Expected ServiceExceptio to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Goal not owned by the user!"));
+        }
+
+        verify(goal, times(2)).getId();
+        verify(goalRepo, times(1)).get(GOAL_ID);
+        verify(originalGoal, times(1)).getUser();
+        verify(user, times(1)).getId();
+    }
+
+    @Test
+    public void WHEN_GoalRepoThrowsExceptionOnGoalUpdate_THEN_ServiceExceptionIsPropagated() throws RepoException {
+        final String error = "Repo add failed";
+        when(goal.getId()).thenReturn(GOAL_ID);
+        when(goalRepo.get(GOAL_ID)).thenReturn(originalGoal);
+        when(originalGoal.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID);
+        doThrow(new RepoException(error)).when(goalRepo).update(GOAL_ID, goal);
+
+        try {
+            crudServices.updateGoal(goal, USER_ID);
+            fail("Expected ServiceExceptio to be thrown");
+        } catch (ServiceException e) {
+            assertThat(e.getMessage(), equalTo("Error occurred while updating goal in repo"));
+        }
+
+        verify(goal, times(3)).getId();
+        verify(goalRepo, times(1)).get(GOAL_ID);
+        verify(originalGoal, times(1)).getUser();
+        verify(user, times(1)).getId();
+        verify(goalRepo, times(1)).update(GOAL_ID, goal);
+    }
+
+    @Test
+    public void WHEN_GoalUpdatedSuccessfully_THEN_NoExceptionIsThrown() throws RepoException {
+        when(goal.getId()).thenReturn(GOAL_ID);
+        when(goalRepo.get(GOAL_ID)).thenReturn(originalGoal);
+        when(originalGoal.getUser()).thenReturn(user);
+        when(user.getId()).thenReturn(USER_ID);
+        doNothing().when(goalRepo).update(GOAL_ID, goal);
+
+        crudServices.updateGoal(goal, USER_ID);
+
+        verify(goal, times(3)).getId();
+        verify(goalRepo, times(1)).get(GOAL_ID);
+        verify(originalGoal, times(1)).getUser();
+        verify(user, times(1)).getId();
+        verify(goalRepo, times(1)).update(GOAL_ID, goal);
+    }
+
+    //TODO: Delete goals
 }
