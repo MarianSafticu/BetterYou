@@ -1,84 +1,81 @@
 import React from "react";
 import GoalCard from "./GoalCard";
 import "../assets/scss/GoalListStyle.scss";
+import { Goal } from "../models/Goal";
 
-const goalsList = [
+const goalsList:Goal[] = [
   {
     title: "Citeste 10 carti",
     description: "aaa",
-    currentProgress: 2,
-    progressToReach: 10
+    currentProgress: 10,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste 3 carti",
+    title: "Citeste 11 carti",
     description: "bbb",
-    currentProgress: 3,
-    progressToReach: 3
+    currentProgress: 15,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste 100 de carti",
+    title: "Citeste 12 carti",
     description: "ccc",
-    currentProgress: 70,
-    progressToReach: 100
+    currentProgress: 66,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste 5 carti",
+    title: "Citeste 13 carti",
     description: "ddd",
-    currentProgress: 4,
-    progressToReach: 5
-  },
-  { title: "E", description: "ddd", currentProgress: 60, progressToReach: 100 },
-  {
-    title: "Citeste 2 carti",
-    description: "ddd",
-    currentProgress: 1,
-    progressToReach: 2
+    currentProgress: 99,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste o carte",
-    description: "ddd",
-    currentProgress: 0,
-    progressToReach: 1
-  },
-  { title: "H", description: "ddd", currentProgress: 30, progressToReach: 100 },
-  {
-    title: "Citeste 10 carti",
-    description: "aaa",
-    currentProgress: 2,
-    progressToReach: 10
+    title: "Citeste 14 carti",
+    description: "eee",
+    currentProgress: 100,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste 3 carti",
-    description: "bbb",
-    currentProgress: 3,
-    progressToReach: 3
+    title: "Citeste 15 carti",
+    description: "fff",
+    currentProgress: 50,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste 100 de carti",
-    description: "ccc",
-    currentProgress: 70,
-    progressToReach: 100
+    title: "Citeste 16 carti",
+    description: "ggg",
+    currentProgress: 24,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
   {
-    title: "Citeste 5 carti",
-    description: "ddd",
-    currentProgress: 4,
-    progressToReach: 5
+    title: "Citeste 17 carti",
+    description: "hhh",
+    currentProgress: 24,
+    progressToReach:100 ,
+    endDate: new Date(),
+    startDate: new Date(),
+    category:"DICKS"
   },
-  { title: "E", description: "ddd", currentProgress: 60, progressToReach: 100 },
-  {
-    title: "Citeste 2 carti",
-    description: "ddd",
-    currentProgress: 1,
-    progressToReach: 2
-  },
-  {
-    title: "Citeste o carte",
-    description: "ddd",
-    currentProgress: 0,
-    progressToReach: 1
-  },
-  { title: "H", description: "ddd", currentProgress: 30, progressToReach: 100 }
 ];
 
 class GoalList extends React.Component {
