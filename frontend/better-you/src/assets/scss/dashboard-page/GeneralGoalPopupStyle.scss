@@ -1,0 +1,13 @@
+@import "../globals/colors";
+
+.genera-popup{
+    background-color: rgba(0,0,0,0.6);
+}
+
+.general-goal-button-container > div:first-child{
+    background-color: rgba(0,0,0,1);
+}
+.general-popup-container{
+    padding: 5px;
+    background: linear-gradient(to top right, #{$color5}, #{$color6});
+}

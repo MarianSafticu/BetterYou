@@ -4,7 +4,7 @@ import RegisterRequest from "../models/requests/RegisterRequest";
 import LoginResponse from "../models/responses/LoginResponse";
 import RegisterResponse from "../models/responses/RegisterResponse";
 
-const url: string = "http://192.168.0.105:8080/app/better-you";
+const url: string = "http://localhost:8080/app/better-you";
 
 export default class HttpService implements IHttpService {
   private static instance: HttpService;

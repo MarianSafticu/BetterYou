@@ -1,6 +1,6 @@
 import React from "react";
 import NewsfeedCard from "./NewsfeedCard";
-import "../assets/scss/NewsfeedListStyle.scss";
+import "../../../../assets/scss/dashboard-page/NewsfeedListStyle.scss";
 
 const newsfeedList = [
   {

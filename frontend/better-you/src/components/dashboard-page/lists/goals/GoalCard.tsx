@@ -3,29 +3,22 @@ import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
-import "../assets/scss/GoalListStyle.scss";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
 import { TextField } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
+import Goal from "../../../../models/Goal";
+import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
 
 interface IProps {
-  goal: {
-    title: string;
-    description: string;
-    currentProgress: number;
-    progressToReach: number;
-  };
+  goal: Goal;
 }
-
 interface IState {
-  goal: {
-    title: string;
-    description: string;
-    currentProgress: number;
-  };
+  goal: Goal;
+  showGoalView: boolean;
   input_progress: number;
 }
 
@@ -33,21 +26,36 @@ class GoalCard extends React.Component<IProps, IState> {
   constructor(prop: IProps) {
     super(prop);
     this.state = {
-      goal: {
-        title: prop.goal.title,
-        description: prop.goal.description,
-        currentProgress: prop.goal.currentProgress
-      },
+      goal: this.props.goal,
+      showGoalView: false,
       input_progress: 1
     };
   }
+
+  handleOpneGoal = () => {
+    this.setState({
+      goal: this.state.goal,
+      showGoalView: true,
+      input_progress: this.state.input_progress
+    });
+  };
+
+  handleCloseGoal = () => {
+    this.setState({
+      goal: this.state.goal,
+      showGoalView: false,
+      input_progress: this.state.input_progress
+    });
+  };
 
   render() {
     return (
       <Card className="card-container">
         <div className="category" />
-
-        <CardActionArea className="title_container">
+        <CardActionArea
+          className="title_container"
+          onClick={this.handleOpneGoal}
+        >
           <Typography variant="h5" className="title">
             {this.props.goal.title}
           </Typography>
@@ -90,6 +98,11 @@ class GoalCard extends React.Component<IProps, IState> {
               />
             </Fab>
           </Tooltip>
+          <GeneralGoalViewPopupComponent
+            selfDistructFunction={this.handleCloseGoal}
+            open={this.state.showGoalView}
+            goal={this.state.goal}
+          />
         </div>
       </Card>
     );
@@ -97,36 +110,40 @@ class GoalCard extends React.Component<IProps, IState> {
 
   handleClick() {
     this.setState(state => {
+      var newGoal = this.state.goal;
+
       if (state.goal.currentProgress + state.input_progress < 0) {
+        newGoal.currentProgress = 0;
         return {
-          goal: {
-            title: this.props.goal.title,
-            description: this.props.goal.description,
-            currentProgress: 0
-          },
-          input_progress: this.state.input_progress
+          goal: newGoal,
+          input_progress: this.state.input_progress,
+          showGoalView: this.state.showGoalView
         };
       }
       if (
         state.goal.currentProgress + state.input_progress <=
         this.props.goal.progressToReach
       ) {
+        newGoal.currentProgress =
+          state.goal.currentProgress + state.input_progress;
         return {
-          goal: {
-            title: this.props.goal.title,
-            description: this.props.goal.description,
-            currentProgress: state.goal.currentProgress + state.input_progress
-          },
-          input_progress: this.state.input_progress
+          goal: newGoal,
+          input_progress: this.state.input_progress,
+          showGoalView: this.state.showGoalView
         };
       } else {
         return {
           goal: {
             title: this.props.goal.title,
             description: this.props.goal.description,
-            currentProgress: this.props.goal.progressToReach
+            currentProgress: this.props.goal.progressToReach,
+            category: newGoal.category,
+            endDate: newGoal.endDate,
+            progressToReach: newGoal.progressToReach,
+            startDate: newGoal.startDate
           },
-          input_progress: this.state.input_progress
+          input_progress: this.state.input_progress,
+          showGoalView: this.state.showGoalView
         };
       }
     });
