@@ -6,6 +6,9 @@ import { LoginErrorMessages } from "../messages/LoginMessages";
 import aesjs from "aes-js";
 import LoginRequest from "../models/requests/LoginRequest";
 import RegisterRequest from "../models/requests/RegisterRequest";
+import Goal from "../models/Goal";
+import { GoalException } from "../exceptions/GoalException";
+import { GoalErrorMessages } from "../messages/GoalMessages";
 
 export default class Service {
   private static instance: Service;
@@ -137,5 +140,38 @@ export default class Service {
       }
     }
     return false;
+  }
+
+  validateGoal(goal: Goal): GoalException {
+    let err: GoalException = {
+      titleError: "",
+      descriptionError: "",
+      startDateError: "",
+      endDateError: "",
+      currentProgressError: "",
+      progressToReachError: "",
+      categoryError: ""
+    };
+
+    let messages = GoalErrorMessages;
+    if (goal.title.length < 3) err.titleError += messages.TITLE_TOO_SHORT;
+    if (goal.description.length < 3)
+      err.descriptionError += messages.DESCRIPTION_TOO_SHORT;
+
+    if (goal.currentProgress < 0)
+      err.currentProgressError += messages.NEGATIVE_CURRENT_PROGRESS;
+    if (goal.currentProgress > goal.progressToReach)
+      err.currentProgressError += messages.BIGGER_CURRENT_PROGRESS;
+    if (goal.progressToReach <= 0)
+      err.progressToReachError += messages.NEGATIVE_PROGRESS_TO_REACH;
+
+    goal.endDate.setHours(0, 0, 0, 0);
+    goal.startDate.setHours(0, 0, 0, 0);
+    if (goal.endDate < goal.startDate) {
+      err.endDateError += messages.STARTING_DATE_AFTER_ENDING;
+      err.startDateError += messages.STARTING_DATE_AFTER_ENDING;
+    }
+
+    return err;
   }
 }

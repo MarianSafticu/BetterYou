@@ -1,18 +1,25 @@
-package Service.lower;
+package Service;
 
 import Model.Goal;
 import Model.Habit;
 import Model.User;
-import Service.ServiceException;
 import Validator.GoalValidator;
 import Validator.HabitValidator;
 import Validator.UserValidator;
 import Validator.ValidatorException;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 
 /**
  * Class which offers validation utilities for the models inside the application.
+ * Validation offered for:
+ * - {@link User}
+ * - {@link Habit}
+ * - {@link Goal}
  */
+@Component
+@ComponentScan("Validator")
 public class ValidationService {
     private final UserValidator userValidator;
     private final HabitValidator habitValidator;
