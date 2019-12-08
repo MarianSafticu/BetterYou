@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/scss/GoalListStyle.scss";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 
 interface IProps {
   currentProgress: number;
@@ -7,10 +7,6 @@ interface IProps {
 }
 
 class ProgressBar extends React.Component<IProps, {}> {
-  constructor(props: any) {
-    super(props);
-  }
-
   render() {
     const style = {
       width:

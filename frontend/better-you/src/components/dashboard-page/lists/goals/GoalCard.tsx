@@ -3,22 +3,22 @@ import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
-import "../assets/scss/GoalListStyle.scss";
-import { Goal } from "../models/Goal";
-import GeneralGoalViewPopupComponent from "./GeneralGoalViewPopupComponent";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
 import { TextField } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
+import Goal from "../../../../models/Goal";
+import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
 
 interface IProps {
-  goal: Goal,
+  goal: Goal;
 }
 interface IState {
-  goal: Goal,
-  showGoalView: boolean
+  goal: Goal;
+  showGoalView: boolean;
   input_progress: number;
 }
 
@@ -37,8 +37,8 @@ class GoalCard extends React.Component<IProps, IState> {
       goal: this.state.goal,
       showGoalView: true,
       input_progress: this.state.input_progress
-    })
-  }
+    });
+  };
 
   handleCloseGoal = () => {
     this.setState({
@@ -46,13 +46,16 @@ class GoalCard extends React.Component<IProps, IState> {
       showGoalView: false,
       input_progress: this.state.input_progress
     });
-  }
+  };
 
   render() {
     return (
       <Card className="card-container">
         <div className="category" />
-        <CardActionArea className="title_container" onClick={this.handleOpneGoal}>
+        <CardActionArea
+          className="title_container"
+          onClick={this.handleOpneGoal}
+        >
           <Typography variant="h5" className="title">
             {this.props.goal.title}
           </Typography>
@@ -98,7 +101,8 @@ class GoalCard extends React.Component<IProps, IState> {
           <GeneralGoalViewPopupComponent
             selfDistructFunction={this.handleCloseGoal}
             open={this.state.showGoalView}
-            goal={this.state.goal} />
+            goal={this.state.goal}
+          />
         </div>
       </Card>
     );
@@ -120,7 +124,8 @@ class GoalCard extends React.Component<IProps, IState> {
         state.goal.currentProgress + state.input_progress <=
         this.props.goal.progressToReach
       ) {
-        newGoal.currentProgress = state.goal.currentProgress + state.input_progress
+        newGoal.currentProgress =
+          state.goal.currentProgress + state.input_progress;
         return {
           goal: newGoal,
           input_progress: this.state.input_progress,
@@ -128,7 +133,7 @@ class GoalCard extends React.Component<IProps, IState> {
         };
       } else {
         return {
-          goal:{
+          goal: {
             title: this.props.goal.title,
             description: this.props.goal.description,
             currentProgress: this.props.goal.progressToReach,

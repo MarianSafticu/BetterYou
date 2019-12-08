@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/scss/GoalListStyle.scss";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Checkbox from "@material-ui/core/Checkbox";
 
 interface IProps {
@@ -21,15 +21,15 @@ class DateCheckbox extends React.Component<IProps, IStates> {
   }
   getWeek() {
     var d = new Date();
-    if (this.props.typeRepetition == "DAILY") {
-      var date = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
-      return date;
+    if (this.props.typeRepetition === "DAILY") {
+      var date1 = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+      return date1;
     }
     var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+      diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
     var monday = new Date(d.setDate(diff));
     var sunday = new Date(d.setDate(diff + 6));
-    var date =
+    var date2 =
       monday.getDate() +
       "/" +
       (monday.getMonth() + 1) +
@@ -41,7 +41,7 @@ class DateCheckbox extends React.Component<IProps, IStates> {
       (sunday.getMonth() + 1) +
       "/" +
       sunday.getFullYear();
-    return date;
+    return date2;
   }
 
   render() {

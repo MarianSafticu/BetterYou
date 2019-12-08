@@ -1,6 +1,6 @@
 import React from "react";
 import HabitCard from "./HabitCard";
-import "../assets/scss/GoalListStyle.scss";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 
 const habitsList = [
   { title: "Read 30 minutes", repetitionType: "DAILY" },
