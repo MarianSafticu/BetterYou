@@ -8,6 +8,7 @@ import { ShowMessageComponent } from "../components/ShowMessageComponent";
 import TestPageComponent from "../components/TestPage";
 import RecoverAccountComponent from "../components/RecoverAccountComponent";
 import DashboardComponent from "../components/DashboardComponent";
+import ResetPasswordComponent from "../components/ResetPasswordComponent";
 
 export default class Routes extends Component {
   render() {
@@ -22,6 +23,7 @@ export default class Routes extends Component {
         <Route exact path="/confirm-account-message" component={()=> <ShowMessageComponent type="confirm-account"/>}/>
         <Route exact path="/recover-account-message" component={()=> <ShowMessageComponent type="recover-account"/>}/>
         <Route exact path="/dashboard" component={DashboardComponent}/>
+        <Route exact path="/reset-password" component={ResetPasswordComponent}/>
         <Route exact path="/test" component={TestPageComponent} />
       </Switch>
     );

@@ -2,8 +2,8 @@ import React, {Component, ChangeEvent} from 'react';
 import "../assets/scss/StartPageStyle.scss";
 import "../assets/scss/RecoverAccountStyle.scss";
 import { TextField, Button } from "@material-ui/core";
-import { RegisterErrorMessages } from "../messages/RegisterMessages";
 import { Link } from "react-router-dom";
+import { RecoverAccountMessages } from '../messages/RecoverAccountMessages';
 
 interface IProps {
     registerUser?: Function;
@@ -33,6 +33,7 @@ export default class RecoverAccountComponent extends Component<IProps, IState> {
                         <div>
                             Please enter your email address to recover your account:
                         </div>
+                        <br />
                         <div className="login-input-container">
                             <TextField
                                 error={this.state.emailError ? true : false}
@@ -86,14 +87,14 @@ export default class RecoverAccountComponent extends Component<IProps, IState> {
 
     validateEmail(): boolean {
         let isValid = true;
-        let errors = RegisterErrorMessages;
+        let errors = RecoverAccountMessages;
     
         if (this.state.email === "") {
           isValid = false;
           this.setState({
             email: this.state.email,
             isRestriction: this.state.isRestriction,
-            emailError: errors.EMPTY_STRING
+            emailError: errors.INVALID_EMAIL
           });
         } else if (
           !this.state.email.match(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/)
