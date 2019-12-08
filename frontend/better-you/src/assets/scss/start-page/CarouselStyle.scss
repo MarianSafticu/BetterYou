@@ -5,9 +5,9 @@
   .carousel-container {
     // min-height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
     // max-height: calc(100% - 30px);
-    height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
+    height: 480px;
     width: calc(100% - 50px);
-    margin: 55px auto 0 auto;
+    margin: 0 auto 0 auto;
   }
 
   .slider,

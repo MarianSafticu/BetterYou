@@ -112,38 +112,40 @@ export default function LoginRegisterTabComponent(
 
       <Breakpoint small down className={classes.breakpoint}>
         <div className={classes.root}>
-          <AppBar className={classes.tabBar}>
-            <Tabs
-              variant="fullWidth"
-              centered
-              value={value}
-              onChange={handleChange}
+          <div className={classes.authContainer}>
+            <AppBar className={classes.tabBar}>
+              <Tabs
+                variant="fullWidth"
+                centered
+                value={value}
+                onChange={handleChange}
+              >
+                <TabPane
+                  className={classes.tab}
+                  label="Login"
+                  {...a11yPropsMobile(0)}
+                />
+                <TabPane
+                  className={classes.tab}
+                  label="Register"
+                  {...a11yPropsMobile(1)}
+                />
+              </Tabs>
+            </AppBar>
+            <SwipeableViews
+              className={classes.swipeableView}
+              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+              index={value}
+              onChangeIndex={handleChangeIndex}
             >
-              <TabPane
-                className={classes.tab}
-                label="Login"
-                {...a11yPropsMobile(0)}
-              />
-              <TabPane
-                className={classes.tab}
-                label="Register"
-                {...a11yPropsMobile(1)}
-              />
-            </Tabs>
-          </AppBar>
-          <SwipeableViews
-            className={classes.swipeableView}
-            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
-            <TabPanel value={value} index={0} dir={theme.direction}>
-              <LoginComponent />
-            </TabPanel>
-            <TabPanel value={value} index={1} dir={theme.direction}>
-              <RegisterComponent />
-            </TabPanel>
-          </SwipeableViews>
+              <TabPanel value={value} index={0} dir={theme.direction}>
+                <LoginComponent />
+              </TabPanel>
+              <TabPanel value={value} index={1} dir={theme.direction}>
+                <RegisterComponent />
+              </TabPanel>
+            </SwipeableViews>
+          </div>
         </div>
       </Breakpoint>
     </div>

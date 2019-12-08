@@ -2,11 +2,10 @@
 @import "../globals/global";
 
 .route-container {
-  min-height: calc(100vh - #{$app_bar_height});
-  height: calc(100vh - #{$app_bar_height});
+  // height: calc(100% - #{$app_bar_height});
 }
 
-@media (min-width: 575px) {
+@media (min-width: 577px) {
   .MuiTabs-root {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
