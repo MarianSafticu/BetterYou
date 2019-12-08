@@ -1,36 +1,58 @@
 package Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import utils.AppUtils;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+import javax.persistence.Entity;
+import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
+
 
 @Entity
-@Table(name="USERS")
+@Table(name = "USERS")
 public class User implements HasId<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="userID")
+    @Column(name = "userID")
     private long id;
-    @Column(name="username",nullable = false,unique = true)
-    private String username;
-    @Column(name="profile_name")
-    private String profile_name;
-    @Column(name="password")
-    private String password;
-    @Column(name="email")
-    private String email;
-    @Column(name="BirthDate")
-    private LocalDate birthDate;
-    @Column(name="isVerified")
-    private boolean isVerified;
-    @Column(name="confirmCode")
-    private String confirmCode;
-    // ??? imagine profil ???
-    // private ??? imagine_profil
 
-    public User(){
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "profile_name")
+    private String profile_name;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "BirthDate")
+    private LocalDate birthDate;
+
+    @Column(name = "isVerified")
+    private boolean isVerified;
+
+    @Column(name = "confirmCode")
+    private String confirmCode;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Goal> goals;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Habit> habits;
+
+    public User() {
     }
 
     public User(String username, String profile_name, String password, String email, LocalDate birthDate) {
@@ -61,6 +83,7 @@ public class User implements HasId<Long> {
     public Long getId() {
         return id;
     }
+
     @Override
     public void setId(Long id) {
         this.id = id;
@@ -116,6 +139,16 @@ public class User implements HasId<Long> {
 
     public String getConfirmCode() {
         return confirmCode;
+    }
+
+    @JsonIgnore
+    public Set<Goal> getGoals() {
+        return goals;
+    }
+
+    @JsonIgnore
+    public Set<Habit> getHabits() {
+        return habits;
     }
 
     public void generateConfirmCode() {

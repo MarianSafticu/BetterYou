@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegistrationLinkRepo extends AbstractRepo<Long, RegistrationLink> {
     public RegistrationLinkRepo() {
-        super();
+        super(RegistrationLink.class);
     }
 
     public RegistrationLinkRepo(Class<RegistrationLink> clazz) {
