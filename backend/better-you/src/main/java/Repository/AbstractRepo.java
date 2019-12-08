@@ -21,9 +21,7 @@ import java.util.List;
 public abstract class AbstractRepo<ID,E extends HasId<ID>> {
     private Class<E> clazz;
     protected SessionFactory sessionFactory;
-    public AbstractRepo() {
 
-    }
 
     /***
      * The constructor contains the class of entity that is used for common queries
@@ -45,7 +43,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @param id is id of the searched entity
      * @return the entity with given id or null if the entity does not exist
      */
-    public E get(ID id) throws RepoException{
+    public E get(ID id)  {
         Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         try {

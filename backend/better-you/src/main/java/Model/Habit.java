@@ -1,8 +1,20 @@
 package Model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Entity;
+import javax.persistence.GenerationType;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "HABBITS")
@@ -11,18 +23,28 @@ public class Habit implements HasId<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "habbitID")
     private long id;
-    @Column(name="title")
+
+    @Column(name = "title")
     private String title;
-    @Column(name="description")
+
+    @Column(name = "description")
     private String description;
-    @Column(name="StartDate")
+
+    @Column(name = "StartDate")
     private LocalDate startDate;
-    @Column(name="RepetitionType")
+
+    @Column(name = "RepetitionType")
     private Repetition repetitionType;
-    @Column(name="category")
+
+    @Column(name = "category")
     private Category category;
+
     @ElementCollection
     private List<LocalDate> dates;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userID")
+    private User user;
 
     public Habit() {
     }
@@ -91,5 +113,33 @@ public class Habit implements HasId<Long> {
 
     public void setDates(List<LocalDate> dates) {
         this.dates = dates;
+    }
+
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Habit habit = (Habit) o;
+        return id == habit.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
