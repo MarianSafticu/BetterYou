@@ -9,7 +9,7 @@
 }
 
 .start-page-container {
-  height: 677px;
+  height: calc(100vh - 45px);
   display: flex;
   flex-direction: column;
 }

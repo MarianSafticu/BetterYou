@@ -1,11 +1,22 @@
 @import "../globals/colors";
 @import "../globals/global";
 
-.route-container {
-  // height: calc(100% - #{$app_bar_height});
+@media (orientation: portrait) {
+  @media (max-width: 576px), (min-width: 577px) and (max-width: 991px) {
+    .route-container {
+      height: calc(100vh - #{$app_bar_height});
+    }
+  }
+}
+@media (orientation: landscape) {
+  @media (max-width: 732px), (min-width: 733px) and (max-width: 991px) {
+    .route-container {
+      height: calc(100vh - #{$app_bar_height});
+    }
+  }
 }
 
-@media (min-width: 577px) {
+@media (min-width: 811px) and (min-height: 410px) {
   .MuiTabs-root {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
