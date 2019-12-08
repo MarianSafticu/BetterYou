@@ -20,7 +20,7 @@ export default class Routes extends Component {
         <LoggedOutRoute
           exact
           path="/recover-account"
-          component={RecoverAccountComponent}
+          component={<RecoverAccountComponent/>}
         />
         <LoggedOutRoute
           exact={true}
@@ -30,17 +30,17 @@ export default class Routes extends Component {
         <LoggedOutRoute
           exact
           path="/register"
-          component={() => <LoginRegisterTabComponent isRegister={true} />}
+          component={<LoginRegisterTabComponent isRegister={true} />}
         />
         <LoggedOutRoute
           exact
           path="/confirm-account-message"
-          component={() => <ShowMessageComponent type="confirm-account" />}
+          component={<ShowMessageComponent type="confirm-account" />}
         />
         <LoggedOutRoute
           exact
           path="/recover-account-message"
-          component={() => <ShowMessageComponent type="recover-account" />}
+          component={<ShowMessageComponent type="recover-account" />}
         />
         <Route exact path="/dashboard" component={DashboardComponent} />
         <Route exact path="/test" component={TestPageComponent} />

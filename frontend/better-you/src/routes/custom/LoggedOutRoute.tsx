@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "../../assets/scss/auth-page/LoginRegisterTabStyle.scss";
 import UserDTO from "../../models/UserDTO";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
@@ -24,7 +25,7 @@ class LoggedOutRoute extends Component<IProps> {
           ) {
             return <Redirect to="/dashboard" />;
           } else {
-            return <div>{this.props.component}</div>;
+            return <div className="route-container">{this.props.component}</div>;
           }
         }}
       />

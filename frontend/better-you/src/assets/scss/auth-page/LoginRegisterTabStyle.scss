@@ -1,6 +1,11 @@
 @import "../globals/colors";
 @import "../globals/global";
 
+.route-container {
+  min-height: calc(100vh - #{$app_bar_height});
+  height: calc(100vh - #{$app_bar_height});
+}
+
 @media (min-width: 575px) {
   .MuiTabs-root {
     border-top-left-radius: 30px;

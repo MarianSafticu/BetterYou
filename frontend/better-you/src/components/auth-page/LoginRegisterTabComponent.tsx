@@ -70,18 +70,14 @@ export default function LoginRegisterTabComponent(
   const [value, setValue] = React.useState(props.isRegister ? 1 : 0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    if(newValue === 0)
-      history.push("/login");
-    else
-      history.push("/register");
+    if (newValue === 0) history.push("/login");
+    else history.push("/register");
     setValue(newValue);
   };
 
   const handleChangeIndex = (index: number) => {
-    if(index === 0)
-      history.push("/login");
-    else
-      history.push("/register");
+    if (index === 0) history.push("/login");
+    else history.push("/register");
     setValue(index);
   };
 
@@ -89,26 +85,28 @@ export default function LoginRegisterTabComponent(
     <div className={classes.pageContainer}>
       <Breakpoint medium up className={classes.breakpoint}>
         <div className={classes.root}>
-          <AppBar className={classes.tabBar}>
-            <Tabs centered value={value} onChange={handleChange}>
-              <TabPane
-                className={classes.tab}
-                label="Login"
-                {...a11yProps(0)}
-              />
-              <TabPane
-                className={classes.tab}
-                label="Register"
-                {...a11yProps(1)}
-              />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            <LoginComponent />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <RegisterComponent />
-          </TabPanel>
+          <div className={classes.authContainer}>
+            <AppBar className={classes.tabBar}>
+              <Tabs centered value={value} onChange={handleChange}>
+                <TabPane
+                  className={classes.tab}
+                  label="Login"
+                  {...a11yProps(0)}
+                />
+                <TabPane
+                  className={classes.tab}
+                  label="Register"
+                  {...a11yProps(1)}
+                />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={value} index={0}>
+              <LoginComponent />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <RegisterComponent />
+            </TabPanel>
+          </div>
         </div>
       </Breakpoint>
 

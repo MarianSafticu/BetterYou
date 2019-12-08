@@ -2,15 +2,24 @@ import { makeStyles } from "@material-ui/styles";
 
 const LoginRegisterTabStyle = makeStyles({
   pageContainer: {
-    height: "calc(100% - 45px)"
+    minHeight: "inherit",
+    height: "100%"
   },
   breakpoint: {
+    minHeight: "inherit",
     height: "100%"
   },
   root: {
+    minHeight: "inherit",
     height: "100%",
     display: "flex",
     justifyContent: "center"
+  },
+  authContainer: {
+    paddingTop: "calc(45px + 30px)",
+    maxHeight: "80%",
+    minWidth: "35%",
+    maxWidth: "50%"
   },
   tabBar: {
     "@media (max-width: 576px)": {
@@ -24,10 +33,11 @@ const LoginRegisterTabStyle = makeStyles({
       right: "auto"
     },
     "@media (min-width: 770px)": {
-      width: "35%",
-      top: "calc(45px + 30px)",
-      left: "auto",
-      right: "auto"
+      position: "unset"
+      // width: "35%",
+      // top: "calc(45px + 30px)",
+      // left: "auto",
+      // right: "auto"
     }
   },
   tab: {
@@ -40,14 +50,14 @@ const LoginRegisterTabStyle = makeStyles({
       height: "100%"
     },
     "@media (min-width: 575px && max-width: 769px)": {
-      width: "50%",
-      height: "85%",
+      width: "100%",
+      // height: "85%",
       borderBottomLeftRadius: "30px",
       borderBottomRightRadius: "30px"
     },
     "@media (min-width: 770px)": {
-      width: "35%",
-      height: "80%",
+      width: "100%",
+      // height: "80%",
       borderBottomLeftRadius: "30px",
       borderBottomRightRadius: "30px"
     },
@@ -70,7 +80,8 @@ const LoginRegisterTabStyle = makeStyles({
       paddingTop: "calc(45px + 30px)"
     },
     "@media (min-width: 770px)": {
-      paddingTop: "calc(45px + 30px)"
+      height: "calc(100% - 45px)"
+      // paddingTop: "calc(45px + 30px)"
     }
   },
   swipeableView: {

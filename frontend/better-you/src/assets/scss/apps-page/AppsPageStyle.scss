@@ -2,7 +2,7 @@
 @import "../globals/global";
 
 .apps-page-container {
-  height: 100%;
+  height: calc(100% - #{$app_bar_height});
   display: flex;
   flex-direction: column;
 }

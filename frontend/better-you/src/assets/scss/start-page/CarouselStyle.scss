@@ -3,6 +3,8 @@
 
 @media only screen and (min-width: 768px) {
   .carousel-container {
+    // min-height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
+    // max-height: calc(100% - 30px);
     height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
     width: calc(100% - 50px);
     margin: 55px auto 0 auto;
@@ -58,9 +60,10 @@
 
 @media only screen and (max-width: 576px) {
   .carousel-container {
-    height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
+    min-height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
+    max-height: calc(100% - 30px);
     width: calc(100% - 50px);
-    margin: 55px auto 0 auto;
+    margin: 55px auto 30px auto;
   }
 
   .slider,

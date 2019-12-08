@@ -10,13 +10,11 @@ interface IProps {
   userInfo: UserDTO | undefined;
 }
 
-interface IState {}
-
-class StartPageComponent extends Component<IProps, IState> {
+class StartPageComponent extends Component<IProps> {
   render() {
     if (this.props.userInfo !== undefined && this.props.userInfo.isAuthenticated) {
       return (
-        <div className="start-page-container">
+        <div className="start-page-logged-user-container">
           <CarouselComponent />
         </div>
       );

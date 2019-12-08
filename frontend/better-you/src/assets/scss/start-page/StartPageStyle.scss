@@ -1,6 +1,13 @@
 @import "../globals/colors";
 @import "../globals/global";
 
+.start-page-logged-user-container {
+  min-height: calc(100% - #{$app_bar_height});
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .start-page-container {
   height: calc(100% - #{$app_bar_height});
   display: flex;
