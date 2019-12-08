@@ -98,13 +98,13 @@ public class RestServer {
     /**
      * This method receives a JSON with an email of an account and try to recover it
      *
-     * @param registerRequest- a JSON with an email
+     * @param recoverRequest- a JSON with an email
      * @return true if the recover is done and false if the email is invalid
      */
     @RequestMapping(value = "/recover", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> recover(@RequestBody RecoverRequest registerRequest) {
+    public ResponseEntity<?> recover(@RequestBody RecoverRequest recoverRequest) {
         try {
-            authService.recoverAccount(registerRequest.getEmail());
+            authService.recoverAccount(recoverRequest.getEmail());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -117,13 +117,13 @@ public class RestServer {
     /**
      * This method receives a JSON with an email and a new password of an account and try to update the password
      *
-     * @param registerRequest- a JSON with an email and a password
+     * @param resetRequest- a JSON with an email and a password
      * @return true if the reset is done and false if the email is invalid
      */
     @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> reset(@RequestBody ResetRequest registerRequest) {
+    public ResponseEntity<?> reset(@RequestBody ResetRequest resetRequest) {
         try {
-            authService.resetPassword(registerRequest.getToken(), registerRequest.getPassword());
+            authService.resetPassword(resetRequest.getToken(), resetRequest.getPassword());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);

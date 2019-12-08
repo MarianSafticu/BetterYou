@@ -21,9 +21,7 @@ import java.util.List;
 public abstract class AbstractRepo<ID,E extends HasId<ID>> {
     private Class<E> clazz;
     protected SessionFactory sessionFactory;
-    public AbstractRepo() {
 
-    }
 
     /***
      * The constructor contains the class of entity that is used for common queries
