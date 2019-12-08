@@ -10,6 +10,7 @@ import ServerUI.Responses.TokenResponse;
 import Service.ServiceException;
 import Service.AuthService;
 import Service.CRUDServices;
+import Service.ValidationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,15 @@ public class RestServer {
 
     private final AuthService authService;
     private final CRUDServices crudServices;
+    private final ValidationService validationService;
 
     @Autowired
-    public RestServer(final AuthService authService, final CRUDServices crudServices) {
+    public RestServer(final AuthService authService,
+                      final CRUDServices crudServices,
+                      final ValidationService validationService) {
         this.authService = authService;
         this.crudServices = crudServices;
+        this.validationService = validationService;
     }
 
     /**
@@ -85,6 +90,7 @@ public class RestServer {
                     registerRequest.getPassword(),
                     registerRequest.getEmail(),
                     registerRequest.getBirthDate());
+            validationService.validateUser(newUser);
             String token = authService.register(newUser);
             return new ResponseEntity<>(new TokenResponse(token), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -182,6 +188,7 @@ public class RestServer {
     @RequestMapping(value = "/goal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addGoal(@RequestBody PostGoalRequest postGoalRequest) {
         try {
+            validationService.validateGoal(postGoalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(postGoalRequest.getToken());
             crudServices.addGoal(postGoalRequest.getGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
@@ -203,6 +210,7 @@ public class RestServer {
     @RequestMapping(value = "/goal", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateGoal(@RequestBody PutGoalRequest putGoalRequest) {
         try {
+            validationService.validateGoal(putGoalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(putGoalRequest.getToken());
             crudServices.updateGoal(putGoalRequest.getGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
