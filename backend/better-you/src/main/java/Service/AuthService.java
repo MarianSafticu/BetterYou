@@ -86,7 +86,9 @@ public class AuthService {
 
         LOG.info("Validating user input data");
         validationService.validateUser(newUser);
+        crudServices.userDataNotUsed(newUser);
         LOG.info("User validation completed successfully");
+
 
         LOG.info("Hashing password for new user");
         newUser.setPassword(appUtils.encode(newUser.getPassword()));
