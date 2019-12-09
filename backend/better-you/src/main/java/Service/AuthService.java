@@ -56,17 +56,17 @@ public class AuthService {
 
         if (user == null) {
             LOG.info("User with email {} does no exist", email);
-            throw new ServiceException("User does not exist with the given email: " + email);
+            throw new ServiceException("Invalid email or password");
+        }
+
+        if (!appUtils.verifyPassword(password, user.getPassword())) {
+            LOG.info("User with email {} provided wrong password", email);
+            throw new ServiceException("Invalid email or password");
         }
 
         if (!user.isVerified()) {
             LOG.info("User with email {} is not verified", email);
             throw new ServiceException("User is not verified with the given email: " + email);
-        }
-
-        if (!appUtils.verifyPassword(password, user.getPassword())) {
-            LOG.info("User with email {} provided wrong password", email);
-            throw new ServiceException("Invalid password for user with email: " + email);
         }
 
         LOG.info("User with email {} provided correct password", email);
