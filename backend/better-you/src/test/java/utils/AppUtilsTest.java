@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class AppUtilsTest {
-    AppUtils appUtils = new AppUtils();
+    AppUtils appUtils = new AppUtils("g4g74i4ugh45gueivbetheb");
 
     @Test
     public void encode() {
