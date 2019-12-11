@@ -1,0 +1,56 @@
+
+@import "./_colors.scss";
+
+#wrapper{
+    display:flex;
+    height : 100%;
+
+}
+
+::-webkit-scrollbar-track
+{
+    border-radius: 8px !important;
+    background-image: linear-gradient(to bottom left, $color5 , $color6);
+}
+
+::-webkit-scrollbar
+{
+    border-radius: 8px !important;
+    width: 12px;
+    background-image: linear-gradient(to bottom left, $color5 , $color6);
+}
+
+::-webkit-scrollbar-thumb
+{
+    border-radius: 8px !important;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+
+.list_component {
+    margin-left:2%;
+    flex : 0 0 63%;
+    overflow-y : scroll;
+    overflow-x:hidden;
+}
+
+
+.newsfeed {
+    margin-right:2%;
+    margin-left:3%;
+    flex : 1;
+    overflow-y:scroll;
+}
+
+#switch_add_bar {
+    display:flex;
+}
+
+#switch_label {
+    margin-left:2%;
+    flex : 0 0 80%;
+}
+
+#icon_add{
+    flex:1;
+}
