@@ -1,9 +1,12 @@
-@import "./_colors.scss";
+@import "../globals/colors.scss";
 
-#wrapper{
+#wrapper
+{
     display:flex;
-    height: 91%;
-     padding-top:1%;
+    height: calc(100vh - 45px);
+    overflow: hidden;
+    //height: 91%;
+    //padding-top:1%;
 }
 
 ::-webkit-scrollbar-track
@@ -25,16 +28,15 @@
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-
 .list_component {
     margin-left:2%;
     flex : 0 0 63%;
+     overflow-y:scroll;
 }
 
 .list {
-    height: 94%;
-    overflow-y : scroll;
-    overflow-x:hidden;
+    //height: 94%;
+    //overflow-y:scroll;
 }
 
 .newsfeed {
