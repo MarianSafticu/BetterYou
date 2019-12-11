@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.AppUtils;
 import utils.mail.MailUtils;
 
@@ -135,7 +135,8 @@ public class AuthService {
      * @throws ServiceException if any error occurs
      */
     public void recoverAccount(final String email) {
-        throw new NotImplementedException();
+//        throw new NotImplementedException();
+        //TODO: de implementat
     }
 
     /**
