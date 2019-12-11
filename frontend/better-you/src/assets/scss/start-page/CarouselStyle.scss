@@ -3,11 +3,9 @@
 
 @media only screen and (min-width: 768px) {
   .carousel-container {
-    // min-height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
-    // max-height: calc(100% - 30px);
-    height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
+    height: calc(100% - 170px - 26px);
     width: calc(100% - 50px);
-    margin: 55px auto 0 auto;
+    margin: 0 auto 0 auto;
   }
 
   .slider,
@@ -58,12 +56,11 @@
   }
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 767px) {
   .carousel-container {
-    min-height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
-    max-height: calc(100% - 30px);
+    height: calc(100% - #{$app_bar_height} - #{$footer_height} - 30px);
     width: calc(100% - 50px);
-    margin: 55px auto 30px auto;
+    margin: 40px auto 0px auto;
   }
 
   .slider,

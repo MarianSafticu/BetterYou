@@ -2,42 +2,98 @@ import { makeStyles } from "@material-ui/styles";
 
 const LoginRegisterTabStyle = makeStyles({
   pageContainer: {
-    minHeight: "inherit",
-    height: "100%"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px), (min-width: 577px) and (max-width: 991px)": {
+        height: "100%"
+      }
+    },
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px), (min-width: 733px) and (max-width: 991px)": {
+        height: "100%"
+      }
+    }
   },
   breakpoint: {
-    minHeight: "inherit",
-    height: "100%"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px), (min-width: 577px) and (max-width: 991px)": {
+        height: "100%"
+      }
+    },
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px), (min-width: 733px) and (max-width: 991px)": {
+        height: "100%"
+      }
+    }
   },
   root: {
-    minHeight: "inherit",
-    height: "100%",
-    display: "flex",
-    justifyContent: "center"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px), (min-width: 577px) and (max-width: 991px)": {
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }
+    },
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px), (min-width: 733px) and (max-width: 991px)": {
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }
+    }
   },
   authContainer: {
-    paddingTop: "calc(45px + 30px)",
-    maxHeight: "80%",
-    minWidth: "35%",
-    maxWidth: "50%"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px)": {
+        height: "100%",
+        width: "100%"
+      },
+      "@media (min-width: 577px) and (max-width: 991px)": {
+        height: "80%",
+        width: "50%"
+      }
+    },
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px)": {
+        height: "100%",
+        width: "100%"
+      },
+      "@media (min-width: 733px) and (max-width: 991px)": {
+        height: "100%",
+        width: "50%"
+      }
+    },
+    "@media (min-width: 992px)": {
+      height: "550px",
+      width: "35%",
+      margin: "auto",
+      paddingTop: "45px"
+    }
   },
   tabBar: {
-    "@media (max-width: 576px)": {
-      width: "100%",
-      top: "45px"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px)": {
+        width: "100%",
+        top: "45px"
+      },
+      "@media (min-width: 577px) and (max-width: 991px)": {
+        width: "100%",
+        position: "unset"
+      }
     },
-    "@media (min-width: 575px && max-width: 769px)": {
-      width: "50%",
-      top: "45px",
-      left: "auto",
-      right: "auto"
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px)": {
+        width: "100%",
+        top: "45px"
+      },
+      "@media (min-width: 733px) and (max-width: 991px)": {
+        width: "100%",
+        position: "unset"
+      }
     },
-    "@media (min-width: 770px)": {
+    "@media (min-width: 992px)": {
       position: "unset"
-      // width: "35%",
-      // top: "calc(45px + 30px)",
-      // left: "auto",
-      // right: "auto"
     }
   },
   tab: {
@@ -45,19 +101,28 @@ const LoginRegisterTabStyle = makeStyles({
   },
   tabPanel: {
     backgroundColor: "#9173ca",
-    "@media (max-width: 576px)": {
-      width: "100%",
-      height: "100%"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px)": {
+        width: "100%",
+        height: "100%"
+      },
+      "@media (min-width: 577px) and (max-width: 991px)": {
+        width: "100%",
+        borderBottomLeftRadius: "30px",
+        borderBottomRightRadius: "30px"
+      }
     },
-    "@media (min-width: 575px && max-width: 769px)": {
-      width: "100%",
-      // height: "85%",
-      borderBottomLeftRadius: "30px",
-      borderBottomRightRadius: "30px"
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px)": {
+        width: "100%",
+        height: "100%"
+      },
+      "@media (min-width: 733px) and (max-width: 991px)": {
+        width: "100%"
+      }
     },
-    "@media (min-width: 770px)": {
+    "@media (min-width: 992px)": {
       width: "100%",
-      // height: "80%",
       borderBottomLeftRadius: "30px",
       borderBottomRightRadius: "30px"
     },
@@ -72,19 +137,30 @@ const LoginRegisterTabStyle = makeStyles({
   typography: {
     width: "100%",
     padding: 0,
-    "@media (max-width: 576px)": {
-      height: "100%",
-      paddingTop: "45px"
+    "@media (orientation: portrait)": {
+      "@media (max-width: 576px)": {
+        height: "calc(100% - 45px)",
+        marginTop: "45px"
+      },
+      "@media (min-width: 577px) and (max-width: 991px)": {
+        height: "calc(100% - 45px)"
+      }
     },
-    "@media (min-width: 575px && max-width: 769px)": {
-      paddingTop: "calc(45px + 30px)"
+    "@media (orientation: landscape)": {
+      "@media (max-width: 732px)": {
+        height: "100%",
+        marginTop: "45px"
+      },
+      "@media (min-width: 733px) and (max-width: 991px)": {
+        height: "100%"
+      }
     },
-    "@media (min-width: 770px)": {
+    "@media (min-width: 992px)": {
       height: "calc(100% - 45px)"
-      // paddingTop: "calc(45px + 30px)"
     }
   },
   swipeableView: {
+    height: "100%",
     width: "100%"
   }
 });

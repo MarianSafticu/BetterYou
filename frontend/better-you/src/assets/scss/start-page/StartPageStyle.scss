@@ -9,7 +9,7 @@
 }
 
 .start-page-container {
-  height: calc(100% - #{$app_bar_height});
+  height: calc(100vh - 45px);
   display: flex;
   flex-direction: column;
 }
