@@ -261,4 +261,33 @@ public class CRUDServices {
             throw new ServiceException("Error occurred while deleting goal in repo");
         }
     }
+
+    /**
+     * Verifies that the email and username are not already used by someone else.
+     *
+     * @param user the user to be checked
+     * @throws ServiceException if the email or the username are already used by someone else
+     */
+    public void userDataNotUsed(final User user) {
+        final String email = user.getEmail();
+        final String username = user.getUsername();
+
+        LOG.info("Verifying that email \"{}\" and username \"{}\" are not already used", email, username);
+
+        String errors = "";
+
+        if (!userRepo.emailNotUsed(email)) {
+            LOG.info("Email \"{}\" is already used", email);
+            errors += "Email \"" + email + "\" already used!\n";
+        }
+
+        if (!userRepo.usernameNotUsed(username)) {
+            LOG.info("Username \"{}\" is already used", username);
+            errors += "Username \"" + username + "\" already used!\n";
+        }
+
+        if (errors.length() > 0) {
+            throw new ServiceException(errors);
+        }
+    }
 }

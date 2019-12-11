@@ -58,8 +58,7 @@ public class AuthServiceTest {
             authService.login(USER_EMAIL, USER_PASSWORD);
             fail("Expected ServiceException to be thrown");
         } catch (ServiceException exception) {
-            assertThat(exception.getMessage(), equalTo("User does not exist with the given email: "
-                    + USER_EMAIL));
+            assertThat(exception.getMessage(), equalTo("Invalid email or password"));
         }
 
         verify(crudServices, times(1)).getUserFromEmail(USER_EMAIL);
@@ -68,24 +67,25 @@ public class AuthServiceTest {
     @Test
     public void WHEN_OnLoginUserIsNotVerified_THEN_ServiceExceptionIsThrown() {
         when(crudServices.getUserFromEmail(USER_EMAIL)).thenReturn(userMock);
+        when(userMock.getPassword()).thenReturn(USER_HASHED_PASSWORD);
+        when(appUtils.verifyPassword(USER_PASSWORD, USER_HASHED_PASSWORD)).thenReturn(true);
         when(userMock.isVerified()).thenReturn(false);
 
         try {
             authService.login(USER_EMAIL, USER_PASSWORD);
             fail("Expected ServiceException to be thrown");
         } catch (ServiceException exception) {
-            assertThat(exception.getMessage(), equalTo("User is not verified with the given email: "
-                    + USER_EMAIL));
+            assertThat(exception.getMessage(), equalTo("User is not verified with the given email: " + USER_EMAIL));
         }
 
         verify(crudServices, times(1)).getUserFromEmail(USER_EMAIL);
-        verify(userMock, times(1)).isVerified();
+        verify(userMock, times(1)).getPassword();
+        verify(appUtils, times(1)).verifyPassword(USER_PASSWORD, USER_HASHED_PASSWORD);
     }
 
     @Test
     public void WHEN_OnLoginPasswordIsWrong_THEN_ServiceExceptionIsThrown() {
         when(crudServices.getUserFromEmail(USER_EMAIL)).thenReturn(userMock);
-        when(userMock.isVerified()).thenReturn(true);
         when(userMock.getPassword()).thenReturn(USER_HASHED_PASSWORD);
         when(appUtils.verifyPassword(USER_PASSWORD, USER_HASHED_PASSWORD)).thenReturn(false);
 
@@ -93,11 +93,10 @@ public class AuthServiceTest {
             authService.login(USER_EMAIL, USER_PASSWORD);
             fail("Expected ServiceException to be thrown");
         } catch (ServiceException exception) {
-            assertThat(exception.getMessage(), equalTo("Invalid password for user with email: " + USER_EMAIL));
+            assertThat(exception.getMessage(), equalTo("Invalid email or password"));
         }
 
         verify(crudServices, times(1)).getUserFromEmail(USER_EMAIL);
-        verify(userMock, times(1)).isVerified();
         verify(userMock, times(1)).getPassword();
         verify(appUtils, times(1)).verifyPassword(USER_PASSWORD, USER_HASHED_PASSWORD);
     }
