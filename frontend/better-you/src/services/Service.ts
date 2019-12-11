@@ -79,7 +79,7 @@ export default class Service {
     if (user.username.length === 0) {
       error.usernameError = messages.USERNAME_ERROR;
     }
-    if (user.profileName.length === 0) {
+    if (user.profile_name.length === 0) {
       error.profileNameError = messages.PROFILE_NAME_ERROR;
     }
     if (user.email.length === 0) {
@@ -94,7 +94,7 @@ export default class Service {
     if (!user.username.match(this.usernameRegex)) {
       error.usernameError = messages.INVALID_USERNAME;
     }
-    if (!user.profileName.match(this.profileNameRegex)) {
+    if (!user.profile_name.match(this.profileNameRegex)) {
       error.profileNameError = messages.INVALID_PROFILE_NAME;
     }
     if (!user.email.match(this.emailRegex)) {
@@ -131,7 +131,7 @@ export default class Service {
     if (user) {
       if (
         user.username.length > 0 &&
-        user.profileName.length > 0 &&
+        user.profile_name.length > 0 &&
         user.email.length > 0 &&
         user.password.length > 0 &&
         user.birthDate.toString().length

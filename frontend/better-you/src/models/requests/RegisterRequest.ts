@@ -1,7 +1,7 @@
 export default interface RegisterRequest {
   username: string;
-  profileName: string;
-  email: string;
+  profile_name: string;
   password: string;
+  email: string;
   birthDate: Date;
 }

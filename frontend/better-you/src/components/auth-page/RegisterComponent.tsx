@@ -1,16 +1,20 @@
 import React, { Component, ChangeEvent } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { RegisterException } from "../../exceptions/RegisterException";
 import Service from "../../services/Service";
 import RegisterRequest from "../../models/requests/RegisterRequest";
+import AppState from "../../redux/store/store";
+import { connect } from "react-redux";
+import { registerUserBegin } from "../../redux/actions/actions";
+import SnackbarComponent from "../messages/SnackbarComponent";
 
 interface IProps {
-  // loading: boolean;
-  // error: string;
-  // registeredUser: UserRegisterDTO | undefined;
-  registerUser?: Function;
+  loading: boolean;
+  error: string;
+  registrationEmailSent: boolean;
+  registerUser: Function;
 }
 
 interface IState {
@@ -19,7 +23,7 @@ interface IState {
   willRedirect: boolean;
 }
 
-export default class RegisterComponent extends Component<IProps, IState> {
+class RegisterComponent extends Component<IProps, IState> {
   service: Service;
 
   constructor(prop: IProps) {
@@ -28,7 +32,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     this.state = {
       user: {
         username: "",
-        profileName: "",
+        profile_name: "",
         email: "",
         password: "",
         birthDate: new Date()
@@ -44,97 +48,101 @@ export default class RegisterComponent extends Component<IProps, IState> {
     };
   }
 
-  // componentDidUpdate() {
-  //   if (this.props.registeredUser) {
-  //     if (this.service.validateRegisteredUser(this.props.registeredUser)) {
-  //       if (this.props.cookies) {
-  //         this.setState({
-  //           willRedirect: true
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
+  componentDidUpdate() {
+    if (this.props.registrationEmailSent) {
+      this.setState({
+        willRedirect: true
+      });
+    }
+  }
 
   render() {
-    return (
-      <div className="login-background">
-        <ToastContainer />
-        <form className="login-container" action="">
-          <div className="login-input-container">
-            <TextField
-              error={this.state.error.usernameError ? true : false}
-              className="login-input"
-              onChange={this.onChangeUsername.bind(this)}
-              helperText={this.state.error.usernameError}
-              label="Username:"
-            />
-            <br />
+    if (this.state.willRedirect) {
+      return <Redirect to="/confirm-account-message" />;
+    } else {
+      return (
+        <div className="login-background">
+          {this.props.error ? (
+            <SnackbarComponent message={this.props.error} />
+          ) : (
+            <div />
+          )}
+          <form className="login-container" action="">
+            <div className="login-input-container">
+              <TextField
+                error={this.state.error.usernameError ? true : false}
+                className="login-input"
+                onChange={this.onChangeUsername.bind(this)}
+                helperText={this.state.error.usernameError}
+                label="Username:"
+              />
+              <br />
 
-            <TextField
-              error={this.state.error.profileNameError ? true : false}
-              className="login-input"
-              onChange={this.onChangeProfileName.bind(this)}
-              helperText={this.state.error.profileNameError}
-              label="Profile name:"
-            />
-            <br />
+              <TextField
+                error={this.state.error.profileNameError ? true : false}
+                className="login-input"
+                onChange={this.onChangeProfileName.bind(this)}
+                helperText={this.state.error.profileNameError}
+                label="Profile name:"
+              />
+              <br />
 
-            <TextField
-              error={this.state.error.emailError ? true : false}
-              className="login-input"
-              onChange={this.onChangeEmail.bind(this)}
-              helperText={this.state.error.emailError}
-              label="Email:"
-            />
-            <br />
+              <TextField
+                error={this.state.error.emailError ? true : false}
+                className="login-input"
+                onChange={this.onChangeEmail.bind(this)}
+                helperText={this.state.error.emailError}
+                label="Email:"
+              />
+              <br />
 
-            <TextField
-              error={this.state.error.passwordError ? true : false}
-              className="login-input"
-              onChange={this.onChangePassword.bind(this)}
-              type="password"
-              helperText={this.state.error.passwordError}
-              label="Password:"
-            />
-            <br />
+              <TextField
+                error={this.state.error.passwordError ? true : false}
+                className="login-input"
+                onChange={this.onChangePassword.bind(this)}
+                type="password"
+                helperText={this.state.error.passwordError}
+                label="Password:"
+              />
+              <br />
 
-            <TextField
-              error={this.state.error.birthDateError ? true : false}
-              className="login-input"
-              onChange={this.onChangeBirthdate.bind(this)}
-              type="date"
-              helperText={this.state.error.birthDateError}
-              label="Birthdate:"
-              InputLabelProps={{ shrink: true }}
-            />
-            <br />
-          </div>
+              <TextField
+                error={this.state.error.birthDateError ? true : false}
+                className="login-input"
+                onChange={this.onChangeBirthdate.bind(this)}
+                type="date"
+                helperText={this.state.error.birthDateError}
+                label="Birthdate:"
+                InputLabelProps={{ shrink: true }}
+              />
+              <br />
+            </div>
 
-          <div className="login-button-container">
-            <Button
-              className="login-button"
-              onClick={this.handleOnClick.bind(this)}
-            >
-              Register
-            </Button>
-          </div>
+            <div className="login-button-container">
+              <Button
+                className="login-button"
+                onClick={this.handleOnClick.bind(this)}
+              >
+                Register
+              </Button>
+            </div>
 
-          <div className="help-links">
-            <Link to="/login" className="help-link-register">
-              Already have an account? Sign in right now!
-            </Link>
-          </div>
-        </form>
-      </div>
-    );
+            <div className="help-links">
+              <Link to="/login" className="help-link-register">
+                Already have an account? Sign in right now!
+              </Link>
+            </div>
+          </form>
+        </div>
+      );
+    }
   }
 
   onChangeUsername(event: ChangeEvent<HTMLInputElement>) {
     this.setState({
       user: {
         username: event.target.value,
-        profileName: this.state.user.profileName,
+        profile_name: this.state.user.profile_name,
         birthDate: this.state.user.birthDate,
         email: this.state.user.email,
         password: this.state.user.password
@@ -146,7 +154,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     this.setState({
       user: {
         username: this.state.user.username,
-        profileName: event.target.value,
+        profile_name: event.target.value,
         birthDate: this.state.user.birthDate,
         email: this.state.user.email,
         password: this.state.user.password
@@ -158,7 +166,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     this.setState({
       user: {
         username: this.state.user.username,
-        profileName: this.state.user.profileName,
+        profile_name: this.state.user.profile_name,
         birthDate: this.state.user.birthDate,
         email: event.target.value,
         password: this.state.user.password
@@ -170,7 +178,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     this.setState({
       user: {
         username: this.state.user.username,
-        profileName: this.state.user.profileName,
+        profile_name: this.state.user.profile_name,
         birthDate: this.state.user.birthDate,
         email: this.state.user.email,
         password: event.target.value
@@ -182,7 +190,7 @@ export default class RegisterComponent extends Component<IProps, IState> {
     this.setState({
       user: {
         username: this.state.user.username,
-        profileName: this.state.user.profileName,
+        profile_name: this.state.user.profile_name,
         birthDate: new Date(event.target.value),
         email: this.state.user.email,
         password: this.state.user.password
@@ -199,7 +207,26 @@ export default class RegisterComponent extends Component<IProps, IState> {
         error: validationResult
       });
     } else {
-      // this.props.registerUser(this.state.user);
+      let { password } = this.state.user;
+      let encryptedPassword = this.service.encryptPassword(password);
+      this.state.user.password = encryptedPassword;
+      this.props.registerUser(this.state.user);
     }
   }
 }
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    error: state.error,
+    loading: state.loading,
+    registrationEmailSent: state.registrationEmailSent
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    registerUser: (user: RegisterRequest) => dispatch(registerUserBegin(user))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterComponent);

@@ -4,19 +4,26 @@ import {
   SET_CURRENT_USER_BEGIN,
   SET_CURRENT_USER_SUCCESS,
   SET_CURRENT_USER_ERROR,
-  UNSET_CURRENT_USER
+  UNSET_CURRENT_USER,
+  REGISTER_USER_BEGIN,
+  REGISTER_USER_SUCCESS,
+  REGISTER_USER_ERROR
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
   setCurrentUserSuccessHandler,
   setCurrentUserErrorHandler,
-  unsetCurrentUserHandler
+  unsetCurrentUserHandler,
+  registerUserBeginHandler,
+  registerUserSuccessHandler,
+  registerUserErrorHandler
 } from "./appHandlers";
 
 export const initialState: AppState = {
   loading: false,
   error: "",
-  userInfo: undefined
+  userInfo: undefined,
+  registrationEmailSent: false
 };
 
 const appReducer = (state = initialState, action: AppActionType): AppState => {
@@ -29,6 +36,12 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return setCurrentUserErrorHandler(state, action.payload);
     case UNSET_CURRENT_USER:
       return unsetCurrentUserHandler(state);
+    case REGISTER_USER_BEGIN:
+      return registerUserBeginHandler(state);
+    case REGISTER_USER_SUCCESS:
+      return registerUserSuccessHandler(state);
+    case REGISTER_USER_ERROR:
+      return registerUserErrorHandler(state, action.payload);
     default:
       return state;
   }

@@ -5,12 +5,12 @@ import { deleteCookie } from "../../services/CookieService";
 
 export function setCurrentUserBeginHandler(
   oldState: AppState,
-  userInfo: LoginRequest 
+  userInfo: LoginRequest
 ): AppState {
   const newState = { ...oldState };
   newState.loading = true;
   newState.error = "";
-  newState.userInfo= undefined;
+  newState.userInfo = undefined;
   return newState;
 }
 
@@ -36,13 +36,38 @@ export function setCurrentUserErrorHandler(
   return newState;
 }
 
-export function unsetCurrentUserHandler(
-  oldState: AppState
-): AppState {
+export function unsetCurrentUserHandler(oldState: AppState): AppState {
   const newState = { ...oldState };
   newState.loading = false;
   newState.error = "";
   newState.userInfo = undefined;
   deleteCookie("token");
+  return newState;
+}
+
+export function registerUserBeginHandler(oldState: AppState): AppState {
+  const newState = { ...oldState };
+  newState.loading = true;
+  newState.error = "";
+  newState.registrationEmailSent = false;
+  return newState;
+}
+
+export function registerUserSuccessHandler(oldState: AppState): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
+  newState.registrationEmailSent = true;
+  return newState;
+}
+
+export function registerUserErrorHandler(
+  oldState: AppState,
+  error: string
+): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = error;
+  newState.registrationEmailSent = false;
   return newState;
 }
