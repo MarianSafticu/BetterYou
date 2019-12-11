@@ -3,18 +3,20 @@ import {
   AppActionType,
   SET_CURRENT_USER_BEGIN,
   SET_CURRENT_USER_SUCCESS,
-  SET_CURRENT_USER_ERROR
+  SET_CURRENT_USER_ERROR,
+  UNSET_CURRENT_USER
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
   setCurrentUserSuccessHandler,
-  setCurrentUserErrorHandler
+  setCurrentUserErrorHandler,
+  unsetCurrentUserHandler
 } from "./appHandlers";
 
 export const initialState: AppState = {
   loading: false,
   error: "",
-  currentUser: undefined
+  userInfo: undefined
 };
 
 const appReducer = (state = initialState, action: AppActionType): AppState => {
@@ -25,6 +27,8 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return setCurrentUserSuccessHandler(state, action.payload);
     case SET_CURRENT_USER_ERROR:
       return setCurrentUserErrorHandler(state, action.payload);
+    case UNSET_CURRENT_USER:
+      return unsetCurrentUserHandler(state);
     default:
       return state;
   }

@@ -1,8 +1,0 @@
-@import "./_colors.scss";
-@import "./_global.scss";
-
-.start-page-container {
-    height: calc(100% - #{$app_bar_height});
-    display: flex;
-    flex-direction: column;
-}

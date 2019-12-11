@@ -1,0 +1,42 @@
+@import "../globals/colors";
+@import "../globals/global";
+
+.route-container {
+  min-height: calc(100vh - #{$app_bar_height});
+  height: calc(100vh - #{$app_bar_height});
+}
+
+@media (min-width: 575px) {
+  .MuiTabs-root {
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+}
+
+.MuiTab-root {
+  max-width: none !important;
+}
+
+.MuiTabs-centered {
+  justify-content: space-evenly;
+}
+
+.MuiTabs-indicator {
+  background-color: darken($color6, 20%) !important;
+}
+
+.MuiTab-wrapper {
+  color: black;
+}
+
+@media (min-width: 600px) {
+  .MuiTab-root {
+    width: 50%;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+}
+
+.react-swipeable-view-container {
+  height: 100%;
+}

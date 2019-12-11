@@ -1,22 +1,30 @@
 import IHttpService from "../../services/interfaces/IHttpService";
 import HttpService from "../../services/HttpService";
 import { AppActionType } from "../../redux/actions/types";
-import { UserLoginDTO } from "../../models/UserLoginDTO";
 import { call, put } from "@redux-saga/core/effects";
 import { setCurrentUserSuccess, setCurrentUserError } from "../actions/actions";
+import LoginRequest from "../../models/requests/LoginRequest";
+import { setCookie } from "../../services/CookieService";
+import UserDTO from "../../models/UserDTO";
 
 const httpService: IHttpService = HttpService.getInstance();
 
-export function* loginUserHandler(action: AppActionType): IterableIterator<any> {
-  let user: UserLoginDTO = action.payload as UserLoginDTO;
+export function* loginUserHandler(
+  action: AppActionType
+): IterableIterator<any> {
+  let user: LoginRequest = action.payload as LoginRequest;
   const response = yield call(httpService.loginUser, user);
   if (response) {
     const { token, massage } = response;
     if (token) {
-      user.token = token;
-      yield put(setCurrentUserSuccess(user));
-    } 
-    else if (massage) {
+      setCookie("token", token);
+      let authenticatedUser: UserDTO = {
+        username: "",
+        profilePicture: "../assets/photos/profile-picture-test.jpg",
+        isAuthenticated: true
+      }
+      yield put(setCurrentUserSuccess(authenticatedUser));
+    } else if (massage) {
       yield put(setCurrentUserError(massage));
     }
   }

@@ -1,0 +1,40 @@
+@import "../globals/colors";
+@import "../globals/global";
+
+.message-background {
+  //background: inherit;
+  height: calc(100% - #{$app_bar_height});
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.message-container {
+  background: whitesmoke;
+  //border: 6px solid $color5;
+  //padding: 30px;
+  width: 45%;
+  max-width: 100%;
+  border-radius: 25px;
+
+  background: linear-gradient(to top right, #{$color5}, #{$color6});
+}
+.message-module {
+  background: $color1;
+  //color: white;
+  padding: 30px;
+  margin: 5px;
+  border-radius: 25px;
+}
+
+@media screen and (max-width: 500px) {
+  .message-container {
+    width: 100%;
+    //padding-top: 50px;
+    //padding-bottom: 50px;
+  }
+  .message-module {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+}

@@ -1,4 +1,4 @@
-export interface Goal{
+export default interface Goal{
     title: string,
     description: string,
     startDate: Date,

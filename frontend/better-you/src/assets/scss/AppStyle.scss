@@ -1,7 +1,8 @@
-@import "./_colors.scss";
-@import "./_global.scss";
+@import "./globals/colors";
+@import "./globals/global";
 
 .main-container {
-    height: 100%;
-    background-image: linear-gradient(to bottom left, $color5 , $color6);
+  min-height: 100%;
+  height: 100%;
+  background-image: linear-gradient(to bottom left, $color5, $color6);
 }

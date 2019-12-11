@@ -1,0 +1,137 @@
+@import "../globals/colors";
+@import "../globals/global";
+
+.app-bar-container {
+  height: $app_bar_height;
+}
+
+.app-bar-breakpoint {
+  height: $app_bar_height;
+}
+
+.MuiAppBar-colorPrimary {
+  background: transparent !important;
+}
+
+.MuiAppBar-root {
+  height: $app_bar_height;
+  justify-content: center !important;
+}
+
+.MuiPaper-elevation4 {
+  box-shadow: none !important;
+}
+
+.MuiToolbar-root {
+  justify-content: space-between !important;
+}
+
+.MuiToolbar-regular {
+  min-height: $app_bar_height !important;
+}
+
+.links-container {
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  height: 100%;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  color: white;
+}
+
+.login-link {
+  text-decoration: none;
+}
+
+.MuiButton-root {
+  background-color: lighten($color6, 5%) !important;
+}
+
+@media (min-width: 770px) {
+  .MuiButton-root {
+    width: 150px;
+  }
+}
+@media (max-width: 575px) {
+  .MuiButton-root {
+    width: 100px;
+  }
+}
+
+.link-container {
+  height: 100%;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .link {
+    text-decoration: none;
+    color: black;
+    transition: $animate;
+    position: relative;
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      width: 0px;
+      height: 3px;
+      margin: 5px 0 0;
+      transition: $animate;
+      transition-duration: 0.75s;
+      opacity: 0;
+      background-color: $color6;
+    }
+    &:before {
+      left: 50%;
+    }
+    &:after {
+      right: 50%;
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    .link {
+      &:before,
+      &:after {
+        width: 100%;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.MuiIconButton-root {
+  background: transparent !important;
+}
+
+.MuiIconButton-label {
+  color: black;
+}
+
+.MuiDrawer-paper {
+  background-color: lighten($color6, 5%) !important;
+  height: calc(100% - 45px);
+  margin-top: 45px;
+}
+
+.profile-pic {
+  float: right;
+  height: 40px !important;
+  width: 40px !important;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 0;
+  margin-right: 25px !important;
+  background-size: 40px 40px;
+}

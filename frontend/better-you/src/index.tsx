@@ -6,7 +6,8 @@ import { Provider } from "react-redux";
 import configureStore from "./redux/store/configure-store";
 import "./assets/scss/indexStyle.scss";
 import { BreakpointProvider, setDefaultBreakpoints } from "react-socks";
-import { CookiesProvider } from 'react-cookie';
+import { CookiesProvider } from "react-cookie";
+import { PersistGate } from "redux-persist/integration/react";
 
 setDefaultBreakpoints([
   { xsmall: 0 }, // all mobile devices
@@ -16,15 +17,17 @@ setDefaultBreakpoints([
   { xlarge: 1200 } // laptops and desktops
 ]);
 
-const store = configureStore();
+const { store, persistor } = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <CookiesProvider>
-      <BreakpointProvider>
-        <App />
-      </BreakpointProvider>
-    </CookiesProvider>
+    <PersistGate persistor={persistor} loading={null}>
+      <CookiesProvider>
+        <BreakpointProvider>
+          <App />
+        </BreakpointProvider>
+      </CookiesProvider>
+    </PersistGate>
   </Provider>,
   document.getElementById("root")
 );
