@@ -19,7 +19,7 @@ export default class DashboardComponent extends Component {
   render() {
     return (
         <div id="wrapper">
-            <div className="list">
+            <div className="list_component">
               <div id="switch_add_bar">
                 <div id="switch_label">
                     <Grid component="label" container alignItems="center" spacing={1}>
@@ -37,10 +37,10 @@ export default class DashboardComponent extends Component {
                 
                 <AddCircleIcon id="icon_add" fontSize="large"/>
               </div>
-                
+              <div className="list"> 
               { !this.state.checked && <GoalList/> }
               {this.state.checked && <HabitList/> }
-            
+              </div>
             </div>
             
             <div className="newsfeed">
