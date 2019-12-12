@@ -14,7 +14,10 @@ import { AppActionType } from '../actions/types';
 const persistConfiguration: PersistConfig<any, any, any, any> = {
   key: 'root',
   storage: storage,
-  stateReconciler: autoMergeLevel2
+  stateReconciler: autoMergeLevel2,
+  blacklist: [
+    'registrationEmailSent'
+  ]
 };
 const rootReducer: Reducer<AppState & PersistPartial, AppActionType> = persistReducer(persistConfiguration, appReducer);
 const sagaMiddleware: SagaMiddleware<AppState> = createSagaMiddleware();

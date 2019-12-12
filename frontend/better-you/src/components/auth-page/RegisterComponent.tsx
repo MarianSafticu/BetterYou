@@ -1,13 +1,12 @@
 import React, { Component, ChangeEvent } from "react";
 import { Button, TextField } from "@material-ui/core";
-import { ToastContainer } from "react-toastify";
 import { Link, Redirect } from "react-router-dom";
 import { RegisterException } from "../../exceptions/RegisterException";
 import Service from "../../services/Service";
 import RegisterRequest from "../../models/requests/RegisterRequest";
 import AppState from "../../redux/store/store";
 import { connect } from "react-redux";
-import { registerUserBegin } from "../../redux/actions/actions";
+import { registerUserBegin, unsetCurrentUser } from "../../redux/actions/actions";
 import SnackbarComponent from "../messages/SnackbarComponent";
 
 interface IProps {
@@ -15,6 +14,7 @@ interface IProps {
   error: string;
   registrationEmailSent: boolean;
   registerUser: Function;
+  clearRegistrationData: Function;
 }
 
 interface IState {
@@ -53,6 +53,7 @@ class RegisterComponent extends Component<IProps, IState> {
       this.setState({
         willRedirect: true
       });
+      this.props.clearRegistrationData();
     }
   }
 
@@ -225,7 +226,8 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    registerUser: (user: RegisterRequest) => dispatch(registerUserBegin(user))
+    registerUser: (user: RegisterRequest) => dispatch(registerUserBegin(user)),
+    clearRegistrationData: () => dispatch(unsetCurrentUser())
   };
 };
 

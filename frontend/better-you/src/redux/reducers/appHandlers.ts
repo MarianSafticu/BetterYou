@@ -41,6 +41,7 @@ export function unsetCurrentUserHandler(oldState: AppState): AppState {
   newState.loading = false;
   newState.error = "";
   newState.userInfo = undefined;
+  newState.registrationEmailSent = false;
   deleteCookie("token");
   return newState;
 }

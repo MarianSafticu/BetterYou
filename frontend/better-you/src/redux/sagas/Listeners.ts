@@ -5,7 +5,6 @@ import { call, put } from "@redux-saga/core/effects";
 import {
   setCurrentUserSuccess,
   setCurrentUserError,
-  registerUserBegin,
   registerUserSuccess,
   registerUserError
 } from "../actions/actions";
