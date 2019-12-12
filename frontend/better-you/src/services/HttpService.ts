@@ -4,7 +4,7 @@ import RegisterRequest from "../models/requests/RegisterRequest";
 import LoginResponse from "../models/responses/LoginResponse";
 import RegisterResponse from "../models/responses/RegisterResponse";
 
-const url: string = "http://localhost:8080/app/better-you";
+const url: string = "http://ec2-3-89-222-56.compute-1.amazonaws.com:12404/app/better-you";
 
 export default class HttpService implements IHttpService {
   private static instance: HttpService;
