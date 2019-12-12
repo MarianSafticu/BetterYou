@@ -4,12 +4,12 @@ const LoginRegisterTabStyle = makeStyles({
   pageContainer: {
     "@media (orientation: portrait)": {
       "@media (max-width: 576px), (min-width: 577px) and (max-width: 991px)": {
-        height: "100%"
+        height: "calc(100vh - 45px)"
       }
     },
     "@media (orientation: landscape)": {
       "@media (max-width: 732px), (min-width: 733px) and (max-width: 991px)": {
-        height: "100%"
+        height: "calc(100vh - 45px)"
       }
     }
   },
