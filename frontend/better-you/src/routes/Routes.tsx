@@ -22,15 +22,15 @@ export default class Routes extends Component {
           path="/recover-account"
           component={<RecoverAccountComponent/>}
         />
-        <LoggedOutRoute
-          exact={true}
+        <Route
+          exact
           path="/login"
-          component={<LoginRegisterTabComponent isRegister={false} />}
+          component={() => <LoginRegisterTabComponent isRegister={false} />}
         />
-        <LoggedOutRoute
+        <Route
           exact
           path="/register"
-          component={<LoginRegisterTabComponent isRegister={true} />}
+          component={() => <LoginRegisterTabComponent isRegister={true} />}
         />
         <LoggedOutRoute
           exact
