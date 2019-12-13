@@ -4,4 +4,5 @@ export default interface AppState {
   loading: boolean;
   error: string;
   userInfo: UserDTO | undefined;
+  registrationEmailSent: boolean;
 }
