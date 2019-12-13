@@ -178,4 +178,19 @@ export default class Service {
 
     return err;
   }
+
+  ValidateValidationGoal(result: GoalException){
+    if (
+      result.categoryError.length !== 0 ||
+      result.currentProgressError.length !== 0 ||
+      result.descriptionError.length !== 0 ||
+      result.endDateError.length !== 0 ||
+      result.progressToReachError.length !== 0 ||
+      result.startDateError.length !== 0 ||
+      result.titleError.length !== 0
+    )
+      return false;
+
+    return true;
+  }
 }

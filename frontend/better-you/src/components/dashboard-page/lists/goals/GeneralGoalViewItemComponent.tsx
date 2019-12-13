@@ -123,21 +123,8 @@ export default class GeneralGoalViewItemComponent extends Component<
     this.setState({
       goalError: err
     });
-
-    console.log(err);
-
-    if (
-      err.categoryError.length !== 0 ||
-      err.currentProgressError.length !== 0 ||
-      err.descriptionError.length !== 0 ||
-      err.endDateError.length !== 0 ||
-      err.progressToReachError.length !== 0 ||
-      err.startDateError.length !== 0 ||
-      err.titleError.length !== 0
-    )
-      return false;
-
-    return true;
+  
+    return Service.getInstance().ValidateValidationGoal(err);
   };
 
   lighten = (color: String, procent: number) => {
@@ -172,8 +159,6 @@ export default class GeneralGoalViewItemComponent extends Component<
       blueC = "0" + blueC;
 
     var ret = "#" + redC + greenC + blueC;
-
-    console.log(color + " " + ret);
 
     return ret;
   }
@@ -242,10 +227,6 @@ export default class GeneralGoalViewItemComponent extends Component<
     const goal: Goal = this.state.goal;
     goal.startDate = new Date(Date.parse(event.target.value) + 86400000);
 
-    console.log(event.target.value);
-    console.log(goal.startDate);
-    console.log(goal);
-
     var err = this.service.validateGoal(goal).startDateError;
     var error = this.state.goalError;
     error.startDateError = err;
@@ -264,8 +245,6 @@ export default class GeneralGoalViewItemComponent extends Component<
     const goal: Goal = this.state.goal;
     goal.endDate = new Date(Date.parse(event.target.value) + 86400000);
 
-    console.log("MEgA DICKS" + event.target.value);
-
     var err = this.service.validateGoal(goal).endDateError;
     var error = this.state.goalError;
     error.endDateError = err;
@@ -279,14 +258,11 @@ export default class GeneralGoalViewItemComponent extends Component<
   };
   onChangeCurentProgress = (event: ChangeEvent<HTMLInputElement>) => {
     if (this.state.edditingIsDisabled || this.state.isDefaultGoal || isNaN(parseInt(event.target.value))) {
-      console.log('not good')
       event.target.value = this.state.goal.currentProgress.toString();
       return;
     }
     const goal: Goal = this.state.goal;
     goal.currentProgress = parseInt(event.target.value);
-
-    console.log(parseInt(event.target.value).toString());
 
     var err = this.service.validateGoal(goal).currentProgressError;
     var error = this.state.goalError;
@@ -343,16 +319,13 @@ export default class GeneralGoalViewItemComponent extends Component<
 
   onSaveChanges = () => {
     console.log("SE SALVEAZA SCHIMBARILE");
-    console.log(this.state.goal);
     if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();
   };
   onSaveAdd = () => {
     console.log("SE ADAUGA GOALUL");
-    console.log(this.state.goal);
     if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();
   };
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("DICKS V2");
     this.setState({
       showDelete: true,
       anchorEl: event.currentTarget
@@ -376,12 +349,10 @@ export default class GeneralGoalViewItemComponent extends Component<
     this.props.onFinnishAction();
   };
   onClosePopoverDelete = () => {
-    console.log("DICKS");
     this.setState({
       showDelete: false,
       anchorEl: null
     });
-    console.log(this.state.showDelete);
   };
   onDeleteHandle = () => {
     console.log("I WANT TO DELETE THIS CRAP");
