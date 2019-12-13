@@ -10,8 +10,11 @@ import LoginComponent from "./LoginComponent";
 import { Breakpoint } from "react-socks";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect, Link } from "react-router-dom";
 import RegisterComponent from "./RegisterComponent";
+import { useSelector } from "react-redux";
+import AppState from "../../redux/store/store";
+import UserDTO from "../../models/UserDTO";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -68,6 +71,13 @@ export default function LoginRegisterTabComponent(
   const classes = LoginRegisterTabStyle();
   const theme = useTheme();
   const [value, setValue] = React.useState(props.isRegister ? 1 : 0);
+  const authenticatedUser: UserDTO | undefined = useSelector(
+    (state: AppState) => state.userInfo
+  );
+  let redirect: boolean = false;
+  if (authenticatedUser) {
+    redirect = authenticatedUser.isAuthenticated;
+  }
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     if (newValue === 0) history.push("/login");
@@ -81,73 +91,81 @@ export default function LoginRegisterTabComponent(
     setValue(index);
   };
 
-  return (
-    <div className={classes.pageContainer}>
-      <Breakpoint medium up className={classes.breakpoint}>
-        <div className={classes.root}>
-          <div className={classes.authContainer}>
-            <AppBar className={classes.tabBar}>
-              <Tabs centered value={value} onChange={handleChange}>
-                <TabPane
-                  className={classes.tab}
-                  label="Login"
-                  {...a11yProps(0)}
-                />
-                <TabPane
-                  className={classes.tab}
-                  label="Register"
-                  {...a11yProps(1)}
-                />
-              </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-              <LoginComponent />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <RegisterComponent />
-            </TabPanel>
-          </div>
-        </div>
-      </Breakpoint>
-
-      <Breakpoint small down className={classes.breakpoint}>
-        <div className={classes.root}>
-          <div className={classes.authContainer}>
-            <AppBar className={classes.tabBar}>
-              <Tabs
-                variant="fullWidth"
-                centered
-                value={value}
-                onChange={handleChange}
-              >
-                <TabPane
-                  className={classes.tab}
-                  label="Login"
-                  {...a11yPropsMobile(0)}
-                />
-                <TabPane
-                  className={classes.tab}
-                  label="Register"
-                  {...a11yPropsMobile(1)}
-                />
-              </Tabs>
-            </AppBar>
-            <SwipeableViews
-              className={classes.swipeableView}
-              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-              index={value}
-              onChangeIndex={handleChangeIndex}
-            >
-              <TabPanel value={value} index={0} dir={theme.direction}>
+  if (redirect) {
+    return (
+      <div className={classes.pageContainer}>
+        <Redirect to="/dashboard" />
+      </div>
+    );
+  } else {
+    return (
+      <div className={classes.pageContainer}>
+        <Breakpoint medium up className={classes.breakpoint}>
+          <div className={classes.root}>
+            <div className={classes.authContainer}>
+              <AppBar className={classes.tabBar}>
+                <Tabs centered value={value} onChange={handleChange}>
+                  <TabPane
+                    className={classes.tab}
+                    label="Login"
+                    {...a11yProps(0)}
+                  />
+                  <TabPane
+                    className={classes.tab}
+                    label="Register"
+                    {...a11yProps(1)}
+                  />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={value} index={0}>
                 <LoginComponent />
               </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
+              <TabPanel value={value} index={1}>
                 <RegisterComponent />
               </TabPanel>
-            </SwipeableViews>
+            </div>
           </div>
-        </div>
-      </Breakpoint>
-    </div>
-  );
+        </Breakpoint>
+
+        <Breakpoint small down className={classes.breakpoint}>
+          <div className={classes.root}>
+            <div className={classes.authContainer}>
+              <AppBar className={classes.tabBar}>
+                <Tabs
+                  variant="fullWidth"
+                  centered
+                  value={value}
+                  onChange={handleChange}
+                >
+                  <TabPane
+                    className={classes.tab}
+                    label="Login"
+                    {...a11yPropsMobile(0)}
+                  />
+                  <TabPane
+                    className={classes.tab}
+                    label="Register"
+                    {...a11yPropsMobile(1)}
+                  />
+                </Tabs>
+              </AppBar>
+              <SwipeableViews
+                className={classes.swipeableView}
+                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                index={value}
+                onChangeIndex={handleChangeIndex}
+              >
+                <TabPanel value={value} index={0} dir={theme.direction}>
+                  <LoginComponent />
+                </TabPanel>
+                <TabPanel value={value} index={1} dir={theme.direction}>
+                  <RegisterComponent />
+                </TabPanel>
+              </SwipeableViews>
+            </div>
+          </div>
+        </Breakpoint>
+      </div>
+    );
+  }
 }
