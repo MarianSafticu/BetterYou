@@ -6,6 +6,8 @@ import GoalList from "../dashboard-page/lists/goals/GoalList";
 import HabitList from "../dashboard-page/lists/habits/HabitList";
 import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
 import GeneralGoalViewPopupComponent from "../dashboard-page/lists/goals/GeneralGoalViewPopupComponent";
+import Goal from "../../models/Goal";
+import { goalCategorys } from "../../models/GoalCategorys";
 
 interface TestPageComponentProps {}
 
@@ -13,6 +15,16 @@ interface TestPageComponentState {
   showGoal: boolean[]
 }
 
+var defaultGoal: Goal ={
+  id: 10,
+  category: goalCategorys[2],
+  currentProgress: 1,
+  description: "descriere default",
+  endDate: new Date(),
+  progressToReach: 100,
+  startDate: new Date(),
+  title: "title default"
+}
 
 export default class TestPageComponent extends Component<
   TestPageComponentProps,
@@ -53,6 +65,12 @@ export default class TestPageComponent extends Component<
             test add
           </Button>
           <GeneralGoalViewPopupComponent selfDistructFunction={this.handleCloseGoal} open={this.state.showGoal[0]} />
+        </div>
+        <div>
+          <Button onClick={() => { this.handleShowGoal(1); }}>
+            test default
+          </Button>
+          <GeneralGoalViewPopupComponent goal={defaultGoal} isDefaultGoal={true} selfDistructFunction={this.handleCloseGoal} open={this.state.showGoal[1]} />
         </div>
           <NewsfeedList />
         <GoalList />

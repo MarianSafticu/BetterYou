@@ -1,6 +1,6 @@
 import React, { Component, ChangeEvent } from "react";
 import "../../../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
-import { Button, TextField, Fab, Popover } from "@material-ui/core";
+import { Button, TextField, Fab, Popover, Select, FormControl, InputLabel } from "@material-ui/core";
 import Goal from "../../../../models/Goal";
 import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
@@ -9,10 +9,19 @@ import Cancel from "@material-ui/icons/Cancel";
 import Close from "@material-ui/icons/Close";
 import Service from "../../../../services/Service";
 import { GoalException } from "../../../../exceptions/GoalException";
+import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
+
+
+/*
+curent progress
+start date
+end date
+*/
 
 interface IProps {
   onFinnishAction: Function;
   goal?: Goal;
+  isDefaultGoal?: boolean
 }
 
 interface IStatus {
@@ -24,12 +33,13 @@ interface IStatus {
   textFieldVariant: "filled" | "outlined";
   showDelete: boolean;
   anchorEl: HTMLButtonElement | null;
+  isDefaultGoal: boolean
 }
 
 export default class GeneralGoalViewItemComponent extends Component<
   IProps,
   IStatus
-> {
+  > {
   service: Service;
   initialGoal: Goal = {
     title: "",
@@ -38,20 +48,21 @@ export default class GeneralGoalViewItemComponent extends Component<
     progressToReach: 1,
     startDate: new Date(),
     endDate: new Date(),
-    category: ""
+    category: goalCategorys[0]
   };
   constructor(props: IProps) {
     super(props);
     this.service = Service.getInstance();
 
     var goal: Goal = {
+      id: null,
       title: "",
       description: "",
       currentProgress: 0,
       progressToReach: 1,
       startDate: new Date(),
       endDate: new Date(),
-      category: ""
+      category: goalCategorys[0]
     };
 
     var err: GoalException = {
@@ -66,6 +77,7 @@ export default class GeneralGoalViewItemComponent extends Component<
 
     if (props.goal !== null && props.goal !== undefined) {
       this.initialGoal = {
+        id: props.goal.id,
         title: props.goal.title,
         description: props.goal.description,
         currentProgress: props.goal.currentProgress,
@@ -74,15 +86,22 @@ export default class GeneralGoalViewItemComponent extends Component<
         endDate: props.goal.endDate,
         category: props.goal.category
       };
+
+      var isDefaultGoal:boolean = false;
+      if(this.props.isDefaultGoal === null || this.props.isDefaultGoal === undefined)
+        isDefaultGoal = false;
+      else isDefaultGoal = this.props.isDefaultGoal;
+
       this.state = {
         goal: props.goal,
-        edditingIsDisabled: true,
-        isForNewGoal: false,
+        edditingIsDisabled: !isDefaultGoal,
+        isForNewGoal: isDefaultGoal,
         onSaveHandle: this.onSaveChanges,
         goalError: err,
-        textFieldVariant: "filled",
+        textFieldVariant: isDefaultGoal?"outlined":"filled",
         showDelete: false,
-        anchorEl: null
+        anchorEl: null,
+        isDefaultGoal: isDefaultGoal
       };
     } else {
       this.state = {
@@ -93,7 +112,8 @@ export default class GeneralGoalViewItemComponent extends Component<
         goalError: err,
         textFieldVariant: "outlined",
         showDelete: false,
-        anchorEl: null
+        anchorEl: null,
+        isDefaultGoal: false
       };
     }
   }
@@ -120,6 +140,44 @@ export default class GeneralGoalViewItemComponent extends Component<
     return true;
   };
 
+  lighten = (color: String, procent: number) => {
+    var red = parseInt(color[1] + color[2], 16);
+    var green = parseInt(color[3] + color[4], 16);
+    var blue = parseInt(color[5] + color[6], 16);
+
+    var med = (red + green + blue) / 3;
+    med = Math.floor(med + med * procent);
+
+    red = Math.floor(red * (1 - procent) + med * procent);
+    green = Math.floor(green * (1 - procent) + med * procent);
+    blue = Math.floor(blue * (1 - procent) + med * procent);
+
+    if (red > 255)
+      red = 255;
+    if (green > 255)
+      green = 255;
+    if (blue > 255)
+      blue = 255;
+
+
+    var redC = red.toString(16);
+    var greenC = green.toString(16);
+    var blueC = blue.toString(16);
+
+    if (redC.length == 1)
+      redC = "0" + redC;
+    if (greenC.length == 1)
+      greenC = "0" + greenC;
+    if (blueC.length == 1)
+      blueC = "0" + blueC;
+
+    var ret = "#" + redC + greenC + blueC;
+
+    console.log(color + " " + ret);
+
+    return ret;
+  }
+
   getStringFromData = (data: Date) => {
     var str = data.toLocaleDateString();
     var strs = str.split("/", 3);
@@ -136,6 +194,152 @@ export default class GeneralGoalViewItemComponent extends Component<
     var strss: string = strs[2] + "-" + strs[0] + "-" + strs[1];
     return strss;
   };
+
+  onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal) {
+      event.target.value = this.state.goal.title;
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    goal.title = event.target.value;
+
+    var err = this.service.validateGoal(goal).titleError;
+    var error = this.state.goalError;
+    error.titleError = err;
+    this.setState({
+      goalError: error
+    });
+
+    this.setState({
+      goal: goal
+    });
+  };
+
+  onChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal) {
+      event.target.value = this.state.goal.description;
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    goal.description = event.target.value;
+
+    var err = this.service.validateGoal(goal).descriptionError;
+    var error = this.state.goalError;
+    error.descriptionError = err;
+    this.setState({
+      goalError: error
+    });
+
+    this.setState({
+      goal: goal
+    });
+  };
+  onChangeDateStart = (event: ChangeEvent<HTMLInputElement>) => {
+    if (this.state.edditingIsDisabled) {
+      event.target.value = this.state.goal.startDate.toLocaleDateString();
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    goal.startDate = new Date(Date.parse(event.target.value) + 86400000);
+
+    console.log(event.target.value);
+    console.log(goal.startDate);
+    console.log(goal);
+
+    var err = this.service.validateGoal(goal).startDateError;
+    var error = this.state.goalError;
+    error.startDateError = err;
+    this.setState({
+      goalError: error
+    });
+    this.setState({
+      goal: goal
+    });
+  };
+  onChangeDateEnd = (event: ChangeEvent<HTMLInputElement>) => {
+    if (this.state.edditingIsDisabled) {
+      event.target.value = this.state.goal.endDate.toLocaleDateString();
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    goal.endDate = new Date(Date.parse(event.target.value) + 86400000);
+
+    console.log("MEgA DICKS" + event.target.value);
+
+    var err = this.service.validateGoal(goal).endDateError;
+    var error = this.state.goalError;
+    error.endDateError = err;
+    this.setState({
+      goalError: error
+    });
+
+    this.setState({
+      goal: goal
+    });
+  };
+  onChangeCurentProgress = (event: ChangeEvent<HTMLInputElement>) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal || isNaN(parseInt(event.target.value))) {
+      console.log('not good')
+      event.target.value = this.state.goal.currentProgress.toString();
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    goal.currentProgress = parseInt(event.target.value);
+
+    console.log(parseInt(event.target.value).toString());
+
+    var err = this.service.validateGoal(goal).currentProgressError;
+    var error = this.state.goalError;
+    error.currentProgressError = err;
+    this.setState({
+      goalError: error
+    });
+
+    this.setState({
+      goal: goal
+    });
+  };
+  onChangeProgressToReach = (event: ChangeEvent<HTMLInputElement>) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal || isNaN(parseInt(event.target.value))) {
+      event.target.value = this.state.goal.progressToReach.toString();
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    goal.progressToReach = parseInt(event.target.value);
+
+    var err = this.service.validateGoal(goal).progressToReachError;
+    var error = this.state.goalError;
+    error.progressToReachError = err;
+    this.setState({
+      goalError: error
+    });
+
+    this.setState({
+      goal: goal
+    });
+  };
+  onChangeCategory = (event: any) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal) {
+      event.target.value = this.state.goal.category.category;
+      return;
+    }
+    const goal: Goal = this.state.goal;
+    var category = goalCategorys.find((category) => category.category === event.target.value);
+    if (category === undefined || category === null)
+      return;
+    goal.category = category;
+
+    var err = this.service.validateGoal(goal).categoryError;
+    var error = this.state.goalError;
+    error.categoryError = err;
+
+    this.setState({
+      goalError: error,
+      goal: goal
+    });
+  };
+
+
 
   onSaveChanges = () => {
     console.log("SE SALVEAZA SCHIMBARILE");
@@ -183,126 +387,6 @@ export default class GeneralGoalViewItemComponent extends Component<
     console.log("I WANT TO DELETE THIS CRAP");
   };
 
-  onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.state.edditingIsDisabled) {
-      event.target.value = this.state.goal.title;
-      return;
-    }
-    const goal: Goal = this.state.goal;
-    goal.title = event.target.value;
-
-    var err = this.service.validateGoal(goal).titleError;
-    var error = this.state.goalError;
-    error.titleError = err;
-    this.setState({
-      goalError: error
-    });
-
-    this.setState({
-      goal: goal
-    });
-  };
-
-  onChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.state.edditingIsDisabled) {
-      event.target.value = this.state.goal.description;
-      return;
-    }
-    const goal: Goal = this.state.goal;
-    goal.description = event.target.value;
-
-    var err = this.service.validateGoal(goal).descriptionError;
-    var error = this.state.goalError;
-    error.descriptionError = err;
-    this.setState({
-      goalError: error
-    });
-
-    this.setState({
-      goal: goal
-    });
-  };
-  onChangeDateStart = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.state.edditingIsDisabled || event.target.value.length == 0) {
-      event.target.value = this.state.goal.startDate.toLocaleDateString();
-      return;
-    }
-    const goal: Goal = this.state.goal;
-    goal.startDate = new Date(Date.parse(event.target.value) + 86400000);
-
-    console.log(event.target.value);
-    console.log(goal.startDate);
-    console.log(goal);
-
-    var err = this.service.validateGoal(goal).startDateError;
-    var error = this.state.goalError;
-    error.startDateError = err;
-    this.setState({
-      goalError: error
-    });
-    this.setState({
-      goal: goal
-    });
-  };
-  onChangeDateEnd = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.state.edditingIsDisabled || event.target.value.length == 0) {
-      event.target.value = this.state.goal.endDate.toLocaleDateString();
-      return;
-    }
-    const goal: Goal = this.state.goal;
-    goal.endDate = new Date(Date.parse(event.target.value) + 86400000);
-
-    console.log("MEgA DICKS" + event.target.value);
-
-    var err = this.service.validateGoal(goal).endDateError;
-    var error = this.state.goalError;
-    error.endDateError = err;
-    this.setState({
-      goalError: error
-    });
-
-    this.setState({
-      goal: goal
-    });
-  };
-  onChangeCurentProgress = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.state.edditingIsDisabled) {
-      event.target.value = this.state.goal.currentProgress.toString();
-      return;
-    }
-    const goal: Goal = this.state.goal;
-    goal.currentProgress = parseInt(event.target.value);
-
-    var err = this.service.validateGoal(goal).currentProgressError;
-    var error = this.state.goalError;
-    error.currentProgressError = err;
-    this.setState({
-      goalError: error
-    });
-
-    this.setState({
-      goal: goal
-    });
-  };
-  onChangeProgressToReach = (event: ChangeEvent<HTMLInputElement>) => {
-    if (this.state.edditingIsDisabled) {
-      event.target.value = this.state.goal.progressToReach.toString();
-      return;
-    }
-    const goal: Goal = this.state.goal;
-    goal.progressToReach = parseInt(event.target.value);
-
-    var err = this.service.validateGoal(goal).progressToReachError;
-    var error = this.state.goalError;
-    error.progressToReachError = err;
-    this.setState({
-      goalError: error
-    });
-
-    this.setState({
-      goal: goal
-    });
-  };
   render() {
     return (
       <div className="general-goal-container">
@@ -373,7 +457,7 @@ export default class GeneralGoalViewItemComponent extends Component<
             onChange={this.onChangeTitle}
             className="general-goal-input"
             defaultValue={this.state.goal.title}
-            variant={this.state.textFieldVariant as any}
+            variant={this.state.isDefaultGoal?"filled":this.state.textFieldVariant as any}
             label="title"
             error={this.state.goalError.titleError.length != 0}
             helperText={this.state.goalError.titleError}
@@ -387,7 +471,7 @@ export default class GeneralGoalViewItemComponent extends Component<
           defaultValue={this.state.goal.description}
           rowsMax="10"
           multiline
-          variant={this.state.textFieldVariant as any}
+          variant={this.state.isDefaultGoal?"filled":this.state.textFieldVariant as any}
           error={this.state.goalError.descriptionError.length != 0}
           helperText={this.state.goalError.descriptionError}
         ></TextField>
@@ -421,13 +505,13 @@ export default class GeneralGoalViewItemComponent extends Component<
           error={this.state.goalError.endDateError.length != 0}
           helperText={this.state.goalError.endDateError}
         ></TextField>
-        {this.state.isForNewGoal === false && (
+        {(this.state.isForNewGoal === false || this.state.isDefaultGoal) &&(
           <TextField
             onChange={this.onChangeCurentProgress}
             className="general-goal-input"
             label="curent progress"
             type="number"
-            variant={this.state.textFieldVariant as any}
+            variant={this.state.isDefaultGoal?"filled":this.state.textFieldVariant as any}
             InputLabelProps={{ shrink: true }}
             defaultValue={this.state.goal.currentProgress}
             error={this.state.goalError.currentProgressError.length != 0}
@@ -439,16 +523,58 @@ export default class GeneralGoalViewItemComponent extends Component<
           className="general-goal-input"
           label="progress to reach"
           type="number"
-          variant={this.state.textFieldVariant as any}
+          variant={this.state.isDefaultGoal?"filled":this.state.textFieldVariant as any}
           InputLabelProps={{ shrink: true }}
           defaultValue={this.state.goal.progressToReach}
           error={this.state.goalError.progressToReachError.length != 0}
           helperText={this.state.goalError.progressToReachError}
         ></TextField>
+
+        {
+          !this.state.edditingIsDisabled && !this.state.isDefaultGoal
+          &&
+          <FormControl
+            variant={this.state.textFieldVariant as any}
+            className="general-goal-input">
+            <InputLabel ref={null} htmlFor="outlined-age-native-simple"
+              style={{ backgroundColor: this.state.goal.category.color }}>
+              category
+            </InputLabel>
+            <Select
+              native
+              value={this.state.goal.category.category}
+              onChange={this.onChangeCategory}
+              inputProps={{
+                name: 'string',
+                id: 'outlined-age-native-simple',
+              }}
+              labelWidth={65}
+              style={{ backgroundColor: this.state.goal.category.color }}
+            >
+              {goalCategorys.map((category) => <option value={category.category}>{category.category}</option>)}
+
+            </Select>
+          </FormControl>
+        }
+        {
+          (this.state.edditingIsDisabled || this.state.isDefaultGoal)
+          &&
+          <TextField
+            onChange={this.onChangeCategory}
+            className="general-goal-input"
+            label="category"
+            variant={this.state.isDefaultGoal?"filled":this.state.textFieldVariant as any}
+            InputLabelProps={{ shrink: true }}
+            defaultValue={this.state.goal.category.category}
+            error={this.state.goalError.categoryError.length != 0}
+            helperText={this.state.goalError.categoryError}
+            style={{ backgroundColor: this.state.goal.category.color }}
+          ></TextField>
+        }
         <br />
         <div className="general-goal-button-container">
           {this.state.isForNewGoal === false && (
-            <Fab
+            <Button
               size="small"
               className="general-goal-button"
               disabled={this.state.edditingIsDisabled}
@@ -456,10 +582,10 @@ export default class GeneralGoalViewItemComponent extends Component<
                 this.onCancelHangler();
               }}
             >
-              <Cancel />
-            </Fab>
+              Cancel
+            </Button>
           )}
-          <Fab
+          <Button
             size="small"
             className="general-goal-button"
             disabled={this.state.edditingIsDisabled}
@@ -467,8 +593,8 @@ export default class GeneralGoalViewItemComponent extends Component<
               this.state.onSaveHandle();
             }}
           >
-            <Save />
-          </Fab>
+            Save
+          </Button>
         </div>
       </div>
     );

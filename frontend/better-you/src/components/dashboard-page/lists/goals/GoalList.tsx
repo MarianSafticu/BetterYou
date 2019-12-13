@@ -2,6 +2,7 @@ import React from "react";
 import GoalCard from "./GoalCard";
 import Goal from "../../../../models/Goal";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
+import { goalCategorys } from "../../../../models/GoalCategorys";
 
 const goalsList: Goal[] = [
   {
@@ -11,7 +12,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 11 carti",
@@ -20,7 +21,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 12 carti",
@@ -29,7 +30,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 13 carti",
@@ -38,7 +39,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 14 carti",
@@ -47,7 +48,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 15 carti",
@@ -56,7 +57,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 16 carti",
@@ -65,7 +66,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   },
   {
     title: "Citeste 17 carti",
@@ -74,7 +75,7 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: "DICKS"
+    category: goalCategorys[0]
   }
 ];
 
