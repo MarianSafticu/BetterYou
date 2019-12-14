@@ -21,6 +21,7 @@ interface IProps {
   open: boolean;
   goal?: Goal;
   selfDistructFunction?: Function;
+  isDefaultGoal?: boolean;
 }
 
 export default function GeneratGoalPopupComponent(props: IProps) {
@@ -53,6 +54,7 @@ export default function GeneratGoalPopupComponent(props: IProps) {
           <GeneralGoalViewItemComponent
             onFinnishAction={handleClose}
             goal={props.goal}
+            isDefaultGoal={props.isDefaultGoal}
           />
         </div>
       </Popover>

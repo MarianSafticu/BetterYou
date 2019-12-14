@@ -9,6 +9,7 @@ import RegisterRequest from "../models/requests/RegisterRequest";
 import Goal from "../models/Goal";
 import { GoalException } from "../exceptions/GoalException";
 import { GoalErrorMessages } from "../messages/GoalMessages";
+import { goalCategorys, GoalCategory } from "../models/GoalCategorys";
 
 export default class Service {
   private static instance: Service;
@@ -172,6 +173,24 @@ export default class Service {
       err.startDateError += messages.STARTING_DATE_AFTER_ENDING;
     }
 
+    if(goalCategorys.find((category:GoalCategory) => category.category === goal.category.category) === undefined)
+      err.categoryError += messages.NOT_EXISTING_CATEGORY;
+
     return err;
+  }
+
+  ValidateValidationGoal(result: GoalException){
+    if (
+      result.categoryError.length !== 0 ||
+      result.currentProgressError.length !== 0 ||
+      result.descriptionError.length !== 0 ||
+      result.endDateError.length !== 0 ||
+      result.progressToReachError.length !== 0 ||
+      result.startDateError.length !== 0 ||
+      result.titleError.length !== 0
+    )
+      return false;
+
+    return true;
   }
 }
