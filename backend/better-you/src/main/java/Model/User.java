@@ -3,18 +3,11 @@ package Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import utils.AppUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
-import javax.persistence.Entity;
-import javax.persistence.GenerationType;
-import javax.persistence.FetchType;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -46,11 +39,20 @@ public class User implements HasId<Long> {
     @Column(name = "confirmCode")
     private String confirmCode;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Goal> goals;
+    @Column(name = "points")
+    private long points;
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Set<User_Goal> goals;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Habit> habits;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<User> friends;
 
     public User() {
     }
@@ -141,9 +143,19 @@ public class User implements HasId<Long> {
         return confirmCode;
     }
 
+    public Set<User_Goal> getGG(){
+        return goals;
+    }
+
     @JsonIgnore
     public Set<Goal> getGoals() {
-        return goals;
+        return this.goals.stream()
+                .map(User_Goal::getGoal)
+                .collect(Collectors.toSet());
+    }
+    @JsonIgnore
+    public Set<User> getFriends(){
+        return this.friends;
     }
 
     @JsonIgnore
@@ -158,5 +170,13 @@ public class User implements HasId<Long> {
     @Override
     public String toString() {
         return "<User id=\"" + id + "\" email=\"" + email + "\">";
+    }
+
+    public long getPoints() {
+        return points;
+    }
+
+    public void setPoints(long points) {
+        this.points = points;
     }
 }

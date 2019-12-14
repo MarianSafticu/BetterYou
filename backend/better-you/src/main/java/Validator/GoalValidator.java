@@ -32,10 +32,10 @@ public class GoalValidator {
         StringBuilder errorsStringBuilder = new StringBuilder();
         validateTitle(goal.getTitle(),errorsStringBuilder);
         validateDescription(goal.getDescription(),errorsStringBuilder);
-        validatecurrentProgress(goal.getCurrentProgress(),goal.getProgressToReach(),errorsStringBuilder);
+        //validatecurrentProgress(goal.getCurrentProgress(),goal.getProgressToReach(),errorsStringBuilder);
         validateprogressToReach(goal.getProgressToReach(),errorsStringBuilder);
-        validateStartDate(goal.getStartDate(),errorsStringBuilder);
-        validateEndDate(goal.getEndDate(),goal.getStartDate(),errorsStringBuilder);
+        //validateStartDate(goal.getStartDate(),errorsStringBuilder);
+        //validateEndDate(goal.getEndDate(),goal.getStartDate(),errorsStringBuilder);
         validateCategory(goal.getCategory(),errorsStringBuilder);
 
         String errors = errorsStringBuilder.toString();

@@ -1,18 +1,12 @@
 package Model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.minidev.json.annotate.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Entity;
-import javax.persistence.GenerationType;
-import java.time.LocalDate;
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -29,47 +23,28 @@ public class Goal implements HasId<Long> {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "currentProgress")
-    private int currentProgress;
-
     @Column(name = "progressToReach")
     private int progressToReach;
-
-    @Column(name = "StartDate")
-    private LocalDate startDate;
-
-    @Column(name = "EndDate")
-    private LocalDate endDate;
 
     @Column(name = "category")
     private Category category;
 
-    @Column(name = "isPublic")
-    private boolean isPublic;
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Set<User_Goal> users;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "userID")
-    private User user;
-
-    public Goal() {
-    }
+    public Goal() {}
 
     public Goal(String title,
                 String description,
-                int currentProgress,
                 int progressToReach,
-                LocalDate startDate,
-                LocalDate endDate,
-                Category category,
-                boolean isPublic) {
+                Category category) {
         this.title = title;
         this.description = description;
-        this.currentProgress = currentProgress;
         this.progressToReach = progressToReach;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.category = category;
-        this.isPublic = isPublic;
     }
 
     public Long getId() {
@@ -96,14 +71,6 @@ public class Goal implements HasId<Long> {
         this.description = description;
     }
 
-    public int getCurrentProgress() {
-        return currentProgress;
-    }
-
-    public void setCurrentProgress(int currentProgress) {
-        this.currentProgress = currentProgress;
-    }
-
     public int getProgressToReach() {
         return progressToReach;
     }
@@ -112,37 +79,13 @@ public class Goal implements HasId<Long> {
         this.progressToReach = progressToReach;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
-    }
-
     @JsonIgnore
-    public User getUser() {
-        return user;
+    public Set<User> getAllUsers() {
+        return users.stream().map(User_Goal::getUser).collect(Collectors.toSet());
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(Set<User_Goal> users) {
+        this.users = users;
     }
 
     public Category getCategory() {
@@ -155,7 +98,8 @@ public class Goal implements HasId<Long> {
 
     @Override
     public String toString() {
-        return "<Goal id=\"" + id + "\" title=\"" + title + "\" userId=" + (user == null ? "null" : user.getId()) + ">";
+//        return "";
+        return "<Goal id=\"" + id + "\" title=\"" + title + ">";
     }
 
     @Override
