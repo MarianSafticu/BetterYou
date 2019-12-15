@@ -1,6 +1,7 @@
 package Repository;
 
 import Model.User;
+import Model.User_Goal;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,6 +14,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -76,4 +80,79 @@ public class UserRepo extends AbstractRepo<Long, User> {
             return usersFound.compareTo(BigInteger.ZERO) == 0;
         }
     }
+    /**
+     * Set 2 users as friends.
+     *
+     * @param u1 the first user
+     * @param u2 the second user
+     * @throws RepoException in case a user does not exist in database
+     */
+    public void setFriends(User u1, User u2) throws RepoException {
+        u1.getFriends().add(u2);
+        u2.getFriends().add(u1);
+        update(u1.getId(), u1);
+        update(u2.getId(), u2);
+    }
+
+    /**
+     * Remove friendship between 2 users.
+     *
+     * @param u1 the first user
+     * @param u2 the second user
+     * @throws RepoException in case a user does not exist in database
+     */
+    public void removeFriends(User u1, User u2) throws RepoException {
+        u1.getFriends().remove(u2);
+        u2.getFriends().remove(u1);
+        update(u1.getId(), u1);
+        update(u2.getId(), u2);
+    }
+
+
+    /**
+     * updates a goal info for a user
+     * if any of the parameters are null then that fields won't be updated
+     * @param user_id the id of the user
+     * @param goal_id the id of the goal
+     * @param currentProgress new progress for the goal
+     * @param end new end date for the goal
+     * @param isPublic visibility of the goal for the user
+     * @throws RepoException if the goal does not exist in database or the user does't have the goal
+     */
+    public void updateGoalUser(Long user_id, Long goal_id, LocalDate end, Boolean isPublic, Integer currentProgress) throws RepoException {
+        User u = get(user_id);
+        List<User_Goal> uglist = u.getGG().stream().filter( (User_Goal x) -> x.getGoal().getId() == goal_id).collect(Collectors.toList());
+        if(uglist.isEmpty()){
+            throw new RepoException("The user doesn't have the goal or the goal is not in the database\n");
+        }
+        User_Goal ug = uglist.get(0);
+        if(currentProgress != null){
+            ug.setCurrentProgress(currentProgress);
+        }
+        if(end != null){
+            ug.setEndDate(end);
+        }
+        if(isPublic != null){
+            ug.setPublic(isPublic);
+        }
+        Session s = sessionFactory.openSession();
+        Transaction tx = s.beginTransaction();
+        try {
+            s.update(ug);
+            tx.commit();
+        } finally {
+            s.close();
+        }
+    }
+    public void removeGoalUser(Long user_id, long goal_id) throws RepoException {
+        User u = get(user_id);
+        List<User_Goal> uglist = u.getGG().stream().filter( (User_Goal x) -> x.getGoal().getId() == goal_id).collect(Collectors.toList());
+        if(uglist.isEmpty()){
+            throw new RepoException("The goal does not exist for the user\n");
+        }
+        u.getGG().remove(uglist.get(0));
+        update(user_id,u);
+    }
+
 }
+

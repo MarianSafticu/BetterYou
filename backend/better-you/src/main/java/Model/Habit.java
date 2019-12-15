@@ -39,12 +39,19 @@ public class Habit implements HasId<Long> {
     @Column(name = "category")
     private Category category;
 
+    @Column(name = "bestStreak")
+    private int bestStreak;
+
+    @Column(name = "currentStreak")
+    private int currentStreak;
+
     @ElementCollection
     private List<LocalDate> dates;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "userID")
     private User user;
+
 
     public Habit() {
     }
@@ -141,5 +148,21 @@ public class Habit implements HasId<Long> {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public int getBestStreak() {
+        return bestStreak;
+    }
+
+    public void setBestStreak(int bestStreak) {
+        this.bestStreak = bestStreak;
+    }
+
+    public int getCurrentStreak() {
+        return currentStreak;
+    }
+
+    public void setCurrentStreak(int currentStreak) {
+        this.currentStreak = currentStreak;
     }
 }

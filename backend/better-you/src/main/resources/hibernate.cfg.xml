@@ -14,14 +14,17 @@
 
         <property name = "hibernate.connection.url">
             jdbc:postgresql://better-you-db.cggixv6cscjm.us-east-1.rds.amazonaws.com:5432/betterYouDB
+<!--            jdbc:postgresql://localhost:5432/PC-->
         </property>
 
         <property name = "hibernate.connection.username">
-            betteryoudb
+<!--            postgres-->
+                        betteryoudb
         </property>
 
         <property name = "hibernate.connection.password">
             qdyXxneJB3tt3ryoubb8Nsr5w
+<!--            toor-->
         </property>
         <property name="hbm2ddl.auto">update</property>
 <!--        <property name="show_sql">true</property>-->
@@ -30,6 +33,7 @@
         <mapping class="Model.Goal"/>
         <mapping class="Model.Habit"/>
         <mapping class="Model.RegistrationLink"/>
+        <mapping class="Model.User_Goal"/>
 
 
     </session-factory>

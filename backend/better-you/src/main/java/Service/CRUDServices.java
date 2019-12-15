@@ -189,7 +189,7 @@ public class CRUDServices {
             throw new ServiceException("There is no user with id " + userId);
         }
 
-        goal.setUser(goalOwner);
+        //goal.setUser(goalOwner);
 
         try {
             goalRepo.add(goal);
@@ -217,13 +217,13 @@ public class CRUDServices {
             throw new ServiceException("No goal found with given id");
         }
 
-        User owner = originalGoal.getUser();
-        if (owner.getId() != userId) {
-            LOG.info("Goal {} is not owned by user with id {}", goal, userId);
-            throw new ServiceException("Goal not owned by the user!");
-        }
+//        User owner = originalGoal.getUser();
+//        if (owner.getId() != userId) {
+//            LOG.info("Goal {} is not owned by user with id {}", goal, userId);
+//            throw new ServiceException("Goal not owned by the user!");
+//        }
 
-        goal.setUser(owner);
+//        goal.setUser(owner);
         try {
             goalRepo.update(goalId, goal);
             LOG.info("Successfully updated goal {}", goal);
@@ -248,10 +248,10 @@ public class CRUDServices {
             throw new ServiceException("No goal found with the provided id");
         }
 
-        if (originalGoal.getUser().getId() != userId) {
-            LOG.info("Goal {} is not owned by user with id {}", goalId, userId);
-            throw new ServiceException("Goal not owned by the user!");
-        }
+        //if (originalGoal.getUser().getId() != userId) {
+        //    LOG.info("Goal {} is not owned by user with id {}", goalId, userId);
+        //    throw new ServiceException("Goal not owned by the user!");
+        //}
 
         try {
             goalRepo.delete(goalId);
