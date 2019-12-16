@@ -8,11 +8,13 @@ import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
 import GeneralGoalViewPopupComponent from "../dashboard-page/lists/goals/GeneralGoalViewPopupComponent";
 import Goal from "../../models/Goal";
 import { goalCategorys } from "../../models/GoalCategorys";
+import GeneralHabitViewPopupComponent from "../dashboard-page/lists/habits/GeneralHabitViewPopupComponent";
 
 interface TestPageComponentProps {}
 
 interface TestPageComponentState {
   showGoal: boolean[]
+  showHabit: boolean[]
 }
 
 var defaultGoal: Goal ={
@@ -33,7 +35,8 @@ export default class TestPageComponent extends Component<
   constructor(props: TestPageComponentProps) {
     super(props);
     this.state = {
-      showGoal: []
+      showGoal: [],
+      showHabit: []
     }
   }
 
@@ -57,6 +60,26 @@ export default class TestPageComponent extends Component<
     });
   }
 
+  handleShowHabit = (index: number) => {
+    const aux = this.state.showHabit.map(l => Object.assign({}, l));
+    for (var i = 0; i < aux.length; i++) {
+      aux[i] = false;
+    }
+    aux[index] = true;
+    this.setState({
+      showHabit: aux
+    });
+  }
+  handleCloseHabit = () => {
+    const aux = this.state.showHabit.map(l => Object.assign({}, l));
+    for (var i = 0; i < aux.length; i++) {
+      aux[i] = false;
+    }
+    this.setState({
+      showHabit: aux
+    });
+  }
+
   render() {
     return (
       <div>
@@ -71,6 +94,12 @@ export default class TestPageComponent extends Component<
             test default
           </Button>
           <GeneralGoalViewPopupComponent goal={defaultGoal} isDefaultGoal={true} selfDistructFunction={this.handleCloseGoal} open={this.state.showGoal[1]} />
+        </div>
+        <div>
+          <Button onClick={() => { this.handleShowHabit(0); }}>
+            Test add habit
+          </Button>
+          <GeneralHabitViewPopupComponent selfDistructFunction={this.handleCloseHabit} open={this.state.showHabit[0]} />
         </div>
           <NewsfeedList />
         <GoalList />

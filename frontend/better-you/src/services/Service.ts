@@ -10,6 +10,9 @@ import Goal from "../models/Goal";
 import { GoalException } from "../exceptions/GoalException";
 import { GoalErrorMessages } from "../messages/GoalMessages";
 import { goalCategorys, GoalCategory } from "../models/GoalCategorys";
+import Habit from "../models/Habit";
+import { HabitException } from "../exceptions/HabitException";
+import { HabitErrorMessages } from "../messages/HabitMessages";
 
 export default class Service {
   private static instance: Service;
@@ -188,6 +191,37 @@ export default class Service {
       result.progressToReachError.length !== 0 ||
       result.startDateError.length !== 0 ||
       result.titleError.length !== 0
+    )
+      return false;
+
+    return true;
+  }
+
+  validateHabit(habit: Habit): HabitException{
+    let err: HabitException = {
+      titleError: "",
+      descriptionError: "",
+      startDateError: "",
+      categoryError: ""
+    }
+
+    let messages = HabitErrorMessages;
+    if(habit.title.length < 3)
+      err.titleError += messages.TITLE_TOO_SHORT;
+    if(habit.description.length < 3)
+      err.descriptionError += messages.DESCRIPTION_TOO_SHORT;
+    if(goalCategorys.find((category:GoalCategory) => category.category === habit.category.category) === undefined)
+      err.categoryError += messages.NOT_EXISTING_CATEGORY;
+
+    return err;
+  }
+
+  ValidateValidationHabit(result: HabitException){
+    if (
+      result.titleError.length !== 0  ||
+      result.descriptionError.length !== 0 ||
+      result.startDateError.length !== 0 ||
+      result.categoryError.length !== 0
     )
       return false;
 
