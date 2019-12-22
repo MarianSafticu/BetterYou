@@ -230,10 +230,75 @@ public class RestServer {
      * @return true if the goal can be deleted else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestBody DeleteGoalRequest deleteGoalRequest) {
+    public ResponseEntity<?> deleteGoal(@RequestBody DeleteGoalRequest deleteGoalRequest) {
         try {
             long userId = authService.getUserIdFromJWT(deleteGoalRequest.getToken());
             crudServices.deleteGoal(deleteGoalRequest.getGoal().getId(), userId);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a habit and return true if the habit can be added or an error
+     * message
+     *
+     * @param habitRequest- a JSON with an token and a goal
+     * @return true if the goal can be added else an error message
+     */
+    @RequestMapping(value = "/habit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addGoal(@RequestBody HabitRequest habitRequest) {
+        try {
+            validationService.validateHabit(habitRequest.getHabit());
+            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            crudServices.addHabit(habitRequest.getHabit(),userId);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a habit and return true if the goal can be updated or an error
+     * message
+     *
+     * @param habitRequest- a JSON with an token and a habit
+     * @return true if the habit can be updated else an error message
+     */
+    @RequestMapping(value = "/habit", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateHabit(@RequestBody HabitRequest habitRequest) {
+        try {
+            validationService.validateHabit(habitRequest.getHabit());
+            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            crudServices.updateHabit(habitRequest.getHabit(), userId);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a habit and return true if the goal can be deleted or an error
+     * message
+     *
+     * @param habitRequest- a JSON with an token and a habit
+     * @return true if the habit can be deleted else an error message
+     */
+    @RequestMapping(value = "/habit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> dalatwHabit(@RequestBody HabitRequest habitRequest) {
+        try {
+            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            crudServices.deleteHabit(habitRequest.getHabit(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);

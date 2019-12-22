@@ -290,4 +290,18 @@ public class CRUDServices {
             throw new ServiceException(errors);
         }
     }
+
+
+    public void addHabit(final Habit habit,final long userID){
+        return;
+    }
+
+    public void updateHabit(final Habit habit,final long userID){
+        return;
+    }
+
+    public void deleteHabit(final Habit habit,final long userID){
+        return;
+    }
+
 }
