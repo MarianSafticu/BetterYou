@@ -46,7 +46,7 @@ public class User implements HasId<Long> {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
-    private Set<User_Goal> goals;
+    private Set<UserGoal> goals;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Habit> habits;
@@ -143,14 +143,14 @@ public class User implements HasId<Long> {
         return confirmCode;
     }
 
-    public Set<User_Goal> getGG(){
+    public Set<UserGoal> getGG(){
         return goals;
     }
 
     @JsonIgnore
     public Set<Goal> getGoals() {
         return this.goals.stream()
-                .map(User_Goal::getGoal)
+                .map(UserGoal::getGoal)
                 .collect(Collectors.toSet());
     }
     @JsonIgnore

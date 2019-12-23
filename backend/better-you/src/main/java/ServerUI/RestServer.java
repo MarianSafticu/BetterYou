@@ -190,7 +190,7 @@ public class RestServer {
         try {
             validationService.validateGoal(postGoalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(postGoalRequest.getToken());
-            crudServices.addGoal(postGoalRequest.getGoal(), userId);
+//            crudServices.addGoal(postGoalRequest.getGoal(), userId); MODIFICARE
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -212,7 +212,7 @@ public class RestServer {
         try {
             validationService.validateGoal(putGoalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(putGoalRequest.getToken());
-            crudServices.updateGoal(putGoalRequest.getGoal(), userId);
+//            crudServices.updateGoal(putGoalRequest.getGoal(), userId); MODIFICARE
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -233,7 +233,7 @@ public class RestServer {
     public ResponseEntity<?> addGoal(@RequestBody DeleteGoalRequest deleteGoalRequest) {
         try {
             long userId = authService.getUserIdFromJWT(deleteGoalRequest.getToken());
-            crudServices.deleteGoal(deleteGoalRequest.getGoal().getId(), userId);
+//            crudServices.deleteGoal(deleteGoalRequest.getGoal().getId(), userId); MODIFICARE
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);

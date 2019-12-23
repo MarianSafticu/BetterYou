@@ -3,18 +3,19 @@ package Model;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+
 @Entity
 @Table(name = "USER_GOAL")
-public class User_Goal {
+public class UserGoal implements HasId<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long Id;
+    private long id;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "goal_id")
     private Goal goal;
 
@@ -36,9 +37,10 @@ public class User_Goal {
     @Column(name = "downvotes")
     private int downvotes;
 
-    public User_Goal(){};
+    public UserGoal() {
+    }
 
-    public User_Goal(User user, Goal goal, int currentProgress, boolean isPublic, LocalDate startDate, LocalDate endDate) {
+    public UserGoal(User user, Goal goal, int currentProgress, boolean isPublic, LocalDate startDate, LocalDate endDate) {
         this.user = user;
         this.goal = goal;
         this.currentProgress = currentProgress;
@@ -47,19 +49,24 @@ public class User_Goal {
         this.endDate = endDate;
     }
 
-    public User_Goal(int currentProgress, boolean isPublic, LocalDate startDate, LocalDate endDate) {
+    public UserGoal(int currentProgress, boolean isPublic, LocalDate startDate, LocalDate endDate) {
         this.currentProgress = currentProgress;
         this.isPublic = isPublic;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public long getId() {
-        return Id;
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public User getUser() {

@@ -5,16 +5,19 @@ import Model.Goal;
 import Model.Habit;
 import Model.RegistrationLink;
 import Model.User;
+import Model.UserGoal;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
+import Repository.UserGoalRepo;
 import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,21 +33,25 @@ public class CRUDServices {
     private final UserRepo userRepo;
     private final HabitsRepo habitsRepo;
     private final GoalRepo goalRepo;
+    private final UserGoalRepo userGoalRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
 
     /**
      * @param userRepo             repository for {@link User}
      * @param habitsRepo           repository for {@link Habit}
      * @param goalRepo             repository for {@link Goal}
+     * @param userGoalRepo         repository for {@link UserGoal}
      * @param registrationLinkRepo repository for {@link RegistrationLink}
      */
     public CRUDServices(final UserRepo userRepo,
                         final HabitsRepo habitsRepo,
                         final GoalRepo goalRepo,
+                        final UserGoalRepo userGoalRepo,
                         final RegistrationLinkRepo registrationLinkRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
+        this.userGoalRepo = userGoalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
     }
 
@@ -174,13 +181,13 @@ public class CRUDServices {
     }
 
     /**
-     * Adds a new goal for an user
+     * Adds a new user goal for an user
      *
      * @param goal   the new goal to be added
      * @param userId the owner's id of the goal (i.e. the user who owns the goal)
      * @throws ServiceException if any error occurs while saving the goal
      */
-    public void addGoal(final Goal goal, final long userId) {
+    public void addGoal(final Goal goal, final boolean isPublic, final LocalDate endDate, final long userId) {
         LOG.info("Adding goal {} for user with id {}", goal, userId);
         User goalOwner = userRepo.get(userId);
 
@@ -189,10 +196,9 @@ public class CRUDServices {
             throw new ServiceException("There is no user with id " + userId);
         }
 
-        //goal.setUser(goalOwner);
-
         try {
             goalRepo.add(goal);
+            goalRepo.addUser(goalOwner, goal, isPublic, endDate);
             LOG.info("Successfully saved goal to repo");
         } catch (RepoException e) {
             LOG.error("Error occurred while adding goal to repo: {}", e.getMessage());
@@ -201,32 +207,32 @@ public class CRUDServices {
     }
 
     /**
-     * Updates a goal.
+     * Updates an user goal.
      *
-     * @param goal   the goal to be updated
+     * @param userGoal   the userGoal to be updated
      * @param userId the id of the user who owns the goal
      * @throws ServiceException if any error occurs while updating the goal
      */
-    public void updateGoal(final Goal goal, final long userId) {
-        long goalId = goal.getId();
+    public void updateUserGoal(final UserGoal userGoal, final long userId) {
+        long goalId = userGoal.getId();
         LOG.info("Updating goal with id {} for user with id {}", goalId, userId);
-        Goal originalGoal = goalRepo.get(goalId);
+        UserGoal originalUserGoal = userGoalRepo.get(goalId);
 
-        if (originalGoal == null) {
+        if (originalUserGoal == null) {
             LOG.warn("No goal was found with id {}", goalId);
             throw new ServiceException("No goal found with given id");
         }
 
-//        User owner = originalGoal.getUser();
-//        if (owner.getId() != userId) {
-//            LOG.info("Goal {} is not owned by user with id {}", goal, userId);
-//            throw new ServiceException("Goal not owned by the user!");
-//        }
+        User owner = originalUserGoal.getUser();
+        if (owner.getId() != userId) {
+            LOG.info("Goal {} is not owned by user with id {}", userGoal, userId);
+            throw new ServiceException("Goal not owned by the user!");
+        }
 
-//        goal.setUser(owner);
+        userGoal.setUser(owner);
         try {
-            goalRepo.update(goalId, goal);
-            LOG.info("Successfully updated goal {}", goal);
+            userGoalRepo.update(goalId, userGoal);
+            LOG.info("Successfully updated goal {}", userGoal);
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while updating goal in repo");
@@ -236,26 +242,26 @@ public class CRUDServices {
     /**
      * Deletes a goal.
      *
-     * @param goalId the goal's to be deleted id
+     * @param userGoalId the user goal's to be deleted id
      * @param userId the goal owner's id
      */
-    public void deleteGoal(final long goalId, final long userId) {
-        LOG.info("Deleting goal with id {}", goalId);
-        Goal originalGoal = goalRepo.get(goalId);
+    public void deleteUserGoal(final long userGoalId, final long userId) {
+        LOG.info("Deleting goal with id {}", userGoalId);
+        UserGoal originalGoal = userGoalRepo.get(userGoalId);
 
         if (originalGoal == null) {
-            LOG.warn("No goal found for id {}", goalId);
+            LOG.warn("No goal found for id {}", userGoalId);
             throw new ServiceException("No goal found with the provided id");
         }
 
-        //if (originalGoal.getUser().getId() != userId) {
-        //    LOG.info("Goal {} is not owned by user with id {}", goalId, userId);
-        //    throw new ServiceException("Goal not owned by the user!");
-        //}
+        if (originalGoal.getUser().getId() != userId) {
+            LOG.info("Goal {} is not owned by user with id {}", userGoalId, userId);
+            throw new ServiceException("Goal not owned by the user!");
+        }
 
         try {
-            goalRepo.delete(goalId);
-            LOG.info("Successfully updated goal {}", goalId);
+            userGoalRepo.delete(userGoalId);
+            LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while deleting goal in repo");

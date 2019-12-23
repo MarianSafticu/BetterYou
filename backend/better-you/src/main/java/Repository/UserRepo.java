@@ -1,7 +1,7 @@
 package Repository;
 
 import Model.User;
-import Model.User_Goal;
+import Model.UserGoal;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -121,11 +121,11 @@ public class UserRepo extends AbstractRepo<Long, User> {
      */
     public void updateGoalUser(Long user_id, Long goal_id, LocalDate end, Boolean isPublic, Integer currentProgress) throws RepoException {
         User u = get(user_id);
-        List<User_Goal> uglist = u.getGG().stream().filter( (User_Goal x) -> x.getGoal().getId() == goal_id).collect(Collectors.toList());
+        List<UserGoal> uglist = u.getGG().stream().filter( (UserGoal x) -> x.getGoal().getId() == goal_id).collect(Collectors.toList());
         if(uglist.isEmpty()){
             throw new RepoException("The user doesn't have the goal or the goal is not in the database\n");
         }
-        User_Goal ug = uglist.get(0);
+        UserGoal ug = uglist.get(0);
         if(currentProgress != null){
             ug.setCurrentProgress(currentProgress);
         }
@@ -146,7 +146,7 @@ public class UserRepo extends AbstractRepo<Long, User> {
     }
     public void removeGoalUser(Long user_id, long goal_id) throws RepoException {
         User u = get(user_id);
-        List<User_Goal> uglist = u.getGG().stream().filter( (User_Goal x) -> x.getGoal().getId() == goal_id).collect(Collectors.toList());
+        List<UserGoal> uglist = u.getGG().stream().filter( (UserGoal x) -> x.getGoal().getId() == goal_id).collect(Collectors.toList());
         if(uglist.isEmpty()){
             throw new RepoException("The goal does not exist for the user\n");
         }

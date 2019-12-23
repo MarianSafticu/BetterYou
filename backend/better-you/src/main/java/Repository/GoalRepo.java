@@ -2,7 +2,7 @@ package Repository;
 
 import Model.Goal;
 import Model.User;
-import Model.User_Goal;
+import Model.UserGoal;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -40,7 +40,7 @@ public class GoalRepo extends AbstractRepo<Long, Goal> {
             if (get(goal.getId()) == null) {
                 s.save(goal);
             }
-            User_Goal ug = new User_Goal(user, goal, 0, isPublic, LocalDate.now(), endDate);
+            UserGoal ug = new UserGoal(user, goal, 0, isPublic, LocalDate.now(), endDate);
             ug.setUpvotes(1);
 
             s.save(ug);
