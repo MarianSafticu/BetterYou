@@ -6,11 +6,13 @@ import {
   UNSET_CURRENT_USER,
   REGISTER_USER_BEGIN,
   REGISTER_USER_SUCCESS,
-  REGISTER_USER_ERROR
+  REGISTER_USER_ERROR,
+  SET_APPBAR_SWIPEABLEDRAWER
 } from "./types";
 import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import RegisterRequest from "../../models/requests/RegisterRequest";
+import { RefObject } from "react";
 
 export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
@@ -57,4 +59,11 @@ export function registerUserError(error: string): AppActionType {
     type: REGISTER_USER_ERROR,
     payload: error
   }
+}
+
+export function setAppBarSwipeableDrawer(refObj: RefObject<any> | null): AppActionType {
+  return {
+    type: SET_APPBAR_SWIPEABLEDRAWER,
+    payload: refObj
+  };
 }

@@ -2,6 +2,7 @@ import AppState from "../store/store";
 import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import { deleteCookie } from "../../services/CookieService";
+import { RefObject } from "react";
 
 export function setCurrentUserBeginHandler(
   oldState: AppState,
@@ -70,5 +71,14 @@ export function registerUserErrorHandler(
   newState.loading = false;
   newState.error = error;
   newState.registrationEmailSent = false;
+  return newState;
+}
+
+export function setAppBarSwipeableDrawerHandler(
+oldState: AppState,
+refObj: RefObject<unknown> | null
+):AppState {
+  const newState = { ...oldState };
+  newState.appBarSwipeableDrawer = refObj;
   return newState;
 }

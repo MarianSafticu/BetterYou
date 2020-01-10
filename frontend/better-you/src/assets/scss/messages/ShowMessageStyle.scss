@@ -27,7 +27,7 @@
   border-radius: 25px;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width:  #{$mobile_witdh_threshold}) {
   .message-container {
     width: 100%;
     //padding-top: 50px;
