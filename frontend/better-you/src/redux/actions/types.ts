@@ -2,6 +2,7 @@ import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import RegisterRequest from "../../models/requests/RegisterRequest";
 import { RefObject } from "react";
+import AppBarItem from "../../models/AppBarItem";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -14,6 +15,7 @@ export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
 export const REGISTER_USER_ERROR = "REGISTER_USER_ERROR";
 
 export const SET_APPBAR_SWIPEABLEDRAWER = "SET_APPBAR_SWIPEABLEDRAWER";
+export const SET_APPBAR_ITEMSLISTS = "SET_APPBAR_ITEMSLISTS";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -53,6 +55,11 @@ export interface SetAppBarSwipeableDrawer {
   payload: RefObject<any> | null;
 }
 
+export interface SetAppBarItemsList {
+  type: typeof SET_APPBAR_ITEMSLISTS;
+  payload: AppBarItem[];
+}
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -61,4 +68,5 @@ export type AppActionType =
   | RegisterUserBegin
   | RegisterUserSuccess
   | RegisterUserError
-  | SetAppBarSwipeableDrawer;
+  | SetAppBarSwipeableDrawer
+  | SetAppBarItemsList;

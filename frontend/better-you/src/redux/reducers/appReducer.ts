@@ -8,7 +8,8 @@ import {
   REGISTER_USER_BEGIN,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_ERROR,
-  SET_APPBAR_SWIPEABLEDRAWER
+  SET_APPBAR_SWIPEABLEDRAWER,
+  SET_APPBAR_ITEMSLISTS
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -18,7 +19,8 @@ import {
   registerUserBeginHandler,
   registerUserSuccessHandler,
   registerUserErrorHandler,
-  setAppBarSwipeableDrawerHandler
+  setAppBarSwipeableDrawerHandler,
+  setAppBarItemsListHandler
 } from "./appHandlers";
 
 export const initialState: AppState = {
@@ -26,7 +28,8 @@ export const initialState: AppState = {
   error: "",
   userInfo: undefined,
   registrationEmailSent: false,
-  appBarSwipeableDrawer: null
+  appBarSwipeableDrawer: null,
+  appBarItemsList: []
 };
 
 const appReducer = (state = initialState, action: AppActionType): AppState => {
@@ -45,8 +48,10 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return registerUserSuccessHandler(state);
     case REGISTER_USER_ERROR:
       return registerUserErrorHandler(state, action.payload);
-      case SET_APPBAR_SWIPEABLEDRAWER:
-        return setAppBarSwipeableDrawerHandler(state, action.payload);
+    case SET_APPBAR_SWIPEABLEDRAWER:
+      return setAppBarSwipeableDrawerHandler(state, action.payload);
+    case SET_APPBAR_ITEMSLISTS:
+      return setAppBarItemsListHandler(state, action.payload);
     default:
       return state;
   }

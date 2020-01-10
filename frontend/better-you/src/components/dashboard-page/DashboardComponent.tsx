@@ -9,9 +9,11 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AppState from "../../redux/store/store";
 import { connect } from "react-redux";
 import { ListItem, Divider } from "@material-ui/core";
+import AppBarItem from "../../models/AppBarItem";
+import { setAppBarItemsList } from "../../redux/actions/actions";
 
 interface IProp {
-  appBarSwipeableDrawer: RefObject<any> | null;
+  setAppBarItemsList: Function
 }
 
 interface IState {
@@ -23,7 +25,6 @@ class DashboardComponent extends Component<IProp, IState> {
   comp1: RefObject<HTMLDivElement>;
   comp2: RefObject<HTMLDivElement>;
   thisDiv: RefObject<HTMLDivElement>;
-  swithcButton: RefObject<HTMLDivElement>;
   compToShow: number;
   constructor(props: IProp) {
     super(props);
@@ -38,7 +39,6 @@ class DashboardComponent extends Component<IProp, IState> {
     this.comp1 = React.createRef();
     this.comp2 = React.createRef();
     this.thisDiv = React.createRef();
-    this.swithcButton = React.createRef();
     this.updateDimensions();
   }
 
@@ -47,21 +47,11 @@ class DashboardComponent extends Component<IProp, IState> {
     window.addEventListener("resize", this.updateDimensions);
     this.updateDimensions();
 
-    setInterval(() => {
-      if (this.swithcButton.current != null) {
-        if (this.props.appBarSwipeableDrawer == null || this.props.appBarSwipeableDrawer.current == null) {
-          this.swithcButton.current.setAttribute("hidden", "true");
-        }
-        else {
-          if (!(this.props.appBarSwipeableDrawer.current as HTMLElement).contains(this.swithcButton.current)) {
-            this.swithcButton.current.removeAttribute("hidden");
-            (this.props.appBarSwipeableDrawer.current as HTMLElement).appendChild(this.swithcButton.current);
-            /*var nod = React.createElement("Divider");
-            (this.props.appBarSwipeableDrawer.current as HTMLElement).appendChild(nod.ref?.valueOf as Node);*/
-          }
-        }
-      }
-    }, 100);
+    this.props.setAppBarItemsList([{
+      text: "Goals/Habits",
+      link: "",
+      func: this.onSwitchComponenTHandler
+    }])
   }
 
   updateDimensions() {
@@ -69,13 +59,8 @@ class DashboardComponent extends Component<IProp, IState> {
       return;
     if (this.comp2.current == null)
       return;
-    if (this.swithcButton.current == null)
-      return;
     if (this.thisDiv.current == null)
       return;
-
-    console.log(this.props.appBarSwipeableDrawer);
-    console.log(this.swithcButton);
 
     //this.compToChangeParent.current.removeAttribute("hidden");
 
@@ -108,22 +93,6 @@ class DashboardComponent extends Component<IProp, IState> {
   render() {
     return (
       <div id="wrapper" ref={this.thisDiv}>
-        <div
-          role="button"
-          className="div-link MuiListItem-root MuiListItem-gutters MuiListItem-button"
-          onClick={this.onSwitchComponenTHandler}
-          ref={this.swithcButton}>
-          {
-            this.state.compToShow % 2 !== 0
-            &&
-            <div>Goals and Habits</div>
-          }
-          {
-            this.state.compToShow % 2 === 0
-            &&
-            <div>News</div>
-          }
-        </div>
         <div className="list_component" ref={this.comp1}>
           <div id="switch_add_bar">
             <div id="switch_label">
@@ -163,7 +132,8 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    setAppBarItemsList: (list: AppBarItem[]) => dispatch(setAppBarItemsList(list))};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardComponent);
