@@ -134,10 +134,8 @@ class AppBarComponent extends Component<IProps, IState> {
                       return (
                         <div>
                           <Divider />
-                          <ListItem>
-                            <div onClick={() => { if(x.func !== null) x.func();}} className="div_to_link link">
-                              {x.text}
-                            </div>
+                          <ListItem onClick={() => { if (x.func !== null) x.func(); }} className="div_to_link link">
+                            {x.text}
                           </ListItem>
                         </div>
                       )
@@ -238,10 +236,8 @@ class AppBarComponent extends Component<IProps, IState> {
                       return (
                         <div>
                           <Divider />
-                          <ListItem>
-                            <div onClick={() => { if(x.func !== null) x.func();}} className="div_to_link link">
-                              {x.text}
-                            </div>
+                          <ListItem onClick={() => { if (x.func !== null) x.func(); }} className="div_to_link link">
+                            {x.text}
                           </ListItem>
                         </div>
                       )
