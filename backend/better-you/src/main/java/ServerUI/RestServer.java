@@ -182,15 +182,15 @@ public class RestServer {
      * This method receives a JSON with an token and a goal and return true if the goal can be added or an error
      * message
      *
-     * @param postGoalRequest- a JSON with an token and a goal
+     * @param goalRequest- a JSON with an token and a goal
      * @return true if the goal can be added else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestBody PostGoalRequest postGoalRequest) {
+    public ResponseEntity<?> addGoal(@RequestBody GoalRequest goalRequest) {
         try {
-            validationService.validateGoal(postGoalRequest.getGoal());
-            long userId = authService.getUserIdFromJWT(postGoalRequest.getToken());
-            crudServices.addGoal(postGoalRequest.getGoal(), userId);
+            validationService.validateGoal(goalRequest.getGoal());
+            long userId = authService.getUserIdFromJWT(goalRequest.getToken());
+            crudServices.addGoal(goalRequest.getGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -204,15 +204,15 @@ public class RestServer {
      * This method receives a JSON with an token and a goal and return true if the goal can be updated or an error
      * message
      *
-     * @param putGoalRequest- a JSON with an token and a goal
+     * @param goalRequest- a JSON with an token and a goal
      * @return true if the goal can be updated else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateGoal(@RequestBody PutGoalRequest putGoalRequest) {
+    public ResponseEntity<?> updateGoal(@RequestBody GoalRequest goalRequest) {
         try {
-            validationService.validateGoal(putGoalRequest.getGoal());
-            long userId = authService.getUserIdFromJWT(putGoalRequest.getToken());
-            crudServices.updateGoal(putGoalRequest.getGoal(), userId);
+            validationService.validateGoal(goalRequest.getGoal());
+            long userId = authService.getUserIdFromJWT(goalRequest.getToken());
+            crudServices.updateGoal(goalRequest.getGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -226,14 +226,79 @@ public class RestServer {
      * This method receives a JSON with an token and a goal and return true if the goal can be deleted or an error
      * message
      *
-     * @param deleteGoalRequest- a JSON with an token and a goal
+     * @param goalRequest- a JSON with an token and a goal
      * @return true if the goal can be deleted else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestBody DeleteGoalRequest deleteGoalRequest) {
+    public ResponseEntity<?> deleteGoal(@RequestBody GoalRequest goalRequest) {
         try {
-            long userId = authService.getUserIdFromJWT(deleteGoalRequest.getToken());
-            crudServices.deleteGoal(deleteGoalRequest.getGoal().getId(), userId);
+            long userId = authService.getUserIdFromJWT(goalRequest.getToken());
+            crudServices.deleteGoal(goalRequest.getGoal().getId(), userId);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a habit and return true if the habit can be added or an error
+     * message
+     *
+     * @param habitRequest- a JSON with an token and a goal
+     * @return true if the goal can be added else an error message
+     */
+    @RequestMapping(value = "/habit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addGoal(@RequestBody HabitRequest habitRequest) {
+        try {
+            validationService.validateHabit(habitRequest.getHabit());
+            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            crudServices.addHabit(habitRequest.getHabit(),userId);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a habit and return true if the goal can be updated or an error
+     * message
+     *
+     * @param habitRequest- a JSON with an token and a habit
+     * @return true if the habit can be updated else an error message
+     */
+    @RequestMapping(value = "/habit", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateHabit(@RequestBody HabitRequest habitRequest) {
+        try {
+            validationService.validateHabit(habitRequest.getHabit());
+            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            crudServices.updateHabit(habitRequest.getHabit(), userId);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a habit and return true if the goal can be deleted or an error
+     * message
+     *
+     * @param habitRequest- a JSON with an token and a habit
+     * @return true if the habit can be deleted else an error message
+     */
+    @RequestMapping(value = "/habit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deletwHabit(@RequestBody HabitRequest habitRequest) {
+        try {
+            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            crudServices.deleteHabit(habitRequest.getHabit(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
