@@ -12,7 +12,6 @@ import Repository.HabitsRepo;
 import Repository.RecoverLinkRepo;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
-import Repository.UserGoalRepo;
 import Repository.UserRepo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
