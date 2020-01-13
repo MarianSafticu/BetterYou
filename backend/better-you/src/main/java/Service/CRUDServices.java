@@ -300,18 +300,23 @@ public class CRUDServices {
     }
 
     public void updateHabit(final Habit habit, final long userId) {
+        LOG.info("Updating {} for userId={}", habit, userId);
         Habit originalHabit = habitsRepo.get(habit.getId());
 
         if (originalHabit == null) {
+            LOG.warn("No habit found for {}", habit);
             throw new ServiceException("Habit not found with the given id");
         }
 
         User owner = userRepo.get(userId);
 
         if (owner == null) {
+            LOG.warn("No user found with id={}", userId);
             throw new ServiceException("User not found");
         }
+
         if (originalHabit.getUser().getId() != userId) {
+            LOG.warn("Habit {} does not belong to userId={}", habit, userId);
             throw new ServiceException("Habit does not belong to this user");
         }
 
@@ -319,6 +324,7 @@ public class CRUDServices {
 
         try {
             habitsRepo.update(habit.getId(), habit);
+            LOG.info("Habit {} for userId={} updated successfully", habit, userId);
         } catch (RepoException e) {
             LOG.error("Repo exception occurred while updating habit: {}", e.getMessage());
             throw new ServiceException("Something went wrong while updating habit", e);

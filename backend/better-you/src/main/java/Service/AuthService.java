@@ -105,7 +105,7 @@ public class AuthService {
         String resetLink = serverAddress + "account/confirmation/request?token=" + confirmationCode;
         LOG.info("Generated confirmation code for user={} is code={}", newUser, confirmationCode);
         crudServices.addRegistrationLink(new RegistrationLink(newUserId, confirmationCode));
-        mailUtils.sendRegistrationEmail(newUser, resetLink);
+        //TODO UNCOMMENT!!! mailUtils.sendRegistrationEmail(newUser, resetLink);
         return appUtils.createJWT(String.valueOf(newUserId));
     }
 

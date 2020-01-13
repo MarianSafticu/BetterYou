@@ -5,8 +5,8 @@ usergoal1 = {
         'progressToReach': 20,
         'category': 'DEVELOPMENT',
     },
-    'isPublic': 'true',
-    'public': True,
+    'public': 'true',
+    'token': True,
     'endDate': '2020-01-01'
 }
 
