@@ -93,6 +93,7 @@ public class AuthService {
         crudServices.userDataNotUsed(newUser);
         LOG.info("User validation completed successfully");
 
+        crudServices.userDataNotUsed(newUser);
 
         LOG.info("Hashing password for new user");
         newUser.setPassword(appUtils.encode(newUser.getPassword()));
@@ -100,9 +101,35 @@ public class AuthService {
         crudServices.addUser(newUser);
 
         long newUserId = crudServices.getUserIdFromEmail(newUser.getEmail());
-        crudServices.addRegistrationLink(new RegistrationLink(newUserId, AppUtils.generateCode()));
-        mailUtils.sendRegistrationEmail(newUser, AppUtils.generateCode());
+        final String confirmationCode = AppUtils.generateCode();
+        LOG.info("Generated confirmation code for user={} is code={}", newUser, confirmationCode);
+        crudServices.addRegistrationLink(new RegistrationLink(newUserId, confirmationCode));
+        mailUtils.sendRegistrationEmail(newUser, confirmationCode);
         return appUtils.createJWT(String.valueOf(newUserId));
+    }
+
+    public void confirmRegistration(final String confirmationCode) {
+        LOG.info("Confirmation registration with code={}", confirmationCode);
+
+        final RegistrationLink registrationLink = crudServices.getRegistrationLinkByCode(confirmationCode);
+
+        if (registrationLink == null) {
+            LOG.warn("No registration found with code={}", confirmationCode);
+            throw new ServiceException("Invalid registration code");
+        }
+
+        final User user = crudServices.getUserFromId(registrationLink.getUserId());
+
+        if (user == null) {
+            LOG.warn("No user with id={} found with the from the registration link", registrationLink.getUserId());
+            throw new ServiceException("Invalid registration code");
+        }
+
+        LOG.info("Updating the user id={} to verified", user.getId());
+        user.setVerified(true);
+        crudServices.updateUser(user.getId(), user);
+        LOG.info("Deleting registration link id={} for user with id={}", registrationLink.getId(), user.getId());
+        crudServices.deleteRegistrationLink(registrationLink.getId());
     }
 
     /**

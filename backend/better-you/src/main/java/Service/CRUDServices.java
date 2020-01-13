@@ -41,7 +41,6 @@ public class CRUDServices {
      * @param userRepo             repository for {@link User}
      * @param habitsRepo           repository for {@link Habit}
      * @param goalRepo             repository for {@link Goal}
-     * @param userGoalRepo         repository for {@link UserGoal}
      * @param registrationLinkRepo repository for {@link RegistrationLink}
      */
     public CRUDServices(final UserRepo userRepo,
@@ -146,6 +145,22 @@ public class CRUDServices {
         } catch (RepoException e) {
             LOG.warn("Unable to add registration link {}: {}", registrationLink, e.getMessage());
             throw new ServiceException("Unable to save registration link.");
+        }
+    }
+
+    public RegistrationLink getRegistrationLinkByCode(final String code) {
+        LOG.info("Retrieving registration code with code={}", code);
+        return registrationLinkRepo.getByCode(code);
+    }
+
+    public void deleteRegistrationLink(Long id) {
+        LOG.info("Deleting registration link with id={}", id);
+        try {
+            registrationLinkRepo.delete(id);
+            LOG.info("Successfully deleted registration link with id={}", id);
+        } catch (RepoException e) {
+            LOG.error("Error occurred while deleting registration link with id={}", id);
+            throw new ServiceException("Unable to delete registration link");
         }
     }
 

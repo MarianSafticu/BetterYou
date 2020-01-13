@@ -21,6 +21,9 @@ public class RegistrationLink implements HasId<Long> {
     @Column(name = "link", nullable = false, unique = true)
     private String link;
 
+    public RegistrationLink() {
+    }
+
     /**
      * @param userId the user to whom the link was assigned
      * @param link   the assigned link

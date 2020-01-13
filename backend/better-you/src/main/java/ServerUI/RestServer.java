@@ -103,6 +103,26 @@ public class RestServer {
     }
 
     /**
+     * AICI AI RAMAS
+     * This method receives a JSON with all the information about the user and try to put them into the database
+     *
+     * @param registerConfirmationRequest- here are all the information about the confirmation
+     * @return An string with the token if the register is successful or the error message
+     */
+    @RequestMapping(value = "/confirm_register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> registerConfirmation(@RequestBody RegisterConfirmationRequest registerConfirmationRequest) {
+        try {
+            authService.confirmRegistration(registerConfirmationRequest.getConfirmationCode());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * This method receives a JSON with an email of an account and try to recover it
      *
      * @param recoverRequest- a JSON with an email

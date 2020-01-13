@@ -1,6 +1,8 @@
 package Validator;
 
 import Model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
  */
 @Component
 public class UserValidator {
+    private static final Logger LOG = LogManager.getLogger(UserValidator.class);
     private static final String PASSWORD_REGEX = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
     private static final String EMAIL_REGEX = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
 
@@ -24,9 +27,11 @@ public class UserValidator {
      *
      * @param user the user to be verified
      * @throws ValidatorException if there are any inconsistencies regarding the user's details (e.g. the username
-     *                                is null or the profile name has less than 3 characters)
+     *                            is null or the profile name has less than 3 characters)
      */
     public void validateUser(final User user) {
+        LOG.info("Validating user {}", user);
+
         StringBuilder errorsStringBuilder = new StringBuilder();
 
         validateUsername(user.getUsername(), errorsStringBuilder);

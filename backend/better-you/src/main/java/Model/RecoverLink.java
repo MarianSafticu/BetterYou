@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Registration_Link")
+@Table(name = "recover_link")
 public class RecoverLink implements HasId<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +18,9 @@ public class RecoverLink implements HasId<Long> {
     private long userId;
     @Column(name = "token", nullable = false, unique = true)
     private String token;
+
+    public RecoverLink() {
+    }
 
     /**
      * @param userId the user to whom the token was assigned
