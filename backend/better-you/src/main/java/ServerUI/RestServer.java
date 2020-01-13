@@ -3,7 +3,7 @@ package ServerUI;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
-import Repository.UserGoalRequest;
+import ServerUI.Requests.UserGoalRequest;
 import ServerUI.Requests.*;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;

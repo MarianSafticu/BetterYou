@@ -35,7 +35,6 @@ public class CRUDServices {
     private final UserRepo userRepo;
     private final HabitsRepo habitsRepo;
     private final GoalRepo goalRepo;
-    private final UserGoalRepo userGoalRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
     private final RecoverLinkRepo recoverLinkRepo;
 
@@ -49,13 +48,11 @@ public class CRUDServices {
     public CRUDServices(final UserRepo userRepo,
                         final HabitsRepo habitsRepo,
                         final GoalRepo goalRepo,
-                        final UserGoalRepo userGoalRepo,
                         final RegistrationLinkRepo registrationLinkRepo,
                         final RecoverLinkRepo recoverLinkRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
-        this.userGoalRepo = userGoalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
         this.recoverLinkRepo = recoverLinkRepo;
     }
@@ -216,17 +213,9 @@ public class CRUDServices {
      * @throws ServiceException if any error occurs while updating the goal
      */
     public void updateUserGoal(final UserGoal userGoal, final long userId) {
-        UserGoal originalUserGoal = userGoalRepo.get(userGoal.getId());
-
-        if (originalUserGoal == null || originalUserGoal.getUser().getId() != userId) {
-            throw new ServiceException("Not allowed to modify this user goal!");
-        }
-
-        userGoal.setUser(originalUserGoal.getUser());
-        userGoal.setGoal(originalUserGoal.getGoal());
-
+        LOG.info("Updating user goal for userid={}", userId);
         try {
-            userGoalRepo.update(userGoal.getId(), userGoal);
+            userRepo.updateGoalUser(userId, userGoal.getId(), userGoal.getEndDate(), userGoal.isPublic(), userGoal.getCurrentProgress());
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while updating goal in repo");
@@ -241,20 +230,8 @@ public class CRUDServices {
      */
     public void deleteUserGoal(final long userGoalId, final long userId) {
         LOG.info("Deleting user goal with id {}", userGoalId);
-        UserGoal originalUserGoal = userGoalRepo.get(userGoalId);
-
-        if (originalUserGoal == null) {
-            LOG.warn("No user goal found for id {}", userGoalId);
-            throw new ServiceException("No user goal found with the provided id");
-        }
-
-        if (originalUserGoal.getUser().getId() != userId) {
-            LOG.info("User goal {} is not owned by user with id {}", userGoalId, userId);
-            throw new ServiceException("Goal not owned by the user!");
-        }
-
         try {
-            userGoalRepo.delete(userGoalId);
+            userRepo.removeGoalUser(userGoalId, userId);
             LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while deleting user goal in repo: {}", e.getMessage());

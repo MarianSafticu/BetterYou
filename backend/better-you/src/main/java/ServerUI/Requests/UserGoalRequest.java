@@ -1,4 +1,4 @@
-package Repository;
+package ServerUI.Requests;
 
 import Model.UserGoal;
 
