@@ -4,6 +4,10 @@ package ServerUI.Requests;
 public class RecoverAccountRequestRequest {
     private String email;
 
+    RecoverAccountRequestRequest() {
+
+    }
+
     public RecoverAccountRequestRequest(String email) {
         this.email = email;
     }

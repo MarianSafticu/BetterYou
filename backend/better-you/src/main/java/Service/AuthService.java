@@ -176,7 +176,7 @@ public class AuthService {
         }
 
 
-        String resetToken = appUtils.createJWT("email");
+        String resetToken = AppUtils.generateCode();
         String resetLink = serverAddress + "account/recover/request?token=" + resetToken;
         LOG.info("resetLink={}", resetLink);
         mailUtils.sendRecoverPasswordEmail(email, resetLink);

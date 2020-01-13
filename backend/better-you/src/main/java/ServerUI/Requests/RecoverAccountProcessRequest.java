@@ -5,6 +5,9 @@ public class RecoverAccountProcessRequest {
     private String token;
     private String newPassword;
 
+    public RecoverAccountProcessRequest() {
+    }
+
     public RecoverAccountProcessRequest(String token, String newPassword) {
         this.token = token;
         this.newPassword = newPassword;
