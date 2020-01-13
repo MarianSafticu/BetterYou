@@ -245,7 +245,7 @@ public class CRUDServices {
     public void deleteUserGoal(final long userGoalId, final long userId) {
         LOG.info("Deleting user goal with id {}", userGoalId);
         try {
-            userRepo.removeUserGoal(userGoalId, userId);
+            userRepo.removeUserGoal(userId, userGoalId);
             LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while deleting user goal in repo: {}", e.getMessage());

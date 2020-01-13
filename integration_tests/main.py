@@ -7,12 +7,13 @@ from src.habits import *
 
 
 def erase_database():
-    print('Erasing data')
+    print('-------->>> Erasing data')
     r = requests.post('http://localhost:12404/app/better-you/hades')
     assert r.status_code == 200
 
 
 def register_users():
+    print('-------->>> Registering users')
     print('Registering user1')
     response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user1), headers=headers)
     assert response.status_code == 200
@@ -44,6 +45,7 @@ def verify_no_goals(tokens):
 
 
 def populate_goals(tokens):
+    print('-------->>> Populating goals')
     print('Adding goal to USER 1')
     usergoal1['token'] = tokens[0]
     response = requests.post('http://localhost:12404/app/better-you/goal', data=json.dumps(usergoal1), headers=headers)
@@ -78,6 +80,75 @@ def populate_goals(tokens):
     assert len(user2_goals) == 2
     print('USER 2 goals\n', user2_goals)
 
+    return user1_goals, user2_goals
+
+
+def verify_update_goals(tokens, user_goals):
+    print('-------->>> Updating goals')
+
+    user_goal_request = {
+        'token': tokens[0],
+        'userGoal': {
+            'id': user_goals[0][0]['id'],
+            'goal': {
+                'id': user_goals[0][0]['goal']['id'],
+                'progressToReach': 20
+            },
+            'currentProgress': 2,
+            'public': False,
+            'upvotes': 50,
+            'downvotes': 10,
+            'startDate': '2126-10-10',
+            'endDate': '2222-10-10'
+        }
+    }
+
+    response = requests.put('http://localhost:12404/app/better-you/goal', data=json.dumps(user_goal_request),
+                            headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/goals', data=json.dumps({'token': tokens[0]}),
+                             headers=headers)
+    user1_goals = response.json()
+    assert len(user1_goals) == 2
+    print('USER 1 goals\n', user1_goals)
+
+    assert user1_goals[1]['currentProgress'] == 2 or user1_goals[0]['currentProgress'] == 2
+    assert user1_goals[1]['public'] is False or user1_goals[0]['public'] is False
+
+
+def verify_delete_goals(tokens, user_goals):
+    print('-------->>> Deleting goals')
+    deleterequest = {
+        'token': tokens[0],
+        'userGoal': {
+            'id': user_goals[0][0]['id']
+        }
+    }
+    response = requests.delete('http://localhost:12404/app/better-you/goal', data=json.dumps(deleterequest),
+                               headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/goals', data=json.dumps({'token': tokens[0]}),
+                             headers=headers)
+    user1_goals = response.json()
+    assert len(user1_goals) == 1
+
+    deleterequest = {
+        'token': tokens[0],
+        'userGoal': {
+            'id': user_goals[0][1]['id']
+        }
+    }
+    response = requests.delete('http://localhost:12404/app/better-you/goal', data=json.dumps(deleterequest),
+                               headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/goals', data=json.dumps({'token': tokens[0]}),
+                             headers=headers)
+    user1_goals = response.json()
+    assert len(user1_goals) == 0
+
 
 def verify_no_habits(tokens):
     print('Testing USER 1 has 0 habits')
@@ -94,6 +165,7 @@ def verify_no_habits(tokens):
 
 
 def populate_habits(tokens):
+    print('-------->>> Populating habits')
     print('Adding habit to USER 1')
     userhabit1['token'] = tokens[0]
     response = requests.post('http://localhost:12404/app/better-you/habit', data=json.dumps(userhabit1),
@@ -136,7 +208,7 @@ def populate_habits(tokens):
 
 
 def verify_update_habits(tokens, user_habits):
-    print('Testing HABIT UPDATE')
+    print('-------->>>Habits update')
 
     userhabit1['habit']['description'] = 'modif description'
     userhabit1['habit']['title'] = 'modif title'
@@ -187,9 +259,9 @@ def main_test():
     erase_database()
     tokens = register_users()
     verify_no_goals(tokens)
-    populate_goals(tokens)
-    # verify_update_goals(tokens)
-    # verify_delete_goals(tokens)
+    user_goals = populate_goals(tokens)
+    verify_update_goals(tokens, user_goals)
+    verify_delete_goals(tokens, user_goals)
     verify_no_habits(tokens)
     user_habits = populate_habits(tokens)
     verify_update_habits(tokens, user_habits)

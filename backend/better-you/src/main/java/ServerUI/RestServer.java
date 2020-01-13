@@ -227,7 +227,7 @@ public class RestServer {
             crudServices.updateUserGoal(userGoalRequest.getUserGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
-            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
             return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -242,13 +242,13 @@ public class RestServer {
      * @return true if the goal can be deleted else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteGoal(@RequestBody GoalRequest goalRequest) {
+    public ResponseEntity<?> deleteGoal(@RequestBody UserGoalRequest goalRequest) {
         try {
             long userId = authService.getUserIdFromJWT(goalRequest.getToken());
-            crudServices.deleteUserGoal(goalRequest.getGoal().getId(), userId);
+            crudServices.deleteUserGoal(goalRequest.getUserGoal().getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
-            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
             return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
