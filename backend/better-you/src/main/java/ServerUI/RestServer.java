@@ -3,8 +3,17 @@ package ServerUI;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
-import ServerUI.Requests.UserGoalRequest;
-import ServerUI.Requests.*;
+import ServerUI.Requests.data.GetGoalRequest;
+import ServerUI.Requests.data.GetHabitsRequest;
+import ServerUI.Requests.data.GoalRequest;
+import ServerUI.Requests.data.HabitRequest;
+import ServerUI.Requests.data.UserGoalRequest;
+import ServerUI.Requests.auth.LoginRequest;
+import ServerUI.Requests.auth.ResetRequest;
+import ServerUI.Requests.auth.recover.RecoverAccountProcessRequest;
+import ServerUI.Requests.auth.recover.RecoverAccountRequestRequest;
+import ServerUI.Requests.auth.register.RegisterConfirmationRequest;
+import ServerUI.Requests.auth.register.RegisterRequest;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;
 import ServerUI.Responses.TokenResponse;
@@ -113,25 +122,6 @@ public class RestServer {
     public ResponseEntity<?> registerConfirmation(@RequestBody RegisterConfirmationRequest registerConfirmationRequest) {
         try {
             authService.confirmRegistration(registerConfirmationRequest.getConfirmationCode());
-            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
-        } catch (ServiceException e) {
-            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
-        } catch (Exception e) {
-            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
-            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * This method receives a JSON with an email of an account and try to recover it
-     *
-     * @param recoverRequest- a JSON with an email
-     * @return true if the recover is done and false if the email is invalid
-     */
-    @RequestMapping(value = "/recover", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> recover(@RequestBody RecoverRequest recoverRequest) {
-        try {
-            authService.recoverAccount(recoverRequest.getEmail());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);

@@ -1,7 +1,7 @@
 package Model;
 
 
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -29,6 +29,7 @@ public class Goal implements HasId<Long> {
     @Column(name = "category")
     private Category category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,

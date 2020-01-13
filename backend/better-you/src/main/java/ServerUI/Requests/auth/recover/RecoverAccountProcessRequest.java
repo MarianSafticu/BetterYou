@@ -1,4 +1,4 @@
-package ServerUI.Requests;
+package ServerUI.Requests.auth.recover;
 
 
 public class RecoverAccountProcessRequest {
