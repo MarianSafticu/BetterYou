@@ -3,11 +3,13 @@ package Service;
 
 import Model.Goal;
 import Model.Habit;
+import Model.RecoverLink;
 import Model.RegistrationLink;
 import Model.User;
 import Model.UserGoal;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
+import Repository.RecoverLinkRepo;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserGoalRepo;
@@ -35,6 +37,7 @@ public class CRUDServices {
     private final GoalRepo goalRepo;
     private final UserGoalRepo userGoalRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
+    private final RecoverLinkRepo recoverLinkRepo;
 
     /**
      * @param userRepo             repository for {@link User}
@@ -47,12 +50,14 @@ public class CRUDServices {
                         final HabitsRepo habitsRepo,
                         final GoalRepo goalRepo,
                         final UserGoalRepo userGoalRepo,
-                        final RegistrationLinkRepo registrationLinkRepo) {
+                        final RegistrationLinkRepo registrationLinkRepo,
+                        final RecoverLinkRepo recoverLinkRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
         this.userGoalRepo = userGoalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
+        this.recoverLinkRepo = recoverLinkRepo;
     }
 
     /**
@@ -346,5 +351,32 @@ public class CRUDServices {
             LOG.error("Repo exception occurred while deleting habit: {}", e.getMessage());
             throw new ServiceException("Something went wrong while deleting habit", e);
         }
+    }
+
+    public void addRecoverLink(final RecoverLink recoverLink) {
+        LOG.info("Add recover link {}", recoverLink);
+
+        try {
+            recoverLinkRepo.add(recoverLink);
+        } catch (RepoException e) {
+            LOG.error("Recover link add failed: {}", e.getMessage());
+            throw new ServiceException("Recover link add failed", e);
+        }
+    }
+
+    public void deleteRecoverLink(final String recoverLinkToken) {
+        LOG.info("Delete recover link with token='{}'", recoverLinkToken);
+
+        try {
+            recoverLinkRepo.deleteByToken(recoverLinkToken);
+        } catch (RepoException e) {
+            LOG.error("Recover link deletion failed: {}", e.getMessage());
+            throw new ServiceException("Recover link deletion failed", e);
+        }
+    }
+
+    public RecoverLink getRecoverLinkByToken(final String token) {
+        LOG.info("Retrieving recover link with token='{}'", token);
+        return recoverLinkRepo.getByToken(token);
     }
 }
