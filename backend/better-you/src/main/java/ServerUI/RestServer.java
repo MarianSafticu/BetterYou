@@ -3,6 +3,7 @@ package ServerUI;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
+import Model.UserGoal;
 import ServerUI.Requests.data.GetGoalRequest;
 import ServerUI.Requests.data.GetHabitsRequest;
 import ServerUI.Requests.data.GoalRequest;
@@ -159,7 +160,7 @@ public class RestServer {
     @RequestMapping(value = "/goals", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getGoals(@RequestBody GetGoalRequest getGoalRequest) {
         try {
-            List<Goal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(getGoalRequest.getToken()));
+            List<UserGoal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(getGoalRequest.getToken()));
             return new ResponseEntity<>(userGoals, HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -221,7 +222,7 @@ public class RestServer {
     @RequestMapping(value = "/goal", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateGoal(@RequestBody UserGoalRequest userGoalRequest) {
         try {
-            // TODO: validationService.validateGoal(userGoalRequest.getGoal());
+            validationService.validateUserGoal(userGoalRequest.getUserGoal());
             long userId = authService.getUserIdFromJWT(userGoalRequest.getToken());
             crudServices.updateUserGoal(userGoalRequest.getUserGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
@@ -336,6 +337,21 @@ public class RestServer {
     public ResponseEntity<?> requestRecoverAccount(@RequestBody RecoverAccountProcessRequest recoverAccountProcessRequest) {
         try {
             authService.setAccountRecovered(recoverAccountProcessRequest.getToken(), recoverAccountProcessRequest.getNewPassword());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    @RequestMapping(value = "/hades", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> requestRecoverAccount() {
+        try {
+            crudServices.eraseData();
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);

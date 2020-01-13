@@ -143,7 +143,7 @@ public class User implements HasId<Long> {
         return confirmCode;
     }
 
-    public Set<UserGoal> getGG(){
+    public Set<UserGoal> getUserGoals(){
         return goals;
     }
 

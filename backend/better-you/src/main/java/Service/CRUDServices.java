@@ -170,14 +170,14 @@ public class CRUDServices {
      * @param userId the user's id
      * @return a list of all of the user's goals
      */
-    public List<Goal> getUsersGoals(final long userId) {
+    public List<UserGoal> getUsersGoals(final long userId) {
         LOG.info("Getting all goals for user with id {}", userId);
         User user = userRepo.get(userId);
         if (user == null) {
             LOG.info("No user found with id {}", userId);
             throw new ServiceException("No user found with given id!");
         }
-        return new ArrayList<>(user.getGoals());
+        return new ArrayList<>(user.getUserGoals());
     }
 
     /**
@@ -229,7 +229,7 @@ public class CRUDServices {
     public void updateUserGoal(final UserGoal userGoal, final long userId) {
         LOG.info("Updating user goal for userid={}", userId);
         try {
-            userRepo.updateGoalUser(userId, userGoal.getId(), userGoal.getEndDate(), userGoal.isPublic(), userGoal.getCurrentProgress());
+            userRepo.updateUserGoal(userId, userGoal.getId(), userGoal.getEndDate(), userGoal.isPublic(), userGoal.getCurrentProgress());
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while updating goal in repo");
@@ -245,7 +245,7 @@ public class CRUDServices {
     public void deleteUserGoal(final long userGoalId, final long userId) {
         LOG.info("Deleting user goal with id {}", userGoalId);
         try {
-            userRepo.removeGoalUser(userGoalId, userId);
+            userRepo.removeUserGoal(userGoalId, userId);
             LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while deleting user goal in repo: {}", e.getMessage());
@@ -369,5 +369,49 @@ public class CRUDServices {
     public RecoverLink getRecoverLinkByToken(final String token) {
         LOG.info("Retrieving recover link with token='{}'", token);
         return recoverLinkRepo.getByToken(token);
+    }
+
+
+    // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void eraseData() {
+        LOG.warn("!! ERASING ALL DATA !!");
+
+        List<User> users = userRepo.getAll();
+        List<Habit> habits = habitsRepo.getAll();
+        List<Goal> goals = goalRepo.getAll();
+        List<RecoverLink> recoverLinks = recoverLinkRepo.getAll();
+        List<RegistrationLink> registrationLinks = registrationLinkRepo.getAll();
+
+        try {
+            LOG.warn("Erasing habits");
+            for (Habit habit : habits) {
+                habitsRepo.delete(habit.getId());
+            }
+            LOG.warn("Erasing recovery links");
+            for (RecoverLink recoverLink : recoverLinks) {
+                recoverLinkRepo.delete(recoverLink.getId());
+            }
+            LOG.warn("Erasing registration links");
+            for (RegistrationLink registrationLink : registrationLinks) {
+                registrationLinkRepo.delete(registrationLink.getId());
+            }
+            LOG.warn("Erasing user and their user goals");
+            for (User user : users) {
+                List<UserGoal> userGoals = new ArrayList<>(user.getUserGoals());
+                LOG.warn("Erasing user goals for user with id={}", user.getId());
+                for (UserGoal userGoal : userGoals) {
+                    userRepo.removeUserGoal(user.getId(), userGoal.getId());
+                }
+                userRepo.delete(user.getId());
+            }
+            LOG.warn("Erasing goals");
+            for (Goal goal : goals) {
+                goalRepo.delete(goal.getId());
+            }
+            LOG.warn("!! DATA ERASED SUCCESSFULLY !!");
+        } catch (RepoException e) {
+            LOG.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
