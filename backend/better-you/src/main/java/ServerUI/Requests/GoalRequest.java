@@ -2,16 +2,24 @@ package ServerUI.Requests;
 
 import Model.Goal;
 
+import java.time.LocalDate;
+
+
 public class GoalRequest {
     private Goal goal;
     private String token;
+    private boolean isPublic;
+    private LocalDate endDate;
+
 
     public GoalRequest() {
     }
 
-    public GoalRequest(Goal goal, String token) {
+    public GoalRequest(Goal goal, String token, boolean isPublic, LocalDate endDate) {
         this.goal = goal;
         this.token = token;
+        this.isPublic = isPublic;
+        this.endDate = endDate;
     }
 
     public Goal getGoal() {
@@ -28,5 +36,21 @@ public class GoalRequest {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 }

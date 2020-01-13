@@ -3,6 +3,7 @@ package ServerUI;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
+import Repository.UserGoalRequest;
 import ServerUI.Requests.*;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;
@@ -190,7 +191,7 @@ public class RestServer {
         try {
             validationService.validateGoal(goalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(goalRequest.getToken());
-            crudServices.addGoal(goalRequest.getGoal(), userId);
+            crudServices.addUserGoal(goalRequest.getGoal(), userId, goalRequest.isPublic(), goalRequest.getEndDate());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -204,15 +205,15 @@ public class RestServer {
      * This method receives a JSON with an token and a goal and return true if the goal can be updated or an error
      * message
      *
-     * @param goalRequest- a JSON with an token and a goal
+     * @param userGoalRequest- a JSON with an token and a user goal
      * @return true if the goal can be updated else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateGoal(@RequestBody GoalRequest goalRequest) {
+    public ResponseEntity<?> updateGoal(@RequestBody UserGoalRequest userGoalRequest) {
         try {
-            validationService.validateGoal(goalRequest.getGoal());
-            long userId = authService.getUserIdFromJWT(goalRequest.getToken());
-            crudServices.updateGoal(goalRequest.getGoal(), userId);
+            // TODO: validationService.validateGoal(userGoalRequest.getGoal());
+            long userId = authService.getUserIdFromJWT(userGoalRequest.getToken());
+            crudServices.updateUserGoal(userGoalRequest.getUserGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -233,7 +234,7 @@ public class RestServer {
     public ResponseEntity<?> deleteGoal(@RequestBody GoalRequest goalRequest) {
         try {
             long userId = authService.getUserIdFromJWT(goalRequest.getToken());
-            crudServices.deleteGoal(goalRequest.getGoal().getId(), userId);
+            crudServices.deleteUserGoal(goalRequest.getGoal().getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -255,7 +256,7 @@ public class RestServer {
         try {
             validationService.validateHabit(habitRequest.getHabit());
             long userId = authService.getUserIdFromJWT(habitRequest.getToken());
-            crudServices.addHabit(habitRequest.getHabit(),userId);
+            crudServices.addHabit(habitRequest.getHabit(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
