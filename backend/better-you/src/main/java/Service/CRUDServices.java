@@ -286,17 +286,65 @@ public class CRUDServices {
         }
     }
 
+    public void addHabit(final Habit habit, final long userId) {
+        User userOwner = userRepo.get(userId);
 
-    public void addHabit(final Habit habit, final long userID) {
-        return;
+        if (userOwner == null) {
+            throw new ServiceException("User with given id does not exist");
+        }
+
+        habit.setUser(userOwner);
+
+        try {
+            habitsRepo.add(habit);
+        } catch (RepoException e) {
+            e.printStackTrace();
+            throw new ServiceException("Error occurred while adding new habit");
+        }
     }
 
-    public void updateHabit(final Habit habit, final long userID) {
-        return;
+    public void updateHabit(final Habit habit, final long userId) {
+        Habit originalHabit = habitsRepo.get(habit.getId());
+
+        if (originalHabit == null) {
+            throw new ServiceException("Habit not found with the given id");
+        }
+
+        User owner = userRepo.get(userId);
+
+        if (owner == null) {
+            throw new ServiceException("User not found");
+        }
+        if (originalHabit.getUser().getId() != userId) {
+            throw new ServiceException("Habit does not belong to this user");
+        }
+
+        habit.setUser(owner);
+
+        try {
+            habitsRepo.update(habit.getId(), habit);
+        } catch (RepoException e) {
+            LOG.error("Repo exception occurred while updating habit: {}", e.getMessage());
+            throw new ServiceException("Something went wrong while updating habit", e);
+        }
     }
 
-    public void deleteHabit(final Habit habit, final long userID) {
-        return;
-    }
+    public void deleteHabit(final Habit habit, final long userId) {
+        Habit originalHabit = habitsRepo.get(habit.getId());
 
+        if (originalHabit == null) {
+            throw new ServiceException("Habit not found with the given id");
+        }
+
+        if (originalHabit.getUser().getId() != userId) {
+            throw new ServiceException("Habit does not belong to this user");
+        }
+
+        try {
+            habitsRepo.delete(habit.getId());
+        } catch (RepoException e) {
+            LOG.error("Repo exception occurred while deleting habit: {}", e.getMessage());
+            throw new ServiceException("Something went wrong while deleting habit", e);
+        }
+    }
 }

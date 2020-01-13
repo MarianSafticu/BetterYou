@@ -296,7 +296,7 @@ public class RestServer {
      * @return true if the habit can be deleted else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deletwHabit(@RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> deleteHabit(@RequestBody HabitRequest habitRequest) {
         try {
             long userId = authService.getUserIdFromJWT(habitRequest.getToken());
             crudServices.deleteHabit(habitRequest.getHabit(), userId);
