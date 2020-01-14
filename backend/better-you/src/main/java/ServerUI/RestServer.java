@@ -15,6 +15,7 @@ import ServerUI.Requests.auth.recover.RecoverAccountProcessRequest;
 import ServerUI.Requests.auth.recover.RecoverAccountRequestRequest;
 import ServerUI.Requests.auth.register.RegisterConfirmationRequest;
 import ServerUI.Requests.auth.register.RegisterRequest;
+import ServerUI.Requests.friends.SearchUsersRequest;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;
 import ServerUI.Responses.TokenResponse;
@@ -346,11 +347,45 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> searchUsers(@RequestBody SearchUsersRequest searchUsersRequest) {
+        try {
+            return new ResponseEntity<>(
+                    crudServices.getUsersByUsernamePrefix(
+                            searchUsersRequest.getUsernamePrefix(),
+                            authService.getUserIdFromJWT(searchUsersRequest.getToken())),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @RequestMapping(value = "/hades", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> requestRecoverAccount() {
         try {
             crudServices.eraseData();
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/gaia", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> verifyAllUsers() {
+        try {
+            LOG.warn("Setting all users to verified!");
+            for (User user : crudServices.getAllUsers()) {
+                user.setVerified(true);
+                crudServices.updateUser(user.getId(), user);
+            }
+            LOG.warn("All users set to verified successfully");
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);

@@ -24,6 +24,7 @@ public class User implements HasId<Long> {
     @Column(name = "profile_name")
     private String profile_name;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
@@ -33,24 +34,29 @@ public class User implements HasId<Long> {
     @Column(name = "BirthDate")
     private LocalDate birthDate;
 
+    @JsonIgnore
     @Column(name = "isVerified")
     private boolean isVerified;
 
+    @JsonIgnore
     @Column(name = "confirmCode")
     private String confirmCode;
 
     @Column(name = "points")
     private long points;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private Set<UserGoal> goals;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Habit> habits;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> friends;
 
@@ -143,6 +149,7 @@ public class User implements HasId<Long> {
         return confirmCode;
     }
 
+    @JsonIgnore
     public Set<UserGoal> getUserGoals(){
         return goals;
     }

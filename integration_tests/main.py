@@ -14,20 +14,21 @@ def erase_database():
 
 def register_users():
     print('-------->>> Registering users')
-    print('Registering user1')
-    response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user1), headers=headers)
-    assert response.status_code == 200
-    token_user_1 = response.json()['token']
+    tokens = []
 
-    print('Registering user2')
-    response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user2), headers=headers)
-    assert response.status_code == 200
-    token_user_2 = response.json()['token']
+    for user in all_users:
+        response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user),
+                                 headers=headers)
+        assert response.status_code == 200
+        tokens.append(response.json()['token'])
 
-    print('USERS REGISTER')
-    print('USER 1 TOKEN = ' + token_user_1)
-    print('USER 2 TOKEN = ' + token_user_2)
-    return token_user_1, token_user_2
+    print('TOKENS\n', tokens)
+
+    print('Set users to verified')
+    response = requests.post('http://localhost:12404/app/better-you/gaia', headers=headers)
+    assert response.status_code == 200
+
+    return tokens
 
 
 def verify_no_goals(tokens):
@@ -255,6 +256,44 @@ def verify_delete_habits(tokens, user_habits):
     assert len(user1_habits) == 0
 
 
+def verify_user_prefix_search(tokens):
+    print('----------->>> User search by prefix')
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'Da'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 2
+    print('USERS with prefix "Da"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[1], 'usernamePrefix': 'ra'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 3
+    print('USERS with prefix "ra"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'dane'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 1
+    print('USERS with prefix "dane"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'xxx'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 0
+    print('USERS with prefix "xxx"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'razvan'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 0
+    print('USERS with prefix "razvan" searched by "razvan"\n', users_list)
+
+
 def main_test():
     erase_database()
     tokens = register_users()
@@ -266,6 +305,7 @@ def main_test():
     user_habits = populate_habits(tokens)
     verify_update_habits(tokens, user_habits)
     verify_delete_habits(tokens, user_habits)
+    verify_user_prefix_search(tokens)
 
 
 main_test()

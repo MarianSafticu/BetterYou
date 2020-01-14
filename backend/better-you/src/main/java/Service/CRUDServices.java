@@ -377,6 +377,14 @@ public class CRUDServices {
         return recoverLinkRepo.getByToken(token);
     }
 
+    public List<User> getUsersByUsernamePrefix(final String usernamePrefix, final long userId) {
+        LOG.info("Searching for users with prefix='{}'", usernamePrefix);
+        if (userRepo.get(userId) == null) {
+            LOG.warn("Provided userId is invalid!");
+            throw new ServiceException("Not authenticated");
+        }
+        return userRepo.getByUsernamePrefix(usernamePrefix, userId);
+    }
 
     // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
     public void eraseData() {
@@ -419,5 +427,9 @@ public class CRUDServices {
             LOG.error(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.getAll();
     }
 }

@@ -156,4 +156,16 @@ public class UserRepo extends AbstractRepo<Long, User> {
         u.getUserGoals().remove(userGoalList.get(0));
         update(user_id, u);
     }
+
+    public List<User> getByUsernamePrefix(final String usernamePrefix, final long userId) {
+        return getAll()
+                .stream()
+                .filter(user ->
+                        user.getUsername()
+                                .toLowerCase()
+                                .startsWith(usernamePrefix.toLowerCase())
+                                && user.getId() != userId
+                                && user.isVerified())
+                .collect(Collectors.toList());
+    }
 }
