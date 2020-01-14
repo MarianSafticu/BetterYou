@@ -301,37 +301,75 @@ def verify_friend_requests(tokens, usernames):
     print('USERNAMES: ', usernames)
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request',
-                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[1]}),
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[1]}),
                              headers=headers)
     assert response.status_code == 200
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request',
-                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[2]}),
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[2]}),
                              headers=headers)
     assert response.status_code == 200
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request',
-                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[3]}),
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[3]}),
                              headers=headers)
     assert response.status_code == 200
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request',
-                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[1]}),
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[1]}),
                              headers=headers)
     assert response.status_code == 403
     assert json.loads(response.text)['massage'] == 'Friend request already exists'
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request',
-                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[0]}),
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[0]}),
                              headers=headers)
     assert response.status_code == 403
     assert json.loads(response.text)['massage'] == 'Cannot send friend request to self'
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request',
-                             data=json.dumps({'token': tokens[0], 'usernameRequested': 'Ah oh uhhh'}),
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': 'Ah oh uhhh'}),
                              headers=headers)
     assert response.status_code == 403
     assert json.loads(response.text)['massage'] == 'No user found with username=\'Ah oh uhhh\''
+
+
+def verify_accept_reject_friend_requests(tokens, usernames):
+    print('------>>> Accepting & rejecting friend requests')
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
+                             data=json.dumps({'token': tokens[1], 'usernameSender': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
+                             data=json.dumps({'token': tokens[2], 'usernameSender': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
+                             data=json.dumps({'token': tokens[3], 'usernameSender': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+
+def verify_friend_delete(tokens, usernames):
+    print('------>>> Deleting friends')
+
+    response = requests.delete('http://localhost:12404/app/better-you/friend/request',
+                               data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[1]}),
+                               headers=headers)
+    assert response.status_code == 200
+
+    response = requests.delete('http://localhost:12404/app/better-you/friend/request',
+                               data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[2]}),
+                               headers=headers)
+    assert response.status_code == 200
+
+    response = requests.delete('http://localhost:12404/app/better-you/friend/request',
+                               data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[3]}),
+                               headers=headers)
+    assert response.status_code == 200
 
 
 def main_test():
@@ -347,6 +385,8 @@ def main_test():
     verify_delete_habits(tokens, user_habits)
     verify_user_prefix_search(tokens)
     verify_friend_requests(tokens, usernames)
+    verify_accept_reject_friend_requests(tokens, usernames)
+    # verify_friend_delete(tokens, usernames)
 
 
 main_test()

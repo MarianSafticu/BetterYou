@@ -3,18 +3,18 @@ package ServerUI.Requests.friends;
 
 public class CreateFriendRequest {
     private final String token;
-    private final String usernameRequested;
+    private final String usernameReceiver;
 
-    public CreateFriendRequest(String token, String usernameRequested) {
+    public CreateFriendRequest(String token, String usernameReceiver) {
         this.token = token;
-        this.usernameRequested = usernameRequested;
+        this.usernameReceiver = usernameReceiver;
     }
 
     public String getToken() {
         return token;
     }
 
-    public String getUsernameRequested() {
-        return usernameRequested;
+    public String getUsernameReceiver() {
+        return usernameReceiver;
     }
 }

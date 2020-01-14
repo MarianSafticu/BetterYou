@@ -15,7 +15,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(
         name = "FriendRequests",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_sender_id", "user_requested_id"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_sender_id", "user_receiver_id"})}
 )
 public class FriendRequest implements HasId<Long> {
     @Id
@@ -28,15 +28,15 @@ public class FriendRequest implements HasId<Long> {
     private User sender;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_requested_id")
-    private User requested;
+    @JoinColumn(name = "user_receiver_id")
+    private User receiver;
 
     public FriendRequest() {
     }
 
-    public FriendRequest(User sender, User requested) {
+    public FriendRequest(User sender, User receiver) {
         this.sender = sender;
-        this.requested = requested;
+        this.receiver = receiver;
     }
 
     public User getSender() {
@@ -47,12 +47,12 @@ public class FriendRequest implements HasId<Long> {
         this.sender = sender;
     }
 
-    public User getRequested() {
-        return requested;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setRequested(User requested) {
-        this.requested = requested;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
     @Override

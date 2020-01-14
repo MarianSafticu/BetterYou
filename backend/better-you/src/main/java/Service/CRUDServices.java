@@ -396,6 +396,10 @@ public class CRUDServices {
         return userRepo.getByUsernamePrefix(usernamePrefix, userId);
     }
 
+    /**
+     * @param userId            the user who wants to send a friend request
+     * @param requestedUsername the user to be requested
+     */
     public void addFriendshipRequest(final long userId, final String requestedUsername) {
         LOG.info("Friendship requested by userId={} to username={}", userId, requestedUsername);
 
@@ -428,6 +432,89 @@ public class CRUDServices {
             LOG.warn("Friend request failed: {}", e.getMessage());
             throw new ServiceException("Friend request already exists");
         }
+    }
+
+    public void acceptFriendRequest(final long userId, final String requesterUsername) {
+        LOG.info("userId={} wants to accept friendship requested by username={}", userId, requesterUsername);
+
+        User receiver = getUserFromId(userId);
+        if (receiver == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        User sender = getUserFromUsername(requesterUsername);
+        if (sender == null) {
+            LOG.warn("No user found with username='{}'", requesterUsername);
+            throw new ServiceException("No user found with username='" + requesterUsername + "'");
+        }
+
+        if (sender.getId().equals(receiver.getId())) {
+            LOG.warn("Cannot send friend request to self");
+            throw new ServiceException("No friend request found");
+        }
+
+        FriendRequest friendRequest = friendRequestRepo.friendRequestFromTo(sender, receiver);
+        if (friendRequest == null) {
+            LOG.warn("No friend request from {}", sender.getUsername());
+            throw new ServiceException("No friend request from " + sender.getUsername());
+        }
+
+        try {
+            LOG.info("Setting friendship between {} and {}", sender.getUsername(), receiver.getUsername());
+            userRepo.setFriends(sender, receiver);
+            LOG.info("Deleting friend request between {} and {}", sender.getUsername(), receiver.getUsername());
+            friendRequestRepo.delete(friendRequest.getId());
+            LOG.info("Friendship established between {} and {}", sender.getUsername(), receiver.getUsername());
+        } catch (RepoException e) {
+            LOG.error("Error occurred while establish");
+        }
+    }
+
+    public void rejectFriendRequest(final long userId, final String requesterUsername) {
+
+    }
+
+    /**
+     * @param userId   the user who wants to remove a friend
+     * @param username the friend to be removed
+     */
+    public void removeFriend(final long userId, final String username) {
+        LOG.info("User with id={} wants to remove friend with username={}", userId, username);
+
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.warn("Invalid user id");
+            throw new ServiceException("Invalid user id");
+        }
+
+        User toBeRemoved = userRepo.getUserByUsername(username);
+        if (toBeRemoved == null) {
+            LOG.warn("No user found with username={}", username);
+            throw new ServiceException("No user found with username='" + username + "'");
+        }
+
+        if (!user.getFriends().contains(toBeRemoved)) {
+            LOG.warn("User {} and {} are not friends", user.getUsername(), toBeRemoved.getUsername());
+            throw new ServiceException("User is not friend with " + username);
+        }
+
+        try {
+            userRepo.removeFriends(user, toBeRemoved);
+            LOG.info("Users {} and {} removed friendship successfully", user.getUsername(), toBeRemoved.getUsername());
+        } catch (RepoException e) {
+            LOG.error("Unable to remove friendship between {} and {}: {}",
+                    user.getUsername(), toBeRemoved.getUsername(), e.getMessage());
+            throw new ServiceException("Unable to remove friendship");
+        }
+    }
+
+    public List<FriendRequest> getUserReceivedFriendRequests() {
+        return null;
+    }
+
+    public List<FriendRequest> getUserSentFriendRequests() {
+        return null;
     }
 
     // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!

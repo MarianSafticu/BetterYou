@@ -1,7 +1,5 @@
 package ServerUI;
 
-import Model.FriendRequest;
-import Model.Goal;
 import Model.Habit;
 import Model.User;
 import Model.UserGoal;
@@ -16,6 +14,7 @@ import ServerUI.Requests.auth.recover.RecoverAccountProcessRequest;
 import ServerUI.Requests.auth.recover.RecoverAccountRequestRequest;
 import ServerUI.Requests.auth.register.RegisterConfirmationRequest;
 import ServerUI.Requests.auth.register.RegisterRequest;
+import ServerUI.Requests.friends.AcceptFriendRequest;
 import ServerUI.Requests.friends.CreateFriendRequest;
 import ServerUI.Requests.friends.SearchUsersRequest;
 import ServerUI.Responses.BooleanResponse;
@@ -369,7 +368,35 @@ public class RestServer {
     public ResponseEntity<?> friendRequest(@RequestBody CreateFriendRequest createFriendRequest) {
         try {
             crudServices.addFriendshipRequest(authService.getUserIdFromJWT(createFriendRequest.getToken()),
-                    createFriendRequest.getUsernameRequested());
+                    createFriendRequest.getUsernameReceiver());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> acceptFriendRequest(@RequestBody AcceptFriendRequest acceptFriendRequest) {
+        try {
+            crudServices.acceptFriendRequest(authService.getUserIdFromJWT(acceptFriendRequest.getToken()),
+                    acceptFriendRequest.getUsernameSender());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeFriend(@RequestBody CreateFriendRequest createFriendRequest) {
+        try {
+            crudServices.removeFriend(authService.getUserIdFromJWT(createFriendRequest.getToken()),
+                    createFriendRequest.getUsernameReceiver());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
