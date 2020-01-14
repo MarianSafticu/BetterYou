@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Repository
 public class UserRepo extends AbstractRepo<Long, User> {
     private static final String EMAIL_FIELD = "email";
+    private static final String USERNAME_FIELD = "username";
 
     public UserRepo() {
         super(User.class);
@@ -44,6 +45,19 @@ public class UserRepo extends AbstractRepo<Long, User> {
             Root<User> root = criteriaQuery.from(User.class);
             criteriaQuery.select(root);
             criteriaQuery.where(criteriaBuilder.equal(root.get(EMAIL_FIELD), email));
+            return session.createQuery(criteriaQuery).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public User getUserByUsername(String username) {
+        try (Session session = HibernateSesionFactory.getFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(criteriaBuilder.equal(root.get(USERNAME_FIELD), username));
             return session.createQuery(criteriaQuery).getSingleResult();
         } catch (NoResultException e) {
             return null;

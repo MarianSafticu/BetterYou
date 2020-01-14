@@ -15,12 +15,14 @@ def erase_database():
 def register_users():
     print('-------->>> Registering users')
     tokens = []
+    usernames = []
 
     for user in all_users:
         response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user),
                                  headers=headers)
         assert response.status_code == 200
         tokens.append(response.json()['token'])
+        usernames.append(user['username'])
 
     print('TOKENS\n', tokens)
 
@@ -28,7 +30,7 @@ def register_users():
     response = requests.post('http://localhost:12404/app/better-you/gaia', headers=headers)
     assert response.status_code == 200
 
-    return tokens
+    return tokens, usernames
 
 
 def verify_no_goals(tokens):
@@ -294,9 +296,47 @@ def verify_user_prefix_search(tokens):
     print('USERS with prefix "razvan" searched by "razvan"\n', users_list)
 
 
+def verify_friend_requests(tokens, usernames):
+    print('------>>> Generating friend requests')
+    print('USERNAMES: ', usernames)
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[1]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[2]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[3]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[1]}),
+                             headers=headers)
+    assert response.status_code == 403
+    assert json.loads(response.text)['massage'] == 'Friend request already exists'
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 403
+    assert json.loads(response.text)['massage'] == 'Cannot send friend request to self'
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameRequested': 'Ah oh uhhh'}),
+                             headers=headers)
+    assert response.status_code == 403
+    assert json.loads(response.text)['massage'] == 'No user found with username=\'Ah oh uhhh\''
+
+
 def main_test():
     erase_database()
-    tokens = register_users()
+    tokens, usernames = register_users()
     verify_no_goals(tokens)
     user_goals = populate_goals(tokens)
     verify_update_goals(tokens, user_goals)
@@ -306,6 +346,7 @@ def main_test():
     verify_update_habits(tokens, user_habits)
     verify_delete_habits(tokens, user_habits)
     verify_user_prefix_search(tokens)
+    verify_friend_requests(tokens, usernames)
 
 
 main_test()

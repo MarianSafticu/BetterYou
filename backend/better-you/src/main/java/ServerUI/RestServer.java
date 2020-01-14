@@ -1,5 +1,6 @@
 package ServerUI;
 
+import Model.FriendRequest;
 import Model.Goal;
 import Model.Habit;
 import Model.User;
@@ -15,6 +16,7 @@ import ServerUI.Requests.auth.recover.RecoverAccountProcessRequest;
 import ServerUI.Requests.auth.recover.RecoverAccountRequestRequest;
 import ServerUI.Requests.auth.register.RegisterConfirmationRequest;
 import ServerUI.Requests.auth.register.RegisterRequest;
+import ServerUI.Requests.friends.CreateFriendRequest;
 import ServerUI.Requests.friends.SearchUsersRequest;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;
@@ -355,6 +357,20 @@ public class RestServer {
                             searchUsersRequest.getUsernamePrefix(),
                             authService.getUserIdFromJWT(searchUsersRequest.getToken())),
                     HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> friendRequest(@RequestBody CreateFriendRequest createFriendRequest) {
+        try {
+            crudServices.addFriendshipRequest(authService.getUserIdFromJWT(createFriendRequest.getToken()),
+                    createFriendRequest.getUsernameRequested());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {

@@ -76,8 +76,10 @@ public class User implements HasId<Long> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         User user = (User) o;
         return username.equals(user.username);
     }
@@ -150,7 +152,7 @@ public class User implements HasId<Long> {
     }
 
     @JsonIgnore
-    public Set<UserGoal> getUserGoals(){
+    public Set<UserGoal> getUserGoals() {
         return goals;
     }
 
@@ -160,8 +162,9 @@ public class User implements HasId<Long> {
                 .map(UserGoal::getGoal)
                 .collect(Collectors.toSet());
     }
+
     @JsonIgnore
-    public Set<User> getFriends(){
+    public Set<User> getFriends() {
         return this.friends;
     }
 

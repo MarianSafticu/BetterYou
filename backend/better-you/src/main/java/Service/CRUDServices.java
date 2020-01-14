@@ -1,12 +1,14 @@
 package Service;
 
 
+import Model.FriendRequest;
 import Model.Goal;
 import Model.Habit;
 import Model.RecoverLink;
 import Model.RegistrationLink;
 import Model.User;
 import Model.UserGoal;
+import Repository.FriendRequestRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
 import Repository.RecoverLinkRepo;
@@ -36,6 +38,7 @@ public class CRUDServices {
     private final GoalRepo goalRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
     private final RecoverLinkRepo recoverLinkRepo;
+    private final FriendRequestRepo friendRequestRepo;
 
     /**
      * @param userRepo             repository for {@link User}
@@ -47,12 +50,14 @@ public class CRUDServices {
                         final HabitsRepo habitsRepo,
                         final GoalRepo goalRepo,
                         final RegistrationLinkRepo registrationLinkRepo,
-                        final RecoverLinkRepo recoverLinkRepo) {
+                        final RecoverLinkRepo recoverLinkRepo,
+                        final FriendRequestRepo friendRequestRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
         this.recoverLinkRepo = recoverLinkRepo;
+        this.friendRequestRepo = friendRequestRepo;
     }
 
     /**
@@ -111,6 +116,11 @@ public class CRUDServices {
     public User getUserFromEmail(final String email) {
         LOG.info("Getting user with email {}", email);
         return userRepo.getUserByEmail(email);
+    }
+
+    public User getUserFromUsername(final String username) {
+        LOG.info("Getting user with username {}", username);
+        return userRepo.getUserByUsername(username);
     }
 
     /**
@@ -386,6 +396,40 @@ public class CRUDServices {
         return userRepo.getByUsernamePrefix(usernamePrefix, userId);
     }
 
+    public void addFriendshipRequest(final long userId, final String requestedUsername) {
+        LOG.info("Friendship requested by userId={} to username={}", userId, requestedUsername);
+
+        User requester = getUserFromId(userId);
+        if (requester == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        User requested = getUserFromUsername(requestedUsername);
+        if (requested == null) {
+            LOG.warn("No user found with username='{}'", requestedUsername);
+            throw new ServiceException("No user found with username='" + requestedUsername + "'");
+        }
+
+        if (requested.getId().equals(requester.getId())) {
+            LOG.warn("Cannot send friend request to self");
+            throw new ServiceException("Cannot send friend request to self");
+        }
+
+        if (requested.getFriends().contains(requester)) {
+            LOG.warn("User {} and {} are already friends", requested.getEmail(), requester.getEmail());
+            throw new ServiceException("Already friend with " + requested.getEmail());
+        }
+
+        try {
+            friendRequestRepo.add(new FriendRequest(requester, requested));
+            LOG.info("Friend request from {} to {} sent successfully", requester.getEmail(), requested.getEmail());
+        } catch (RepoException e) {
+            LOG.warn("Friend request failed: {}", e.getMessage());
+            throw new ServiceException("Friend request already exists");
+        }
+    }
+
     // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
     public void eraseData() {
         LOG.warn("!! ERASING ALL DATA !!");
@@ -395,8 +439,13 @@ public class CRUDServices {
         List<Goal> goals = goalRepo.getAll();
         List<RecoverLink> recoverLinks = recoverLinkRepo.getAll();
         List<RegistrationLink> registrationLinks = registrationLinkRepo.getAll();
+        List<FriendRequest> friendRequests = friendRequestRepo.getAll();
 
         try {
+            LOG.warn("Erasing friend requests");
+            for (FriendRequest friendRequest : friendRequests) {
+                friendRequestRepo.delete(friendRequest.getId());
+            }
             LOG.warn("Erasing habits");
             for (Habit habit : habits) {
                 habitsRepo.delete(habit.getId());
