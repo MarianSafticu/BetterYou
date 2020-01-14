@@ -1,4 +1,4 @@
-package ServerUI.Requests;
+package ServerUI.Requests.auth;
 
 public class LoginRequest{
     private String email;

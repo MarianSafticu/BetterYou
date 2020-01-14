@@ -1,7 +1,7 @@
 package Model;
 
 
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -29,11 +29,12 @@ public class Goal implements HasId<Long> {
     @Column(name = "category")
     private Category category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
-    private Set<User_Goal> users;
+    private Set<UserGoal> users;
 
     public Goal() {}
 
@@ -81,10 +82,10 @@ public class Goal implements HasId<Long> {
 
     @JsonIgnore
     public Set<User> getAllUsers() {
-        return users.stream().map(User_Goal::getUser).collect(Collectors.toSet());
+        return users.stream().map(UserGoal::getUser).collect(Collectors.toSet());
     }
 
-    public void setUsers(Set<User_Goal> users) {
+    public void setUsers(Set<UserGoal> users) {
         this.users = users;
     }
 

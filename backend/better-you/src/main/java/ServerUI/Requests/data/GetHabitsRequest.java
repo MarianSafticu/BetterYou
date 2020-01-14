@@ -1,12 +1,12 @@
-package ServerUI.Requests;
+package ServerUI.Requests.data;
 
-public class GetGoalRequest {
+public class GetHabitsRequest {
     private String token;
 
-    public GetGoalRequest() {
+    public GetHabitsRequest() {
     }
 
-    public GetGoalRequest(String token) {
+    public GetHabitsRequest(String token) {
         this.token = token;
     }
 

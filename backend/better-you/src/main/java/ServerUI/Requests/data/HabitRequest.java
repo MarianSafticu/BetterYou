@@ -1,6 +1,7 @@
-package ServerUI.Requests;
+package ServerUI.Requests.data;
 
 import Model.Habit;
+
 
 public class HabitRequest {
     private Habit habit;
