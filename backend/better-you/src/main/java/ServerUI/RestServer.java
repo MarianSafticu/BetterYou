@@ -405,6 +405,20 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/friend/request/reject", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> rejectFriendRequest(@RequestBody AcceptFriendRequest acceptFriendRequest) {
+        try {
+            crudServices.rejectFriendRequest(authService.getUserIdFromJWT(acceptFriendRequest.getToken()),
+                    acceptFriendRequest.getUsernameSender());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/friend/request", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeFriend(@RequestBody CreateFriendRequest createFriendRequest) {
         try {

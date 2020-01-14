@@ -484,7 +484,39 @@ public class CRUDServices {
     }
 
     public void rejectFriendRequest(final long userId, final String requesterUsername) {
+        LOG.info("userId={} wants to reject friendship requested by username={}", userId, requesterUsername);
 
+        User receiver = getUserFromId(userId);
+        if (receiver == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        User sender = getUserFromUsername(requesterUsername);
+        if (sender == null) {
+            LOG.warn("No user found with username='{}'", requesterUsername);
+            throw new ServiceException("No user found with username='" + requesterUsername + "'");
+        }
+
+        if (sender.getId().equals(receiver.getId())) {
+            LOG.warn("Cannot send friend request to self");
+            throw new ServiceException("No friend request found");
+        }
+
+        FriendRequest friendRequest = friendRequestRepo.friendRequestFromTo(sender, receiver);
+        if (friendRequest == null) {
+            LOG.warn("No friend request from {}", sender.getUsername());
+            throw new ServiceException("No friend request from " + sender.getUsername());
+        }
+
+        try {
+            LOG.info("rejecting friendship between {} and {}", sender.getUsername(), receiver.getUsername());
+            LOG.info("Deleting friend request between {} and {}", sender.getUsername(), receiver.getUsername());
+            friendRequestRepo.delete(friendRequest.getId());
+            LOG.info("Request deleted between {} and {}", sender.getUsername(), receiver.getUsername());
+        } catch (RepoException e) {
+            LOG.error("Error occurred while establish");
+        }
     }
 
     /**
