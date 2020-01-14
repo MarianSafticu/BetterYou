@@ -3,6 +3,7 @@ package ServerUI;
 import Model.Habit;
 import Model.User;
 import Model.UserGoal;
+import ServerUI.Requests.auth.TokenRequest;
 import ServerUI.Requests.data.GetGoalRequest;
 import ServerUI.Requests.data.GetHabitsRequest;
 import ServerUI.Requests.data.GoalRequest;
@@ -107,7 +108,7 @@ public class RestServer {
             String token = authService.register(newUser);
             return new ResponseEntity<>(new TokenResponse(token), HttpStatus.OK);
         } catch (ServiceException e) {
-            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
             return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -370,6 +371,18 @@ public class RestServer {
             crudServices.addFriendshipRequest(authService.getUserIdFromJWT(createFriendRequest.getToken()),
                     createFriendRequest.getUsernameReceiver());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> acceptFriendRequest(@RequestBody TokenRequest tokenRequest) {
+        try {
+            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(tokenRequest.getToken())), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {

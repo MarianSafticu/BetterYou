@@ -10,6 +10,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
@@ -38,6 +40,21 @@ public class FriendRequestRepo extends AbstractRepo<Long, FriendRequest> {
             return session.createQuery(criteriaQuery).getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    public List<FriendRequest> getUserReceivedFriendshipRequests(User receiver) {
+        try (Session session = HibernateSesionFactory.getFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<FriendRequest> criteriaQuery = criteriaBuilder.createQuery(FriendRequest.class);
+            Root<FriendRequest> root = criteriaQuery.from(FriendRequest.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(criteriaBuilder.and(
+                    criteriaBuilder.equal(root.join(RECEIVER_FIELD).get("id"), receiver.getId())
+            ));
+            return session.createQuery(criteriaQuery).getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
         }
     }
 }

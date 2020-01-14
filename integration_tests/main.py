@@ -337,15 +337,39 @@ def verify_friend_requests(tokens, usernames):
 def verify_accept_reject_friend_requests(tokens, usernames):
     print('------>>> Accepting & rejecting friend requests')
 
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[1]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 1
+
     response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
                              data=json.dumps({'token': tokens[1], 'usernameSender': usernames[0]}),
                              headers=headers)
     assert response.status_code == 200
 
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[1]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 0
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[2]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 1
+
     response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
                              data=json.dumps({'token': tokens[2], 'usernameSender': usernames[0]}),
                              headers=headers)
     assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[2]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 0
 
     response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
                              data=json.dumps({'token': tokens[3], 'usernameSender': usernames[0]}),

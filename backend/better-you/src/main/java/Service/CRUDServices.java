@@ -434,6 +434,18 @@ public class CRUDServices {
         }
     }
 
+    public List<FriendRequest> getFriendshipRequests(final long userId) {
+        LOG.info("Retrieving friendship requests for userId={}", userId);
+
+        User receiver = getUserFromId(userId);
+        if (receiver == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        return friendRequestRepo.getUserReceivedFriendshipRequests(receiver);
+    }
+
     public void acceptFriendRequest(final long userId, final String requesterUsername) {
         LOG.info("userId={} wants to accept friendship requested by username={}", userId, requesterUsername);
 
@@ -462,7 +474,7 @@ public class CRUDServices {
 
         try {
             LOG.info("Setting friendship between {} and {}", sender.getUsername(), receiver.getUsername());
-            userRepo.setFriends(sender, receiver);
+            userRepo.setFriends(sender.getId(), receiver.getId());
             LOG.info("Deleting friend request between {} and {}", sender.getUsername(), receiver.getUsername());
             friendRequestRepo.delete(friendRequest.getId());
             LOG.info("Friendship established between {} and {}", sender.getUsername(), receiver.getUsername());
@@ -500,7 +512,7 @@ public class CRUDServices {
         }
 
         try {
-            userRepo.removeFriends(user, toBeRemoved);
+            userRepo.removeFriends(user.getId(), toBeRemoved.getId());
             LOG.info("Users {} and {} removed friendship successfully", user.getUsername(), toBeRemoved.getUsername());
         } catch (RepoException e) {
             LOG.error("Unable to remove friendship between {} and {}: {}",
@@ -544,6 +556,19 @@ public class CRUDServices {
             LOG.warn("Erasing registration links");
             for (RegistrationLink registrationLink : registrationLinks) {
                 registrationLinkRepo.delete(registrationLink.getId());
+            }
+            LOG.warn("Removing all friendships :(");
+            for (User user : users) {
+                List<User> friends = new ArrayList<>(user.getFriends());
+                LOG.warn("Erasing friends for user with id={}", user.getId());
+                for (User friend : friends) {
+                    try {
+                        LOG.warn("Erasing friendship between {} and {}", user.getId(), friend.getId());
+                        userRepo.removeFriends(user.getId(), friend.getId());
+                    } catch (Exception e) {
+                        LOG.error(e.getMessage());
+                    }
+                }
             }
             LOG.warn("Erasing user and their user goals");
             for (User user : users) {

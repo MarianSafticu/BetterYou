@@ -95,32 +95,22 @@ public class UserRepo extends AbstractRepo<Long, User> {
         }
     }
 
-    /**
-     * Set 2 users as friends.
-     *
-     * @param u1 the first user
-     * @param u2 the second user
-     * @throws RepoException in case a user does not exist in database
-     */
-    public void setFriends(User u1, User u2) throws RepoException {
-        u1.getFriends().add(u2);
-        u2.getFriends().add(u1);
-        update(u1.getId(), u1);
-        update(u2.getId(), u2);
+    synchronized public void setFriends(final long userId1, final long userId2) throws RepoException {
+        User user1 = get(userId1);
+        User user2 = get(userId2);
+        user1.getFriends().add(user2);
+        user2.getFriends().add(user1);
+        update(userId1, user1);
+        update(userId2, user2);
     }
 
-    /**
-     * Remove friendship between 2 users.
-     *
-     * @param u1 the first user
-     * @param u2 the second user
-     * @throws RepoException in case a user does not exist in database
-     */
-    public void removeFriends(User u1, User u2) throws RepoException {
-        u1.getFriends().remove(u2);
-        u2.getFriends().remove(u1);
-        update(u1.getId(), u1);
-        update(u2.getId(), u2);
+    synchronized public void removeFriends(final long userId1, final long userId2) throws RepoException {
+        User user1 = get(userId1);
+        User user2 = get(userId2);
+        user1.getFriends().remove(user2);
+        user2.getFriends().remove(user1);
+        update(userId1, user1);
+        update(userId2, user2);
     }
 
 
