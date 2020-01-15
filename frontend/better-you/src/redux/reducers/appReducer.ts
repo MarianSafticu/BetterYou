@@ -11,9 +11,30 @@ import {
   CONFIRM_ACCOUNT_BEGIN,
   CONFIRM_ACCOUNT_SUCCESS,
   CONFIRM_ACCOUNT_ERROR,
+  FETCH_GOALS_BEGIN,
+  FETCH_GOALS_SUCCESS,
+  FETCH_GOALS_ERROR,
   ADD_GOAL_BEGIN,
   ADD_GOAL_SUCCESS,
-  ADD_GOAL_ERROR
+  ADD_GOAL_ERROR,
+  EDIT_GOAL_BEGIN,
+  EDIT_GOAL_SUCCESS,
+  EDIT_GOAL_ERROR,
+  DELETE_GOAL_BEGIN,
+  DELETE_GOAL_SUCCESS,
+  DELETE_GOAL_ERROR,
+  FETCH_HABITS_BEGIN,
+  FETCH_HABITS_SUCCESS,
+  FETCH_HABITS_ERROR,
+  ADD_HABIT_BEGIN,
+  ADD_HABIT_SUCCESS,
+  ADD_HABIT_ERROR,
+  EDIT_HABIT_BEGIN,
+  EDIT_HABIT_SUCCESS,
+  EDIT_HABIT_ERROR,
+  DELETE_HABIT_BEGIN,
+  DELETE_HABIT_SUCCESS,
+  DELETE_HABIT_ERROR
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -26,10 +47,32 @@ import {
   confirmAccountBeginHandler,
   confirmAccountSuccessHandler,
   confirmAccountErrorHandler,
+  fetchGoalsBeginHandler,
+  fetchGoalsSuccessHandler,
+  fetchGoalsErrorHandler,
   addGoalBeginHandler,
   addGoalSuccessHandler,
-  addGoalErrorHandler
+  addGoalErrorHandler,
+  editGoalBeginHandler,
+  editGoalSuccessHandler,
+  editGoalErrorHandler,
+  deleteGoalBeginHandler,
+  deleteGoalSuccessHandler,
+  deleteGoalErrorHandler,
+  fetchHabitsBeginHandler,
+  fetchHabitsSuccessHandler,
+  fetchHabitsErrorHandler,
+  addHabitBeginHandler,
+  addHabitSuccessHandler,
+  addHabitErrorHandler,
+  editHabitBeginHandler,
+  editHabitSuccessHandler,
+  editHabitErrorHandler,
+  deleteHabitBeginHandler,
+  deleteHabitSuccessHandler,
+  deleteHabitErrorHandler
 } from "./appHandlers";
+
 
 export const initialState: AppState = {
   loading: false,
@@ -42,34 +85,89 @@ export const initialState: AppState = {
   friends: []
 };
 
+
 const appReducer = (state = initialState, action: AppActionType): AppState => {
   switch (action.type) {
     case SET_CURRENT_USER_BEGIN:
-      return setCurrentUserBeginHandler(state, action.payload);
+      return setCurrentUserBeginHandler(state);
     case SET_CURRENT_USER_SUCCESS:
       return setCurrentUserSuccessHandler(state, action.payload);
     case SET_CURRENT_USER_ERROR:
       return setCurrentUserErrorHandler(state, action.payload);
+
     case UNSET_CURRENT_USER:
       return unsetCurrentUserHandler(state);
+
     case REGISTER_USER_BEGIN:
       return registerUserBeginHandler(state);
     case REGISTER_USER_SUCCESS:
       return registerUserSuccessHandler(state);
     case REGISTER_USER_ERROR:
       return registerUserErrorHandler(state, action.payload);
+
     case CONFIRM_ACCOUNT_BEGIN:
-      return confirmAccountBeginHandler(state, action.payload);
+      return confirmAccountBeginHandler(state);
     case CONFIRM_ACCOUNT_SUCCESS:
       return confirmAccountSuccessHandler(state, action.payload);
     case CONFIRM_ACCOUNT_ERROR:
       return confirmAccountErrorHandler(state, action.payload);
+
+    case FETCH_GOALS_BEGIN:
+      return fetchGoalsBeginHandler(state);
+    case FETCH_GOALS_SUCCESS:
+      return fetchGoalsSuccessHandler(state, action.payload);
+    case FETCH_GOALS_ERROR:
+      return fetchGoalsErrorHandler(state, action.payload);
+
     case ADD_GOAL_BEGIN:
-      return addGoalBeginHandler(state, action.payload);
+      return addGoalBeginHandler(state);
     case ADD_GOAL_SUCCESS:
       return addGoalSuccessHandler(state, action.payload);
     case ADD_GOAL_ERROR:
       return addGoalErrorHandler(state, action.payload);
+
+    case EDIT_GOAL_BEGIN:
+      return editGoalBeginHandler(state);
+    case EDIT_GOAL_SUCCESS:
+      return editGoalSuccessHandler(state, action.payload);
+    case EDIT_GOAL_ERROR:
+      return editGoalErrorHandler(state, action.payload);
+
+    case DELETE_GOAL_BEGIN:
+      return deleteGoalBeginHandler(state);
+    case DELETE_GOAL_SUCCESS:
+      return deleteGoalSuccessHandler(state, action.payload);
+    case DELETE_GOAL_ERROR:
+      return deleteGoalErrorHandler(state, action.payload);
+    
+    case FETCH_HABITS_BEGIN:
+      return fetchHabitsBeginHandler(state);
+    case FETCH_HABITS_SUCCESS:
+      return fetchHabitsSuccessHandler(state, action.payload);
+    case FETCH_HABITS_ERROR:
+      return fetchHabitsErrorHandler(state, action.payload);
+
+    case ADD_HABIT_BEGIN:
+      return addHabitBeginHandler(state);
+    case ADD_HABIT_SUCCESS:
+      return addHabitSuccessHandler(state, action.payload);
+    case ADD_HABIT_ERROR:
+      return addHabitErrorHandler(state, action.payload);
+
+    case EDIT_HABIT_BEGIN:
+      return editHabitBeginHandler(state);
+    case EDIT_HABIT_SUCCESS:
+      return editHabitSuccessHandler(state, action.payload);
+    case EDIT_HABIT_ERROR:
+      return editHabitErrorHandler(state, action.payload);
+
+    case DELETE_HABIT_BEGIN:
+      return deleteHabitBeginHandler(state);
+    case DELETE_HABIT_SUCCESS:
+      return deleteHabitSuccessHandler(state, action.payload);
+    case DELETE_HABIT_ERROR:
+      return deleteHabitErrorHandler(state, action.payload);
+
     default:
       return state;
   }
