@@ -79,14 +79,24 @@ const goalsList: Goal[] = [
   }
 ];
 
-class GoalList extends React.Component {
+
+interface IProps {
+  isReadOnly?: boolean | null
+}
+interface IState {
+}
+
+class GoalList extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+  }
   render() {
     return (
       <div className="container">
-        {goalsList.map(function(goal, index) {
+        {goalsList.map((goal, index) =>  {
           return (
             <div key={index}>
-              <GoalCard goal={goal} />
+              <GoalCard goal={goal} isReadOnly={this.props.isReadOnly} />
             </div>
           );
         })}
@@ -94,7 +104,7 @@ class GoalList extends React.Component {
     );
   }
 
-  handleClick(e: any) {}
+  handleClick(e: any) { }
 }
 
 export default GoalList;

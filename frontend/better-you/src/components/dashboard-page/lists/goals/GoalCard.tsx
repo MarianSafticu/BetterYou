@@ -15,6 +15,7 @@ import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponen
 
 interface IProps {
   goal: Goal;
+  isReadOnly?: boolean | null
 }
 interface IState {
   goal: Goal;
@@ -23,6 +24,7 @@ interface IState {
 }
 
 class GoalCard extends React.Component<IProps, IState> {
+
   constructor(prop: IProps) {
     super(prop);
     this.state = {
@@ -32,7 +34,17 @@ class GoalCard extends React.Component<IProps, IState> {
     };
   }
 
+  isReaadOnly = (): boolean => {
+    if (this.props.isReadOnly !== null &&
+      this.props.isReadOnly !== undefined &&
+      this.props.isReadOnly)
+      return true;
+    return false;
+  }
+
   handleOpneGoal = () => {
+    if (this.isReaadOnly())
+      return
     this.setState({
       goal: this.state.goal,
       showGoalView: true,
@@ -60,11 +72,15 @@ class GoalCard extends React.Component<IProps, IState> {
             {this.props.goal.title}
           </Typography>
 
-          <Tooltip title="Delete">
-            <IconButton aria-label="delete" className="delete_button">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          {
+            !this.isReaadOnly()
+            &&
+            <Tooltip title="Delete">
+              <IconButton aria-label="delete" className="delete_button">
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          }
         </CardActionArea>
 
         <div className="container">
@@ -73,31 +89,38 @@ class GoalCard extends React.Component<IProps, IState> {
             progressToReach={this.props.goal.progressToReach}
           />
 
-          <Tooltip
-            title="Modify progress with the specified number"
-            aria-label="add"
-          >
-            <TextField
-              type="number"
-              defaultValue="+1"
-              className="input_progress"
-              onChange={(text: any) => {
-                this.setState({
-                  input_progress: Number(text.target.value)
-                });
-              }}
-            />
-          </Tooltip>
-
-          <Tooltip title="Modify" aria-label="add">
-            <Fab color="inherit" className="add_button_progress">
-              <Done
-                onClick={e => {
-                  this.handleClick();
+          {
+            !this.isReaadOnly()
+            &&
+            <Tooltip
+              title="Modify progress with the specified number"
+              aria-label="add"
+            >
+              <TextField
+                type="number"
+                defaultValue="+1"
+                className="input_progress"
+                onChange={(text: any) => {
+                  this.setState({
+                    input_progress: Number(text.target.value)
+                  });
                 }}
               />
-            </Fab>
-          </Tooltip>
+            </Tooltip>
+          }
+          {
+            !this.isReaadOnly()
+            &&
+            <Tooltip title="Modify" aria-label="add">
+              <Fab color="inherit" className="add_button_progress">
+                <Done
+                  onClick={e => {
+                    this.handleClick();
+                  }}
+                />
+              </Fab>
+            </Tooltip>
+          }
           <GeneralGoalViewPopupComponent
             selfDistructFunction={this.handleCloseGoal}
             open={this.state.showGoalView}
