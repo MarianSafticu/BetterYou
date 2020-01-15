@@ -1,4 +1,4 @@
-export default interface RegisterRequest {
+export default interface RegisterResponse {
     token: string;
     errorMessage: string;
 }

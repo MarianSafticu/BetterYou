@@ -142,7 +142,7 @@ export interface EditGoalSuccess {
 }
 export interface EditGoalError {
   type: typeof EDIT_GOAL_ERROR;
-  paylaod: string;
+  payload: string;
 }
 
 
@@ -248,5 +248,6 @@ export type AppActionType =
   | EditHabitBegin
   | EditHabitSuccess
   | EditHabitError
+  | DeleteHabitBegin
   | DeleteHabitSuccess
   | DeleteHabitError
