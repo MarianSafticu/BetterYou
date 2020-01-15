@@ -213,7 +213,7 @@ public class CRUDServices {
      * @param userId the owner's id of the goal (i.e. the user who owns the goal)
      * @throws ServiceException if any error occurs while saving the goal
      */
-    public void addUserGoal(final Goal goal, final long userId, boolean isPublic, LocalDate endDate) {
+    public long addUserGoal(final Goal goal, final long userId, boolean isPublic, LocalDate endDate) {
         LOG.info("Adding goal {} for user with id {}", goal, userId);
         User goalOwner = userRepo.get(userId);
 
@@ -223,8 +223,9 @@ public class CRUDServices {
         }
 
         try {
-            goalRepo.addUserToGoal(goalOwner, goal, isPublic, endDate);
+            long goalId = goalRepo.addUserToGoal(goalOwner, goal, isPublic, endDate);
             LOG.info("Successfully saved goal to repo");
+            return goalId;
         } catch (RepoException e) {
             LOG.error("Error occurred while adding goal to repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while adding goal to repo");

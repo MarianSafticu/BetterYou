@@ -36,7 +36,8 @@ public class Goal implements HasId<Long> {
             fetch = FetchType.EAGER)
     private Set<UserGoal> users;
 
-    public Goal() {}
+    public Goal() {
+    }
 
     public Goal(String title,
                 String description,
@@ -99,7 +100,6 @@ public class Goal implements HasId<Long> {
 
     @Override
     public String toString() {
-//        return "";
         return "<Goal id=\"" + id + "\" title=\"" + title + ">";
     }
 

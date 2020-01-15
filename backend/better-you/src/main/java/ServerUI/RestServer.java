@@ -19,6 +19,7 @@ import ServerUI.Requests.friends.CreateFriendRequest;
 import ServerUI.Requests.friends.SearchUsersRequest;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;
+import ServerUI.Responses.IdResponse;
 import ServerUI.Responses.TokenResponse;
 import Service.ServiceException;
 import Service.AuthService;
@@ -203,8 +204,8 @@ public class RestServer {
         try {
             validationService.validateGoal(goalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.addUserGoal(goalRequest.getGoal(), userId, goalRequest.isPublic(), goalRequest.getEndDate());
-            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+            long goalId = crudServices.addUserGoal(goalRequest.getGoal(), userId, goalRequest.isPublic(), goalRequest.getEndDate());
+            return new ResponseEntity<>(new IdResponse(goalId), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
