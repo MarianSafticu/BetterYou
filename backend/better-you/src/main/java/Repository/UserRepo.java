@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Repository
 public class UserRepo extends AbstractRepo<Long, User> {
     private static final String EMAIL_FIELD = "email";
+    private static final String USERNAME_FIELD = "username";
 
     public UserRepo() {
         super(User.class);
@@ -44,6 +45,19 @@ public class UserRepo extends AbstractRepo<Long, User> {
             Root<User> root = criteriaQuery.from(User.class);
             criteriaQuery.select(root);
             criteriaQuery.where(criteriaBuilder.equal(root.get(EMAIL_FIELD), email));
+            return session.createQuery(criteriaQuery).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public User getUserByUsername(String username) {
+        try (Session session = HibernateSesionFactory.getFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(criteriaBuilder.equal(root.get(USERNAME_FIELD), username));
             return session.createQuery(criteriaQuery).getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -81,32 +95,22 @@ public class UserRepo extends AbstractRepo<Long, User> {
         }
     }
 
-    /**
-     * Set 2 users as friends.
-     *
-     * @param u1 the first user
-     * @param u2 the second user
-     * @throws RepoException in case a user does not exist in database
-     */
-    public void setFriends(User u1, User u2) throws RepoException {
-        u1.getFriends().add(u2);
-        u2.getFriends().add(u1);
-        update(u1.getId(), u1);
-        update(u2.getId(), u2);
+    synchronized public void setFriends(final long userId1, final long userId2) throws RepoException {
+        User user1 = get(userId1);
+        User user2 = get(userId2);
+        user1.getFriends().add(user2);
+        user2.getFriends().add(user1);
+        update(userId1, user1);
+        update(userId2, user2);
     }
 
-    /**
-     * Remove friendship between 2 users.
-     *
-     * @param u1 the first user
-     * @param u2 the second user
-     * @throws RepoException in case a user does not exist in database
-     */
-    public void removeFriends(User u1, User u2) throws RepoException {
-        u1.getFriends().remove(u2);
-        u2.getFriends().remove(u1);
-        update(u1.getId(), u1);
-        update(u2.getId(), u2);
+    synchronized public void removeFriends(final long userId1, final long userId2) throws RepoException {
+        User user1 = get(userId1);
+        User user2 = get(userId2);
+        user1.getFriends().remove(user2);
+        user2.getFriends().remove(user1);
+        update(userId1, user1);
+        update(userId2, user2);
     }
 
 
@@ -155,5 +159,17 @@ public class UserRepo extends AbstractRepo<Long, User> {
         }
         u.getUserGoals().remove(userGoalList.get(0));
         update(user_id, u);
+    }
+
+    public List<User> getByUsernamePrefix(final String usernamePrefix, final long userId) {
+        return getAll()
+                .stream()
+                .filter(user ->
+                        user.getUsername()
+                                .toLowerCase()
+                                .startsWith(usernamePrefix.toLowerCase())
+                                && user.getId() != userId
+                                && user.isVerified())
+                .collect(Collectors.toList());
     }
 }

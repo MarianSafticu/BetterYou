@@ -14,20 +14,23 @@ def erase_database():
 
 def register_users():
     print('-------->>> Registering users')
-    print('Registering user1')
-    response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user1), headers=headers)
-    assert response.status_code == 200
-    token_user_1 = response.json()['token']
+    tokens = []
+    usernames = []
 
-    print('Registering user2')
-    response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user2), headers=headers)
-    assert response.status_code == 200
-    token_user_2 = response.json()['token']
+    for user in all_users:
+        response = requests.post('http://localhost:12404/app/better-you/register', data=json.dumps(user),
+                                 headers=headers)
+        assert response.status_code == 200
+        tokens.append(response.json()['token'])
+        usernames.append(user['username'])
 
-    print('USERS REGISTER')
-    print('USER 1 TOKEN = ' + token_user_1)
-    print('USER 2 TOKEN = ' + token_user_2)
-    return token_user_1, token_user_2
+    print('TOKENS\n', tokens)
+
+    print('Set users to verified')
+    response = requests.post('http://localhost:12404/app/better-you/gaia', headers=headers)
+    assert response.status_code == 200
+
+    return tokens, usernames
 
 
 def verify_no_goals(tokens):
@@ -255,9 +258,147 @@ def verify_delete_habits(tokens, user_habits):
     assert len(user1_habits) == 0
 
 
+def verify_user_prefix_search(tokens):
+    print('----------->>> User search by prefix')
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'Da'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 2
+    print('USERS with prefix "Da"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[1], 'usernamePrefix': 'ra'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 3
+    print('USERS with prefix "ra"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'dane'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 1
+    print('USERS with prefix "dane"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'xxx'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 0
+    print('USERS with prefix "xxx"\n', users_list)
+
+    response = requests.post('http://localhost:12404/app/better-you/users',
+                             data=json.dumps({'token': tokens[0], 'usernamePrefix': 'razvan'}),
+                             headers=headers)
+    users_list = response.json()
+    assert len(users_list) == 0
+    print('USERS with prefix "razvan" searched by "razvan"\n', users_list)
+
+
+def verify_friend_requests(tokens, usernames):
+    print('------>>> Generating friend requests')
+    print('USERNAMES: ', usernames)
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[1]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[2]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[3]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[1]}),
+                             headers=headers)
+    assert response.status_code == 403
+    assert json.loads(response.text)['massage'] == 'Friend request already exists'
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 403
+    assert json.loads(response.text)['massage'] == 'Cannot send friend request to self'
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request',
+                             data=json.dumps({'token': tokens[0], 'usernameReceiver': 'Ah oh uhhh'}),
+                             headers=headers)
+    assert response.status_code == 403
+    assert json.loads(response.text)['massage'] == 'No user found with username=\'Ah oh uhhh\''
+
+
+def verify_accept_reject_friend_requests(tokens, usernames):
+    print('------>>> Accepting & rejecting friend requests')
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[1]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 1
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
+                             data=json.dumps({'token': tokens[1], 'usernameSender': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[1]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 0
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[2]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 1
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
+                             data=json.dumps({'token': tokens[2], 'usernameSender': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/list',
+                             data=json.dumps({'token': tokens[2]}),
+                             headers=headers)
+    friendship_requests = response.json()
+    assert len(friendship_requests) == 0
+
+    response = requests.post('http://localhost:12404/app/better-you/friend/request/accept',
+                             data=json.dumps({'token': tokens[3], 'usernameSender': usernames[0]}),
+                             headers=headers)
+    assert response.status_code == 200
+
+
+def verify_friend_delete(tokens, usernames):
+    print('------>>> Deleting friends')
+
+    response = requests.delete('http://localhost:12404/app/better-you/friend/request',
+                               data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[1]}),
+                               headers=headers)
+    assert response.status_code == 200
+
+    response = requests.delete('http://localhost:12404/app/better-you/friend/request',
+                               data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[2]}),
+                               headers=headers)
+    assert response.status_code == 200
+
+    response = requests.delete('http://localhost:12404/app/better-you/friend/request',
+                               data=json.dumps({'token': tokens[0], 'usernameRequested': usernames[3]}),
+                               headers=headers)
+    assert response.status_code == 200
+
+
 def main_test():
     erase_database()
-    tokens = register_users()
+    tokens, usernames = register_users()
     verify_no_goals(tokens)
     user_goals = populate_goals(tokens)
     verify_update_goals(tokens, user_goals)
@@ -266,6 +407,10 @@ def main_test():
     user_habits = populate_habits(tokens)
     verify_update_habits(tokens, user_habits)
     verify_delete_habits(tokens, user_habits)
+    verify_user_prefix_search(tokens)
+    verify_friend_requests(tokens, usernames)
+    verify_accept_reject_friend_requests(tokens, usernames)
+    # verify_friend_delete(tokens, usernames)
 
 
 main_test()

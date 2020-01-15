@@ -4,6 +4,7 @@ import Model.Habit;
 import Model.User;
 import Model.UserGoal;
 import ServerUI.Requests.Authorization;
+import ServerUI.Requests.auth.TokenRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -13,8 +14,12 @@ import ServerUI.Requests.auth.recover.RecoverAccountProcessRequest;
 import ServerUI.Requests.auth.recover.RecoverAccountRequestRequest;
 import ServerUI.Requests.auth.register.RegisterConfirmationRequest;
 import ServerUI.Requests.auth.register.RegisterRequest;
+import ServerUI.Requests.friends.AcceptFriendRequest;
+import ServerUI.Requests.friends.CreateFriendRequest;
+import ServerUI.Requests.friends.SearchUsersRequest;
 import ServerUI.Responses.BooleanResponse;
 import ServerUI.Responses.ErrorResponse;
+import ServerUI.Responses.IdResponse;
 import ServerUI.Responses.TokenResponse;
 import Service.ServiceException;
 import Service.AuthService;
@@ -103,7 +108,7 @@ public class RestServer {
             String token = authService.register(newUser);
             return new ResponseEntity<>(new TokenResponse(token), HttpStatus.OK);
         } catch (ServiceException e) {
-            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
             return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,7 +116,6 @@ public class RestServer {
     }
 
     /**
-     * AICI AI RAMAS
      * This method receives a JSON with all the information about the user and try to put them into the database
      *
      * @param registerConfirmationRequest- here are all the information about the confirmation
@@ -137,9 +141,9 @@ public class RestServer {
      * @return true if the reset is done and false if the email is invalid
      */
     @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> reset(@RequestBody ResetRequest resetRequest) {
+    public ResponseEntity<?> reset(@RequestHeader Authorization authorization, @RequestBody ResetRequest resetRequest) {
         try {
-            authService.resetPassword(resetRequest.getToken(), resetRequest.getPassword());
+            authService.resetPassword(authorization.getToken(), resetRequest.getPassword());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -200,8 +204,8 @@ public class RestServer {
         try {
             validationService.validateGoal(goalRequest.getGoal());
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.addUserGoal(goalRequest.getGoal(), userId, goalRequest.isPublic(), goalRequest.getEndDate());
-            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+            long goalId = crudServices.addUserGoal(goalRequest.getGoal(), userId, goalRequest.isPublic(), goalRequest.getEndDate());
+            return new ResponseEntity<>(new IdResponse(goalId), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -344,11 +348,118 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> searchUsers(@RequestHeader Authorization authorization,
+                                         @RequestBody SearchUsersRequest searchUsersRequest) {
+        try {
+            return new ResponseEntity<>(
+                    crudServices.getUsersByUsernamePrefix(
+                            searchUsersRequest.getUsernamePrefix(),
+                            authService.getUserIdFromJWT(authorization.getToken())),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> friendRequest(@RequestHeader Authorization authorization,
+                                           @RequestBody CreateFriendRequest createFriendRequest) {
+        try {
+            crudServices.addFriendshipRequest(authService.getUserIdFromJWT(authorization.getToken()),
+                    createFriendRequest.getUsernameReceiver());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken())), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization,
+                                                 @RequestBody AcceptFriendRequest acceptFriendRequest) {
+        try {
+            crudServices.acceptFriendRequest(authService.getUserIdFromJWT(authorization.getToken()),
+                    acceptFriendRequest.getUsernameSender());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request/reject", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> rejectFriendRequest(@RequestHeader Authorization authorization,
+                                                 @RequestBody AcceptFriendRequest acceptFriendRequest) {
+        try {
+            crudServices.rejectFriendRequest(authService.getUserIdFromJWT(authorization.getToken()),
+                    acceptFriendRequest.getUsernameSender());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/request", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> removeFriend(@RequestHeader Authorization authorization,
+                                          @RequestBody CreateFriendRequest createFriendRequest) {
+        try {
+            crudServices.removeFriend(authService.getUserIdFromJWT(authorization.getToken()),
+                    createFriendRequest.getUsernameReceiver());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @RequestMapping(value = "/hades", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> requestRecoverAccount() {
         try {
             crudServices.eraseData();
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/gaia", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> verifyAllUsers() {
+        try {
+            LOG.warn("Setting all users to verified!");
+            for (User user : crudServices.getAllUsers()) {
+                user.setVerified(true);
+                crudServices.updateUser(user.getId(), user);
+            }
+            LOG.warn("All users set to verified successfully");
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
