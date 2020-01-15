@@ -1,6 +1,8 @@
 import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import RegisterRequest from "../../models/requests/RegisterRequest";
+import Goal from "../../models/Goal";
+import AddGoalRequest from "../../models/requests/AddGoalRequest";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -15,6 +17,10 @@ export const REGISTER_USER_ERROR = "REGISTER_USER_ERROR";
 export const CONFIRM_ACCOUNT_BEGIN = "CONFIRM_ACCOUNT_BEGIN";
 export const CONFIRM_ACCOUNT_SUCCESS = "CONFIRM_ACCOUNT_SUCCESS";
 export const CONFIRM_ACCOUNT_ERROR = "CONFIRM_ACCOUNT_ERROR";
+
+export const ADD_GOAL_BEGIN = "ADD_GOAL_BEGIN";
+export const ADD_GOAL_SUCCESS = "ADD_GOAL_SUCCESS";
+export const ADD_GOAL_ERROR = "ADD_GOAL_ERROR";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -62,6 +68,19 @@ export interface ConfirmAccountError {
   payload: string;
 }
 
+export interface AddGoalBegin {
+  type: typeof ADD_GOAL_BEGIN;
+  payload: AddGoalRequest;
+}
+export interface AddGoalSuccess {
+  type: typeof ADD_GOAL_SUCCESS;
+  payload: Goal;
+}
+export interface AddGoalError {
+  type: typeof ADD_GOAL_ERROR;
+  payload: string;
+}
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -72,4 +91,7 @@ export type AppActionType =
   | RegisterUserError
   | ConfirmAccountBegin
   | ConfirmAccountSuccess
-  | ConfirmAccountError;
+  | ConfirmAccountError
+  | AddGoalBegin
+  | AddGoalSuccess
+  | AddGoalError

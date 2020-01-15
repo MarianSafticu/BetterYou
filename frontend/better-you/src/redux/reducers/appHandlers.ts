@@ -2,6 +2,8 @@ import AppState from "../store/store";
 import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import { deleteCookie } from "../../services/CookieService";
+import AddGoalRequest from "../../models/requests/AddGoalRequest";
+import Goal from "../../models/Goal";
 
 export function setCurrentUserBeginHandler(
   oldState: AppState,
@@ -103,5 +105,33 @@ export function confirmAccountErrorHandler(
   newState.loading = false;
   newState.error = error;
   newState.accountConfirmed = false;
+  return newState;
+}
+
+export function addGoalBeginHandler(oldState: AppState, goal: AddGoalRequest): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
+  return newState;
+}
+
+export function addGoalSuccessHandler(oldState: AppState, goal: Goal): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
+  newState.goals.push(goal);
+  return newState;
+}
+
+export function addGoalErrorHandler(
+  oldState: AppState,
+  error: string
+): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }

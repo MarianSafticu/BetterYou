@@ -12,7 +12,8 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: goalCategorys[0]
+    category: goalCategorys[0],
+    isPublic: true
   },
   {
     title: "Citeste 11 carti",
@@ -21,7 +22,8 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: goalCategorys[0]
+    category: goalCategorys[0],
+    isPublic: false
   },
   {
     title: "Citeste 12 carti",
@@ -30,53 +32,54 @@ const goalsList: Goal[] = [
     progressToReach: 100,
     endDate: new Date(),
     startDate: new Date(),
-    category: goalCategorys[0]
-  },
-  {
-    title: "Citeste 13 carti",
-    description: "ddd",
-    currentProgress: 99,
-    progressToReach: 100,
-    endDate: new Date(),
-    startDate: new Date(),
-    category: goalCategorys[0]
-  },
-  {
-    title: "Citeste 14 carti",
-    description: "eee",
-    currentProgress: 100,
-    progressToReach: 100,
-    endDate: new Date(),
-    startDate: new Date(),
-    category: goalCategorys[0]
-  },
-  {
-    title: "Citeste 15 carti",
-    description: "fff",
-    currentProgress: 50,
-    progressToReach: 100,
-    endDate: new Date(),
-    startDate: new Date(),
-    category: goalCategorys[0]
-  },
-  {
-    title: "Citeste 16 carti",
-    description: "ggg",
-    currentProgress: 24,
-    progressToReach: 100,
-    endDate: new Date(),
-    startDate: new Date(),
-    category: goalCategorys[0]
-  },
-  {
-    title: "Citeste 17 carti",
-    description: "hhh",
-    currentProgress: 24,
-    progressToReach: 100,
-    endDate: new Date(),
-    startDate: new Date(),
-    category: goalCategorys[0]
+    category: goalCategorys[0],
+    isPublic: true
   }
+  // {
+  //   title: "Citeste 13 carti",
+  //   description: "ddd",
+  //   currentProgress: 99,
+  //   progressToReach: 100,
+  //   endDate: new Date(),
+  //   startDate: new Date(),
+  //   category: goalCategorys[0]
+  // },
+  // {
+  //   title: "Citeste 14 carti",
+  //   description: "eee",
+  //   currentProgress: 100,
+  //   progressToReach: 100,
+  //   endDate: new Date(),
+  //   startDate: new Date(),
+  //   category: goalCategorys[0]
+  // },
+  // {
+  //   title: "Citeste 15 carti",
+  //   description: "fff",
+  //   currentProgress: 50,
+  //   progressToReach: 100,
+  //   endDate: new Date(),
+  //   startDate: new Date(),
+  //   category: goalCategorys[0]
+  // },
+  // {
+  //   title: "Citeste 16 carti",
+  //   description: "ggg",
+  //   currentProgress: 24,
+  //   progressToReach: 100,
+  //   endDate: new Date(),
+  //   startDate: new Date(),
+  //   category: goalCategorys[0]
+  // },
+  // {
+  //   title: "Citeste 17 carti",
+  //   description: "hhh",
+  //   currentProgress: 24,
+  //   progressToReach: 100,
+  //   endDate: new Date(),
+  //   startDate: new Date(),
+  //   category: goalCategorys[0]
+  // }
 ];
 
 class GoalList extends React.Component {

@@ -3,6 +3,8 @@ import LoginRequest from "../models/requests/LoginRequest";
 import RegisterRequest from "../models/requests/RegisterRequest";
 import LoginResponse from "../models/responses/LoginResponse";
 import RegisterResponse from "../models/responses/RegisterResponse";
+import AddGoalRequest from "../models/requests/AddGoalRequest";
+import { getCookie } from "./CookieService";
 
 // const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -56,6 +58,25 @@ export default class HttpService implements IHttpService {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(confirmationCode)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
+  async addGoal(goal: AddGoalRequest): Promise<number> {
+    console.log("TOKEN: ", JSON.stringify(getCookie("token")));
+    return await fetch(`${url}/goal`, {
+      method: "post",
+      headers: {
+        "Authorization": JSON.stringify(getCookie("token")),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(goal)
     })
       .then(response => response.json())
       .then(body => {

@@ -8,12 +8,17 @@ import {
   registerUserSuccess,
   registerUserError,
   confirmAccountSuccess,
-  confirmAccountError
+  confirmAccountError,
+  addGoalSuccess,
+  addGoalError
 } from "../actions/actions";
 import LoginRequest from "../../models/requests/LoginRequest";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
 import RegisterRequest from "../../models/requests/RegisterRequest";
+import AddGoalRequest from "../../models/requests/AddGoalRequest";
+import Goal from "../../models/Goal";
+import { goalCategorys } from "../../models/GoalCategorys";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -59,5 +64,29 @@ export function* confirmAccountHandler(
     const { aBoolean , massage } = response;
     if (aBoolean) yield put(confirmAccountSuccess(aBoolean));
     else if (massage) yield put(confirmAccountError(massage));
+  }
+}
+
+export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
+  let goal: AddGoalRequest = action.payload as AddGoalRequest;
+  const response = yield call(httpService.addGoal, goal);
+  if(response) {
+    const {id, massage} = response;
+    if(id) {
+      let goalComplete: Goal = {
+        id: id,
+        title: goal.goal.title,
+        description: goal.goal.description,
+        startDate: new Date(),
+        endDate: new Date(goal.endDate),
+        currentProgress: 0,
+        progressToReach: goal.goal.progressToReach,
+        isPublic: goal.public,
+        category: {category: "none",
+        color: "#e9eff2"}
+      }
+      yield put(addGoalSuccess(goalComplete))
+    }
+    else if(massage) yield put(addGoalError(massage))
   }
 }

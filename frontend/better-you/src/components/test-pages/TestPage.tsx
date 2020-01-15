@@ -25,7 +25,8 @@ var defaultGoal: Goal ={
   endDate: new Date(),
   progressToReach: 100,
   startDate: new Date(),
-  title: "title default"
+  title: "title default",
+  isPublic: true
 }
 
 export default class TestPageComponent extends Component<
