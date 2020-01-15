@@ -12,19 +12,18 @@ import {
   addGoalSuccess,
   addGoalError
 } from "../actions/actions";
-import LoginRequest from "../../models/requests/LoginRequest";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
+import Goal from "../../models/Goal";
+import LoginRequest from "../../models/requests/LoginRequest";
 import RegisterRequest from "../../models/requests/RegisterRequest";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
-import Goal from "../../models/Goal";
-import { goalCategorys } from "../../models/GoalCategorys";
+
 
 const httpService: IHttpService = HttpService.getInstance();
 
-export function* loginUserHandler(
-  action: AppActionType
-): IterableIterator<any> {
+
+export function* loginUserHandler(action: AppActionType): IterableIterator<any> {
   let user: LoginRequest = action.payload as LoginRequest;
   const response = yield call(httpService.loginUser, user);
   if (response) {
@@ -43,9 +42,8 @@ export function* loginUserHandler(
   }
 }
 
-export function* registerUserHandler(
-  action: AppActionType
-): IterableIterator<any> {
+
+export function* registerUserHandler(action: AppActionType): IterableIterator<any> {
   let user: RegisterRequest = action.payload as RegisterRequest;
   const response = yield call(httpService.registerUser, user);
   if (response) {
@@ -55,9 +53,8 @@ export function* registerUserHandler(
   }
 }
 
-export function* confirmAccountHandler(
-  action: AppActionType
-): IterableIterator<any> {
+
+export function* confirmAccountHandler(action: AppActionType): IterableIterator<any> {
   let code: string = action.payload as string;
   const response = yield call(httpService.confirmAccount, code);
   if (response) {
@@ -66,6 +63,12 @@ export function* confirmAccountHandler(
     else if (massage) yield put(confirmAccountError(massage));
   }
 }
+
+
+export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
+
+}
+
 
 export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
   let goal: AddGoalRequest = action.payload as AddGoalRequest;
@@ -82,11 +85,43 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
         currentProgress: 0,
         progressToReach: goal.goal.progressToReach,
         isPublic: goal.public,
-        category: {category: "none",
-        color: "#e9eff2"}
+        category: { 
+          category: "none",
+          color: "#e9eff2"
+        }
       }
       yield put(addGoalSuccess(goalComplete))
     }
     else if(massage) yield put(addGoalError(massage))
   }
+}
+
+
+export function* editGoalHandler(action: AppActionType): IterableIterator<any> {
+
+}
+
+
+export function* deleteGoalHandler(action: AppActionType): IterableIterator<any> {
+
+}
+
+
+export function* fetchHabitsHandler(action: AppActionType): IterableIterator<any> {
+
+}
+
+
+export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
+
+}
+
+
+export function* editHabitHandler(action: AppActionType): IterableIterator<any> {
+
+}
+
+
+export function* deleteHabitHandler(action: AppActionType): IterableIterator<any> {
+  
 }
