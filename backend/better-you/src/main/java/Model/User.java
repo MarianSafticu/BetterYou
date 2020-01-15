@@ -24,6 +24,7 @@ public class User implements HasId<Long> {
     @Column(name = "profile_name")
     private String profile_name;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
@@ -33,24 +34,29 @@ public class User implements HasId<Long> {
     @Column(name = "BirthDate")
     private LocalDate birthDate;
 
+    @JsonIgnore
     @Column(name = "isVerified")
     private boolean isVerified;
 
+    @JsonIgnore
     @Column(name = "confirmCode")
     private String confirmCode;
 
     @Column(name = "points")
     private long points;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     private Set<UserGoal> goals;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Habit> habits;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> friends;
 
@@ -70,8 +76,10 @@ public class User implements HasId<Long> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         User user = (User) o;
         return username.equals(user.username);
     }
@@ -143,7 +151,8 @@ public class User implements HasId<Long> {
         return confirmCode;
     }
 
-    public Set<UserGoal> getUserGoals(){
+    @JsonIgnore
+    public Set<UserGoal> getUserGoals() {
         return goals;
     }
 
@@ -153,8 +162,9 @@ public class User implements HasId<Long> {
                 .map(UserGoal::getGoal)
                 .collect(Collectors.toSet());
     }
+
     @JsonIgnore
-    public Set<User> getFriends(){
+    public Set<User> getFriends() {
         return this.friends;
     }
 

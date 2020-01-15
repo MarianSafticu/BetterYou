@@ -37,7 +37,7 @@ public class AuthService {
                        final ValidationService validationService,
                        final AppUtils appUtils,
                        final MailUtils mailUtils,
-                       @Value("${server.address.port}") String serverAddress) {
+                       @Value("${frontend.address.port}") String serverAddress) {
         this.crudServices = crudServices;
         this.validationService = validationService;
         this.appUtils = appUtils;
@@ -102,10 +102,10 @@ public class AuthService {
 
         long newUserId = crudServices.getUserIdFromEmail(newUser.getEmail());
         final String confirmationCode = AppUtils.generateCode();
-        String resetLink = serverAddress + "account/confirmation/request?token=" + confirmationCode;
+        String resetLink = serverAddress + "?code=" + confirmationCode;
         LOG.info("Generated confirmation code for user={} is code={}", newUser, confirmationCode);
         crudServices.addRegistrationLink(new RegistrationLink(newUserId, confirmationCode));
-        //TODO UNCOMMENT!!! mailUtils.sendRegistrationEmail(newUser, resetLink);
+        mailUtils.sendRegistrationEmail(newUser, resetLink);
         return appUtils.createJWT(String.valueOf(newUserId));
     }
 

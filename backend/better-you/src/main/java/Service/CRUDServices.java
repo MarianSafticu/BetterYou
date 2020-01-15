@@ -1,12 +1,14 @@
 package Service;
 
 
+import Model.FriendRequest;
 import Model.Goal;
 import Model.Habit;
 import Model.RecoverLink;
 import Model.RegistrationLink;
 import Model.User;
 import Model.UserGoal;
+import Repository.FriendRequestRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
 import Repository.RecoverLinkRepo;
@@ -36,6 +38,7 @@ public class CRUDServices {
     private final GoalRepo goalRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
     private final RecoverLinkRepo recoverLinkRepo;
+    private final FriendRequestRepo friendRequestRepo;
 
     /**
      * @param userRepo             repository for {@link User}
@@ -47,12 +50,14 @@ public class CRUDServices {
                         final HabitsRepo habitsRepo,
                         final GoalRepo goalRepo,
                         final RegistrationLinkRepo registrationLinkRepo,
-                        final RecoverLinkRepo recoverLinkRepo) {
+                        final RecoverLinkRepo recoverLinkRepo,
+                        final FriendRequestRepo friendRequestRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
         this.recoverLinkRepo = recoverLinkRepo;
+        this.friendRequestRepo = friendRequestRepo;
     }
 
     /**
@@ -111,6 +116,11 @@ public class CRUDServices {
     public User getUserFromEmail(final String email) {
         LOG.info("Getting user with email {}", email);
         return userRepo.getUserByEmail(email);
+    }
+
+    public User getUserFromUsername(final String username) {
+        LOG.info("Getting user with username {}", username);
+        return userRepo.getUserByUsername(username);
     }
 
     /**
@@ -203,7 +213,7 @@ public class CRUDServices {
      * @param userId the owner's id of the goal (i.e. the user who owns the goal)
      * @throws ServiceException if any error occurs while saving the goal
      */
-    public void addUserGoal(final Goal goal, final long userId, boolean isPublic, LocalDate endDate) {
+    public long addUserGoal(final Goal goal, final long userId, boolean isPublic, LocalDate endDate) {
         LOG.info("Adding goal {} for user with id {}", goal, userId);
         User goalOwner = userRepo.get(userId);
 
@@ -213,8 +223,9 @@ public class CRUDServices {
         }
 
         try {
-            goalRepo.addUserToGoal(goalOwner, goal, isPublic, endDate);
+            long goalId = goalRepo.addUserToGoal(goalOwner, goal, isPublic, endDate);
             LOG.info("Successfully saved goal to repo");
+            return goalId;
         } catch (RepoException e) {
             LOG.error("Error occurred while adding goal to repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while adding goal to repo");
@@ -377,6 +388,179 @@ public class CRUDServices {
         return recoverLinkRepo.getByToken(token);
     }
 
+    public List<User> getUsersByUsernamePrefix(final String usernamePrefix, final long userId) {
+        LOG.info("Searching for users with prefix='{}'", usernamePrefix);
+        if (userRepo.get(userId) == null) {
+            LOG.warn("Provided userId is invalid!");
+            throw new ServiceException("Not authenticated");
+        }
+        return userRepo.getByUsernamePrefix(usernamePrefix, userId);
+    }
+
+    /**
+     * @param userId            the user who wants to send a friend request
+     * @param requestedUsername the user to be requested
+     */
+    public void addFriendshipRequest(final long userId, final String requestedUsername) {
+        LOG.info("Friendship requested by userId={} to username={}", userId, requestedUsername);
+
+        User requester = getUserFromId(userId);
+        if (requester == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        User requested = getUserFromUsername(requestedUsername);
+        if (requested == null) {
+            LOG.warn("No user found with username='{}'", requestedUsername);
+            throw new ServiceException("No user found with username='" + requestedUsername + "'");
+        }
+
+        if (requested.getId().equals(requester.getId())) {
+            LOG.warn("Cannot send friend request to self");
+            throw new ServiceException("Cannot send friend request to self");
+        }
+
+        if (requested.getFriends().contains(requester)) {
+            LOG.warn("User {} and {} are already friends", requested.getEmail(), requester.getEmail());
+            throw new ServiceException("Already friend with " + requested.getEmail());
+        }
+
+        try {
+            friendRequestRepo.add(new FriendRequest(requester, requested));
+            LOG.info("Friend request from {} to {} sent successfully", requester.getEmail(), requested.getEmail());
+        } catch (RepoException e) {
+            LOG.warn("Friend request failed: {}", e.getMessage());
+            throw new ServiceException("Friend request already exists");
+        }
+    }
+
+    public List<FriendRequest> getFriendshipRequests(final long userId) {
+        LOG.info("Retrieving friendship requests for userId={}", userId);
+
+        User receiver = getUserFromId(userId);
+        if (receiver == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        return friendRequestRepo.getUserReceivedFriendshipRequests(receiver);
+    }
+
+    public void acceptFriendRequest(final long userId, final String requesterUsername) {
+        LOG.info("userId={} wants to accept friendship requested by username={}", userId, requesterUsername);
+
+        User receiver = getUserFromId(userId);
+        if (receiver == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        User sender = getUserFromUsername(requesterUsername);
+        if (sender == null) {
+            LOG.warn("No user found with username='{}'", requesterUsername);
+            throw new ServiceException("No user found with username='" + requesterUsername + "'");
+        }
+
+        if (sender.getId().equals(receiver.getId())) {
+            LOG.warn("Cannot send friend request to self");
+            throw new ServiceException("No friend request found");
+        }
+
+        FriendRequest friendRequest = friendRequestRepo.friendRequestFromTo(sender, receiver);
+        if (friendRequest == null) {
+            LOG.warn("No friend request from {}", sender.getUsername());
+            throw new ServiceException("No friend request from " + sender.getUsername());
+        }
+
+        try {
+            LOG.info("Setting friendship between {} and {}", sender.getUsername(), receiver.getUsername());
+            userRepo.setFriends(sender.getId(), receiver.getId());
+            LOG.info("Deleting friend request between {} and {}", sender.getUsername(), receiver.getUsername());
+            friendRequestRepo.delete(friendRequest.getId());
+            LOG.info("Friendship established between {} and {}", sender.getUsername(), receiver.getUsername());
+        } catch (RepoException e) {
+            LOG.error("Error occurred while establish");
+        }
+    }
+
+    public void rejectFriendRequest(final long userId, final String requesterUsername) {
+        LOG.info("userId={} wants to reject friendship requested by username={}", userId, requesterUsername);
+
+        User receiver = getUserFromId(userId);
+        if (receiver == null) {
+            LOG.warn("User not found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        User sender = getUserFromUsername(requesterUsername);
+        if (sender == null) {
+            LOG.warn("No user found with username='{}'", requesterUsername);
+            throw new ServiceException("No user found with username='" + requesterUsername + "'");
+        }
+
+        if (sender.getId().equals(receiver.getId())) {
+            LOG.warn("Cannot send friend request to self");
+            throw new ServiceException("No friend request found");
+        }
+
+        FriendRequest friendRequest = friendRequestRepo.friendRequestFromTo(sender, receiver);
+        if (friendRequest == null) {
+            LOG.warn("No friend request from {}", sender.getUsername());
+            throw new ServiceException("No friend request from " + sender.getUsername());
+        }
+
+        try {
+            LOG.info("rejecting friendship between {} and {}", sender.getUsername(), receiver.getUsername());
+            LOG.info("Deleting friend request between {} and {}", sender.getUsername(), receiver.getUsername());
+            friendRequestRepo.delete(friendRequest.getId());
+            LOG.info("Request deleted between {} and {}", sender.getUsername(), receiver.getUsername());
+        } catch (RepoException e) {
+            LOG.error("Error occurred while establish");
+        }
+    }
+
+    /**
+     * @param userId   the user who wants to remove a friend
+     * @param username the friend to be removed
+     */
+    public void removeFriend(final long userId, final String username) {
+        LOG.info("User with id={} wants to remove friend with username={}", userId, username);
+
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.warn("Invalid user id");
+            throw new ServiceException("Invalid user id");
+        }
+
+        User toBeRemoved = userRepo.getUserByUsername(username);
+        if (toBeRemoved == null) {
+            LOG.warn("No user found with username={}", username);
+            throw new ServiceException("No user found with username='" + username + "'");
+        }
+
+        if (!user.getFriends().contains(toBeRemoved)) {
+            LOG.warn("User {} and {} are not friends", user.getUsername(), toBeRemoved.getUsername());
+            throw new ServiceException("User is not friend with " + username);
+        }
+
+        try {
+            userRepo.removeFriends(user.getId(), toBeRemoved.getId());
+            LOG.info("Users {} and {} removed friendship successfully", user.getUsername(), toBeRemoved.getUsername());
+        } catch (RepoException e) {
+            LOG.error("Unable to remove friendship between {} and {}: {}",
+                    user.getUsername(), toBeRemoved.getUsername(), e.getMessage());
+            throw new ServiceException("Unable to remove friendship");
+        }
+    }
+
+    public List<FriendRequest> getUserReceivedFriendRequests() {
+        return null;
+    }
+
+    public List<FriendRequest> getUserSentFriendRequests() {
+        return null;
+    }
 
     // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
     public void eraseData() {
@@ -387,8 +571,13 @@ public class CRUDServices {
         List<Goal> goals = goalRepo.getAll();
         List<RecoverLink> recoverLinks = recoverLinkRepo.getAll();
         List<RegistrationLink> registrationLinks = registrationLinkRepo.getAll();
+        List<FriendRequest> friendRequests = friendRequestRepo.getAll();
 
         try {
+            LOG.warn("Erasing friend requests");
+            for (FriendRequest friendRequest : friendRequests) {
+                friendRequestRepo.delete(friendRequest.getId());
+            }
             LOG.warn("Erasing habits");
             for (Habit habit : habits) {
                 habitsRepo.delete(habit.getId());
@@ -400,6 +589,19 @@ public class CRUDServices {
             LOG.warn("Erasing registration links");
             for (RegistrationLink registrationLink : registrationLinks) {
                 registrationLinkRepo.delete(registrationLink.getId());
+            }
+            LOG.warn("Removing all friendships :(");
+            for (User user : users) {
+                List<User> friends = new ArrayList<>(user.getFriends());
+                LOG.warn("Erasing friends for user with id={}", user.getId());
+                for (User friend : friends) {
+                    try {
+                        LOG.warn("Erasing friendship between {} and {}", user.getId(), friend.getId());
+                        userRepo.removeFriends(user.getId(), friend.getId());
+                    } catch (Exception e) {
+                        LOG.error(e.getMessage());
+                    }
+                }
             }
             LOG.warn("Erasing user and their user goals");
             for (User user : users) {
@@ -419,5 +621,9 @@ public class CRUDServices {
             LOG.error(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.getAll();
     }
 }

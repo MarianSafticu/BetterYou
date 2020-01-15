@@ -69,7 +69,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @param e is the entity to be added
      * @throws RepoException if the params for entity violates any unique restriction
      */
-    public void add(E e) throws RepoException {
+    synchronized public void add(E e) throws RepoException {
         Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         try{
@@ -95,7 +95,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @throws RepoException if there is no entity with given id in DB
      *                       or the new params for entity violates any unique restriction
      */
-    public void update(ID id,E e) throws RepoException{
+    synchronized public void update(ID id,E e) throws RepoException{
         Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         try {
@@ -123,7 +123,7 @@ public abstract class AbstractRepo<ID,E extends HasId<ID>> {
      * @param id is the id of the entity
      * @throws RepoException if there is no entity with given id in db
      */
-    public void delete(ID id) throws RepoException {
+    synchronized public void delete(ID id) throws RepoException {
         Session s = sessionFactory.openSession();
         Transaction tx = s.beginTransaction();
         CriteriaBuilder cb = s.getCriteriaBuilder();
