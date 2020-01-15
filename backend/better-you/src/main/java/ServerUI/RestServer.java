@@ -3,6 +3,7 @@ package ServerUI;
 import Model.Habit;
 import Model.User;
 import Model.UserGoal;
+import ServerUI.Requests.Authorization;
 import ServerUI.Requests.auth.TokenRequest;
 import ServerUI.Requests.data.GetGoalRequest;
 import ServerUI.Requests.data.GetHabitsRequest;
@@ -157,13 +158,13 @@ public class RestServer {
     /**
      * This method receives a JSON with an token an return all the goals of that user
      *
-     * @param getGoalRequest- a JSON with an token
+     * @param authorization - a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
     @RequestMapping(value = "/goals", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getGoals(@RequestBody GetGoalRequest getGoalRequest) {
+    public ResponseEntity<?> getGoals(@RequestHeader Authorization authorization) {
         try {
-            List<UserGoal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(getGoalRequest.getToken()));
+            List<UserGoal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
             return new ResponseEntity<>(userGoals, HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -176,14 +177,14 @@ public class RestServer {
     /**
      * This method receives a JSON with an token an return all the habits of that user
      *
-     * @param getHabitsRequest- a JSON with an token
+     * @param authorization - a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
     @RequestMapping(value = "/habits", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getHabits(@RequestBody GetHabitsRequest getHabitsRequest) {
+    public ResponseEntity<?> getHabits(@RequestHeader Authorization authorization) {
         try {
             List<Habit> userHabits = crudServices.getUsersHabits(authService.getUserIdFromJWT(
-                    getHabitsRequest.getToken()));
+                    authorization.getToken()));
             return new ResponseEntity<>(userHabits, HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -201,10 +202,10 @@ public class RestServer {
      * @return true if the goal can be added else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestBody GoalRequest goalRequest) {
+    public ResponseEntity<?> addGoal(@RequestHeader Authorization authorization, @RequestBody GoalRequest goalRequest) {
         try {
             validationService.validateGoal(goalRequest.getGoal());
-            long userId = authService.getUserIdFromJWT(goalRequest.getToken());
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.addUserGoal(goalRequest.getGoal(), userId, goalRequest.isPublic(), goalRequest.getEndDate());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -223,10 +224,10 @@ public class RestServer {
      * @return true if the goal can be updated else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateGoal(@RequestBody UserGoalRequest userGoalRequest) {
+    public ResponseEntity<?> updateGoal(@RequestHeader Authorization authorization, @RequestBody UserGoalRequest userGoalRequest) {
         try {
             validationService.validateUserGoal(userGoalRequest.getUserGoal());
-            long userId = authService.getUserIdFromJWT(userGoalRequest.getToken());
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.updateUserGoal(userGoalRequest.getUserGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -245,9 +246,9 @@ public class RestServer {
      * @return true if the goal can be deleted else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteGoal(@RequestBody UserGoalRequest goalRequest) {
+    public ResponseEntity<?> deleteGoal(@RequestHeader Authorization authorization, @RequestBody UserGoalRequest goalRequest) {
         try {
-            long userId = authService.getUserIdFromJWT(goalRequest.getToken());
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.deleteUserGoal(goalRequest.getUserGoal().getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -266,10 +267,10 @@ public class RestServer {
      * @return true if the goal can be added else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> addGoal(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
         try {
             validationService.validateHabit(habitRequest.getHabit());
-            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.addHabit(habitRequest.getHabit(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -288,10 +289,10 @@ public class RestServer {
      * @return true if the habit can be updated else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateHabit(@RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> updateHabit(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
         try {
             validationService.validateHabit(habitRequest.getHabit());
-            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.updateHabit(habitRequest.getHabit(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -310,9 +311,9 @@ public class RestServer {
      * @return true if the habit can be deleted else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteHabit(@RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> deleteHabit(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
         try {
-            long userId = authService.getUserIdFromJWT(habitRequest.getToken());
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.deleteHabit(habitRequest.getHabit(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {

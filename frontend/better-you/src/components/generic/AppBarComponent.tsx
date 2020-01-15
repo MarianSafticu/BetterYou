@@ -54,7 +54,10 @@ class AppBarComponent extends Component<IProps, IState> {
                 <div className="links-container">
                   <div className="logo-container">
                     <NavLink to="/" className="logo">
-                      <BuildIcon />
+                      <img
+                        className="logo-container"
+                        src={"../assets/photos/logo.png"}
+                        alt={"logo"} />
                     </NavLink>
                   </div>
                   <div className="link-container">
@@ -83,7 +86,10 @@ class AppBarComponent extends Component<IProps, IState> {
                 <div className="links-container">
                   <div className="logo-container">
                     <NavLink to="/" className="logo">
-                      <BuildIcon />
+                      <img
+                        className="logo-container"
+                        src={"../assets/photos/logo.png"}
+                        alt={"logo"} />
                     </NavLink>
                   </div>
                 </div>
@@ -118,7 +124,10 @@ class AppBarComponent extends Component<IProps, IState> {
                 <div className="links-container">
                   <div className="logo-container">
                     <NavLink to="/" className="logo">
-                      <BuildIcon />
+                      <img
+                        className="logo-container"
+                        src={"../assets/photos/logo.png"}
+                        alt={"logo"} />
                     </NavLink>
                   </div>
                   <div className="link-container">
@@ -150,7 +159,10 @@ class AppBarComponent extends Component<IProps, IState> {
                 <div className="links-container">
                   <div className="logo-container">
                     <NavLink to="/" className="logo">
-                      <BuildIcon />
+                      <img
+                        className="logo-container"
+                        src={"../assets/photos/logo.png"}
+                        alt={"logo"} />
                     </NavLink>
                   </div>
                 </div>
