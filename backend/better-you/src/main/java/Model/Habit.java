@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -45,9 +46,10 @@ public class Habit implements HasId<Long> {
     @Column(name = "currentStreak")
     private int currentStreak;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<LocalDate> dates;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "userID")
     private User user;
@@ -164,5 +166,21 @@ public class Habit implements HasId<Long> {
 
     public void setCurrentStreak(int currentStreak) {
         this.currentStreak = currentStreak;
+    }
+
+    @Override
+    public String toString() {
+        return "Habit{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", repetitionType=" + repetitionType +
+                ", category=" + category +
+                ", bestStreak=" + bestStreak +
+                ", currentStreak=" + currentStreak +
+                ", dates=" + dates +
+                ", user=" + user +
+                '}';
     }
 }

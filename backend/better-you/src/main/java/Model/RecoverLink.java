@@ -1,6 +1,5 @@
 package Model;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,29 +7,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name = "Registration_Link")
-public class RegistrationLink implements HasId<Long> {
+@Table(name = "recover_link")
+public class RecoverLink implements HasId<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "registration_link_id")
+    @Column(name = "recover_link_id")
     private long id;
     @Column(name = "user_id", nullable = false, unique = true)
     private long userId;
-    @Column(name = "link", nullable = false, unique = true)
-    private String link;
+    @Column(name = "token", nullable = false, unique = true)
+    private String token;
 
-    public RegistrationLink() {
+    public RecoverLink() {
     }
 
     /**
-     * @param userId the user to whom the link was assigned
-     * @param link   the assigned link
+     * @param userId the user to whom the token was assigned
+     * @param token   the assigned token
      */
-    public RegistrationLink(long userId, String link) {
+    public RecoverLink(long userId, String token) {
         this.userId = userId;
-        this.link = link;
+        this.token = token;
     }
 
     public Long getId() {
@@ -49,16 +47,20 @@ public class RegistrationLink implements HasId<Long> {
         this.userId = userId;
     }
 
-    public String getLink() {
-        return link;
+    public String getToken() {
+        return token;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
     public String toString() {
-        return "<RegistrationLink user_id=\"" + userId + "\" link=\"" + link + "\">";
+        return "RecoverLink{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", token='" + token + '\'' +
+                '}';
     }
 }

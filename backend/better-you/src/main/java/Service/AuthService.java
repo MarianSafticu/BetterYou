@@ -1,13 +1,14 @@
 package Service;
 
+import Model.RecoverLink;
 import Model.RegistrationLink;
 import Model.User;
 import io.jsonwebtoken.Claims;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
-//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utils.AppUtils;
 import utils.mail.MailUtils;
 
@@ -24,6 +25,7 @@ public class AuthService {
     private final ValidationService validationService;
     private final AppUtils appUtils;
     private final MailUtils mailUtils;
+    private final String serverAddress;
 
     /**
      * @param crudServices      contains CRUD operations for the application's models
@@ -34,11 +36,13 @@ public class AuthService {
     public AuthService(final CRUDServices crudServices,
                        final ValidationService validationService,
                        final AppUtils appUtils,
-                       final MailUtils mailUtils) {
+                       final MailUtils mailUtils,
+                       @Value("${server.address.port}") String serverAddress) {
         this.crudServices = crudServices;
         this.validationService = validationService;
         this.appUtils = appUtils;
         this.mailUtils = mailUtils;
+        this.serverAddress = serverAddress;
     }
 
     /**
@@ -89,6 +93,7 @@ public class AuthService {
         crudServices.userDataNotUsed(newUser);
         LOG.info("User validation completed successfully");
 
+        crudServices.userDataNotUsed(newUser);
 
         LOG.info("Hashing password for new user");
         newUser.setPassword(appUtils.encode(newUser.getPassword()));
@@ -96,9 +101,36 @@ public class AuthService {
         crudServices.addUser(newUser);
 
         long newUserId = crudServices.getUserIdFromEmail(newUser.getEmail());
-        crudServices.addRegistrationLink(new RegistrationLink(newUserId, AppUtils.generateCode()));
-        mailUtils.sendRegistrationEmail(newUser, AppUtils.generateCode());
+        final String confirmationCode = AppUtils.generateCode();
+        String resetLink = serverAddress + "account/confirmation/request?token=" + confirmationCode;
+        LOG.info("Generated confirmation code for user={} is code={}", newUser, confirmationCode);
+        crudServices.addRegistrationLink(new RegistrationLink(newUserId, confirmationCode));
+        //TODO UNCOMMENT!!! mailUtils.sendRegistrationEmail(newUser, resetLink);
         return appUtils.createJWT(String.valueOf(newUserId));
+    }
+
+    public void confirmRegistration(final String confirmationCode) {
+        LOG.info("Confirmation registration with code={}", confirmationCode);
+
+        final RegistrationLink registrationLink = crudServices.getRegistrationLinkByCode(confirmationCode);
+
+        if (registrationLink == null) {
+            LOG.warn("No registration found with code={}", confirmationCode);
+            throw new ServiceException("Invalid registration code");
+        }
+
+        final User user = crudServices.getUserFromId(registrationLink.getUserId());
+
+        if (user == null) {
+            LOG.warn("No user with id={} found with the from the registration link", registrationLink.getUserId());
+            throw new ServiceException("Invalid registration code");
+        }
+
+        LOG.info("Updating the user id={} to verified", user.getId());
+        user.setVerified(true);
+        crudServices.updateUser(user.getId(), user);
+        LOG.info("Deleting registration link id={} for user with id={}", registrationLink.getId(), user.getId());
+        crudServices.deleteRegistrationLink(registrationLink.getId());
     }
 
     /**
@@ -135,8 +167,42 @@ public class AuthService {
      * @throws ServiceException if any error occurs
      */
     public void recoverAccount(final String email) {
-//        throw new NotImplementedException();
-        //TODO: de implementat
+        LOG.info("Recovering account for email='{}'", email);
+
+        User user = crudServices.getUserFromEmail(email);
+
+        if (user == null) {
+            LOG.info("User with email='{}' not found", email);
+            throw new ServiceException("Email does not exist");
+        }
+
+
+        String resetToken = AppUtils.generateCode();
+        String resetLink = serverAddress + "account/recover/request?token=" + resetToken;
+        LOG.info("resetLink={}", resetLink);
+        mailUtils.sendRecoverPasswordEmail(email, resetLink);
+        crudServices.addRecoverLink(new RecoverLink(user.getId(), resetToken));
+    }
+
+    public void setAccountRecovered(final String resetToken, final String newPassword) {
+        LOG.info("Set account recovered for token={} and password={}", resetToken, newPassword);
+
+        RecoverLink recoverLink = crudServices.getRecoverLinkByToken(resetToken);
+
+        if (recoverLink == null) {
+            LOG.info("Did not found recover link with token='{}'", resetToken);
+            throw new ServiceException("Invalid link");
+        }
+
+        try {
+            User user = crudServices.getUserFromId(recoverLink.getUserId());
+            user.setPassword(appUtils.encode(newPassword));
+            crudServices.updateUser(user.getId(), user);
+            crudServices.deleteRecoverLink(resetToken);
+        } catch (Exception e) {
+            LOG.error("Unable to set account as recovered: {}", e.getMessage());
+            throw new ServiceException("Unable to reset account", e);
+        }
     }
 
     /**

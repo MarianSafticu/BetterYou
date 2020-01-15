@@ -60,14 +60,13 @@ public class MailUtils {
     /**
      * Async sends an email to an user who forgot his password and desires to recover it
      *
-     * @param user the user who forgot his password
      */
-    public void sendRecoverPasswordEmail(final User user, final String resetPasswordLink) {
-        LOG.info("Sending reset password email to {}", user.getEmail());
+    public void sendRecoverPasswordEmail(final String email, final String resetPasswordLink) {
+        LOG.info("Sending reset password email to {}", email);
         String personalisedEmailContent = resetPasswordEmailContent
-                .replaceAll("<username>", user.getUsername())
+                .replaceAll("<username>", email)
                 .replaceAll("<link>", resetPasswordLink);
-        mailSender.sendEmailAsync(user.getEmail(), RESET_PASSWORD_EMAIL_HEADER, personalisedEmailContent);
+        mailSender.sendEmailAsync(email, RESET_PASSWORD_EMAIL_HEADER, personalisedEmailContent);
     }
 
     public String getRegistrationEmailContent() {

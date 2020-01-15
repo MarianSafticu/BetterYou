@@ -3,10 +3,13 @@ package Service;
 
 import Model.Goal;
 import Model.Habit;
+import Model.RecoverLink;
 import Model.RegistrationLink;
 import Model.User;
+import Model.UserGoal;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
+import Repository.RecoverLinkRepo;
 import Repository.RegistrationLinkRepo;
 import Repository.RepoException;
 import Repository.UserRepo;
@@ -15,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class CRUDServices {
     private final HabitsRepo habitsRepo;
     private final GoalRepo goalRepo;
     private final RegistrationLinkRepo registrationLinkRepo;
+    private final RecoverLinkRepo recoverLinkRepo;
 
     /**
      * @param userRepo             repository for {@link User}
@@ -41,11 +46,13 @@ public class CRUDServices {
     public CRUDServices(final UserRepo userRepo,
                         final HabitsRepo habitsRepo,
                         final GoalRepo goalRepo,
-                        final RegistrationLinkRepo registrationLinkRepo) {
+                        final RegistrationLinkRepo registrationLinkRepo,
+                        final RecoverLinkRepo recoverLinkRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
+        this.recoverLinkRepo = recoverLinkRepo;
     }
 
     /**
@@ -141,20 +148,36 @@ public class CRUDServices {
         }
     }
 
+    public RegistrationLink getRegistrationLinkByCode(final String code) {
+        LOG.info("Retrieving registration code with code={}", code);
+        return registrationLinkRepo.getByCode(code);
+    }
+
+    public void deleteRegistrationLink(Long id) {
+        LOG.info("Deleting registration link with id={}", id);
+        try {
+            registrationLinkRepo.delete(id);
+            LOG.info("Successfully deleted registration link with id={}", id);
+        } catch (RepoException e) {
+            LOG.error("Error occurred while deleting registration link with id={}", id);
+            throw new ServiceException("Unable to delete registration link");
+        }
+    }
+
     /**
      * Returns an user's goals
      *
      * @param userId the user's id
      * @return a list of all of the user's goals
      */
-    public List<Goal> getUsersGoals(final long userId) {
+    public List<UserGoal> getUsersGoals(final long userId) {
         LOG.info("Getting all goals for user with id {}", userId);
         User user = userRepo.get(userId);
         if (user == null) {
             LOG.info("No user found with id {}", userId);
             throw new ServiceException("No user found with given id!");
         }
-        return new ArrayList<>(user.getGoals());
+        return new ArrayList<>(user.getUserGoals());
     }
 
     /**
@@ -180,7 +203,7 @@ public class CRUDServices {
      * @param userId the owner's id of the goal (i.e. the user who owns the goal)
      * @throws ServiceException if any error occurs while saving the goal
      */
-    public void addGoal(final Goal goal, final long userId) {
+    public void addUserGoal(final Goal goal, final long userId, boolean isPublic, LocalDate endDate) {
         LOG.info("Adding goal {} for user with id {}", goal, userId);
         User goalOwner = userRepo.get(userId);
 
@@ -189,10 +212,8 @@ public class CRUDServices {
             throw new ServiceException("There is no user with id " + userId);
         }
 
-        //goal.setUser(goalOwner);
-
         try {
-            goalRepo.add(goal);
+            goalRepo.addUserToGoal(goalOwner, goal, isPublic, endDate);
             LOG.info("Successfully saved goal to repo");
         } catch (RepoException e) {
             LOG.error("Error occurred while adding goal to repo: {}", e.getMessage());
@@ -203,30 +224,12 @@ public class CRUDServices {
     /**
      * Updates a goal.
      *
-     * @param goal   the goal to be updated
-     * @param userId the id of the user who owns the goal
      * @throws ServiceException if any error occurs while updating the goal
      */
-    public void updateGoal(final Goal goal, final long userId) {
-        long goalId = goal.getId();
-        LOG.info("Updating goal with id {} for user with id {}", goalId, userId);
-        Goal originalGoal = goalRepo.get(goalId);
-
-        if (originalGoal == null) {
-            LOG.warn("No goal was found with id {}", goalId);
-            throw new ServiceException("No goal found with given id");
-        }
-
-//        User owner = originalGoal.getUser();
-//        if (owner.getId() != userId) {
-//            LOG.info("Goal {} is not owned by user with id {}", goal, userId);
-//            throw new ServiceException("Goal not owned by the user!");
-//        }
-
-//        goal.setUser(owner);
+    public void updateUserGoal(final UserGoal userGoal, final long userId) {
+        LOG.info("Updating user goal for userid={}", userId);
         try {
-            goalRepo.update(goalId, goal);
-            LOG.info("Successfully updated goal {}", goal);
+            userRepo.updateUserGoal(userId, userGoal.getId(), userGoal.getEndDate(), userGoal.isPublic(), userGoal.getCurrentProgress());
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while updating goal in repo");
@@ -236,28 +239,16 @@ public class CRUDServices {
     /**
      * Deletes a goal.
      *
-     * @param goalId the goal's to be deleted id
-     * @param userId the goal owner's id
+     * @param userGoalId the user-goal's to be deleted id
+     * @param userId     the goal owner's id
      */
-    public void deleteGoal(final long goalId, final long userId) {
-        LOG.info("Deleting goal with id {}", goalId);
-        Goal originalGoal = goalRepo.get(goalId);
-
-        if (originalGoal == null) {
-            LOG.warn("No goal found for id {}", goalId);
-            throw new ServiceException("No goal found with the provided id");
-        }
-
-        //if (originalGoal.getUser().getId() != userId) {
-        //    LOG.info("Goal {} is not owned by user with id {}", goalId, userId);
-        //    throw new ServiceException("Goal not owned by the user!");
-        //}
-
+    public void deleteUserGoal(final long userGoalId, final long userId) {
+        LOG.info("Deleting user goal with id {}", userGoalId);
         try {
-            goalRepo.delete(goalId);
-            LOG.info("Successfully updated goal {}", goalId);
+            userRepo.removeUserGoal(userId, userGoalId);
+            LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
-            LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
+            LOG.error("Error occurred while deleting user goal in repo: {}", e.getMessage());
             throw new ServiceException("Error occurred while deleting goal in repo");
         }
     }
@@ -288,6 +279,145 @@ public class CRUDServices {
 
         if (errors.length() > 0) {
             throw new ServiceException(errors);
+        }
+    }
+
+    public void addHabit(final Habit habit, final long userId) {
+        User userOwner = userRepo.get(userId);
+
+        if (userOwner == null) {
+            throw new ServiceException("User with given id does not exist");
+        }
+
+        habit.setUser(userOwner);
+
+        try {
+            habitsRepo.add(habit);
+        } catch (RepoException e) {
+            e.printStackTrace();
+            throw new ServiceException("Error occurred while adding new habit");
+        }
+    }
+
+    public void updateHabit(final Habit habit, final long userId) {
+        LOG.info("Updating {} for userId={}", habit, userId);
+        Habit originalHabit = habitsRepo.get(habit.getId());
+
+        if (originalHabit == null) {
+            LOG.warn("No habit found for {}", habit);
+            throw new ServiceException("Habit not found with the given id");
+        }
+
+        User owner = userRepo.get(userId);
+
+        if (owner == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("User not found");
+        }
+
+        if (originalHabit.getUser().getId() != userId) {
+            LOG.warn("Habit {} does not belong to userId={}", habit, userId);
+            throw new ServiceException("Habit does not belong to this user");
+        }
+
+        habit.setUser(owner);
+
+        try {
+            habitsRepo.update(habit.getId(), habit);
+            LOG.info("Habit {} for userId={} updated successfully", habit, userId);
+        } catch (RepoException e) {
+            LOG.error("Repo exception occurred while updating habit: {}", e.getMessage());
+            throw new ServiceException("Something went wrong while updating habit", e);
+        }
+    }
+
+    public void deleteHabit(final Habit habit, final long userId) {
+        Habit originalHabit = habitsRepo.get(habit.getId());
+
+        if (originalHabit == null) {
+            throw new ServiceException("Habit not found with the given id");
+        }
+
+        if (originalHabit.getUser().getId() != userId) {
+            throw new ServiceException("Habit does not belong to this user");
+        }
+
+        try {
+            habitsRepo.delete(habit.getId());
+        } catch (RepoException e) {
+            LOG.error("Repo exception occurred while deleting habit: {}", e.getMessage());
+            throw new ServiceException("Something went wrong while deleting habit", e);
+        }
+    }
+
+    public void addRecoverLink(final RecoverLink recoverLink) {
+        LOG.info("Add recover link {}", recoverLink);
+
+        try {
+            recoverLinkRepo.add(recoverLink);
+        } catch (RepoException e) {
+            LOG.error("Recover link add failed: {}", e.getMessage());
+            throw new ServiceException("Recover link add failed", e);
+        }
+    }
+
+    public void deleteRecoverLink(final String recoverLinkToken) {
+        LOG.info("Delete recover link with token='{}'", recoverLinkToken);
+
+        try {
+            recoverLinkRepo.deleteByToken(recoverLinkToken);
+        } catch (RepoException e) {
+            LOG.error("Recover link deletion failed: {}", e.getMessage());
+            throw new ServiceException("Recover link deletion failed", e);
+        }
+    }
+
+    public RecoverLink getRecoverLinkByToken(final String token) {
+        LOG.info("Retrieving recover link with token='{}'", token);
+        return recoverLinkRepo.getByToken(token);
+    }
+
+
+    // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
+    public void eraseData() {
+        LOG.warn("!! ERASING ALL DATA !!");
+
+        List<User> users = userRepo.getAll();
+        List<Habit> habits = habitsRepo.getAll();
+        List<Goal> goals = goalRepo.getAll();
+        List<RecoverLink> recoverLinks = recoverLinkRepo.getAll();
+        List<RegistrationLink> registrationLinks = registrationLinkRepo.getAll();
+
+        try {
+            LOG.warn("Erasing habits");
+            for (Habit habit : habits) {
+                habitsRepo.delete(habit.getId());
+            }
+            LOG.warn("Erasing recovery links");
+            for (RecoverLink recoverLink : recoverLinks) {
+                recoverLinkRepo.delete(recoverLink.getId());
+            }
+            LOG.warn("Erasing registration links");
+            for (RegistrationLink registrationLink : registrationLinks) {
+                registrationLinkRepo.delete(registrationLink.getId());
+            }
+            LOG.warn("Erasing user and their user goals");
+            for (User user : users) {
+                List<UserGoal> userGoals = new ArrayList<>(user.getUserGoals());
+                LOG.warn("Erasing user goals for user with id={}", user.getId());
+                for (UserGoal userGoal : userGoals) {
+                    userRepo.removeUserGoal(user.getId(), userGoal.getId());
+                }
+                userRepo.delete(user.getId());
+            }
+            LOG.warn("Erasing goals");
+            for (Goal goal : goals) {
+                goalRepo.delete(goal.getId());
+            }
+            LOG.warn("!! DATA ERASED SUCCESSFULLY !!");
+        } catch (RepoException e) {
+            LOG.error(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

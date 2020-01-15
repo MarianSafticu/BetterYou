@@ -1,4 +1,4 @@
-package ServerUI.Requests;
+package ServerUI.Requests.auth.register;
 
 import java.time.LocalDate;
 import java.util.Date;
