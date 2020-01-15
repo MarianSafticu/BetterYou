@@ -5,7 +5,7 @@ export default class AboutPageComponent extends Component {
   render() {
     return (
       <div className="about-page-container">
-        <h1>Transforming the way people work so they can achieve their greatest ambitions</h1>
+        <h2 className="page-title">Transforming the way people work so they can achieve their greatest ambitions</h2>
         <div className="page-content">
           At Better You, we all come to work every day because we want to solve one of
         the biggest problem in human motivation. <b>Achieving your goals</b>. People don't know what they want nor how to
