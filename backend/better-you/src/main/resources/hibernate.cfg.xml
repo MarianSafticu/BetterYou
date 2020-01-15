@@ -33,7 +33,7 @@
         <mapping class="Model.Goal"/>
         <mapping class="Model.Habit"/>
         <mapping class="Model.RegistrationLink"/>
-        <mapping class="Model.User_Goal"/>
+        <mapping class="Model.UserGoal"/>
 
 
     </session-factory>
