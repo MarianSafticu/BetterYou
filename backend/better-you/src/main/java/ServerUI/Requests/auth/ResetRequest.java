@@ -2,14 +2,12 @@ package ServerUI.Requests.auth;
 
 public class ResetRequest {
     private String password;
-    private String token;
 
     public ResetRequest() {
     }
 
-    public ResetRequest(String password, String token) {
+    public ResetRequest(String password) {
         this.password = password;
-        this.token = token;
     }
 
     public String getPassword() {
@@ -19,13 +17,4 @@ public class ResetRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }

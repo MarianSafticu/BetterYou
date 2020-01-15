@@ -5,8 +5,6 @@ import Model.User;
 import Model.UserGoal;
 import ServerUI.Requests.Authorization;
 import ServerUI.Requests.auth.TokenRequest;
-import ServerUI.Requests.data.GetGoalRequest;
-import ServerUI.Requests.data.GetHabitsRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -117,7 +115,6 @@ public class RestServer {
     }
 
     /**
-     * AICI AI RAMAS
      * This method receives a JSON with all the information about the user and try to put them into the database
      *
      * @param registerConfirmationRequest- here are all the information about the confirmation
@@ -143,9 +140,9 @@ public class RestServer {
      * @return true if the reset is done and false if the email is invalid
      */
     @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> reset(@RequestBody ResetRequest resetRequest) {
+    public ResponseEntity<?> reset(@RequestHeader Authorization authorization, @RequestBody ResetRequest resetRequest) {
         try {
-            authService.resetPassword(resetRequest.getToken(), resetRequest.getPassword());
+            authService.resetPassword(authorization.getToken(), resetRequest.getPassword());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -351,12 +348,13 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> searchUsers(@RequestBody SearchUsersRequest searchUsersRequest) {
+    public ResponseEntity<?> searchUsers(@RequestHeader Authorization authorization,
+                                         @RequestBody SearchUsersRequest searchUsersRequest) {
         try {
             return new ResponseEntity<>(
                     crudServices.getUsersByUsernamePrefix(
                             searchUsersRequest.getUsernamePrefix(),
-                            authService.getUserIdFromJWT(searchUsersRequest.getToken())),
+                            authService.getUserIdFromJWT(authorization.getToken())),
                     HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -367,9 +365,10 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/friend/request", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> friendRequest(@RequestBody CreateFriendRequest createFriendRequest) {
+    public ResponseEntity<?> friendRequest(@RequestHeader Authorization authorization,
+                                           @RequestBody CreateFriendRequest createFriendRequest) {
         try {
-            crudServices.addFriendshipRequest(authService.getUserIdFromJWT(createFriendRequest.getToken()),
+            crudServices.addFriendshipRequest(authService.getUserIdFromJWT(authorization.getToken()),
                     createFriendRequest.getUsernameReceiver());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -381,9 +380,9 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/friend/request/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> acceptFriendRequest(@RequestBody TokenRequest tokenRequest) {
+    public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization) {
         try {
-            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(tokenRequest.getToken())), HttpStatus.OK);
+            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken())), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
@@ -393,9 +392,10 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/friend/request/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> acceptFriendRequest(@RequestBody AcceptFriendRequest acceptFriendRequest) {
+    public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization,
+                                                 @RequestBody AcceptFriendRequest acceptFriendRequest) {
         try {
-            crudServices.acceptFriendRequest(authService.getUserIdFromJWT(acceptFriendRequest.getToken()),
+            crudServices.acceptFriendRequest(authService.getUserIdFromJWT(authorization.getToken()),
                     acceptFriendRequest.getUsernameSender());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -407,9 +407,10 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/friend/request/reject", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> rejectFriendRequest(@RequestBody AcceptFriendRequest acceptFriendRequest) {
+    public ResponseEntity<?> rejectFriendRequest(@RequestHeader Authorization authorization,
+                                                 @RequestBody AcceptFriendRequest acceptFriendRequest) {
         try {
-            crudServices.rejectFriendRequest(authService.getUserIdFromJWT(acceptFriendRequest.getToken()),
+            crudServices.rejectFriendRequest(authService.getUserIdFromJWT(authorization.getToken()),
                     acceptFriendRequest.getUsernameSender());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
@@ -421,9 +422,10 @@ public class RestServer {
     }
 
     @RequestMapping(value = "/friend/request", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> removeFriend(@RequestBody CreateFriendRequest createFriendRequest) {
+    public ResponseEntity<?> removeFriend(@RequestHeader Authorization authorization,
+                                          @RequestBody CreateFriendRequest createFriendRequest) {
         try {
-            crudServices.removeFriend(authService.getUserIdFromJWT(createFriendRequest.getToken()),
+            crudServices.removeFriend(authService.getUserIdFromJWT(authorization.getToken()),
                     createFriendRequest.getUsernameReceiver());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
