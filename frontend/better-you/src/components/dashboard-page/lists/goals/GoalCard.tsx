@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
-import { TextField } from "@material-ui/core";
+import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -14,13 +14,15 @@ import Goal from "../../../../models/Goal";
 import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
 
 interface IProps {
-  goal: Goal;
-  isReadOnly?: boolean | null
+  goal: Goal,
+  isReadOnly?: boolean | null,
+  markGoalAsCompleate?: Function
 }
 interface IState {
-  goal: Goal;
-  showGoalView: boolean;
-  input_progress: number;
+  goal: Goal,
+  showGoalView: boolean,
+  input_progress: number,
+  openDialog: boolean
 }
 
 class GoalCard extends React.Component<IProps, IState> {
@@ -30,7 +32,8 @@ class GoalCard extends React.Component<IProps, IState> {
     this.state = {
       goal: this.props.goal,
       showGoalView: false,
-      input_progress: 1
+      input_progress: 1,
+      openDialog: false
     };
   }
 
@@ -126,17 +129,53 @@ class GoalCard extends React.Component<IProps, IState> {
             open={this.state.showGoalView}
             goal={this.state.goal}
           />
+
+
+          <Dialog
+            disableBackdropClick
+            disableEscapeKeyDown
+            open={this.state.openDialog}
+            onClose={this.handleClick}
+          >
+            <DialogTitle>Congratulation! You have completed this goal.</DialogTitle>
+            <DialogContent>
+              Do you want to remove this goal from your list?
+              It will automatically remove it if you restart.
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => { this.setState({ openDialog: false }) }}>Cancel</Button>
+              <Button onClick={() => {
+                if (this.props.markGoalAsCompleate !== undefined)
+                  this.props.markGoalAsCompleate(this.state.goal)
+              }}>Ok</Button>
+            </DialogActions>
+          </Dialog>
+
         </div>
       </Card>
     );
   }
 
   handleClick() {
+    var goal = this.state.goal;
+    goal.currentProgress = goal.currentProgress + this.state.input_progress;
+    if (goal.currentProgress < 0)
+      goal.currentProgress = 0;
+    else if (goal.currentProgress >= goal.progressToReach) {
+      goal.currentProgress = goal.progressToReach;
+      if (this.props.markGoalAsCompleate !== undefined)
+        this.setState({ openDialog: true })
+    }
+
+    this.setState({ goal: goal })
+  }
+  handleClick2() {
     this.setState(state => {
       var newGoal = this.state.goal;
 
       if (state.goal.currentProgress + state.input_progress < 0) {
         newGoal.currentProgress = 0;
+        this.state.goal.currentProgress = 0;
         return {
           goal: newGoal,
           input_progress: this.state.input_progress,
@@ -149,12 +188,15 @@ class GoalCard extends React.Component<IProps, IState> {
       ) {
         newGoal.currentProgress =
           state.goal.currentProgress + state.input_progress;
+        this.state.goal.currentProgress =
+          state.goal.currentProgress + state.input_progress;
         return {
           goal: newGoal,
           input_progress: this.state.input_progress,
           showGoalView: this.state.showGoalView
         };
       } else {
+        this.state.goal.currentProgress = this.state.goal.progressToReach;
         return {
           goal: {
             title: this.props.goal.title,

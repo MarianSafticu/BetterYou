@@ -84,21 +84,32 @@ interface IProps {
   isReadOnly?: boolean | null
 }
 interface IState {
+  goals: Goal[]
 }
 
 class GoalList extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
+    this.state = {
+      goals: goalsList
+    }
   }
+
+  markGoalAsComplete = (goal: Goal) => {
+    this.state.goals.filter(x => x.id != goal.id)
+    this.setState({goals: this.state.goals})
+  }
+
   render() {
     return (
       <div className="container">
-        {goalsList.map((goal, index) =>  {
-          return (
-            <div key={index}>
-              <GoalCard goal={goal} isReadOnly={this.props.isReadOnly} />
-            </div>
-          );
+        {this.state.goals.map((goal, index) => {
+          if (goal.currentProgress < goal.progressToReach)
+            return (
+              <div key={index}>
+                <GoalCard goal={goal} isReadOnly={this.props.isReadOnly} markGoalAsCompleate={this.markGoalAsComplete}/>
+              </div>
+            );
         })}
       </div>
     );
