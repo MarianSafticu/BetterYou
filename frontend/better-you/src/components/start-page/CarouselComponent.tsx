@@ -28,7 +28,7 @@ export default class CarouselComponent extends Component {
             fade={true}
             autoplay={true}
             infinite={true}
-            autoplaySpeed={4000}
+            autoplaySpeed={12000}
             centerMode={true}
             centerPadding={"150px"}
             pauseOnHover={true}
