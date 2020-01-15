@@ -5,4 +5,5 @@ export default interface AppState {
   error: string;
   userInfo: UserDTO | undefined;
   registrationEmailSent: boolean;
+  accountConfirmed: boolean;
 }

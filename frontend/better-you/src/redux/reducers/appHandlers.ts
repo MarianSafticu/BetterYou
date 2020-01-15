@@ -72,3 +72,36 @@ export function registerUserErrorHandler(
   newState.registrationEmailSent = false;
   return newState;
 }
+
+export function confirmAccountBeginHandler(
+  oldState: AppState,
+  code: string
+): AppState {
+  const newState = { ...oldState };
+  newState.loading = true;
+  newState.error = "";
+  newState.accountConfirmed = false;
+  return newState;
+}
+
+export function confirmAccountSuccessHandler(
+  oldState: AppState,
+  response: boolean
+): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
+  newState.accountConfirmed = true;
+  return newState;
+}
+
+export function confirmAccountErrorHandler(
+  oldState: AppState,
+  error: string
+): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = error;
+  newState.accountConfirmed = false;
+  return newState;
+}

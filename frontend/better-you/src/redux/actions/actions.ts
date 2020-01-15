@@ -6,7 +6,10 @@ import {
   UNSET_CURRENT_USER,
   REGISTER_USER_BEGIN,
   REGISTER_USER_SUCCESS,
-  REGISTER_USER_ERROR
+  REGISTER_USER_ERROR,
+  CONFIRM_ACCOUNT_BEGIN,
+  CONFIRM_ACCOUNT_SUCCESS,
+  CONFIRM_ACCOUNT_ERROR
 } from "./types";
 import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
@@ -55,6 +58,27 @@ export function registerUserSuccess(): AppActionType {
 export function registerUserError(error: string): AppActionType {
   return {
     type: REGISTER_USER_ERROR,
+    payload: error
+  }
+}
+
+export function confirmAccountBegin(code: string): AppActionType {
+  return {
+    type: CONFIRM_ACCOUNT_BEGIN,
+    payload: code
+  }
+}
+
+export function confirmAccountSuccess(response: boolean): AppActionType {
+  return {
+    type: CONFIRM_ACCOUNT_SUCCESS,
+    payload: response
+  }
+}
+
+export function confirmAccountError(error: string): AppActionType {
+  return {
+    type: CONFIRM_ACCOUNT_ERROR,
     payload: error
   }
 }

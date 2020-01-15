@@ -6,7 +6,9 @@ import {
   setCurrentUserSuccess,
   setCurrentUserError,
   registerUserSuccess,
-  registerUserError
+  registerUserError,
+  confirmAccountSuccess,
+  confirmAccountError
 } from "../actions/actions";
 import LoginRequest from "../../models/requests/LoginRequest";
 import { setCookie } from "../../services/CookieService";
@@ -45,5 +47,17 @@ export function* registerUserHandler(
     const { token, massage } = response;
     if (token) yield put(registerUserSuccess());
     else if (massage) yield put(registerUserError(massage));
+  }
+}
+
+export function* confirmAccountHandler(
+  action: AppActionType
+): IterableIterator<any> {
+  let code: string = action.payload as string;
+  const response = yield call(httpService.confirmAccount, code);
+  if (response) {
+    const { aBoolean , massage } = response;
+    if (aBoolean) yield put(confirmAccountSuccess(aBoolean));
+    else if (massage) yield put(confirmAccountError(massage));
   }
 }

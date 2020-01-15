@@ -12,6 +12,10 @@ export const REGISTER_USER_BEGIN = "REGISTER_USER_BEGIN";
 export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
 export const REGISTER_USER_ERROR = "REGISTER_USER_ERROR";
 
+export const CONFIRM_ACCOUNT_BEGIN = "CONFIRM_ACCOUNT_BEGIN";
+export const CONFIRM_ACCOUNT_SUCCESS = "CONFIRM_ACCOUNT_SUCCESS";
+export const CONFIRM_ACCOUNT_ERROR = "CONFIRM_ACCOUNT_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -45,6 +49,19 @@ export interface RegisterUserError {
   payload: string;
 }
 
+export interface ConfirmAccountBegin {
+  type: typeof CONFIRM_ACCOUNT_BEGIN;
+  payload: string;
+}
+export interface ConfirmAccountSuccess {
+  type: typeof CONFIRM_ACCOUNT_SUCCESS;
+  payload: boolean;
+}
+export interface ConfirmAccountError {
+  type: typeof CONFIRM_ACCOUNT_ERROR;
+  payload: string;
+}
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -52,4 +69,7 @@ export type AppActionType =
   | UnsetCurrentUser
   | RegisterUserBegin
   | RegisterUserSuccess
-  | RegisterUserError;
+  | RegisterUserError
+  | ConfirmAccountBegin
+  | ConfirmAccountSuccess
+  | ConfirmAccountError;

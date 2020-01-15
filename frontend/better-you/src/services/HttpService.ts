@@ -4,7 +4,8 @@ import RegisterRequest from "../models/requests/RegisterRequest";
 import LoginResponse from "../models/responses/LoginResponse";
 import RegisterResponse from "../models/responses/RegisterResponse";
 
-const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
+// const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
+const url: string = "http://192.168.43.105:12404/app/better-you";
 
 export default class HttpService implements IHttpService {
   private static instance: HttpService;
@@ -38,6 +39,23 @@ export default class HttpService implements IHttpService {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(requestData)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
+  async confirmAccount(confirmationCode: string): Promise<boolean> {
+    return await fetch(`${url}/confirm_register`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(confirmationCode)
     })
       .then(response => response.json())
       .then(body => {

@@ -4,7 +4,7 @@ import StartPageComponent from "../components/start-page/StartPageComponent";
 import LoginRegisterTabComponent from "../components/auth-page/LoginRegisterTabComponent";
 import AppsPageComponent from "../components/apps-page/AppsPageComponent";
 import AboutPageComponent from "../components/about-page/AboutPageComponent";
-import { ShowMessageComponent } from "../components/messages/ShowMessageComponent";
+import ShowMessageComponent from "../components/messages/ShowMessageComponent";
 import TestPageComponent from "../components/test-pages/TestPage";
 import RecoverAccountComponent from "../components/settings/RecoverAccountComponent";
 import DashboardComponent from "../components/dashboard-page/DashboardComponent";
