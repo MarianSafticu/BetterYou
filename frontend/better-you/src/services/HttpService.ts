@@ -12,7 +12,7 @@ import FetchGoalResponse from "../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../models/requests/AddHabitRequest";
 
-const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
+export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
 // const url: string = "http://localhost:12404/app/better-you";
 
