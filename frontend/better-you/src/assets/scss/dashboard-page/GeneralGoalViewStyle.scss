@@ -1,4 +1,5 @@
 @import "../globals/colors";
+@import "../globals/global";
 
 .general-goal-container{
     width: 55vw;
@@ -23,7 +24,7 @@
     background-color: $color6 !important;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width:  #{$mobile_witdh_threshold}) {
     .general-goal-container{
         width: 100vw;
     }

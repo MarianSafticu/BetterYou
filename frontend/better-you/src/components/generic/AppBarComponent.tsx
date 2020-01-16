@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, RefObject } from "react";
 import "../../assets/scss/generic/AppBarStyle.scss";
 import {
   Toolbar,
@@ -18,9 +18,16 @@ import { Breakpoint } from "react-socks";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
 import UserDTO from "../../models/UserDTO";
+import NewsfeedList from "../dashboard-page/lists/newsfeed/NewsfeedList";
+import GoalList from "../dashboard-page/lists/goals/GoalList";
+import { setAppBarSwipeableDrawer } from "../../redux/actions/actions";
+import AppBarItem from "../../models/AppBarItem";
+import { stat } from "fs";
 
 interface IProps {
   userInfo: UserDTO | undefined;
+  appBarListItems: AppBarItem[];
+  setAppBarSwipeableDrawer: Function;
 }
 
 interface IState {
@@ -28,14 +35,21 @@ interface IState {
 }
 
 class AppBarComponent extends Component<IProps, IState> {
+  appBarSwipeableDrawerAux: RefObject<any>;
   constructor(props: any) {
     super(props);
     this.state = {
       drawerIsOpen: false
     };
+
+    this.appBarSwipeableDrawerAux = React.createRef();
+  }
+  componentDidMount() {
+    this.props.setAppBarSwipeableDrawer(this.appBarSwipeableDrawerAux);
   }
 
   toggleDrawer(openValue: boolean) {
+    this.props.setAppBarSwipeableDrawer(this.appBarSwipeableDrawerAux);
     this.setState({
       drawerIsOpen: openValue
     });
@@ -109,7 +123,31 @@ class AppBarComponent extends Component<IProps, IState> {
                 onClick={() => this.toggleDrawer(false)}
                 onKeyDown={() => this.toggleDrawer(false)}
               >
-                <List className="drawer-list"></List>
+                <List className="drawer-list" ref={this.appBarSwipeableDrawerAux}>
+                  {this.props.appBarListItems.map(x => {
+                    if (x.func == null)
+                      return (
+                        <div>
+                          <Divider />
+                          <ListItem>
+                            <Link to={x.link} className="link">
+                              {x.text}
+                            </Link>
+                          </ListItem>
+                        </div>
+                      )
+                    else
+                      return (
+                        <div>
+                          <Divider />
+                          <ListItem onClick={() => { if (x.func !== null) x.func(); }} className="div_to_link link">
+                            {x.text}
+                          </ListItem>
+                        </div>
+                      )
+                  }
+                  )}
+                </List>
               </div>
             </SwipeableDrawer>
           </Breakpoint>
@@ -182,7 +220,7 @@ class AppBarComponent extends Component<IProps, IState> {
                 onClick={() => this.toggleDrawer(false)}
                 onKeyDown={() => this.toggleDrawer(false)}
               >
-                <List className="drawer-list">
+                <List className="drawer-list" ref={this.appBarSwipeableDrawerAux}>
                   <ListItem button>
                     <NavLink to="/apps" className="link">
                       Apps
@@ -194,6 +232,29 @@ class AppBarComponent extends Component<IProps, IState> {
                       About
                     </NavLink>
                   </ListItem>
+                  {this.props.appBarListItems.map(x => {
+                    if (x.func == null)
+                      return (
+                        <div>
+                          <Divider />
+                          <ListItem>
+                            <Link to={x.link} className="link">
+                              {x.text}
+                            </Link>
+                          </ListItem>
+                        </div>
+                      )
+                    else
+                      return (
+                        <div>
+                          <Divider />
+                          <ListItem onClick={() => { if (x.func !== null) x.func(); }} className="div_to_link link">
+                            {x.text}
+                          </ListItem>
+                        </div>
+                      )
+                  }
+                  )}
                   <Divider />
                 </List>
               </div>
@@ -206,11 +267,14 @@ class AppBarComponent extends Component<IProps, IState> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  userInfo: state.userInfo
+  userInfo: state.userInfo,
+  appBarListItems: state.appBarItemsList
 });
 
 const mapDispatchToProps = (dispatch: any) => {
-  return {};
+  return {
+    setAppBarSwipeableDrawer: (refObj: RefObject<any> | null) => dispatch(setAppBarSwipeableDrawer(refObj))
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppBarComponent);
