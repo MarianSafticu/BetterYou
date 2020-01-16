@@ -346,6 +346,20 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/user/info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserInfo(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(
+                    new UserInfoResponse(crudServices.getUserFromId(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchUsers(@RequestHeader Authorization authorization,
                                          @RequestBody SearchUsersRequest searchUsersRequest) {
