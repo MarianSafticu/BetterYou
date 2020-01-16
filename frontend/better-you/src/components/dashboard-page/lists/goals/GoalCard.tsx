@@ -182,7 +182,8 @@ class GoalCard extends React.Component<IProps, IState> {
             category: newGoal.category,
             endDate: newGoal.endDate,
             progressToReach: newGoal.progressToReach,
-            startDate: newGoal.startDate
+            startDate: newGoal.startDate,
+            isPublic: newGoal.isPublic
           },
           input_progress: this.state.input_progress,
           showGoalView: this.state.showGoalView

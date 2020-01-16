@@ -4,6 +4,9 @@ import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Habit from "../../../../models/Habit";
 import { Repetition } from "../../../../models/Repetition";
 import { goalCategorys } from "../../../../models/GoalCategorys";
+import { connect } from "react-redux";
+import AppState from "../../../../redux/store/store";
+import { fetchHabitsBegin } from "../../../../redux/actions/actions";
 
 var d = new Date();
 
@@ -99,11 +102,20 @@ const habitsList:Habit[] = [
   },
 ];
 
-class HabitList extends React.Component {
+interface IProps {
+  habits: Habit[];
+  fetchHabits: Function;
+}
+
+class HabitList extends React.Component<IProps, {}> {
+  componentDidMount() {
+    this.props.fetchHabits();
+  }
+
   render() {
     return (
       <div className="container">
-        {habitsList.map(function(habit, index) {
+        {this.props.habits.map(function(habit, index) {
           return (
             <div key={index}>
               <HabitCard habit={habit} />
@@ -113,8 +125,18 @@ class HabitList extends React.Component {
       </div>
     );
   }
-
-  handleClick(e: any) {}
 }
 
-export default HabitList;
+const mapStateToProps = (state: AppState) => {
+  return {
+    habits: state.habits
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchHabits: () => dispatch(fetchHabitsBegin())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HabitList);
