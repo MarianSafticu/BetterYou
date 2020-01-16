@@ -7,6 +7,7 @@ import GoalCardReadOnly from "./GoalCardReadOnly";
 
 const goalsList: Goal[] = [
   {
+    id: 1,
     title: "Citeste 10 carti",
     description: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -17,6 +18,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[0]
   },
   {
+    id: 2,
     title: "Citeste 11 carti",
     description: "bbb",
     currentProgress: 15,
@@ -26,6 +28,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[1]
   },
   {
+    id: 3,
     title: "Citeste 12 carti",
     description: "ccc",
     currentProgress: 66,
@@ -35,6 +38,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[2]
   },
   {
+    id: 4,
     title: "Citeste 13 carti",
     description: "ddd",
     currentProgress: 99,
@@ -44,6 +48,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[3]
   },
   {
+    id: 5,
     title: "Citeste 14 carti",
     description: "eee",
     currentProgress: 100,
@@ -53,6 +58,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[4]
   },
   {
+    id: 6,
     title: "Citeste 15 carti",
     description: "fff",
     currentProgress: 50,
@@ -62,6 +68,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[0]
   },
   {
+    id: 7,
     title: "Citeste 16 carti",
     description: "ggg",
     currentProgress: 24,
@@ -71,6 +78,7 @@ const goalsList: Goal[] = [
     category: goalCategorys[0]
   },
   {
+    id: 8,
     title: "Citeste 17 carti",
     description: "hhh",
     currentProgress: 24,
@@ -103,10 +111,10 @@ class GoalList extends React.Component<IProps, IState> {
           this.state.goals.map((goal, index) => {
             if (this.props.isReadOnly === true)
               return <div key={index}>
-                <GoalCardReadOnly goal={goal}/>
+                <GoalCardReadOnly goal={goal} />
               </div>
             return <div key={index}>
-              <GoalCard goal={goal}/>
+              <GoalCard goal={goal} />
             </div>
           }
           )

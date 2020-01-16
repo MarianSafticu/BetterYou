@@ -54,7 +54,7 @@ public class GoalRepo extends AbstractRepo<Long, Goal> {
                     || tx.getStatus() == TransactionStatus.MARKED_ROLLBACK) {
                 tx.rollback();
             }
-            throw new RepoException("Existent username\n");
+            throw new RepoException("Invalid goal\n");
         } finally {
             s.close();
         }

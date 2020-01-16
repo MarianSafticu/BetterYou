@@ -1,11 +1,11 @@
+@import "../globals/global";
 @import "../globals/colors";
 @import "../globals/global";
 
 #wrapper{
-    display:flex;
+    display: flex;
     height: calc(100vh - 50px);
     overflow: hidden;
-
 }
 
 ::-webkit-scrollbar-track
@@ -27,6 +27,10 @@
     background-color: rgba(0, 0, 0, 0.6);
 }
 
+.div-link{
+    width: 200px !important;
+    cursor: pointer;
+}
 
 .list_component {
     margin-left:2%;
@@ -64,6 +68,16 @@
     flex:1;
 }
 
+@media screen and (max-width:  #{$mobile_witdh_threshold}) {
+    .list_component {
+        max-width: #{$mobile_witdh_threshold};
+        flex : 0 0 96%;
+    }
+    .newsfeed{
+        max-width: #{$mobile_witdh_threshold};
+        flex : 0 0 96%;
+    }
+  }
 #form{
     display:flex;
     flex-wrap: wrap;

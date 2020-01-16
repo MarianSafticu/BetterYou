@@ -4,7 +4,6 @@ import Model.Habit;
 import Model.User;
 import Model.UserGoal;
 import ServerUI.Requests.Authorization;
-import ServerUI.Requests.auth.TokenRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -17,10 +16,7 @@ import ServerUI.Requests.auth.register.RegisterRequest;
 import ServerUI.Requests.friends.AcceptFriendRequest;
 import ServerUI.Requests.friends.CreateFriendRequest;
 import ServerUI.Requests.friends.SearchUsersRequest;
-import ServerUI.Responses.BooleanResponse;
-import ServerUI.Responses.ErrorResponse;
-import ServerUI.Responses.IdResponse;
-import ServerUI.Responses.TokenResponse;
+import ServerUI.Responses.*;
 import Service.ServiceException;
 import Service.AuthService;
 import Service.CRUDServices;
@@ -163,7 +159,7 @@ public class RestServer {
     public ResponseEntity<?> getGoals(@RequestHeader Authorization authorization) {
         try {
             List<UserGoal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
-            return new ResponseEntity<>(userGoals, HttpStatus.OK);
+            return new ResponseEntity<>(new GoalsResponse(userGoals), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -183,7 +179,7 @@ public class RestServer {
         try {
             List<Habit> userHabits = crudServices.getUsersHabits(authService.getUserIdFromJWT(
                     authorization.getToken()));
-            return new ResponseEntity<>(userHabits, HttpStatus.OK);
+            return new ResponseEntity<>(new HabitsResponse(userHabits), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -265,12 +261,14 @@ public class RestServer {
      * @return true if the goal can be added else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> addHabit(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
         try {
+            LOG.info("adding habit");
             validationService.validateHabit(habitRequest.getHabit());
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.addHabit(habitRequest.getHabit(), userId);
-            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+            long habitId = crudServices.addHabit(habitRequest.getHabit(), userId);
+            return new ResponseEntity<>(new IdResponse(habitId), HttpStatus.OK);
+
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
