@@ -2,30 +2,33 @@
 @import "../globals/global";
 
 .profile-card-container{
-    width: 75vw;
+    width: 90vw;
     margin: auto;
+    height: calc(100vh - #{$app_bar_height});
+    flex : 1;
+    overflow-y:scroll;
 }
 
-.profile-card-container>div{
-    margin: auto !important;
+.goallist-container-div{
+    background: linear-gradient($color5, $color6);
 }
 
 .profile-card-border{
     width: 100%;
     min-height: 25vh;
-    border-radius: 25px;
-    background: linear-gradient($color2, $color4);
+    border-radius: 25px 25px 0 0;
+    background: linear-gradient($color6, $color5);
 }
 .profile-card{
-    margin: 5px 7px 5px 7px;
+    margin: 0px 7px 0px 7px;
+    border-radius: 25px 25px 25px 25px;
 
-    background: linear-gradient($color4, $color2);
+    height: 100%;
+    background: linear-gradient($color5, $color6);
     overflow: hidden; /* will contain if #first is longer than #second */
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border-radius: 25px;
 }
 
 .profile-card>div{
@@ -45,11 +48,12 @@
     width: 50vw;
     height: 50vw;
 
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 150px;
+    max-height: 150px;
     margin: auto;
 
     border: 1px solid  gray;
+    border-radius: 50%;
 }
 
 @media screen and (max-width:  #{$mobile_witdh_threshold}) {

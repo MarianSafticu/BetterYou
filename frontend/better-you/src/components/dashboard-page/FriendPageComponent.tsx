@@ -16,7 +16,7 @@ interface IState {
 
 class FriendPageComponent extends React.Component<RouteComponentProps<IProps>, IState> {
     getUser = (username: string): UserDTO => {
-        return { username: username, profilePicture: "https://cdn3.f-cdn.com/contestentries/1376995/30494909/5b566bc71d308_thumb900.jpg", isAuthenticated: true }
+        return { username: username, profilePicture: "https://c8.alamy.com/comp/P9MYWR/man-avatar-profile-P9MYWR.jpg", isAuthenticated: true }
     }
 
     constructor(props: RouteComponentProps<IProps>) {
@@ -36,16 +36,14 @@ class FriendPageComponent extends React.Component<RouteComponentProps<IProps>, I
                         <img src={this.state.user.profilePicture} />
                         <div>
                             <h2>User: {this.state.user.username} </h2>
-                            <Button>
-                                Invide as friend
-                        </Button>
-                            <Button>
-                                Chalange
-                        </Button>
+                            <Button> Add friend </Button>
+                            <Button> Challenge friend </Button>
                         </div>
                     </div>
                 </div>
-                <GoalList isReadOnly={true} />
+                <div className="goallist-container-div">
+                    <GoalList isReadOnly={true} />
+                </div>
             </div>
         )
     }

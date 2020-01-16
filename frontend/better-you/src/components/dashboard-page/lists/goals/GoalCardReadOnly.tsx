@@ -12,6 +12,11 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import Goal from "../../../../models/Goal";
 import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
+import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded';
+import ThumbDownAltRoundedIcon from '@material-ui/icons/ThumbDownAltRounded';
+
+
+
 
 interface IProps {
     goal: Goal,
@@ -40,6 +45,15 @@ export default class GoalCardReadOnly extends React.Component<IProps, IState> {
                         {this.props.goal.title}
                     </Typography>
                 </CardActionArea>
+
+                <div style={{ paddingLeft: "5px", paddingTop: "5px" }}>
+                    <Fab size="small" style={{ marginLeft: "20px" }}>
+                    <ThumbUpAltRoundedIcon  />
+                    </Fab>
+                    <Fab size="small" style={{ marginLeft: "20px" }}>
+                    <ThumbDownAltRoundedIcon  />
+                    </Fab>
+                </div>
 
                 <div className="container-readOnly">
                     <GoalProgressBar
