@@ -1,12 +1,10 @@
 import AppState from "../store/store";
-import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import { deleteCookie } from "../../services/CookieService";
-import AddGoalRequest from "../../models/requests/AddGoalRequest";
-import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
+import Goal from "../../models/Goal";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -140,6 +138,9 @@ export function addGoalErrorHandler(oldState: AppState, error: string): AppState
 
 export function editGoalBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState {
@@ -148,20 +149,32 @@ export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState
 }
 export function editGoalErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
 
 export function deleteGoalBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function deleteGoalSuccessHandler(oldState: AppState, id: number): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals.filter(goal => goal.id !== id);
   return newState;
 }
 export function deleteGoalErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
@@ -217,6 +230,9 @@ export function addHabitErrorHandler(oldState: AppState, error: string): AppStat
 
 export function editHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function editHabitSuccessHandler(oldState: AppState, habit: Habit): AppState {
@@ -225,29 +241,41 @@ export function editHabitSuccessHandler(oldState: AppState, habit: Habit): AppSt
 }
 export function editHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
 
 export function deleteHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function deleteHabitSuccessHandler(oldState: AppState, id: number): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.habits = oldState.habits.filter(habit => habit.id !== id);
   return newState;
 }
 export function deleteHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
+
 
 export function setAppBarSwipeableDrawerHandler(oldState: AppState, refObj: RefObject<unknown> | null):AppState {
   const newState = { ...oldState };
   newState.appBarSwipeableDrawer = refObj;
   return newState;
 }
-
 export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]):AppState {
   const newState = { ...oldState };
   newState.appBarItemsList = list;

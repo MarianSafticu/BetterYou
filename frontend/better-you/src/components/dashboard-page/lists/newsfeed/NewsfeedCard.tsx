@@ -44,13 +44,7 @@ class NewsfeedCard extends React.Component<IProps, {}> {
       return (
         <Card className="newsfeed_container">
           <Tooltip title="Go to profile">
-            <Fab color="inherit" className="friend_image" style={stil}></Fab>
-          </Tooltip>
-
-          <Tooltip title="Close">
-            <IconButton aria-label="close" className="close_newsfeed_button">
-              <HighlightOff />
-            </IconButton>
+            <Fab color="inherit" className="friend_image" style={stil}>{""}</Fab>
           </Tooltip>
 
           <div className="newsfeed_message">

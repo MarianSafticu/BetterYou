@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import GeneralHabitViewItemComponent from "./GeneralHabitViewItemComponent";
 import Habit from "../../../../models/Habit";

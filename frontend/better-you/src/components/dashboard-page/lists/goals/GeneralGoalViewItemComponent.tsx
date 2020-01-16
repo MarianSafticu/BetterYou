@@ -152,9 +152,9 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     var greenC = green.toString(16);
     var blueC = blue.toString(16);
 
-    if (redC.length == 1) redC = "0" + redC;
-    if (greenC.length == 1) greenC = "0" + greenC;
-    if (blueC.length == 1) blueC = "0" + blueC;
+    if (redC.length === 1) redC = "0" + redC;
+    if (greenC.length === 1) greenC = "0" + greenC;
+    if (blueC.length === 1) blueC = "0" + blueC;
 
     var ret = "#" + redC + greenC + blueC;
 
@@ -357,13 +357,18 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     });
   };
   onCancelHandler = () => {
-    this.state.goal.title = this.initialGoal.title;
-    this.state.goal.description = this.initialGoal.description;
-    this.state.goal.category = this.initialGoal.category;
-    this.state.goal.currentProgress = this.initialGoal.currentProgress;
-    this.state.goal.endDate = this.initialGoal.endDate;
-    this.state.goal.progressToReach = this.initialGoal.progressToReach;
-    this.state.goal.startDate = this.initialGoal.startDate;
+    this.setState({
+      goal: {
+        title: this.initialGoal.title,
+        description: this.initialGoal.description,
+        category: this.initialGoal.category,
+        currentProgress: this.initialGoal.currentProgress,
+        endDate: this.initialGoal.endDate,
+        progressToReach: this.initialGoal.progressToReach,
+        startDate: this.initialGoal.startDate,
+        isPublic: this.initialGoal.isPublic 
+      }
+    })
     this.props.onFinnishAction();
   };
   onClosePopoverDelete = () => {
@@ -452,7 +457,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
                 : (this.state.textFieldVariant as any)
             }
             label="title"
-            error={this.state.goalError.titleError.length != 0}
+            error={this.state.goalError.titleError.length !== 0}
             helperText={this.state.goalError.titleError}
           ></TextField>
         </h1>
@@ -468,7 +473,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
               ? "filled"
               : (this.state.textFieldVariant as any)
           }
-          error={this.state.goalError.descriptionError.length != 0}
+          error={this.state.goalError.descriptionError.length !== 0}
           helperText={this.state.goalError.descriptionError}
         ></TextField>
         <TextField
@@ -483,7 +488,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
               ? this.state.goal.startDate.toLocaleDateString()
               : this.getStringFromData(this.state.goal.startDate)
           }
-          error={this.state.goalError.startDateError.length != 0}
+          error={this.state.goalError.startDateError.length !== 0}
           helperText={this.state.goalError.startDateError}
         ></TextField>
         <TextField
@@ -498,7 +503,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
               ? this.state.goal.endDate.toLocaleDateString()
               : this.getStringFromData(this.state.goal.endDate)
           }
-          error={this.state.goalError.endDateError.length != 0}
+          error={this.state.goalError.endDateError.length !== 0}
           helperText={this.state.goalError.endDateError}
         ></TextField>
         <FormControlLabel
@@ -524,7 +529,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
             }
             InputLabelProps={{ shrink: true }}
             defaultValue={this.state.goal.currentProgress}
-            error={this.state.goalError.currentProgressError.length != 0}
+            error={this.state.goalError.currentProgressError.length !== 0}
             helperText={this.state.goalError.currentProgressError}
           ></TextField>
         )}
@@ -540,7 +545,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
           }
           InputLabelProps={{ shrink: true }}
           defaultValue={this.state.goal.progressToReach}
-          error={this.state.goalError.progressToReachError.length != 0}
+          error={this.state.goalError.progressToReachError.length !== 0}
           helperText={this.state.goalError.progressToReachError}
         ></TextField>
 
@@ -585,7 +590,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
             }
             InputLabelProps={{ shrink: true }}
             defaultValue={this.state.goal.category.category}
-            error={this.state.goalError.categoryError.length != 0}
+            error={this.state.goalError.categoryError.length !== 0}
             helperText={this.state.goalError.categoryError}
             style={{ backgroundColor: this.state.goal.category.color }}
           ></TextField>

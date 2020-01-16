@@ -10,7 +10,7 @@ import LoginComponent from "./LoginComponent";
 import { Breakpoint } from "react-socks";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@material-ui/core/styles";
-import { useHistory, Redirect, Link } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import RegisterComponent from "./RegisterComponent";
 import { useSelector } from "react-redux";
 import AppState from "../../redux/store/store";

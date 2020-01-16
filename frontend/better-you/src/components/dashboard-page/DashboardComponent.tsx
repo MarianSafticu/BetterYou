@@ -22,7 +22,6 @@ import { setAppBarItemsList } from "../../redux/actions/actions";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
 import AppBarItem from "../../models/AppBarItem";
-import Goal from "../../models/Goal";
 
 let options_1: any[] = [];
 let options_2: any[] = [];
@@ -61,8 +60,8 @@ class DashboardComponent extends Component<IProp, IState> {
     super(props);
     this.compToShow = 1;
     this.state = {
-      showGoal: [],
-      showHabit: [],
+      showGoal: [false],
+      showHabit: [false],
       checked: false,
       openDialog: false,
       title: "",
@@ -99,7 +98,7 @@ class DashboardComponent extends Component<IProp, IState> {
       return;
 
     if (window.innerWidth < 770) {
-      if (this.compToShow % 2 == 0) {
+      if (this.compToShow % 2 === 0) {
         this.comp1.current.removeAttribute("hidden");
         this.comp2.current.setAttribute("hidden", "true");
       }
@@ -166,14 +165,14 @@ class DashboardComponent extends Component<IProp, IState> {
 
   populateOptions = () => {
     options_1 = [];
-    for (var i = 0; i < this.state.category.length; i++) {
+    for (let i = 0; i < this.state.category.length; i++) {
       options_1.push(
         <option value={this.state.category[i]}>{this.state.category[i]}</option>
       );
     }
     options_2 = [];
-    if (this.state.category == filt_category) {
-      for (var i = 0; i < goalCategorys.length; i++) {
+    if (this.state.category === filt_category) {
+      for (let i = 0; i < goalCategorys.length; i++) {
         options_2.push(
           <option value={goalCategorys[i].category}>
             {goalCategorys[i].category}

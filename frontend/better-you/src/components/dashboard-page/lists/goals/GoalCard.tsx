@@ -5,51 +5,52 @@ import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
-import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import Goal from "../../../../models/Goal";
 import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
+import { deleteGoalBegin } from "../../../../redux/actions/actions";
+import { connect } from "react-redux";
 
 interface IProps {
-  goal: Goal,
-  isReadOnly?: boolean | null,
-  markGoalAsCompleate?: Function
+  goal: Goal;
+  isReadOnly?: boolean | null;
+  markGoalAsComplete?: Function;
+  deleteGoal: Function;
 }
+
 interface IState {
-  goal: Goal,
-  showGoalView: boolean,
-  input_progress: number,
+  goal: Goal;
+  showGoalView: boolean;
+  inputProgress: number;
 }
 
 class GoalCard extends React.Component<IProps, IState> {
-
-  constructor(prop: IProps) {
+  constructor(prop: any) {
     super(prop);
     this.state = {
       goal: this.props.goal,
       showGoalView: false,
-      input_progress: 1,
+      inputProgress: 1,
     };
   }
 
-  isReaadOnly = (): boolean => {
-    if (this.props.isReadOnly !== null &&
-      this.props.isReadOnly !== undefined &&
-      this.props.isReadOnly)
+  isReadOnly = (): boolean => {
+    if (this.props.isReadOnly !== null && this.props.isReadOnly !== undefined && this.props.isReadOnly)
       return true;
     return false;
   }
 
-  handleOpneGoal = () => {
-    if (this.isReaadOnly())
+  handleOpenGoal = () => {
+    if (this.isReadOnly())
       return
     this.setState({
       goal: this.state.goal,
       showGoalView: true,
-      input_progress: this.state.input_progress
+      inputProgress: this.state.inputProgress
     });
   };
 
@@ -57,7 +58,7 @@ class GoalCard extends React.Component<IProps, IState> {
     this.setState({
       goal: this.state.goal,
       showGoalView: false,
-      input_progress: this.state.input_progress
+      inputProgress: this.state.inputProgress
     });
   };
 
@@ -67,17 +68,20 @@ class GoalCard extends React.Component<IProps, IState> {
         <div className="category" />
         <CardActionArea
           className="title_container"
-          onClick={this.handleOpneGoal}
+          onClick={this.handleOpenGoal}
         >
           <Typography variant="h5" className="title">
             {this.props.goal.title}
           </Typography>
-
           {
-            !this.isReaadOnly()
+            !this.isReadOnly()
             &&
             <Tooltip title="Delete">
-              <IconButton aria-label="delete" className="delete_button">
+              <IconButton
+                aria-label="delete" 
+                className="delete_button"
+                onClick={() => this.props.deleteGoal(this.state.goal.id)}
+              >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -89,9 +93,8 @@ class GoalCard extends React.Component<IProps, IState> {
             currentProgress={this.state.goal.currentProgress}
             progressToReach={this.props.goal.progressToReach}
           />
-
           {
-            !this.isReaadOnly()
+            !this.isReadOnly()
             &&
             <Tooltip
               title="Modify progress with the specified number"
@@ -99,26 +102,22 @@ class GoalCard extends React.Component<IProps, IState> {
             >
               <TextField
                 type="number"
-                defaultValue="+1"
+                defaultValue="1"
                 className="input_progress"
                 onChange={(text: any) => {
                   this.setState({
-                    input_progress: Number(text.target.value)
+                    inputProgress: Number(text.target.value)
                   });
                 }}
               />
             </Tooltip>
           }
           {
-            !this.isReaadOnly()
+            !this.isReadOnly()
             &&
             <Tooltip title="Modify" aria-label="add">
               <Fab color="inherit" className="add_button_progress">
-                <Done
-                  onClick={e => {
-                    this.handleClick();
-                  }}
-                />
+                <Done onClick={e => { this.handleClick(); }} />
               </Fab>
             </Tooltip>
           }
@@ -133,64 +132,20 @@ class GoalCard extends React.Component<IProps, IState> {
   }
 
   handleClick() {
-    var goal = this.state.goal;
-    goal.currentProgress = goal.currentProgress + this.state.input_progress;
+    let goal = this.state.goal;
+    goal.currentProgress = goal.currentProgress + this.state.inputProgress;
     if (goal.currentProgress < 0)
       goal.currentProgress = 0;
-    else if (goal.currentProgress >= goal.progressToReach) {
+    else if (goal.currentProgress >= goal.progressToReach)
       goal.currentProgress = goal.progressToReach;
-      /*if (this.props.markGoalAsCompleate !== undefined)
-        this.setState({ openDialog: true })
-      return*/
-    }
-
     this.setState({ goal: goal })
-  }
-  handleClick2() {
-    this.setState(state => {
-      var newGoal = this.state.goal;
-
-      if (state.goal.currentProgress + state.input_progress < 0) {
-        newGoal.currentProgress = 0;
-        this.state.goal.currentProgress = 0;
-        return {
-          goal: newGoal,
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      }
-      if (
-        state.goal.currentProgress + state.input_progress <=
-        this.props.goal.progressToReach
-      ) {
-        newGoal.currentProgress =
-          state.goal.currentProgress + state.input_progress;
-        this.state.goal.currentProgress =
-          state.goal.currentProgress + state.input_progress;
-        return {
-          goal: newGoal,
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      } else {
-        this.state.goal.currentProgress = this.state.goal.progressToReach;
-        return {
-          goal: {
-            title: this.props.goal.title,
-            description: this.props.goal.description,
-            currentProgress: this.props.goal.progressToReach,
-            category: newGoal.category,
-            endDate: newGoal.endDate,
-            progressToReach: newGoal.progressToReach,
-            startDate: newGoal.startDate,
-            isPublic: newGoal.isPublic
-          },
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      }
-    });
   }
 }
 
-export default GoalCard;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(GoalCard);

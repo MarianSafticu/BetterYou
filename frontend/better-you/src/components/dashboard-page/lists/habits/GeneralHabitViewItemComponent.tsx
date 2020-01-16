@@ -7,7 +7,7 @@ import Delete from "@material-ui/icons/Delete";
 import Close from "@material-ui/icons/Close";
 import Service from "../../../../services/Service";
 import { HabitException } from "../../../../exceptions/HabitException";
-import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
+import { goalCategorys } from "../../../../models/GoalCategorys";
 import { Repetition } from "../../../../models/Repetition";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -143,11 +143,11 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     var greenC = green.toString(16);
     var blueC = blue.toString(16);
 
-    if (redC.length == 1)
+    if (redC.length === 1)
       redC = "0" + redC;
-    if (greenC.length == 1)
+    if (greenC.length === 1)
       greenC = "0" + greenC;
-    if (blueC.length == 1)
+    if (blueC.length === 1)
       blueC = "0" + blueC;
 
     var ret = "#" + redC + greenC + blueC;
@@ -258,7 +258,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
         return;
     }
     const habit: Habit = this.state.habit;
-    if(event.target.value == "Daily")
+    if(event.target.value === "Daily")
         habit.repetitionType = Repetition.Daily;
     else
         habit.repetitionType = Repetition.Weekly;
@@ -299,12 +299,16 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     });
   };
   onCancelHandler = () => {
-    this.state.habit.title = this.initialHabit.title;
-    this.state.habit.description = this.initialHabit.description;
-    this.state.habit.repetitionType = this.initialHabit.repetitionType;
-    this.state.habit.startDate = this.initialHabit.startDate;
-    this.state.habit.category = this.initialHabit.category;
-    this.state.habit.dates = this.initialHabit.dates;
+    this.setState({
+      habit: {
+        title: this.initialHabit.title,
+        description: this.initialHabit.description,
+        repetitionType: this.initialHabit.repetitionType,
+        startDate: this.initialHabit.startDate,
+        category: this.initialHabit.category,
+        dates: this.initialHabit.dates,    
+      }
+    })
     this.props.onFinnishAction();
   };
   onClosePopoverDelete = () => {
@@ -389,7 +393,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
             defaultValue={this.state.habit.title}
             variant={this.state.isDefaultHabit?"filled":this.state.textFieldVariant as any}
             label="title"
-            error={this.state.habitError.titleError.length != 0}
+            error={this.state.habitError.titleError.length !== 0}
             helperText={this.state.habitError.titleError}
           ></TextField>
         </h1>
@@ -402,7 +406,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
           rowsMax="10"
           multiline
           variant={this.state.isDefaultHabit?"filled":this.state.textFieldVariant as any}
-          error={this.state.habitError.descriptionError.length != 0}
+          error={this.state.habitError.descriptionError.length !== 0}
           helperText={this.state.habitError.descriptionError}
         ></TextField>
         <TextField
@@ -417,7 +421,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
               ? this.state.habit.startDate.toLocaleDateString()
               : this.getStringFromData(this.state.habit.startDate)
           }
-          error={this.state.habitError.startDateError.length != 0}
+          error={this.state.habitError.startDateError.length !== 0}
           helperText={this.state.habitError.startDateError}
         ></TextField>
 
@@ -458,7 +462,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
             variant={this.state.isDefaultHabit?"filled":this.state.textFieldVariant as any}
             InputLabelProps={{ shrink: true }}
             defaultValue={this.state.habit.category.category}
-            error={this.state.habitError.categoryError.length != 0}
+            error={this.state.habitError.categoryError.length !== 0}
             helperText={this.state.habitError.categoryError}
             style={{ backgroundColor: this.state.habit.category.color }}
           ></TextField>

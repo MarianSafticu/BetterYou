@@ -7,7 +7,6 @@ import RegisterRequest from "../models/requests/RegisterRequest";
 import LoginResponse from "../models/responses/LoginResponse";
 import RegisterResponse from "../models/responses/RegisterResponse";
 import AddGoalRequest from "../models/requests/AddGoalRequest";
-import { getCookie } from "./CookieService";
 import FetchGoalResponse from "../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../models/requests/AddHabitRequest";
@@ -84,11 +83,25 @@ export default class HttpService implements IHttpService {
   }
 
   async addGoal(goal: AddGoalRequest): Promise<number> {
-    console.log(JSON.stringify(goal))
     return await fetch(`${url}/goal`, {
       method: "post",
       headers: getSafeHeaders(),
       body: JSON.stringify(goal)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
+  async deleteGoal(id: number): Promise<boolean> {
+    return await fetch(`${url}/goal`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(id)
     })
       .then(response => response.json())
       .then(body => {
@@ -114,7 +127,6 @@ export default class HttpService implements IHttpService {
   }
 
   async addHabit(habit: AddHabitRequest): Promise<number> {
-    console.log(JSON.stringify(habit))
     return await fetch(`${url}/habit`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -128,4 +140,20 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
+
+  async deleteHabit(id: number): Promise<boolean> {
+    return await fetch(`${url}/habit`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(id)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
 }

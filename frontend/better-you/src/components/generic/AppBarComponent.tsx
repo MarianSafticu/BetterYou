@@ -10,7 +10,6 @@ import {
   ListItem,
   AppBar
 } from "@material-ui/core";
-import BuildIcon from "@material-ui/icons/Build";
 import { NavLink, Link } from "react-router-dom";
 import AppState from "../../redux/store/store";
 import { connect } from "react-redux";
@@ -18,11 +17,8 @@ import { Breakpoint } from "react-socks";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
 import UserDTO from "../../models/UserDTO";
-import NewsfeedList from "../dashboard-page/lists/newsfeed/NewsfeedList";
-import GoalList from "../dashboard-page/lists/goals/GoalList";
 import { setAppBarSwipeableDrawer } from "../../redux/actions/actions";
 import AppBarItem from "../../models/AppBarItem";
-import { stat } from "fs";
 
 interface IProps {
   userInfo: UserDTO | undefined;
@@ -127,7 +123,7 @@ class AppBarComponent extends Component<IProps, IState> {
                   {this.props.appBarListItems.map(x => {
                     if (x.func == null)
                       return (
-                        <div>
+                        <div key={x.text}>
                           <Divider />
                           <ListItem>
                             <Link to={x.link} className="link">
@@ -138,9 +134,9 @@ class AppBarComponent extends Component<IProps, IState> {
                       )
                     else
                       return (
-                        <div>
+                        <div key={x.text}>
                           <Divider />
-                          <ListItem onClick={() => { if (x.func !== null) x.func(); }} className="div_to_link link">
+                          <ListItem key={x.text} onClick={() => { if (x.func !== null) x.func(); }} className="div_to_link link">
                             {x.text}
                           </ListItem>
                         </div>

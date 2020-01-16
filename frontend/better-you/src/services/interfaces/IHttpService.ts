@@ -14,8 +14,10 @@ export default interface IHttpService {
   confirmAccount(confirmationCode: string): Promise<boolean>;
   fetchGoals(): Promise<FetchGoalResponse[]>;
   addGoal(goal: AddGoalRequest): Promise<number>;
+  deleteGoal(id: number): Promise<boolean>;
   fetchHabits(): Promise<FetchHabitResponse[]>;
   addHabit(habit: AddHabitRequest): Promise<number>;
+  deleteHabit(id: number): Promise<boolean>;
 }
 
 export function getHeaders() {

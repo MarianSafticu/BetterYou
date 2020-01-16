@@ -17,7 +17,7 @@ const newsfeedList = [
   },
   {
     image: "",
-    name: "Pati",
+    name: "Josh",
     action: 'added a new goal "Citeste 2 carti"'
   },
   {

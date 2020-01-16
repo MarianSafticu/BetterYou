@@ -16,7 +16,11 @@ import {
   fetchHabitsSuccess,
   addHabitSuccess,
   addHabitError,
-  fetchHabitsError
+  fetchHabitsError,
+  deleteGoalSuccess,
+  deleteGoalError,
+  deleteHabitSuccess,
+  deleteHabitError
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -97,6 +101,7 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
           category: { category: goal.goal.category, color: "#e9eff2"}
         }
         goalsDTO.push(goalDTO);
+        return goalDTO;
       });
       yield put(fetchGoalsSuccess(goalsDTO));
     }
@@ -120,7 +125,7 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
         currentProgress: 0,
         progressToReach: goal.goal.progressToReach,
         isPublic: goal.public,
-        category: (<any>goalCategorys)[goal.goal.category]
+        category: (goalCategorys as any)[goal.goal.category]
       }
       yield put(addGoalSuccess(goalComplete))
     }
@@ -135,7 +140,13 @@ export function* editGoalHandler(action: AppActionType): IterableIterator<any> {
 
 
 export function* deleteGoalHandler(action: AppActionType): IterableIterator<any> {
-
+  let id: number = action.payload as number;
+  const response = yield call(httpService.deleteGoal, id);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) yield put(deleteGoalSuccess(id));
+    else if (massage) yield put(deleteGoalError(massage))
+  }
 }
 
 
@@ -152,11 +163,12 @@ export function* fetchHabitsHandler(action: AppActionType): IterableIterator<any
           title: habit.title,
           description: habit.description,
           startDate: new Date(habit.startDate),
-          repetitionType: (<any>Repetition)[habit.repetitionType],
-          category: (<any>goalCategorys)[habit.category],
+          repetitionType: (Repetition as any)[habit.repetitionType],
+          category: (goalCategorys as any)[habit.category],
           dates: habit.dates.map(date => new Date(date))
         }
         habitsDTO.push(habitDTO);
+        return habitDTO;
       });
       yield put(fetchHabitsSuccess(habitsDTO));
     }
@@ -176,8 +188,8 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
         title: habit.habit.title,
         description: habit.habit.description,
         startDate: new Date(),
-        repetitionType: (<any>Repetition)[habit.habit.repetitionType],
-        category: (<any>goalCategorys)[habit.habit.category],
+        repetitionType: (Repetition as any)[habit.habit.repetitionType],
+        category: (goalCategorys as any)[habit.habit.category],
         dates: habit.habit.dates.map(date => new Date(date))
       }
       yield put(addHabitSuccess(habitComplete))
@@ -193,5 +205,11 @@ export function* editHabitHandler(action: AppActionType): IterableIterator<any> 
 
 
 export function* deleteHabitHandler(action: AppActionType): IterableIterator<any> {
-  
+  let id: number = action.payload as number;
+  const response = yield call(httpService.deleteHabit, id);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) yield put(deleteHabitSuccess(id));
+    else if (massage) yield put(deleteHabitError(massage))
+  }
 }
