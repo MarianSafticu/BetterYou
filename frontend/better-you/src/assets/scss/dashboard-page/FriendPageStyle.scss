@@ -1,0 +1,25 @@
+@import "../globals/colors";
+@import "../globals/global";
+
+.profile-card{
+    background: $color1;
+    overflow: hidden; /* will contain if #first is longer than #second */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75vw;
+    min-height: 25vh;
+    margin: auto;
+}
+.profile-card div{
+    padding-right: 10vw;
+}
+.profile-card img{
+    width: 50vw;
+    height: 50vw;
+
+    max-width: 300px;
+    max-height: 300px;
+}
+@media (min-width:  #{$mobile_witdh_threshold}) {
+}

@@ -10,6 +10,7 @@ import RecoverAccountComponent from "../components/settings/RecoverAccountCompon
 import DashboardComponent from "../components/dashboard-page/DashboardComponent";
 import LoggedOutRoute from "./custom/LoggedOutRoute";
 import TestLoading from "../components/test-pages/TestLoading";
+import FriendPageComponent from "../components/dashboard-page/FriendPageComponent";
 
 export default class Routes extends Component {
   render() {
@@ -46,6 +47,7 @@ export default class Routes extends Component {
         <Route exact path="/dashboard" component={DashboardComponent} />
         <Route exact path="/test" component={TestPageComponent} />
         <Route exact path="/testloading" component={TestLoading} />
+        <Route exact path="/u/:username" component={FriendPageComponent} />
       </Switch>
     );
   }

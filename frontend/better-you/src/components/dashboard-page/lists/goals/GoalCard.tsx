@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
-import { TextField } from "@material-ui/core";
+import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -14,25 +14,38 @@ import Goal from "../../../../models/Goal";
 import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
 
 interface IProps {
-  goal: Goal;
+  goal: Goal,
+  isReadOnly?: boolean | null,
+  markGoalAsCompleate?: Function
 }
 interface IState {
-  goal: Goal;
-  showGoalView: boolean;
-  input_progress: number;
+  goal: Goal,
+  showGoalView: boolean,
+  input_progress: number,
 }
 
 class GoalCard extends React.Component<IProps, IState> {
+
   constructor(prop: IProps) {
     super(prop);
     this.state = {
       goal: this.props.goal,
       showGoalView: false,
-      input_progress: 1
+      input_progress: 1,
     };
   }
 
+  isReaadOnly = (): boolean => {
+    if (this.props.isReadOnly !== null &&
+      this.props.isReadOnly !== undefined &&
+      this.props.isReadOnly)
+      return true;
+    return false;
+  }
+
   handleOpneGoal = () => {
+    if (this.isReaadOnly())
+      return
     this.setState({
       goal: this.state.goal,
       showGoalView: true,
@@ -51,7 +64,7 @@ class GoalCard extends React.Component<IProps, IState> {
   render() {
     return (
       <Card className="card-container">
-        <div className="category" />
+        <div className="category"  style={{backgroundColor: this.state.goal.category.color}}/>
         <CardActionArea
           className="title_container"
           onClick={this.handleOpneGoal}
@@ -60,11 +73,15 @@ class GoalCard extends React.Component<IProps, IState> {
             {this.props.goal.title}
           </Typography>
 
-          <Tooltip title="Delete">
-            <IconButton aria-label="delete" className="delete_button">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          {
+            !this.isReaadOnly()
+            &&
+            <Tooltip title="Delete">
+              <IconButton aria-label="delete" className="delete_button">
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          }
         </CardActionArea>
 
         <div className="container">
@@ -73,31 +90,38 @@ class GoalCard extends React.Component<IProps, IState> {
             progressToReach={this.props.goal.progressToReach}
           />
 
-          <Tooltip
-            title="Modify progress with the specified number"
-            aria-label="add"
-          >
-            <TextField
-              type="number"
-              defaultValue="+1"
-              className="input_progress"
-              onChange={(text: any) => {
-                this.setState({
-                  input_progress: Number(text.target.value)
-                });
-              }}
-            />
-          </Tooltip>
-
-          <Tooltip title="Modify" aria-label="add">
-            <Fab color="inherit" className="add_button_progress">
-              <Done
-                onClick={e => {
-                  this.handleClick();
+          {
+            !this.isReaadOnly()
+            &&
+            <Tooltip
+              title="Modify progress with the specified number"
+              aria-label="add"
+            >
+              <TextField
+                type="number"
+                defaultValue="+1"
+                className="input_progress"
+                onChange={(text: any) => {
+                  this.setState({
+                    input_progress: Number(text.target.value)
+                  });
                 }}
               />
-            </Fab>
-          </Tooltip>
+            </Tooltip>
+          }
+          {
+            !this.isReaadOnly()
+            &&
+            <Tooltip title="Modify" aria-label="add">
+              <Fab color="inherit" className="add_button_progress">
+                <Done
+                  onClick={e => {
+                    this.handleClick();
+                  }}
+                />
+              </Fab>
+            </Tooltip>
+          }
           <GeneralGoalViewPopupComponent
             selfDistructFunction={this.handleCloseGoal}
             open={this.state.showGoalView}
@@ -109,11 +133,26 @@ class GoalCard extends React.Component<IProps, IState> {
   }
 
   handleClick() {
+    var goal = this.state.goal;
+    goal.currentProgress = goal.currentProgress + this.state.input_progress;
+    if (goal.currentProgress < 0)
+      goal.currentProgress = 0;
+    else if (goal.currentProgress >= goal.progressToReach) {
+      goal.currentProgress = goal.progressToReach;
+      /*if (this.props.markGoalAsCompleate !== undefined)
+        this.setState({ openDialog: true })
+      return*/
+    }
+
+    this.setState({ goal: goal })
+  }
+  handleClick2() {
     this.setState(state => {
       var newGoal = this.state.goal;
 
       if (state.goal.currentProgress + state.input_progress < 0) {
         newGoal.currentProgress = 0;
+        this.state.goal.currentProgress = 0;
         return {
           goal: newGoal,
           input_progress: this.state.input_progress,
@@ -126,12 +165,15 @@ class GoalCard extends React.Component<IProps, IState> {
       ) {
         newGoal.currentProgress =
           state.goal.currentProgress + state.input_progress;
+        this.state.goal.currentProgress =
+          state.goal.currentProgress + state.input_progress;
         return {
           goal: newGoal,
           input_progress: this.state.input_progress,
           showGoalView: this.state.showGoalView
         };
       } else {
+        this.state.goal.currentProgress = this.state.goal.progressToReach;
         return {
           goal: {
             title: this.props.goal.title,
