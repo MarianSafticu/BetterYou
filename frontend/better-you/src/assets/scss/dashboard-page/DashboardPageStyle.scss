@@ -91,14 +91,3 @@
 #formControl_2 {
     flex : 1;
 }
-
-@media screen and (max-width:  #{$mobile_witdh_threshold}) {
-    .list_component {
-        max-width: #{$mobile_witdh_threshold};
-        flex : 0 0 96%;
-    }
-    .newsfeed{
-        max-width: #{$mobile_witdh_threshold};
-        flex : 0 0 96%;
-    }
-  }

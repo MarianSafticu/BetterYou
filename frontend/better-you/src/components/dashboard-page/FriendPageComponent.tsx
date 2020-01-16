@@ -3,6 +3,7 @@ import { RouteComponentProps, withRouter } from "react-router";
 import UserDTO from "../../models/UserDTO";
 import GoalList from "./lists/goals/GoalList";
 import "../../assets/scss/dashboard-page/FriendPageStyle.scss"
+import { Button } from "@material-ui/core";
 
 interface IProps {
     username: string,
@@ -29,13 +30,19 @@ class FriendPageComponent extends React.Component<RouteComponentProps<IProps>, I
 
     render() {
         return (
-            <div>
-                <div className="profile-card">
-                    <img src={this.state.user.profilePicture}/>
-                    <div>
-                        <h2>Username: {this.state.user.username} </h2>
-                        <h2>Username: {this.state.user.username} </h2>
-                        <h2>Username: {this.state.user.username} </h2>
+            <div className="profile-card-container">
+                <div className="profile-card-border">
+                    <div className="profile-card">
+                        <img src={this.state.user.profilePicture} />
+                        <div>
+                            <h2>User: {this.state.user.username} </h2>
+                            <Button>
+                                Invide as friend
+                        </Button>
+                            <Button>
+                                Chalange
+                        </Button>
+                        </div>
                     </div>
                 </div>
                 <GoalList isReadOnly={true} />
