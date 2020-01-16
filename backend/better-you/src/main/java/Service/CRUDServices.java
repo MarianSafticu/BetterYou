@@ -293,19 +293,24 @@ public class CRUDServices {
         }
     }
 
-    public void addHabit(final Habit habit, final long userId) {
+    public long addHabit(final Habit habit, final long userId) {
+        LOG.info("Adding habit {} for user with id {}", habit, userId);
         User userOwner = userRepo.get(userId);
 
         if (userOwner == null) {
+            LOG.info("There is no user with id {}", userId);
             throw new ServiceException("User with given id does not exist");
         }
 
         habit.setUser(userOwner);
 
         try {
-            habitsRepo.add(habit);
+            long habitId = habitsRepo.addHabitToUser(habit);
+            LOG.info("Successfully saved habit to repo");
+            return habitId;
         } catch (RepoException e) {
             e.printStackTrace();
+            LOG.error("Could not save habit to repo");
             throw new ServiceException("Error occurred while adding new habit");
         }
     }
