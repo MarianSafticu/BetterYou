@@ -22,7 +22,6 @@ interface IState {
   goal: Goal,
   showGoalView: boolean,
   input_progress: number,
-  openDialog: boolean
 }
 
 class GoalCard extends React.Component<IProps, IState> {
@@ -33,7 +32,6 @@ class GoalCard extends React.Component<IProps, IState> {
       goal: this.props.goal,
       showGoalView: false,
       input_progress: 1,
-      openDialog: false
     };
   }
 
@@ -129,28 +127,6 @@ class GoalCard extends React.Component<IProps, IState> {
             open={this.state.showGoalView}
             goal={this.state.goal}
           />
-
-
-          <Dialog
-            disableBackdropClick
-            disableEscapeKeyDown
-            open={this.state.openDialog}
-            onClose={this.handleClick}
-          >
-            <DialogTitle>Congratulation! You have completed this goal.</DialogTitle>
-            <DialogContent>
-              Do you want to remove this goal from your list?
-              It will automatically remove it if you restart.
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => { this.setState({ openDialog: false }) }}>Cancel</Button>
-              <Button onClick={() => {
-                if (this.props.markGoalAsCompleate !== undefined)
-                  this.props.markGoalAsCompleate(this.state.goal)
-              }}>Ok</Button>
-            </DialogActions>
-          </Dialog>
-
         </div>
       </Card>
     );
@@ -163,8 +139,9 @@ class GoalCard extends React.Component<IProps, IState> {
       goal.currentProgress = 0;
     else if (goal.currentProgress >= goal.progressToReach) {
       goal.currentProgress = goal.progressToReach;
-      if (this.props.markGoalAsCompleate !== undefined)
+      /*if (this.props.markGoalAsCompleate !== undefined)
         this.setState({ openDialog: true })
+      return*/
     }
 
     this.setState({ goal: goal })
