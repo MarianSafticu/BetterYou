@@ -4,6 +4,8 @@ import {
   SET_CURRENT_USER_ERROR,
   AppActionType,
   UNSET_CURRENT_USER,
+  SET_CURRENT_USER_INFORMATION_SUCCES,
+  SET_CURRENT_USER_INFORMATION_ERROR,
   REGISTER_USER_BEGIN,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_ERROR,
@@ -49,6 +51,7 @@ import EditHabitRequest from "../../models/requests/EditHabitRequest";
 
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
+import UserInfoDTO from "../../models/UserInfoDTO";
 
 export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
@@ -77,6 +80,19 @@ export function unsetCurrentUser(): AppActionType {
   };
 }
 
+export function setCurrentUserInformationSuccess(userInfo : UserInfoDTO):AppActionType{
+  return {
+    type : SET_CURRENT_USER_INFORMATION_SUCCES,
+    payload : userInfo
+  };
+}
+
+export function setCurrentUserInformationError(error:string):AppActionType{
+  return {
+    type : SET_CURRENT_USER_INFORMATION_ERROR,
+    payload : error
+  }
+}
 
 export function registerUserBegin(user: RegisterRequest): AppActionType {
   return {

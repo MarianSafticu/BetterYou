@@ -4,6 +4,7 @@ import "../../assets/scss/generic/AppBarStyle.scss";
 import AppState from "../../redux/store/store";
 import { unsetCurrentUser } from "../../redux/actions/actions";
 import UserDTO from "../../models/UserDTO";
+import UserInfoDTO from '../../models/UserInfoDTO';
 import { connect } from "react-redux";
 
 import Drawer from '@material-ui/core/Drawer';
@@ -22,6 +23,7 @@ import BookIcon from '@material-ui/icons/Book';
 interface IProps {
     image?: string;
     userInfo: UserDTO | undefined;
+    userInformation : UserInfoDTO | undefined;
     logoutUser: Function;
 }
 
@@ -47,7 +49,8 @@ export class MyProfileComponent extends Component<IProps, IState>{
         this.state = {
             friends:false,
             goals:false,
-            url_picture: (props.userInfo !== undefined ? props.userInfo.profilePicture : "../assets/photos/profile-picture-test.jpg")
+            url_picture: (props.userInfo !== undefined ? props.userInfo.profilePicture : "../assets/photos/profile-picture-test.jpg"),
+            username : (props.userInformation !==undefined ? props.userInformation.profile_name : "Profile Name")
         }
     }
 
@@ -62,7 +65,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
                          <img id="avatar" src={this.state.url_picture}></img>
                     </ListItem>
                     <ListItem id="username">
-                        <ListItemText primary="Utilizator"/>
+                        <ListItemText primary={this.state.username}/>
                     </ListItem>
                     <Divider/>
                     <ListItem key="Statistici" className="item">
@@ -126,7 +129,8 @@ export class MyProfileComponent extends Component<IProps, IState>{
 
 const mapStateToProps = (state: AppState) => {
     return {
-        userInfo: state.userInfo
+        userInfo: state.userInfo,
+        userInformation : state.userInformation
     };
 };
 

@@ -4,11 +4,13 @@ import Friend from "../../models/Friend";
 import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
+import UserInfoDTO from "../../models/UserInfoDTO";
 
 export default interface AppState {
   loading: boolean;
   error: string;
   userInfo: UserDTO | undefined;
+  userInformation: UserInfoDTO | undefined;
   registrationEmailSent: boolean;
   accountConfirmed: boolean;
   goals: Goal[];

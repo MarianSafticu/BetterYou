@@ -5,6 +5,8 @@ import {
   SET_CURRENT_USER_SUCCESS,
   SET_CURRENT_USER_ERROR,
   UNSET_CURRENT_USER,
+  SET_CURRENT_USER_INFORMATION_SUCCES,
+  SET_CURRENT_USER_INFORMATION_ERROR,
   REGISTER_USER_BEGIN,
   REGISTER_USER_SUCCESS,
   REGISTER_USER_ERROR,
@@ -43,6 +45,8 @@ import {
   setCurrentUserSuccessHandler,
   setCurrentUserErrorHandler,
   unsetCurrentUserHandler,
+  setCurrentUserInformationSuccesHandler,
+  setCurrentUserInformationErrorHandler,
   registerUserBeginHandler,
   registerUserSuccessHandler,
   registerUserErrorHandler,
@@ -76,12 +80,14 @@ import {
   setAppBarSwipeableDrawerHandler,
   setAppBarItemsListHandler
 } from "./appHandlers";
+import { setCurrentUserInformationError } from "../actions/actions";
 
 
 export const initialState: AppState = {
   loading: false,
   error: "",
   userInfo: undefined,
+  userInformation:undefined,
   registrationEmailSent: false,
   accountConfirmed: false,
   goals: [],
@@ -104,6 +110,11 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case UNSET_CURRENT_USER:
       return unsetCurrentUserHandler(state);
 
+    case SET_CURRENT_USER_INFORMATION_SUCCES:
+      return setCurrentUserInformationSuccesHandler(state,action.payload);
+    case SET_CURRENT_USER_INFORMATION_ERROR:
+      return setCurrentUserInformationErrorHandler(state,action.payload);
+    
     case REGISTER_USER_BEGIN:
       return registerUserBeginHandler(state);
     case REGISTER_USER_SUCCESS:

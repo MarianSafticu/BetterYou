@@ -5,6 +5,8 @@ import { call, put } from "@redux-saga/core/effects";
 import {
   setCurrentUserSuccess,
   setCurrentUserError,
+  setCurrentUserInformationSuccess,
+  setCurrentUserInformationError,
   registerUserSuccess,
   registerUserError,
   confirmAccountSuccess,
@@ -76,6 +78,16 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
   }
 }
 
+export function* getUserInformationHandler(action:AppActionType):IterableIterator<any>{
+  const response = yield call(httpService.getUserInformation);
+  if(response){
+    const {userInformation, massage} = response;
+    if(userInformation)
+      yield put(setCurrentUserInformationSuccess(userInformation));
+    if(massage)
+      yield put(setCurrentUserInformationError(massage))
+  }
+}
 
 export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.fetchGoals);

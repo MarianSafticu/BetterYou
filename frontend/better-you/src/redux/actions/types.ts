@@ -10,12 +10,16 @@ import Habit from "../../models/Habit";
 
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
+import UserInfoDTO from "../../models/UserInfoDTO";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
 export const SET_CURRENT_USER_ERROR = "SET_CURRENT_USER_ERROR";
 
 export const UNSET_CURRENT_USER = "UNSET_CURRENT_USER";
+
+export const SET_CURRENT_USER_INFORMATION_SUCCES = "SET_CURRENT_USER_INFORMATION_SUCCES";
+export const SET_CURRENT_USER_INFORMATION_ERROR = "SET_CURRENT_USER_INFORMATION_ERROR";
 
 export const REGISTER_USER_BEGIN = "REGISTER_USER_BEGIN";
 export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
@@ -77,6 +81,16 @@ export interface SetCurrentUserError {
 export interface UnsetCurrentUser {
   type: typeof UNSET_CURRENT_USER;
   payload: undefined;
+}
+
+
+export interface SetCurrentUserInformationSucces{
+  type : typeof SET_CURRENT_USER_INFORMATION_SUCCES;
+  payload: UserInfoDTO;
+}
+export interface SetCurrentUserInformationError{
+  type : typeof SET_CURRENT_USER_INFORMATION_ERROR;
+  payload: string;
 }
 
 
@@ -234,6 +248,8 @@ export type AppActionType =
   | SetCurrentUserSuccess
   | SetCurrentUserError
   | UnsetCurrentUser
+  | SetCurrentUserInformationSucces
+  | SetCurrentUserInformationError
   | RegisterUserBegin
   | RegisterUserSuccess
   | RegisterUserError
