@@ -1,9 +1,12 @@
 package ServerUI;
 
+import Model.Category;
 import Model.Habit;
 import Model.User;
 import Model.UserGoal;
 import ServerUI.Requests.Authorization;
+import ServerUI.Requests.Filter;
+import ServerUI.Requests.FilterHabits;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -31,6 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -346,14 +350,28 @@ public class RestServer {
         }
     }
 
+    @RequestMapping(value = "/user/info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUserInfo(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(
+                    new UserInfoResponse(crudServices.getUserFromId(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchUsers(@RequestHeader Authorization authorization,
                                          @RequestBody SearchUsersRequest searchUsersRequest) {
         try {
-            return new ResponseEntity<>(
+            return new ResponseEntity<>(new UsersSearchResponse(
                     crudServices.getUsersByUsernamePrefix(
                             searchUsersRequest.getUsernamePrefix(),
-                            authService.getUserIdFromJWT(authorization.getToken())),
+                            authService.getUserIdFromJWT(authorization.getToken()))),
                     HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -381,7 +399,9 @@ public class RestServer {
     @RequestMapping(value = "/friend/request/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization) {
         try {
-            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken())), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new FriendRequestsResponse(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
@@ -435,6 +455,24 @@ public class RestServer {
         }
     }
 
+    /**
+     * Returns the list of friends of the user with the given token.
+     */
+    @RequestMapping(value = "/friends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFriends(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(
+                    new FriendsResponse(
+                            crudServices.getUserFriends(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     @RequestMapping(value = "/hades", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> requestRecoverAccount() {
@@ -459,6 +497,76 @@ public class RestServer {
             }
             LOG.warn("All users set to verified successfully");
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    /**
+     * This method receives a JSON with a token and a filter type and return all the goals of that user with the filter
+     *
+     * @param filter - the filter
+     * @param authorization - a JSON with an token
+     * @return all the goals if the token si ok or the error message
+     */
+    @RequestMapping(value = "/filter-goal", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> filterGoals(@RequestHeader Authorization authorization, @RequestBody Filter filter) {
+        try {
+            List<UserGoal> userGoals = null; // = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
+            if(filter.getCompleted() != null){
+                if(filter.getCompleted()){
+                    userGoals = crudServices.getCompletedGoals(userId);
+                }else{
+                    userGoals = crudServices.getGoalsInProgress(userId);
+                }
+            }else if(filter.getVisibility() != null){
+                if(filter.getVisibility()){
+                    userGoals = crudServices.getPublicGoals(userId);
+                }else{
+                    userGoals = crudServices.getPrivateGoals(userId);
+                }
+            }else{
+                userGoals = crudServices.getGoalsByCategory(userId, Category.valueOf(filter.getCategory()));
+            }
+            return new ResponseEntity<>(new GoalsResponse(userGoals), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * This method receives a JSON with an token and a filter and return all the habits of that user with that filter
+     *
+     * @param filter - the filter
+     * @param authorization - a JSON with an token
+     * @return all the goals if the token si ok or the error message
+     */
+    @RequestMapping(value = "/filter-habits", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> filterHabits(@RequestHeader Authorization authorization, @RequestBody FilterHabits filter) {
+        try {
+            List<Habit> userHabits = null;
+            long userId = authService.getUserIdFromJWT(authorization.getToken());
+            if(filter.getCategory() != null){
+                userHabits = crudServices.getHabitsByCategory(userId,Category.valueOf(filter.getCategory()));
+            }else{
+                if(filter.getBestStreak()){
+                    userHabits = crudServices.getBestStreakHabits(userId);
+                }
+                else{
+                    // null case
+                    // if the body was empty
+                    userHabits = new ArrayList<>();
+                }
+            }
+            return new ResponseEntity<>(new HabitsResponse(userHabits), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {

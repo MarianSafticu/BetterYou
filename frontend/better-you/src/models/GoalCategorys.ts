@@ -3,7 +3,7 @@ export interface GoalCategory{
     color: string
 }
 
-export const goalCategorys:GoalCategory[] = [
+export const goalCategorys: GoalCategory[] = [
 {
     category: "none",
     color: "#e9eff2"

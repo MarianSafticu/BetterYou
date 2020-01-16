@@ -1,13 +1,7 @@
 package Service;
 
 
-import Model.FriendRequest;
-import Model.Goal;
-import Model.Habit;
-import Model.RecoverLink;
-import Model.RegistrationLink;
-import Model.User;
-import Model.UserGoal;
+import Model.*;
 import Repository.FriendRequestRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
@@ -449,7 +443,7 @@ public class CRUDServices {
             throw new ServiceException("No user found");
         }
 
-        return friendRequestRepo.getUserReceivedFriendshipRequests(receiver);
+        return friendRequestRepo.getUserReceivedFriendshipRequests(userId);
     }
 
     public void acceptFriendRequest(final long userId, final String requesterUsername) {
@@ -559,12 +553,29 @@ public class CRUDServices {
         }
     }
 
-    public List<FriendRequest> getUserReceivedFriendRequests() {
-        return null;
+
+    public List<FriendRequest> getUserSentFriendRequests(final long userId) {
+        LOG.info("Retrieving sent friend requests for id={}", userId);
+
+        if (userRepo.get(userId) == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        return friendRequestRepo.getUserSentFriendshipRequests(userId);
     }
 
-    public List<FriendRequest> getUserSentFriendRequests() {
-        return null;
+    public List<User> getUserFriends(final long userId) {
+        LOG.info("Retrieving friends for user with id={}", userId);
+
+        User user = userRepo.get(userId);
+
+        if (user == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        return new ArrayList<>(user.getFriends());
     }
 
     // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -627,7 +638,27 @@ public class CRUDServices {
             e.printStackTrace();
         }
     }
-
+    public List<UserGoal> getCompletedGoals(long userId){
+        return goalRepo.getCompletedGoals(userRepo.get(userId));
+    }
+    public List<UserGoal> getGoalsInProgress(long userId){
+        return goalRepo.getGoalsInProgress(userRepo.get(userId));
+    }
+    public List<UserGoal> getGoalsByCategory(long userId, Category c){
+        return goalRepo.getUserGoalsByCategory(userRepo.get(userId),c);
+    }
+    public List<UserGoal> getPublicGoals(long userId){
+        return goalRepo.getPublicGoals(userRepo.get(userId));
+    }
+    public List<UserGoal> getPrivateGoals(long userId){
+        return goalRepo.getPrivateGoals(userRepo.get(userId));
+    }
+    public List<Habit> getBestStreakHabits(long userId){
+        return habitsRepo.getBestStreakHabbits(userRepo.get(userId));
+    }
+    public List<Habit> getHabitsByCategory(long userId,Category c){
+        return habitsRepo.getHabbitsByCategory(userRepo.get(userId),c);
+    }
     public List<User> getAllUsers() {
         return userRepo.getAll();
     }

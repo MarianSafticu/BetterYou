@@ -4,8 +4,6 @@ import { Button, TextField, Fab, Popover, Select, FormControl, InputLabel, FormL
 import Habit from "../../../../models/Habit";
 import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
-import Save from "@material-ui/icons/Save";
-import Cancel from "@material-ui/icons/Cancel";
 import Close from "@material-ui/icons/Close";
 import Service from "../../../../services/Service";
 import { HabitException } from "../../../../exceptions/HabitException";
@@ -13,24 +11,22 @@ import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
 import { Repetition } from "../../../../models/Repetition";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-/*
-curent progress
-start date
-end date
-*/
+import AddHabitRequest from "../../../../models/requests/AddHabitRequest";
+import { addHabitBegin } from "../../../../redux/actions/actions";
+import { connect } from "react-redux";
 
 interface IProps {
   onFinnishAction: Function;
   habit?: Habit;
-  isDefaultHabit?: boolean
+  isDefaultHabit?: boolean;
+  addHabit: Function;
 }
 
-interface IStatus {
+interface IState {
   habit: Habit;
   edditingIsDisabled: boolean;
   isForNewHabit: boolean;
-  onSaveHandle: Function;
+  // onSaveHandle: Function;
   habitError: HabitException;
   textFieldVariant: "filled" | "outlined";
   showDelete: boolean;
@@ -39,10 +35,7 @@ interface IStatus {
   selectedRepetition: string
 }
 
-export default class GeneralHabitViewItemComponent extends Component<
-  IProps,
-  IStatus
-  > {
+class GeneralHabitViewItemComponent extends Component<IProps, IState> {
   service: Service;
   initialDates: Date[] = [];
   initialHabit: Habit = {
@@ -93,7 +86,7 @@ export default class GeneralHabitViewItemComponent extends Component<
         habit: props.habit,
         edditingIsDisabled: !isDefaultHabit,
         isForNewHabit: isDefaultHabit,
-        onSaveHandle: this.onSaveChanges,
+        // onSaveHandle: this.onSaveChanges,
         habitError: err,
         textFieldVariant: isDefaultHabit?"outlined":"filled",
         showDelete: false,
@@ -106,7 +99,7 @@ export default class GeneralHabitViewItemComponent extends Component<
         habit: habit,
         edditingIsDisabled: false,
         isForNewHabit: true,
-        onSaveHandle: this.onSaveAdd,
+        // onSaveHandle: this.onSaveAdd,
         habitError: err,
         textFieldVariant: "outlined",
         showDelete: false,
@@ -218,6 +211,7 @@ export default class GeneralHabitViewItemComponent extends Component<
       habit: habit
     });
   };
+
   onChangeDateStart = (event: ChangeEvent<HTMLInputElement>) => {
     if (this.state.edditingIsDisabled) {
       event.target.value = this.state.habit.startDate.toLocaleDateString();
@@ -236,6 +230,7 @@ export default class GeneralHabitViewItemComponent extends Component<
       habit: habit
     });
   };
+
   onChangeCategory = (event: any) => {
     if (this.state.edditingIsDisabled || this.state.isDefaultHabit) {
       event.target.value = this.state.habit.category.category;
@@ -274,12 +269,20 @@ export default class GeneralHabitViewItemComponent extends Component<
   }
   onChangeDateCalendar: any;
 
-  onSaveChanges = () => {
-    console.log("SE SALVEAZA SCHIMBARILE");
-    if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
-  };
   onSaveAdd = () => {
-    console.log("SE ADAUGA HABIT-UL");
+    let habitReq: AddHabitRequest = {
+      habit: {
+        title: this.state.habit.title,
+        description: this.state.habit.description,
+        startDate: this.getStringFromData(this.state.habit.startDate),
+        repetitionType: this.state.habit.repetitionType.toUpperCase(),
+        category: this.state.habit.category.category.toUpperCase(),
+        bestStreak: 0,
+        currentStreak: 0,
+        dates: []  
+      }
+    }
+    this.props.addHabit(habitReq);
     if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
   };
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -295,7 +298,7 @@ export default class GeneralHabitViewItemComponent extends Component<
       textFieldVariant: this.state.edditingIsDisabled ? "outlined" : "filled"
     });
   };
-  onCancelHangler = () => {
+  onCancelHandler = () => {
     this.state.habit.title = this.initialHabit.title;
     this.state.habit.description = this.initialHabit.description;
     this.state.habit.repetitionType = this.initialHabit.repetitionType;
@@ -372,7 +375,7 @@ export default class GeneralHabitViewItemComponent extends Component<
           <Fab
             className="general-goal-button"
             onClick={() => {
-              this.onCancelHangler();
+              this.onCancelHandler();
             }}
             size="small"
           >
@@ -491,7 +494,6 @@ export default class GeneralHabitViewItemComponent extends Component<
           placeholderText="   Calendar"
           />                
         }
-
         <br />
         <div className="general-goal-button-container">
           {this.state.isForNewHabit === false && (
@@ -499,10 +501,7 @@ export default class GeneralHabitViewItemComponent extends Component<
               size="small"
               className="general-goal-button"
               disabled={this.state.edditingIsDisabled}
-              onClick={() => {
-                this.onCancelHangler();
-              }}
-            >
+              onClick={() => { this.onCancelHandler(); }}>
               Cancel
             </Button>
           )}
@@ -510,10 +509,7 @@ export default class GeneralHabitViewItemComponent extends Component<
             size="small"
             className="general-goal-button"
             disabled={this.state.edditingIsDisabled}
-            onClick={() => {
-              this.state.onSaveHandle();
-            }}
-          >
+            onClick={() => { this.onSaveAdd(); }}>
             Save
           </Button>
         </div>
@@ -521,3 +517,11 @@ export default class GeneralHabitViewItemComponent extends Component<
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    addHabit: (habit: AddHabitRequest) => dispatch(addHabitBegin(habit))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(GeneralHabitViewItemComponent);

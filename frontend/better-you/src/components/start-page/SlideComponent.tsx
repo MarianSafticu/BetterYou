@@ -18,7 +18,7 @@ export default class SlideComponent extends Component<
         <Breakpoint medium up className="slide-breakpoint">
           <div className="image">
             <img
-              className="image-content"
+              className="slide-image-content"
               src={"../assets/photos/img" + this.props.index + ".png"}
               alt={"to be implemented"}
             />
@@ -34,7 +34,7 @@ export default class SlideComponent extends Component<
           {this.props.index % 2 === 0 ? (
             <div className="image">
               <img
-                className="image-content"
+                className="slide-image-content"
                 src={"../assets/photos/img" + this.props.index + ".png"}
                 alt={"to be implemented"}
               />
