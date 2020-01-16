@@ -321,7 +321,12 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
       goal: goal
     });
   };
-  onChangePublic = (event: any, checked:boolean) => {
+  onChangePublic = (event: any, checked: boolean) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal) {
+      event.target.value = this.state.goal.category.category;
+      return;
+    }
+    
     const goal: Goal = this.state.goal;
     goal.isPublic = checked
     this.setState({
@@ -364,14 +369,17 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     this.state.goal.endDate = this.initialGoal.endDate;
     this.state.goal.progressToReach = this.initialGoal.progressToReach;
     this.state.goal.startDate = this.initialGoal.startDate;
+    this.state.goal.isPublic = this.initialGoal.isPublic;
     this.props.onFinnishAction();
   };
+
   onClosePopoverDelete = () => {
     this.setState({
       showDelete: false,
       anchorEl: null
     });
   };
+
   onDeleteHandle = () => {
     console.log("I WANT TO DELETE THIS CRAP");
   };
@@ -502,13 +510,15 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
           helperText={this.state.goalError.endDateError}
         ></TextField>
         <FormControlLabel
+          className="general-goal-input"
           control={
             <Checkbox
-              checked={false}
+              checked={this.state.goal.isPublic}
               onChange={(event, checked) => this.onChangePublic(event, checked)}
               value="checkedPublic"
             />
           }
+          value={this.state.goal.isPublic}
           label="Public"
         />
         {(this.state.isForNewGoal === false || this.state.isDefaultGoal) && (
