@@ -1,13 +1,7 @@
 package Service;
 
 
-import Model.FriendRequest;
-import Model.Goal;
-import Model.Habit;
-import Model.RecoverLink;
-import Model.RegistrationLink;
-import Model.User;
-import Model.UserGoal;
+import Model.*;
 import Repository.FriendRequestRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
@@ -644,7 +638,27 @@ public class CRUDServices {
             e.printStackTrace();
         }
     }
-
+    public List<UserGoal> getCompletedGoals(long userId){
+        return goalRepo.getCompletedGoals(userRepo.get(userId));
+    }
+    public List<UserGoal> getGoalsInProgress(long userId){
+        return goalRepo.getGoalsInProgress(userRepo.get(userId));
+    }
+    public List<UserGoal> getGoalsByCategory(long userId, Category c){
+        return goalRepo.getUserGoalsByCategory(userRepo.get(userId),c);
+    }
+    public List<UserGoal> getPublicGoals(long userId){
+        return goalRepo.getPublicGoals(userRepo.get(userId));
+    }
+    public List<UserGoal> getPrivateGoals(long userId){
+        return goalRepo.getPrivateGoals(userRepo.get(userId));
+    }
+    public List<Habit> getBestStreakHabits(long userId){
+        return habitsRepo.getBestStreakHabbits(userRepo.get(userId));
+    }
+    public List<Habit> getHabitsByCategory(long userId,Category c){
+        return habitsRepo.getHabbitsByCategory(userRepo.get(userId),c);
+    }
     public List<User> getAllUsers() {
         return userRepo.getAll();
     }
