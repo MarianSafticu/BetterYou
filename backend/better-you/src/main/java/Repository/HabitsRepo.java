@@ -48,7 +48,6 @@ public class HabitsRepo extends AbstractRepo<Long, Habit> {
             s.close();
         }
     }
-
     /**
      * get habits with the best streak for a user
      * @param u the user
