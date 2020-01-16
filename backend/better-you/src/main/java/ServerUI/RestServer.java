@@ -4,7 +4,6 @@ import Model.Habit;
 import Model.User;
 import Model.UserGoal;
 import ServerUI.Requests.Authorization;
-import ServerUI.Requests.auth.TokenRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
