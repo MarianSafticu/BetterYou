@@ -16,7 +16,9 @@ import {
   fetchHabitsSuccess,
   addHabitSuccess,
   addHabitError,
-  fetchHabitsError
+  fetchHabitsError,
+  fetchFriendsError,
+  fetchFriendsSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -26,10 +28,12 @@ import RegisterRequest from "../../models/requests/RegisterRequest";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
+import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import { goalCategorys } from "../../models/GoalCategorys";
+import Friend from "../../models/Friend";
 
 
 const httpService: IHttpService = HttpService.getInstance();
@@ -194,4 +198,29 @@ export function* editHabitHandler(action: AppActionType): IterableIterator<any> 
 
 export function* deleteHabitHandler(action: AppActionType): IterableIterator<any> {
   
+}
+
+export function* fetchFriendsHandler(action: AppActionType): IterableIterator<any> {
+  const response = yield call(httpService.fetchFriends);
+  if (response) {
+    const { friends, massage } = response;
+    if (friends) {
+      let respFriends: FetchFriendsResponse[] = friends
+      let friendsDTO: Friend[] = []
+      respFriends.map((friend: FetchFriendsResponse) => {
+        let friendDTO: Friend = {
+          id: friend.id,
+          username: friend.username,
+          profile_name: friend.profile_name,
+          email: friend.email,
+          birthDate: new Date(friend.birthDate),
+          points: friend.points,
+          verified: friend.verified
+        }
+        friendsDTO.push(friendDTO);
+      });
+      yield put(fetchFriendsSuccess(friendsDTO));
+    }
+    if (massage) yield put(fetchFriendsError(massage))
+  }
 }

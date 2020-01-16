@@ -7,6 +7,7 @@ import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
+import Friend from "../../models/Friend";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -251,5 +252,28 @@ export function setAppBarSwipeableDrawerHandler(oldState: AppState, refObj: RefO
 export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]):AppState {
   const newState = { ...oldState };
   newState.appBarItemsList = list;
+  return newState;
+}
+
+export function fetchFriendsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+
+export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.friends = friends;
+  return newState;
+}
+
+export function fetchFriendsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.friends = [];
   return newState;
 }

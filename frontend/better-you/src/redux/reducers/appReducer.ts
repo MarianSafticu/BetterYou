@@ -36,7 +36,10 @@ import {
   DELETE_HABIT_SUCCESS,
   DELETE_HABIT_ERROR,
   SET_APPBAR_SWIPEABLEDRAWER,
-  SET_APPBAR_ITEMSLISTS
+  SET_APPBAR_ITEMSLISTS,
+  FETCH_FRIENDS_BEGIN,
+  FETCH_FRIENDS_SUCCESS,
+  FETCH_FRIENDS_ERROR,
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -74,7 +77,10 @@ import {
   deleteHabitSuccessHandler,
   deleteHabitErrorHandler,
   setAppBarSwipeableDrawerHandler,
-  setAppBarItemsListHandler
+  setAppBarItemsListHandler,
+  fetchFriendsBeginHandler,
+  fetchFriendsSuccessHandler,
+  fetchFriendsErrorHandler
 } from "./appHandlers";
 
 
@@ -145,7 +151,7 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return deleteGoalSuccessHandler(state, action.payload);
     case DELETE_GOAL_ERROR:
       return deleteGoalErrorHandler(state, action.payload);
-    
+
     case FETCH_HABITS_BEGIN:
       return fetchHabitsBeginHandler(state);
     case FETCH_HABITS_SUCCESS:
@@ -178,6 +184,13 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return setAppBarSwipeableDrawerHandler(state, action.payload);
     case SET_APPBAR_ITEMSLISTS:
       return setAppBarItemsListHandler(state, action.payload);
+
+    case FETCH_FRIENDS_BEGIN:
+      return fetchFriendsBeginHandler(state);
+    case FETCH_FRIENDS_SUCCESS:
+      return fetchFriendsSuccessHandler(state, action.payload);
+    case FETCH_FRIENDS_ERROR:
+      return fetchFriendsErrorHandler(state, action.payload);
     default:
       return state;
   }

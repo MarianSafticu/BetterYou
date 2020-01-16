@@ -1,8 +1,9 @@
 import React from "react";
 import FriendCard from "./FriendCard";
-import { url } from "../../../../services/HttpService";
-import { getSafeHeaders } from "../../../../services/interfaces/IHttpService";
 import Friend from "../../../../models/Friend";
+import { fetchFriendsBegin } from "../../../../redux/actions/actions";
+import { connect } from "react-redux";
+import AppState from "../../../../redux/store/store";
 
 
 const friendsList_test = [
@@ -23,33 +24,30 @@ const friendsList_test = [
     }
 ];
 
-interface IState {
+interface IProps {
     friendsList: Friend[];
+    fetchFriends: Function;
 }
 
-class FriendsList extends React.Component<{}, IState> {
-    constructor(props: any) {
+class FriendsList extends React.Component<IProps, {}> {
+    constructor(props: IProps) {
         super(props);
-        this.state = { friendsList: [] }
-    }
+        this.state = {
+            friendsList: []
+        }
+      }
 
-    async componentDidMount() {
-        return await fetch(`${url}/friends`, {
-            method: "get",
-            headers: getSafeHeaders()
-        })
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ friendsList: Object.values(data["friends"]) })
-            })
-    }
+      componentDidMount() {
+        this.props.fetchFriends();
+      }
 
 
     render() {
         return (
             <div>
                 {
-                    this.state.friendsList.map(friend => {
+                    this.props.friendsList.map(friend => {
+                        console.log("Friend", friend)
                         return (
                             <div>
                                 <FriendCard
@@ -66,4 +64,16 @@ class FriendsList extends React.Component<{}, IState> {
     }
 }
 
-export default FriendsList
+const mapStateToProps = (state: AppState) => {
+    return {
+      friendsList: state.friends
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch: any) => {
+    return {
+      fetchFriends: () => dispatch(fetchFriendsBegin())
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendsList)
