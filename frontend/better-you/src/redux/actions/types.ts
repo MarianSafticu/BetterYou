@@ -8,6 +8,8 @@ import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
 
+import { RefObject } from "react";
+import AppBarItem from "../../models/AppBarItem";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -55,6 +57,8 @@ export const DELETE_HABIT_BEGIN = "DELETE_HABIT_BEGIN";
 export const DELETE_HABIT_SUCCESS = "DELETE_HABIT_SUCCESS";
 export const DELETE_HABIT_ERROR = "DELETE_HABIT_ERROR";
 
+export const SET_APPBAR_SWIPEABLEDRAWER = "SET_APPBAR_SWIPEABLEDRAWER";
+export const SET_APPBAR_ITEMSLISTS = "SET_APPBAR_ITEMSLISTS";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -215,6 +219,15 @@ export interface DeleteHabitError {
   payload: string;
 }
 
+export interface SetAppBarSwipeableDrawer {
+  type: typeof SET_APPBAR_SWIPEABLEDRAWER;
+  payload: RefObject<any> | null;
+}
+
+export interface SetAppBarItemsList {
+  type: typeof SET_APPBAR_ITEMSLISTS;
+  payload: AppBarItem[];
+}
 
 export type AppActionType =
   | SetCurrentUserBegin
@@ -251,3 +264,5 @@ export type AppActionType =
   | DeleteHabitBegin
   | DeleteHabitSuccess
   | DeleteHabitError
+  | SetAppBarSwipeableDrawer
+  | SetAppBarItemsList;

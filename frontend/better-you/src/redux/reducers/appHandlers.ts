@@ -5,6 +5,8 @@ import { deleteCookie } from "../../services/CookieService";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
+import { RefObject } from "react";
+import AppBarItem from "../../models/AppBarItem";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -213,5 +215,17 @@ export function deleteHabitSuccessHandler(oldState: AppState, id: number): AppSt
 }
 export function deleteHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  return newState;
+}
+
+export function setAppBarSwipeableDrawerHandler(oldState: AppState, refObj: RefObject<unknown> | null):AppState {
+  const newState = { ...oldState };
+  newState.appBarSwipeableDrawer = refObj;
+  return newState;
+}
+
+export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]):AppState {
+  const newState = { ...oldState };
+  newState.appBarItemsList = list;
   return newState;
 }

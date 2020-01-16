@@ -3,6 +3,7 @@
 .newsfeed_container {
   position: relative;
   width: 400px;
+  max-width: 90%;
   border-radius: 4px;
 
   background: rgba($color: white, $alpha: 0.3) !important;

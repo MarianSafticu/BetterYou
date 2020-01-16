@@ -9,6 +9,7 @@ import AppState from "../../../../redux/store/store";
 
 const goalsList: Goal[] = [
   {
+    id: 1,
     title: "Citeste 10 carti",
     description: "aaa",
     currentProgress: 10,
@@ -19,6 +20,7 @@ const goalsList: Goal[] = [
     isPublic: true
   },
   {
+    id: 2,
     title: "Citeste 11 carti",
     description: "bbb",
     currentProgress: 15,
@@ -29,6 +31,7 @@ const goalsList: Goal[] = [
     isPublic: false
   },
   {
+    id: 3,
     title: "Citeste 12 carti",
     description: "ccc",
     currentProgress: 66,
@@ -88,23 +91,42 @@ const goalsList: Goal[] = [
 interface IProps {
   goals: Goal[];
   fetchGoals: Function;
+  isReadOnly?: boolean | null;
 }
+// interface IProps {
+// }
+// interface IState {
+//   goals: Goal[]
+// }
 
 class GoalList extends React.Component<IProps, {}> {
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      goals: goalsList
+    }
+  }
+
   componentDidMount() {
     this.props.fetchGoals();
+  }
+  
+  markGoalAsComplete = (goal: Goal) => {
+    console.log(goal)
+    // var list = this.state.goals;
+    // list = list.filter(x => x.id !== goal.id)
+    // this.setState({goals: list})
   }
 
   render() {
     return (
       <div className="container">
-        {this.props.goals.map(function(goal, index) {
-          return (
-            <div key={index}>
-              <GoalCard goal={goal} />
-            </div>
-          );
-        })}
+        {this.props.goals.map((goal, index) => 
+              <div key={index}>
+                <GoalCard goal={goal} isReadOnly={this.props.isReadOnly} markGoalAsCompleate={this.markGoalAsComplete}/>
+              </div>
+            )
+        }
       </div>
     );
   }

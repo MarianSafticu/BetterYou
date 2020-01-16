@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, RefObject } from "react";
 import GoalList from "./lists/goals/GoalList";
 import "../../assets/scss/dashboard-page/DashboardPageStyle.scss";
 import HabitList from "./lists/habits/HabitList";
@@ -18,6 +18,10 @@ import Select from "@material-ui/core/Select";
 import { goalCategorys } from "../../models/GoalCategorys";
 import GeneralGoalViewPopupComponent from "../dashboard-page/lists/goals/GeneralGoalViewPopupComponent";
 import GeneralHabitViewPopupComponent from "../dashboard-page/lists/habits/GeneralHabitViewPopupComponent";
+import { setAppBarItemsList } from "../../redux/actions/actions";
+import { connect } from "react-redux";
+import AppState from "../../redux/store/store";
+import AppBarItem from "../../models/AppBarItem";
 
 let options_1: any[] = [];
 let options_2: any[] = [];
@@ -30,6 +34,10 @@ let sort_category_goals: Array<string> = [
 let sort_category_habits: Array<string> = ["Title", "Start Date"];
 let filt_category: Array<string> = ["Category"];
 
+interface IProp {
+  setAppBarItemsList: Function;
+}
+
 interface IState {
   showGoal: boolean[];
   showHabit: boolean[];
@@ -39,11 +47,18 @@ interface IState {
   category: string[];
   type: string[];
   sort_filt: string;
+  compToShow: number;
 }
 
-export default class DashboardComponent extends Component<{}, IState> {
+class DashboardComponent extends Component<IProp, IState> {
+  comp1: RefObject<HTMLDivElement>;
+  comp2: RefObject<HTMLDivElement>;
+  thisDiv: RefObject<HTMLDivElement>;
+  compToShow: number;
+
   constructor(props: any) {
     super(props);
+    this.compToShow = 1;
     this.state = {
       showGoal: [],
       showHabit: [],
@@ -52,8 +67,58 @@ export default class DashboardComponent extends Component<{}, IState> {
       title: "",
       category: [],
       type: [],
-      sort_filt: ""
+      sort_filt: "",
+      compToShow: this.compToShow
     };
+
+    this.updateDimensions = this.updateDimensions.bind(this);
+    this.comp1 = React.createRef();
+    this.comp2 = React.createRef();
+    this.thisDiv = React.createRef();
+    this.updateDimensions();
+  }
+  componentDidMount() {
+    // Additionally I could have just used an arrow function for the binding `this` to the component...
+    window.addEventListener("resize", this.updateDimensions);
+    this.updateDimensions();
+
+    this.props.setAppBarItemsList([{
+      text: "Goals/News",
+      link: "",
+      func: this.onSwitchComponenTHandler
+    }])
+  }
+
+  updateDimensions() {
+    if (this.comp1.current == null)
+      return;
+    if (this.comp2.current == null)
+      return;
+    if (this.thisDiv.current == null)
+      return;
+
+    //this.compToChangeParent.current.removeAttribute("hidden");
+
+    if (window.innerWidth < 770) {
+      if (this.compToShow % 2 == 0) {
+        this.comp1.current.removeAttribute("hidden");
+        this.comp2.current.setAttribute("hidden", "true");
+      }
+      else {
+        this.comp1.current.setAttribute("hidden", "true");
+        this.comp2.current.removeAttribute("hidden");
+      }
+    }
+    else {
+      this.comp1.current.removeAttribute("hidden");
+      this.comp2.current.removeAttribute("hidden");
+    }
+  }
+
+  onSwitchComponenTHandler = (e: React.MouseEvent) => {
+    this.compToShow = (this.compToShow + 1) % 2;
+    this.updateDimensions();
+    this.setState({ compToShow: this.compToShow });
   }
 
   toggleChecked = () => {
@@ -169,8 +234,8 @@ export default class DashboardComponent extends Component<{}, IState> {
 
   render() {
     return (
-      <div id="wrapper">
-        <div className="list_component">
+      <div id="wrapper" ref={this.thisDiv}>
+        <div className="list_component" ref={this.comp1}>
           <div id="switch_add_bar">
             <div id="switch_label">
               <Grid component="label" container alignItems="center" spacing={1}>
@@ -275,10 +340,26 @@ export default class DashboardComponent extends Component<{}, IState> {
           </div>
         </div>
 
-        <div className="newsfeed">
-          <NewsfeedList />
+        <div className="newsfeed" ref={this.comp2}>
+          <div className="newsfeed">
+            <NewsfeedList />
+          </div>
+
         </div>
       </div>
     );
   }
 }
+
+
+const mapStateToProps = (state: AppState) => ({
+  appBarSwipeableDrawer: state.appBarSwipeableDrawer
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setAppBarItemsList: (list: AppBarItem[]) => dispatch(setAppBarItemsList(list))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardComponent);

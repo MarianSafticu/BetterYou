@@ -33,7 +33,9 @@ import {
   EDIT_HABIT_ERROR,
   DELETE_HABIT_BEGIN,
   DELETE_HABIT_SUCCESS,
-  DELETE_HABIT_ERROR
+  DELETE_HABIT_ERROR,
+  SET_APPBAR_SWIPEABLEDRAWER,
+  SET_APPBAR_ITEMSLISTS
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -45,6 +47,8 @@ import EditGoalRequest from "../../models/requests/EditGoalRequest";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import EditHabitRequest from "../../models/requests/EditHabitRequest";
 
+import { RefObject } from "react";
+import AppBarItem from "../../models/AppBarItem";
 
 export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
@@ -271,3 +275,18 @@ export function deleteHabitError(error: string): AppActionType {
     payload: error
   }
 }
+
+export function setAppBarSwipeableDrawer(refObj: RefObject<any> | null): AppActionType {
+  return {
+    type: SET_APPBAR_SWIPEABLEDRAWER,
+    payload: refObj
+  };
+}
+
+export function setAppBarItemsList(list: AppBarItem[]): AppActionType {
+  return {
+    type: SET_APPBAR_ITEMSLISTS,
+    payload: list
+  };
+}
+

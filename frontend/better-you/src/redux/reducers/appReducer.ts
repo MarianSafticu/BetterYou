@@ -34,7 +34,9 @@ import {
   EDIT_HABIT_ERROR,
   DELETE_HABIT_BEGIN,
   DELETE_HABIT_SUCCESS,
-  DELETE_HABIT_ERROR
+  DELETE_HABIT_ERROR,
+  SET_APPBAR_SWIPEABLEDRAWER,
+  SET_APPBAR_ITEMSLISTS
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -70,7 +72,9 @@ import {
   editHabitErrorHandler,
   deleteHabitBeginHandler,
   deleteHabitSuccessHandler,
-  deleteHabitErrorHandler
+  deleteHabitErrorHandler,
+  setAppBarSwipeableDrawerHandler,
+  setAppBarItemsListHandler
 } from "./appHandlers";
 
 
@@ -82,7 +86,9 @@ export const initialState: AppState = {
   accountConfirmed: false,
   goals: [],
   habits: [],
-  friends: []
+  friends: [],
+  appBarSwipeableDrawer: null,
+  appBarItemsList: []
 };
 
 
@@ -168,6 +174,10 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case DELETE_HABIT_ERROR:
       return deleteHabitErrorHandler(state, action.payload);
 
+    case SET_APPBAR_SWIPEABLEDRAWER:
+      return setAppBarSwipeableDrawerHandler(state, action.payload);
+    case SET_APPBAR_ITEMSLISTS:
+      return setAppBarItemsListHandler(state, action.payload);
     default:
       return state;
   }
