@@ -10,6 +10,7 @@ import RecoverAccountComponent from "../components/settings/RecoverAccountCompon
 import DashboardComponent from "../components/dashboard-page/DashboardComponent";
 import LoggedOutRoute from "./custom/LoggedOutRoute";
 import TestLoading from "../components/test-pages/TestLoading";
+import { MyProfileComponent } from "../components/myprofile-page/MyProfileComponent";
 
 export default class Routes extends Component {
   render() {
@@ -43,6 +44,7 @@ export default class Routes extends Component {
           path="/recover-account-message"
           component={<ShowMessageComponent type="recover-account" />}
         />
+        <Route exact path="/profile" component ={MyProfileComponent}/>
         <Route exact path="/dashboard" component={DashboardComponent} />
         <Route exact path="/test" component={TestPageComponent} />
         <Route exact path="/testloading" component={TestLoading} />

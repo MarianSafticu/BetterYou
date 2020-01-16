@@ -87,7 +87,7 @@ function MenuProfilePicture(props: IProps) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <NavLink to="/settings" className="link">
+            <NavLink to="/profile" className="link">
               <PersonIcon fontSize="small" /> MyProfile
             </NavLink>
           </ListItemIcon>
