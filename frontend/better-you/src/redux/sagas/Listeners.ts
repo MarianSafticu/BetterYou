@@ -173,12 +173,12 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
     if(id) {
       let habitComplete: Habit = {
         id: id,
-        title: habit.title,
-        description: habit.description,
+        title: habit.habit.title,
+        description: habit.habit.description,
         startDate: new Date(),
-        repetitionType: (<any>Repetition)[habit.repetitionType],
-        category: (<any>goalCategorys)[habit.category],
-        dates: habit.dates.map(date => new Date(date))
+        repetitionType: (<any>Repetition)[habit.habit.repetitionType],
+        category: (<any>goalCategorys)[habit.habit.category],
+        dates: habit.habit.dates.map(date => new Date(date))
       }
       yield put(addHabitSuccess(habitComplete))
     }

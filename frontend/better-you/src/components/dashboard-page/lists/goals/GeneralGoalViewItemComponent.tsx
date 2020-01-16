@@ -17,9 +17,8 @@ import Delete from "@material-ui/icons/Delete";
 import Close from "@material-ui/icons/Close";
 import Service from "../../../../services/Service";
 import { GoalException } from "../../../../exceptions/GoalException";
-import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
+import { goalCategorys } from "../../../../models/GoalCategorys";
 import { connect } from "react-redux";
-import AppState from "../../../../redux/store/store";
 import { addGoalBegin } from "../../../../redux/actions/actions";
 import AddGoalRequest from "../../../../models/requests/AddGoalRequest";
 
@@ -330,12 +329,18 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     })
   }
 
-  onSaveChanges = () => {
-    console.log("SE SALVEAZA SCHIMBARILE");
-    if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();
-  };
   onSaveAdd = () => {
-    console.log("SE ADAUGA GOALUL");
+    let goal: AddGoalRequest = {
+      public: this.state.goal.isPublic,
+      endDate: this.getStringFromData(this.state.goal.endDate),
+      goal: {
+        title: this.state.goal.title,
+        description: this.state.goal.description,
+        progressToReach: this.state.goal.progressToReach,
+        category: this.state.goal.category.category.toLocaleUpperCase()
+      }
+    }
+    this.props.addGoal(goal);
     if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();
   };
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -603,19 +608,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
             size="small"
             className="general-goal-button"
             disabled={this.state.edditingIsDisabled}
-            onClick={() => {
-              let goal: AddGoalRequest = {
-                public: this.state.goal.isPublic,
-                endDate: this.state.goal.endDate.getFullYear().toString() + "-" + "01" + "-" + "15",
-                goal: {
-                  title: this.state.goal.title,
-                  description: this.state.goal.description,
-                  progressToReach: this.state.goal.progressToReach,
-                  category: this.state.goal.category.category.toLocaleUpperCase()
-                }
-              }
-              this.props.addGoal(goal);
-            }}
+            onClick={() => this.onSaveAdd()}
           >
             Save
           </Button>

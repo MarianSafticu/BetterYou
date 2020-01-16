@@ -84,6 +84,7 @@ export default class HttpService implements IHttpService {
   }
 
   async addGoal(goal: AddGoalRequest): Promise<number> {
+    console.log(JSON.stringify(goal))
     return await fetch(`${url}/goal`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -112,11 +113,12 @@ export default class HttpService implements IHttpService {
       });
   }
 
-  async addHabit(goal: AddHabitRequest): Promise<number> {
+  async addHabit(habit: AddHabitRequest): Promise<number> {
+    console.log(JSON.stringify(habit))
     return await fetch(`${url}/habit`, {
       method: "post",
       headers: getSafeHeaders(),
-      body: JSON.stringify(goal)
+      body: JSON.stringify(habit)
     })
       .then(response => response.json())
       .then(body => {
