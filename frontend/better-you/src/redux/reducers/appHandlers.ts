@@ -126,7 +126,7 @@ export function addGoalSuccessHandler(oldState: AppState, goal: Goal): AppState 
   let newGoals = newState.goals.slice();
   newGoals.splice(0, 0, goal);
   newState.goals = newGoals;
-  
+
   return newState;
 }
 export function addGoalErrorHandler(oldState: AppState, error: string): AppState {
@@ -168,28 +168,49 @@ export function deleteGoalErrorHandler(oldState: AppState, error: string): AppSt
 
 export function fetchHabitsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
   return newState;
 }
 export function fetchHabitsSuccessHandler(oldState: AppState, habits: Habit[]): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.habits = habits;
   return newState;
 }
 export function fetchHabitsErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = [];
   return newState;
 }
 
 
 export function addHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function addHabitSuccessHandler(oldState: AppState, habit: Habit): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  
+  let newHabits = newState.habits.slice();
+  newHabits.splice(0, 0, habit);
+  newState.habits = newHabits;
+
   return newState;
 }
 export function addHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 

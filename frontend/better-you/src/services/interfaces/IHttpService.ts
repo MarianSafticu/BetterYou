@@ -5,6 +5,8 @@ import RegisterResponse from "../../models/responses/RegisterResponse";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import { getCookie } from "../CookieService";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
+import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
+import AddHabitRequest from "../../models/requests/AddHabitRequest";
 
 export default interface IHttpService {
   loginUser(requestData: LoginRequest): Promise<LoginResponse>;
@@ -12,6 +14,8 @@ export default interface IHttpService {
   confirmAccount(confirmationCode: string): Promise<boolean>;
   fetchGoals(): Promise<FetchGoalResponse[]>;
   addGoal(goal: AddGoalRequest): Promise<number>;
+  fetchHabits(): Promise<FetchHabitResponse[]>;
+  addHabit(habit: AddHabitRequest): Promise<number>;
 }
 
 export function getHeaders() {

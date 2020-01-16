@@ -36,7 +36,6 @@ let sort_category_habits: Array<string> = ["Title", "Start Date"];
 let filt_category: Array<string> = ["Category"];
 
 interface IProp {
-  goals: Goal[];
   setAppBarItemsList: Function;
 }
 
@@ -353,7 +352,6 @@ class DashboardComponent extends Component<IProp, IState> {
 
 
 const mapStateToProps = (state: AppState) => ({
-  goals: state.goals,
   appBarSwipeableDrawer: state.appBarSwipeableDrawer
 });
 
