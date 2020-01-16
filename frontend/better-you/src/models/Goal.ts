@@ -1,7 +1,7 @@
 import { GoalCategory } from "./GoalCategorys";
 
 export default interface Goal{
-    id?: number | null;
+    id?: number;
     title: string;
     description: string;
     startDate: Date;

@@ -16,9 +16,9 @@ import { addHabitBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
 
 interface IProps {
-  onFinnishAction: Function;
   habit?: Habit;
   isDefaultHabit?: boolean;
+  onFinnishAction: Function;
   addHabit: Function;
 }
 
@@ -26,7 +26,6 @@ interface IState {
   habit: Habit;
   edditingIsDisabled: boolean;
   isForNewHabit: boolean;
-  // onSaveHandle: Function;
   habitError: HabitException;
   textFieldVariant: "filled" | "outlined";
   showDelete: boolean;
@@ -39,6 +38,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
   service: Service;
   initialDates: Date[] = [];
   initialHabit: Habit = {
+    id: undefined,
     title: "",
     description: "",
     repetitionType: Repetition.Daily,
@@ -52,6 +52,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     this.service = Service.getInstance();
 
     var habit: Habit = {
+      id: undefined,
       title: "",
       description: "",
       repetitionType: Repetition.Daily,
@@ -69,6 +70,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
 
     if (props.habit !== null && props.habit !== undefined) {
       this.initialHabit = {
+        id: props.habit.id,
         title: props.habit.title,
         description: props.habit.description,
         repetitionType: props.habit.repetitionType,
@@ -86,7 +88,6 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
         habit: props.habit,
         edditingIsDisabled: !isDefaultHabit,
         isForNewHabit: isDefaultHabit,
-        // onSaveHandle: this.onSaveChanges,
         habitError: err,
         textFieldVariant: isDefaultHabit?"outlined":"filled",
         showDelete: false,
@@ -99,7 +100,6 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
         habit: habit,
         edditingIsDisabled: false,
         isForNewHabit: true,
-        // onSaveHandle: this.onSaveAdd,
         habitError: err,
         textFieldVariant: "outlined",
         showDelete: false,
@@ -112,10 +112,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
 
   verifyHabit = (habit: Habit) => {
     var err = this.service.validateHabit(habit);
-    this.setState({
-      habitError: err
-    });
-  
+    this.setState({ habitError: err});
     return Service.getInstance().ValidateValidationHabit(err);
   };
 
@@ -156,7 +153,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
   }
 
   getStringFromData = (data: Date) => {
-    var str = data.toLocaleDateString();
+    var str = this.getStringFromData(data);
     var strs = str.split("/", 3);
 
     if (strs.length < 3) {
@@ -285,12 +282,14 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     this.props.addHabit(habitReq);
     if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
   };
+
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.setState({
       showDelete: true,
       anchorEl: event.currentTarget
     });
   };
+
   onModifyHandler = () => {
     this.setState({
       habit: this.state.habit,
@@ -298,6 +297,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
       textFieldVariant: this.state.edditingIsDisabled ? "outlined" : "filled"
     });
   };
+
   onCancelHandler = () => {
     this.setState({
       habit: {
@@ -311,6 +311,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     })
     this.props.onFinnishAction();
   };
+
   onClosePopoverDelete = () => {
     this.setState({
       showDelete: false,
@@ -418,7 +419,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
           variant={this.state.textFieldVariant as any}
           defaultValue={
             this.state.edditingIsDisabled
-              ? this.state.habit.startDate.toLocaleDateString()
+              ? this.state.habit.startDate
               : this.getStringFromData(this.state.habit.startDate)
           }
           error={this.state.habitError.startDateError.length !== 0}
@@ -461,7 +462,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
             label="category"
             variant={this.state.isDefaultHabit?"filled":this.state.textFieldVariant as any}
             InputLabelProps={{ shrink: true }}
-            defaultValue={this.state.habit.category.category}
+            defaultValue={this.state.habit.category}
             error={this.state.habitError.categoryError.length !== 0}
             helperText={this.state.habitError.categoryError}
             style={{ backgroundColor: this.state.habit.category.color }}

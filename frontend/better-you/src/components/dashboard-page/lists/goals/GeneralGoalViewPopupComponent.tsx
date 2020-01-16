@@ -33,7 +33,7 @@ export default function GeneratGoalPopupComponent(props: IProps) {
           vertical: "center",
           horizontal: "center"
         }}
-        anchorEl={null}
+        // anchorEl={null}
         className="genera-popup"
       >
         <div className="general-popup-container">

@@ -4,8 +4,6 @@ import "../../../../assets/scss/dashboard-page/NewsfeedListStyle.scss";
 import Fab from "@material-ui/core/Fab";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import Tooltip from "@material-ui/core/Tooltip";
-import HighlightOff from "@material-ui/icons/HighlightOff";
-import IconButton from "@material-ui/core/IconButton";
 
 interface IProps {
   image: string;
@@ -26,12 +24,6 @@ class NewsfeedCard extends React.Component<IProps, {}> {
             <Fab color="inherit" className="friend_image">
               <AccountCircleOutlinedIcon />
             </Fab>
-          </Tooltip>
-
-          <Tooltip title="Close">
-            <IconButton aria-label="close" className="close_newsfeed_button">
-              <HighlightOff />
-            </IconButton>
           </Tooltip>
 
           <div className="newsfeed_message">
