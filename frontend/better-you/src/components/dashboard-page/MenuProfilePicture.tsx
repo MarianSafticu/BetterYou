@@ -4,7 +4,7 @@ import Menu, { MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PersonIcon from "@material-ui/icons/Person";
-import SettingsIcon from "@material-ui/icons/Settings";
+import HomeIcon from '@material-ui/icons/Home';
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { NavLink } from "react-router-dom";
 import "../../assets/scss/generic/AppBarStyle.scss";
@@ -81,14 +81,14 @@ function MenuProfilePicture(props: IProps) {
         <MenuItem>
           <ListItemIcon>
             <NavLink to="/dashboard" className="link">
-              <PersonIcon fontSize="small" /> My profile
+              <HomeIcon fontSize="small" /> Dashboard
             </NavLink>
           </ListItemIcon>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <NavLink to="/settings" className="link">
-              <SettingsIcon fontSize="small" /> Settings
+              <PersonIcon fontSize="small" /> MyProfile
             </NavLink>
           </ListItemIcon>
         </MenuItem>
