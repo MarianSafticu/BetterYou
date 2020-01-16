@@ -350,10 +350,10 @@ public class RestServer {
     public ResponseEntity<?> searchUsers(@RequestHeader Authorization authorization,
                                          @RequestBody SearchUsersRequest searchUsersRequest) {
         try {
-            return new ResponseEntity<>(
+            return new ResponseEntity<>(new UsersSearchResponse(
                     crudServices.getUsersByUsernamePrefix(
                             searchUsersRequest.getUsernamePrefix(),
-                            authService.getUserIdFromJWT(authorization.getToken())),
+                            authService.getUserIdFromJWT(authorization.getToken()))),
                     HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -381,7 +381,9 @@ public class RestServer {
     @RequestMapping(value = "/friend/request/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization) {
         try {
-            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken())), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new FriendRequestsResponse(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
@@ -442,7 +444,9 @@ public class RestServer {
     public ResponseEntity<?> getFriends(@RequestHeader Authorization authorization) {
         try {
             return new ResponseEntity<>(
-                    crudServices.getUserFriends(authService.getUserIdFromJWT(authorization.getToken())), HttpStatus.OK);
+                    new FriendsResponse(
+                            crudServices.getUserFriends(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
