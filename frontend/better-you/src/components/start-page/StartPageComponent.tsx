@@ -5,6 +5,7 @@ import RegisterBarComponent from "./RegisterBarComponent";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
 import UserDTO from "../../models/UserDTO";
+import { Redirect } from "react-router-dom";
 
 interface IProps {
   userInfo: UserDTO | undefined;
@@ -14,9 +15,7 @@ class StartPageComponent extends Component<IProps> {
   render() {
     if (this.props.userInfo !== undefined && this.props.userInfo.isAuthenticated) {
       return (
-        <div className="start-page-logged-user-container">
-          <CarouselComponent />
-        </div>
+        <Redirect to="/dashboard"/>
       );
     } else {
       return (
