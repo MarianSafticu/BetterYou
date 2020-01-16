@@ -119,7 +119,7 @@ class GoalList extends React.Component<IProps, {}> {
     return (
       <div className="container">
         {
-          goalsList.map((goal, index) => {
+          this.props.goals.map((goal, index) => {
             if (this.props.isReadOnly === true)
               return <div key={index}>
                 <GoalCardReadOnly goal={goal} />
