@@ -122,8 +122,11 @@ export function addGoalSuccessHandler(oldState: AppState, goal: Goal): AppState 
   const newState = { ...oldState };
   newState.loading = false;
   newState.error = "";
-  newState.goals = oldState.goals;
-  newState.goals.push(goal);
+  
+  let newGoals = newState.goals.slice();
+  newGoals.splice(0, 0, goal);
+  newState.goals = newGoals;
+  
   return newState;
 }
 export function addGoalErrorHandler(oldState: AppState, error: string): AppState {

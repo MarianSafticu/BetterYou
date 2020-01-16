@@ -93,11 +93,6 @@ interface IProps {
   fetchGoals: Function;
   isReadOnly?: boolean | null;
 }
-// interface IProps {
-// }
-// interface IState {
-//   goals: Goal[]
-// }
 
 class GoalList extends React.Component<IProps, {}> {
   constructor(props: IProps) {

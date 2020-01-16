@@ -22,6 +22,7 @@ import { setAppBarItemsList } from "../../redux/actions/actions";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
 import AppBarItem from "../../models/AppBarItem";
+import Goal from "../../models/Goal";
 
 let options_1: any[] = [];
 let options_2: any[] = [];
@@ -35,6 +36,7 @@ let sort_category_habits: Array<string> = ["Title", "Start Date"];
 let filt_category: Array<string> = ["Category"];
 
 interface IProp {
+  goals: Goal[];
   setAppBarItemsList: Function;
 }
 
@@ -77,8 +79,8 @@ class DashboardComponent extends Component<IProp, IState> {
     this.thisDiv = React.createRef();
     this.updateDimensions();
   }
+
   componentDidMount() {
-    // Additionally I could have just used an arrow function for the binding `this` to the component...
     window.addEventListener("resize", this.updateDimensions);
     this.updateDimensions();
 
@@ -96,8 +98,6 @@ class DashboardComponent extends Component<IProp, IState> {
       return;
     if (this.thisDiv.current == null)
       return;
-
-    //this.compToChangeParent.current.removeAttribute("hidden");
 
     if (window.innerWidth < 770) {
       if (this.compToShow % 2 == 0) {
@@ -353,6 +353,7 @@ class DashboardComponent extends Component<IProp, IState> {
 
 
 const mapStateToProps = (state: AppState) => ({
+  goals: state.goals,
   appBarSwipeableDrawer: state.appBarSwipeableDrawer
 });
 

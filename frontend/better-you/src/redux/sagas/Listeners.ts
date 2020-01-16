@@ -11,7 +11,8 @@ import {
   confirmAccountError,
   addGoalSuccess,
   addGoalError,
-  fetchGoalsError
+  fetchGoalsError,
+  fetchGoalsSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -68,21 +69,29 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
 
 
 export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
-  const response: FetchGoalResponse[] | string | undefined = yield call(httpService.fetchGoals);
+  const response = yield call(httpService.fetchGoals);
   if (response) {
-    const { massage } = response;
+    const { userGoals, massage } = response;
+    if (userGoals) {
+      let goals: FetchGoalResponse[] = userGoals
+      let goalsDTO: Goal[] = []
+      goals.map((goal: FetchGoalResponse) => {
+        let goalDTO: Goal = {
+          id: goal.id,
+          title: goal.goal.title,
+          description: goal.goal.description,
+          startDate: new Date(goal.startDate),
+          endDate: new Date(goal.endDate),
+          currentProgress: goal.currentProgress,
+          progressToReach: goal.goal.progressToReach,
+          isPublic: goal.public,
+          category: { category: goal.goal.category, color: "#e9eff2"}
+        }
+        goalsDTO.push(goalDTO);
+      });
+      yield put(fetchGoalsSuccess(goalsDTO));
+    }
     if (massage) yield put(fetchGoalsError(massage))
-    // response = Object.values(response)
-    // console.log(typeof Object.values(response));
-    // else 
-    // if (response!.constructor === Array){
-      // const goals: Goal[] = []
-      // Object.values(response).forEach((goal: FetchGoalResponse) => {
-      //   goals.push({
-      //     id: goal.
-      //   })
-      // })
-    // }
   }
 }
 
