@@ -4,15 +4,15 @@ import FriendCard from "./FriendCard";
 
 const friendsList = [
     {
-        name: "Friend1",
+        profile_name: "Friend1",
         image: "https://i.ya-webdesign.com/images/default-avatar-png-18.png"
     },
     {
-        name: "Friend2",
+        profile_name: "Friend2",
         image: "https://i.ya-webdesign.com/images/default-avatar-png-18.png"
     },
     {
-        name: "Friend3",
+        profile_name: "Friend3",
         image: "https://i.ya-webdesign.com/images/default-avatar-png-18.png"
     }
 ];
@@ -29,7 +29,7 @@ class FriendsList extends React.Component {
                             <div>
                                 <FriendCard
                                     image={item.image}
-                                    name={item.name}
+                                    name={item.profile_name}
                                 />
                             </div>
                         )

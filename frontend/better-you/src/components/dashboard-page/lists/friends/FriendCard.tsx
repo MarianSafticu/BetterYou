@@ -12,6 +12,7 @@ class FriendCard extends React.Component<IProps, {}> {
     return(
       <Card className="friend_container">
         <img src={this.props.image} className="friend_image_page"></img>
+        <div>{this.props.name}</div>
       </Card>
     )
   }
