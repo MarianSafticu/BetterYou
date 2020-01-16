@@ -163,7 +163,19 @@ public class RestServer {
     public ResponseEntity<?> getGoals(@RequestHeader Authorization authorization) {
         try {
             List<UserGoal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
-            return new ResponseEntity<>(new GoalsResponse(userGoals), HttpStatus.OK);
+            return new ResponseEntity<>(new UserGoalsResponse(userGoals), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/goals/random", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getRandomGoals(@RequestParam int amount) {
+        try {
+            return new ResponseEntity<>(new GoalsResponse(crudServices.getRandomGoals(amount)), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -509,7 +521,7 @@ public class RestServer {
     /**
      * This method receives a JSON with a token and a filter type and return all the goals of that user with the filter
      *
-     * @param filter - the filter
+     * @param filter        - the filter
      * @param authorization - a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
@@ -518,22 +530,22 @@ public class RestServer {
         try {
             List<UserGoal> userGoals = null; // = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            if(filter.getCompleted() != null){
-                if(filter.getCompleted()){
+            if (filter.getCompleted() != null) {
+                if (filter.getCompleted()) {
                     userGoals = crudServices.getCompletedGoals(userId);
-                }else{
+                } else {
                     userGoals = crudServices.getGoalsInProgress(userId);
                 }
-            }else if(filter.getVisibility() != null){
-                if(filter.getVisibility()){
+            } else if (filter.getVisibility() != null) {
+                if (filter.getVisibility()) {
                     userGoals = crudServices.getPublicGoals(userId);
-                }else{
+                } else {
                     userGoals = crudServices.getPrivateGoals(userId);
                 }
-            }else{
+            } else {
                 userGoals = crudServices.getGoalsByCategory(userId, Category.valueOf(filter.getCategory()));
             }
-            return new ResponseEntity<>(new GoalsResponse(userGoals), HttpStatus.OK);
+            return new ResponseEntity<>(new UserGoalsResponse(userGoals), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -545,7 +557,7 @@ public class RestServer {
     /**
      * This method receives a JSON with an token and a filter and return all the habits of that user with that filter
      *
-     * @param filter - the filter
+     * @param filter        - the filter
      * @param authorization - a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
@@ -554,13 +566,12 @@ public class RestServer {
         try {
             List<Habit> userHabits = null;
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            if(filter.getCategory() != null){
-                userHabits = crudServices.getHabitsByCategory(userId,Category.valueOf(filter.getCategory()));
-            }else{
-                if(filter.getBestStreak()){
+            if (filter.getCategory() != null) {
+                userHabits = crudServices.getHabitsByCategory(userId, Category.valueOf(filter.getCategory()));
+            } else {
+                if (filter.getBestStreak()) {
                     userHabits = crudServices.getBestStreakHabits(userId);
-                }
-                else{
+                } else {
                     // null case
                     // if the body was empty
                     userHabits = new ArrayList<>();
