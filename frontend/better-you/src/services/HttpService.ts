@@ -11,6 +11,7 @@ import { getCookie } from "./CookieService";
 import FetchGoalResponse from "../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../models/requests/AddHabitRequest";
+import GoalDTO from "../models/GoalDTO";
 
 const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -128,4 +129,18 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
+  async fetchDefaultGoals(): Promise<GoalDTO[]> {
+    return await fetch(`${url}/goals/random?amount=5`, {
+      method: "get",
+      headers: getSafeHeaders()
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
 }
+
