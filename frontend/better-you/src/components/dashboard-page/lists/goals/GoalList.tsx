@@ -3,6 +3,9 @@ import GoalCard from "./GoalCard";
 import Goal from "../../../../models/Goal";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import { goalCategorys } from "../../../../models/GoalCategorys";
+import { fetchGoalsBegin } from "../../../../redux/actions/actions";
+import { connect } from "react-redux";
+import AppState from "../../../../redux/store/store";
 
 const goalsList: Goal[] = [
   {
@@ -82,11 +85,20 @@ const goalsList: Goal[] = [
   // }
 ];
 
-class GoalList extends React.Component {
+interface IProps {
+  goals: Goal[];
+  fetchGoals: Function;
+}
+
+class GoalList extends React.Component<IProps, {}> {
+  componentDidMount() {
+    this.props.fetchGoals();
+  }
+
   render() {
     return (
       <div className="container">
-        {goalsList.map(function(goal, index) {
+        {this.props.goals.map(function(goal, index) {
           return (
             <div key={index}>
               <GoalCard goal={goal} />
@@ -96,8 +108,18 @@ class GoalList extends React.Component {
       </div>
     );
   }
-
-  handleClick(e: any) {}
 }
 
-export default GoalList;
+const mapStateToProps = (state: AppState) => {
+  return {
+    goals: state.goals
+  }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    fetchGoals: () => dispatch(fetchGoalsBegin())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoalList);

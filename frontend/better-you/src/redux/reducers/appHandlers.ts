@@ -89,14 +89,22 @@ export function confirmAccountErrorHandler(oldState: AppState, error: string): A
 
 export function fetchGoalsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
   return newState;
 }
 export function fetchGoalsSuccessHandler(oldState: AppState, goals: Goal[]): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = goals;
   return newState;
 }
 export function fetchGoalsErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = [];
   return newState;
 }
 

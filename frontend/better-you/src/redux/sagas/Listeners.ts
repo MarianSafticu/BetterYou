@@ -10,7 +10,8 @@ import {
   confirmAccountSuccess,
   confirmAccountError,
   addGoalSuccess,
-  addGoalError
+  addGoalError,
+  fetchGoalsError
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -18,6 +19,7 @@ import Goal from "../../models/Goal";
 import LoginRequest from "../../models/requests/LoginRequest";
 import RegisterRequest from "../../models/requests/RegisterRequest";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
+import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 
 
 const httpService: IHttpService = HttpService.getInstance();
@@ -66,7 +68,22 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
 
 
 export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
-
+  const response: FetchGoalResponse[] | string | undefined = yield call(httpService.fetchGoals);
+  if (response) {
+    const { massage } = response;
+    if (massage) yield put(fetchGoalsError(massage))
+    // response = Object.values(response)
+    // console.log(typeof Object.values(response));
+    // else 
+    // if (response!.constructor === Array){
+      // const goals: Goal[] = []
+      // Object.values(response).forEach((goal: FetchGoalResponse) => {
+      //   goals.push({
+      //     id: goal.
+      //   })
+      // })
+    // }
+  }
 }
 
 
