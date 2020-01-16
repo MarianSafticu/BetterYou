@@ -350,10 +350,10 @@ public class RestServer {
     public ResponseEntity<?> searchUsers(@RequestHeader Authorization authorization,
                                          @RequestBody SearchUsersRequest searchUsersRequest) {
         try {
-            return new ResponseEntity<>(
+            return new ResponseEntity<>(new UsersSearchResponse(
                     crudServices.getUsersByUsernamePrefix(
                             searchUsersRequest.getUsernamePrefix(),
-                            authService.getUserIdFromJWT(authorization.getToken())),
+                            authService.getUserIdFromJWT(authorization.getToken()))),
                     HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -381,7 +381,9 @@ public class RestServer {
     @RequestMapping(value = "/friend/request/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> acceptFriendRequest(@RequestHeader Authorization authorization) {
         try {
-            return new ResponseEntity<>(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken())), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new FriendRequestsResponse(crudServices.getFriendshipRequests(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
@@ -427,6 +429,24 @@ public class RestServer {
             crudServices.removeFriend(authService.getUserIdFromJWT(authorization.getToken()),
                     createFriendRequest.getUsernameReceiver());
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Returns the list of friends of the user with the given token.
+     */
+    @RequestMapping(value = "/friends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFriends(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(
+                    new FriendsResponse(
+                            crudServices.getUserFriends(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (Exception e) {

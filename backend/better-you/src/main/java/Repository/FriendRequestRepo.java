@@ -43,14 +43,31 @@ public class FriendRequestRepo extends AbstractRepo<Long, FriendRequest> {
         }
     }
 
-    public List<FriendRequest> getUserReceivedFriendshipRequests(User receiver) {
+    // Returns the received friend requests for an user
+    public List<FriendRequest> getUserReceivedFriendshipRequests(final long receiverUserId) {
         try (Session session = HibernateSesionFactory.getFactory().openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<FriendRequest> criteriaQuery = criteriaBuilder.createQuery(FriendRequest.class);
             Root<FriendRequest> root = criteriaQuery.from(FriendRequest.class);
             criteriaQuery.select(root);
             criteriaQuery.where(criteriaBuilder.and(
-                    criteriaBuilder.equal(root.join(RECEIVER_FIELD).get("id"), receiver.getId())
+                    criteriaBuilder.equal(root.join(RECEIVER_FIELD).get("id"), receiverUserId)
+            ));
+            return session.createQuery(criteriaQuery).getResultList();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    // Returns the sent friend requests for an user
+    public List<FriendRequest> getUserSentFriendshipRequests(final long sentUserId) {
+        try (Session session = HibernateSesionFactory.getFactory().openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<FriendRequest> criteriaQuery = criteriaBuilder.createQuery(FriendRequest.class);
+            Root<FriendRequest> root = criteriaQuery.from(FriendRequest.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(criteriaBuilder.and(
+                    criteriaBuilder.equal(root.join(SENDER_FIELD).get("id"), sentUserId)
             ));
             return session.createQuery(criteriaQuery).getResultList();
         } catch (NoResultException e) {

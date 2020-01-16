@@ -449,7 +449,7 @@ public class CRUDServices {
             throw new ServiceException("No user found");
         }
 
-        return friendRequestRepo.getUserReceivedFriendshipRequests(receiver);
+        return friendRequestRepo.getUserReceivedFriendshipRequests(userId);
     }
 
     public void acceptFriendRequest(final long userId, final String requesterUsername) {
@@ -559,12 +559,29 @@ public class CRUDServices {
         }
     }
 
-    public List<FriendRequest> getUserReceivedFriendRequests() {
-        return null;
+
+    public List<FriendRequest> getUserSentFriendRequests(final long userId) {
+        LOG.info("Retrieving sent friend requests for id={}", userId);
+
+        if (userRepo.get(userId) == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        return friendRequestRepo.getUserSentFriendshipRequests(userId);
     }
 
-    public List<FriendRequest> getUserSentFriendRequests() {
-        return null;
+    public List<User> getUserFriends(final long userId) {
+        LOG.info("Retrieving friends for user with id={}", userId);
+
+        User user = userRepo.get(userId);
+
+        if (user == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("No user found");
+        }
+
+        return new ArrayList<>(user.getFriends());
     }
 
     // !!!!!!!!!!!!!!!!!!!!!!!! USE WITH CAUTION !!!!!!!!!!!!!!!!!!!!!!!!!!
