@@ -65,6 +65,8 @@ public class Habit implements HasId<Long> {
         this.repetitionType = repetitionType;
         this.category = category;
         this.dates = dates;
+        this.bestStreak = 0;
+        this.currentStreak = 0;
     }
 
     @Override
