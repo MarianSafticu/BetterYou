@@ -261,12 +261,14 @@ public class RestServer {
      * @return true if the goal can be added else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addGoal(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> addHabit(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
         try {
+            LOG.info("adding habit");
             validationService.validateHabit(habitRequest.getHabit());
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.addHabit(habitRequest.getHabit(), userId);
-            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+            long habitId = crudServices.addHabit(habitRequest.getHabit(), userId);
+            return new ResponseEntity<>(new IdResponse(habitId), HttpStatus.OK);
+
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
