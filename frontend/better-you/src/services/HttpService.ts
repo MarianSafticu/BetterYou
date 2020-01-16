@@ -6,9 +6,9 @@ import RegisterResponse from "../models/responses/RegisterResponse";
 import AddGoalRequest from "../models/requests/AddGoalRequest";
 import { getCookie } from "./CookieService";
 
-// const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
+const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
-const url: string = "http://localhost:12404/app/better-you";
+// const url: string = "http://localhost:12404/app/better-you";
 
 export default class HttpService implements IHttpService {
   private static instance: HttpService;
