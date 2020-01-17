@@ -283,8 +283,12 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
       goal: goal
     });
   };
-
   onChangePublic = (event: any, checked: boolean) => {
+    if (this.state.edditingIsDisabled || this.state.isDefaultGoal) {
+      event.target.value = this.state.goal.category.category;
+      return;
+    }
+    
     const goal: Goal = this.state.goal;
     goal.isPublic = checked
     this.setState({
@@ -456,13 +460,15 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
           InputLabelProps={{ shrink: true }}
         />
         <FormControlLabel
+          className="general-goal-input"
           control={
             <Checkbox
-              checked={false}
+              checked={this.state.goal.isPublic}
               onChange={(event, checked) => this.onChangePublic(event, checked)}
               value="checkedPublic"
             />
           }
+          value={this.state.goal.isPublic}
           label="Public"
         />
         {(this.state.isForNewGoal === false || this.state.isDefaultGoal) && (

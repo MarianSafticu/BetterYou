@@ -65,7 +65,7 @@ class GoalCard extends React.Component<IProps, IState> {
   render() {
     return (
       <Card className="card-container">
-        <div className="category" />
+        <div className="category"  style={{backgroundColor: this.state.goal.category.color}}/>
         <CardActionArea
           className="title_container"
           onClick={this.handleOpenGoal}

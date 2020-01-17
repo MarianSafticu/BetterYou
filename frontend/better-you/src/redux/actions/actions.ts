@@ -35,7 +35,10 @@ import {
   DELETE_HABIT_SUCCESS,
   DELETE_HABIT_ERROR,
   SET_APPBAR_SWIPEABLEDRAWER,
-  SET_APPBAR_ITEMSLISTS
+  SET_APPBAR_ITEMSLISTS,
+  FETCH_DEFAULT_GOALS_BEGIN,
+  FETCH_DEFAULT_GOALS_SUCCESS,
+  FETCH_DEFAULT_GOALS_ERROR
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -288,5 +291,24 @@ export function setAppBarItemsList(list: AppBarItem[]): AppActionType {
     type: SET_APPBAR_ITEMSLISTS,
     payload: list
   };
+}
+
+export function fetchDefaultGoalsBegin(): AppActionType {
+  return {
+    type: FETCH_DEFAULT_GOALS_BEGIN,
+    payload: undefined
+  };
+}
+export function fetchDefaultGoalsSuccess(goals: Goal[]): AppActionType {
+  return {
+    type: FETCH_DEFAULT_GOALS_SUCCESS,
+    payload: goals
+  }
+}
+export function fetchDefaultGoalsError(error: string): AppActionType {
+  return {
+    type: FETCH_DEFAULT_GOALS_ERROR,
+    payload: error
+  }
 }
 

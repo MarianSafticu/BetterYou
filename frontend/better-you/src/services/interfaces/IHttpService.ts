@@ -7,6 +7,7 @@ import { getCookie } from "../CookieService";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
+import GoalDTO from "../../models/GoalDTO";
 
 export default interface IHttpService {
   loginUser(requestData: LoginRequest): Promise<LoginResponse>;
@@ -18,6 +19,7 @@ export default interface IHttpService {
   fetchHabits(): Promise<FetchHabitResponse[]>;
   addHabit(habit: AddHabitRequest): Promise<number>;
   deleteHabit(id: number): Promise<boolean>;
+  fetchDefaultGoals(): Promise<GoalDTO[]>;
 }
 
 export function getHeaders() {

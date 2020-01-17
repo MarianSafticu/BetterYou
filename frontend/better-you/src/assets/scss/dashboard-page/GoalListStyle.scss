@@ -4,6 +4,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+.container.p {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 .card-container {
   position: relative;
@@ -18,6 +22,17 @@
   margin-right: 10px;
   margin-bottom: 10px;
 }
+
+.container-readOnly{
+  margin-left: 50px;
+}
+.container-readOnly p {
+  word-wrap: break-word;
+  overflow: auto;
+  white-space: pre-wrap;
+  max-height: 50px;
+}
+
 
 .title_container {
   background: rgba($color: #000000, $alpha: 0.6) !important;
@@ -100,4 +115,16 @@
   padding-top: 10px;
   font-weight: bold;
   color: black;
+}
+
+.default_list_component {
+  margin-left: 2%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: 1.5mm outset $color1;
+}
+
+.generate_button{
+  float: right;
+  margin-right: 2%;
 }

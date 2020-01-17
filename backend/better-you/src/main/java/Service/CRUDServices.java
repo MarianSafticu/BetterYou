@@ -1,13 +1,7 @@
 package Service;
 
 
-import Model.FriendRequest;
-import Model.Goal;
-import Model.Habit;
-import Model.RecoverLink;
-import Model.RegistrationLink;
-import Model.User;
-import Model.UserGoal;
+import Model.*;
 import Repository.FriendRequestRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
@@ -22,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -172,6 +167,20 @@ public class CRUDServices {
             LOG.error("Error occurred while deleting registration link with id={}", id);
             throw new ServiceException("Unable to delete registration link");
         }
+    }
+
+    public List<Goal> getRandomGoals(final int numberGoals) {
+        List<Goal> allGoals = goalRepo.getAll();
+
+        Collections.shuffle(allGoals);
+
+        List<Goal> randomGoals = new ArrayList<>();
+
+        for(int i = 0; i < Math.min(numberGoals, allGoals.size()); i ++) {
+            randomGoals.add(allGoals.get(i));
+        }
+
+        return randomGoals;
     }
 
     /**
@@ -643,6 +652,34 @@ public class CRUDServices {
             LOG.error(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public List<UserGoal> getCompletedGoals(long userId) {
+        return goalRepo.getCompletedGoals(userRepo.get(userId));
+    }
+
+    public List<UserGoal> getGoalsInProgress(long userId) {
+        return goalRepo.getGoalsInProgress(userRepo.get(userId));
+    }
+
+    public List<UserGoal> getGoalsByCategory(long userId, Category c) {
+        return goalRepo.getUserGoalsByCategory(userRepo.get(userId), c);
+    }
+
+    public List<UserGoal> getPublicGoals(long userId) {
+        return goalRepo.getPublicGoals(userRepo.get(userId));
+    }
+
+    public List<UserGoal> getPrivateGoals(long userId) {
+        return goalRepo.getPrivateGoals(userRepo.get(userId));
+    }
+
+    public List<Habit> getBestStreakHabits(long userId) {
+        return habitsRepo.getBestStreakHabbits(userRepo.get(userId));
+    }
+
+    public List<Habit> getHabitsByCategory(long userId, Category c) {
+        return habitsRepo.getHabbitsByCategory(userRepo.get(userId), c);
     }
 
     public List<User> getAllUsers() {

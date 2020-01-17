@@ -20,7 +20,9 @@ import {
   deleteGoalSuccess,
   deleteGoalError,
   deleteHabitSuccess,
-  deleteHabitError
+  deleteHabitError,
+  fetchDefaultGoalsError,
+  fetchDefaultGoalsSuccess,
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -34,6 +36,7 @@ import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import { goalCategorys } from "../../models/GoalCategorys";
+import GoalDTO from "../../models/GoalDTO";
 
 
 const httpService: IHttpService = HttpService.getInstance();
@@ -211,5 +214,32 @@ export function* deleteHabitHandler(action: AppActionType): IterableIterator<any
     const { aBoolean, massage } = response;
     if (aBoolean) yield put(deleteHabitSuccess(id));
     else if (massage) yield put(deleteHabitError(massage))
+  }
+}
+
+export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
+  const response = yield call(httpService.fetchDefaultGoals);
+  if (response) {
+    const { goals, massage } = response;
+    if (goals) {
+      let defaultGoals: GoalDTO[] = goals
+      let goalsDTO: Goal[] = []
+      defaultGoals.map((goal: GoalDTO) => {
+        let goalDTO: Goal = {
+          id: goal.id,
+          title: goal.title,
+          description: goal.description,
+          startDate: new Date(),
+          endDate: new Date(),
+          currentProgress: 0,
+          progressToReach: goal.progressToReach,
+          isPublic: true,
+          category: { category: goal.category, color: "#e9eff2"}
+        }
+        goalsDTO.push(goalDTO);
+      });
+      yield put(fetchDefaultGoalsSuccess(goalsDTO));
+    }
+    if (massage) yield put(fetchDefaultGoalsError(massage))
   }
 }

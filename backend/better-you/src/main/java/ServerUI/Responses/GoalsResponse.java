@@ -1,21 +1,22 @@
 package ServerUI.Responses;
 
-import Model.UserGoal;
+import Model.Goal;
 
 import java.util.List;
 
-public class GoalsResponse {
-    List<UserGoal> goals;
 
-    public GoalsResponse(List<UserGoal> userGoals) {
-        this.goals = userGoals;
+public class GoalsResponse {
+    private List<Goal> goals;
+
+    public GoalsResponse(List<Goal> goals) {
+        this.goals = goals;
     }
 
-    public List<UserGoal> getUserGoals() {
+    public List<Goal> getGoals() {
         return goals;
     }
 
-    public void setUserGoals(List<UserGoal> userGoals) {
-        this.goals = userGoals;
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
     }
 }
