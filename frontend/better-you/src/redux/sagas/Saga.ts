@@ -1,7 +1,7 @@
 import { takeEvery } from "@redux-saga/core/effects";
 import {
   SET_CURRENT_USER_BEGIN,
-  SET_CURRENT_USER_INFORMATION_SUCCES,
+  SET_CURRENT_USER_INFORMATION_BEGIN,
   REGISTER_USER_BEGIN,
   CONFIRM_ACCOUNT_BEGIN,
   FETCH_GOALS_BEGIN,
@@ -32,7 +32,7 @@ export function* generalSaga(): IterableIterator<any> {
   yield takeEvery(SET_CURRENT_USER_BEGIN, loginUserHandler);
   yield takeEvery(REGISTER_USER_BEGIN, registerUserHandler);
   yield takeEvery(CONFIRM_ACCOUNT_BEGIN, confirmAccountHandler);
-  yield takeEvery(SET_CURRENT_USER_INFORMATION_SUCCES,getUserInformationHandler);
+  yield takeEvery(SET_CURRENT_USER_INFORMATION_BEGIN,getUserInformationHandler);
   yield takeEvery(FETCH_GOALS_BEGIN, fetchGoalsHandler);
   yield takeEvery(ADD_GOAL_BEGIN, addGoalHandler);
   yield takeEvery(EDIT_GOAL_BEGIN, editGoalHandler);

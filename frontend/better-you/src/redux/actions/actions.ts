@@ -4,6 +4,7 @@ import {
   SET_CURRENT_USER_ERROR,
   AppActionType,
   UNSET_CURRENT_USER,
+  SET_CURRENT_USER_INFORMATION_BEGIN,
   SET_CURRENT_USER_INFORMATION_SUCCES,
   SET_CURRENT_USER_INFORMATION_ERROR,
   REGISTER_USER_BEGIN,
@@ -80,13 +81,19 @@ export function unsetCurrentUser(): AppActionType {
   };
 }
 
+
+export function setCurrentUserInformationBegin():AppActionType{
+  return {
+    type : SET_CURRENT_USER_INFORMATION_BEGIN,
+    payload : undefined
+  };
+}
 export function setCurrentUserInformationSuccess(userInfo : UserInfoDTO):AppActionType{
   return {
     type : SET_CURRENT_USER_INFORMATION_SUCCES,
     payload : userInfo
   };
 }
-
 export function setCurrentUserInformationError(error:string):AppActionType{
   return {
     type : SET_CURRENT_USER_INFORMATION_ERROR,

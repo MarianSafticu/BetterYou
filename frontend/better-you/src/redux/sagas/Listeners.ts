@@ -32,6 +32,7 @@ import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import { goalCategorys } from "../../models/GoalCategorys";
+import UserInfoDTO from "../../models/UserInfoDTO";
 
 
 const httpService: IHttpService = HttpService.getInstance();
@@ -82,9 +83,9 @@ export function* getUserInformationHandler(action:AppActionType):IterableIterato
   const response = yield call(httpService.getUserInformation);
   if(response){
     const {userInformation, massage} = response;
-    if(userInformation)
-      yield put(setCurrentUserInformationSuccess(userInformation));
-    if(massage)
+    if(userInformation){
+      yield put(setCurrentUserInformationSuccess(userInformation));}
+    else if(massage)
       yield put(setCurrentUserInformationError(massage))
   }
 }

@@ -18,6 +18,7 @@ export const SET_CURRENT_USER_ERROR = "SET_CURRENT_USER_ERROR";
 
 export const UNSET_CURRENT_USER = "UNSET_CURRENT_USER";
 
+export const SET_CURRENT_USER_INFORMATION_BEGIN = "SET_CURRENT_USER_INFORMATION_BEGIN";
 export const SET_CURRENT_USER_INFORMATION_SUCCES = "SET_CURRENT_USER_INFORMATION_SUCCES";
 export const SET_CURRENT_USER_INFORMATION_ERROR = "SET_CURRENT_USER_INFORMATION_ERROR";
 
@@ -83,7 +84,10 @@ export interface UnsetCurrentUser {
   payload: undefined;
 }
 
-
+export interface SetCurrentUserInformationBegin{
+  type : typeof SET_CURRENT_USER_INFORMATION_BEGIN;
+  payload : undefined;
+}
 export interface SetCurrentUserInformationSucces{
   type : typeof SET_CURRENT_USER_INFORMATION_SUCCES;
   payload: UserInfoDTO;
@@ -248,6 +252,7 @@ export type AppActionType =
   | SetCurrentUserSuccess
   | SetCurrentUserError
   | UnsetCurrentUser
+  | SetCurrentUserInformationBegin
   | SetCurrentUserInformationSucces
   | SetCurrentUserInformationError
   | RegisterUserBegin

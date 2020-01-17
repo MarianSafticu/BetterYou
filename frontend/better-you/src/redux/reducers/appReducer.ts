@@ -5,6 +5,7 @@ import {
   SET_CURRENT_USER_SUCCESS,
   SET_CURRENT_USER_ERROR,
   UNSET_CURRENT_USER,
+  SET_CURRENT_USER_INFORMATION_BEGIN,
   SET_CURRENT_USER_INFORMATION_SUCCES,
   SET_CURRENT_USER_INFORMATION_ERROR,
   REGISTER_USER_BEGIN,
@@ -45,6 +46,7 @@ import {
   setCurrentUserSuccessHandler,
   setCurrentUserErrorHandler,
   unsetCurrentUserHandler,
+  setCurrentUserInformationBeginHandler,
   setCurrentUserInformationSuccesHandler,
   setCurrentUserInformationErrorHandler,
   registerUserBeginHandler,
@@ -110,6 +112,8 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case UNSET_CURRENT_USER:
       return unsetCurrentUserHandler(state);
 
+    case SET_CURRENT_USER_INFORMATION_BEGIN:
+      return setCurrentUserInformationBeginHandler(state);
     case SET_CURRENT_USER_INFORMATION_SUCCES:
       return setCurrentUserInformationSuccesHandler(state,action.payload);
     case SET_CURRENT_USER_INFORMATION_ERROR:

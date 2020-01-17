@@ -43,7 +43,13 @@ export function unsetCurrentUserHandler(oldState: AppState): AppState {
   return newState;
 }
 
-
+export function setCurrentUserInformationBeginHandler(oldState:AppState):AppState{
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.userInformation = undefined;
+  return newState;
+}
 export function setCurrentUserInformationSuccesHandler(oldState:AppState,userInformation:UserInfoDTO):AppState{
   const newState = { ...oldState};
   newState.loading=false;

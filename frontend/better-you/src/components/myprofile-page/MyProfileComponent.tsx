@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -21,7 +20,6 @@ import BookIcon from '@material-ui/icons/Book';
 
 
 interface IProps {
-    image?: string;
     userInfo: UserDTO | undefined;
     userInformation : UserInfoDTO | undefined;
     logoutUser: Function;
