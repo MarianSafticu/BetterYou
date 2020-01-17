@@ -7,6 +7,9 @@ public class SearchUsersRequest {
     public SearchUsersRequest(String usernamePrefix, String token) {
         this.usernamePrefix = usernamePrefix;
     }
+    public SearchUsersRequest(String usernamePrefix) {
+        this.usernamePrefix = usernamePrefix;
+    }
 
     public String getUsernamePrefix() {
         return usernamePrefix;
