@@ -41,7 +41,7 @@ interface IProps {
   userInfo: UserDTO | undefined;
   userInformation : UserInfoDTO | undefined;
   logoutUser: Function;
-  getUserInformation : Function;
+  // getUserInformation : Function;
 }
 
 function MenuProfilePicture(props: IProps) {
@@ -68,7 +68,7 @@ function MenuProfilePicture(props: IProps) {
   };
 
   const handleProfileAction = () => {
-    props.getUserInformation();
+    // props.getUserInformation();
   }
 
   return (
@@ -122,7 +122,7 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     logoutUser: () => dispatch(unsetCurrentUser()),
-    getUserInformation : () => dispatch(setCurrentUserInformationBegin())
+    // getUserInformation : () => dispatch(setCurrentUserInformationBegin())
   };
 };
 

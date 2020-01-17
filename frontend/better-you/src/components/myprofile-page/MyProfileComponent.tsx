@@ -17,6 +17,7 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import SettingsIcon from '@material-ui/icons/Settings';
 import BookIcon from '@material-ui/icons/Book';
+import { getCookie } from "../../services/CookieService";
 
 
 interface IProps {
@@ -76,6 +77,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
     }
 
     render() {
+        console.log("IN profile COMP", this.props.userInformation, getCookie("userInfo"))
         return (
             <div>
                 <Drawer
@@ -90,7 +92,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
                         </ListItem>}
                         {this.state.show && 
                         <ListItem id="username">
-                            <ListItemText primary={this.state.profile_name} />
+                            <ListItemText primary={this.props.userInformation !=undefined ? this.props.userInformation.profile_name : "Profile Name"} />
                         </ListItem>}
                         {this.state.show && <Divider />}
                         <ListItem key="Statistici" className="item">

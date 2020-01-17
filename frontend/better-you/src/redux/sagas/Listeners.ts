@@ -18,7 +18,8 @@ import {
   fetchHabitsSuccess,
   addHabitSuccess,
   addHabitError,
-  fetchHabitsError
+  fetchHabitsError,
+  setCurrentUserInformationBegin
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -50,6 +51,17 @@ export function* loginUserHandler(action: AppActionType): IterableIterator<any> 
         profilePicture: "../assets/photos/profile-picture-test.jpg",
         isAuthenticated: true
       };
+      // getUserInformationHandler(setCurrentUserInformationBegin());
+      const response = yield call(httpService.getUserInformation);
+      if(response){
+        const {userInfo, massage} = response;
+        const userInfoCookie: UserInfoDTO = userInfo;
+        if(userInfo && userInfoCookie.profile_name !== undefined){
+          setCookie("userInfo", userInfoCookie.profile_name);
+          yield put(setCurrentUserInformationSuccess(userInfo));}
+        if(massage)
+          yield put(setCurrentUserInformationError(massage))
+      }
       yield put(setCurrentUserSuccess(authenticatedUser));
     } else if (massage) {
       yield put(setCurrentUserError(massage));
