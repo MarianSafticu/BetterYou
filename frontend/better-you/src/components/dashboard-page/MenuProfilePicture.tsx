@@ -70,8 +70,7 @@ function MenuProfilePicture(props: IProps) {
         className="profile-pic"
         style={picture}
         onClick={handleClick}
-        href="/#"
-  >{""}</a>
+      >{""}</a>
       <StyledMenu
         id="customized-menu"
         anchorEl={anchorEl}

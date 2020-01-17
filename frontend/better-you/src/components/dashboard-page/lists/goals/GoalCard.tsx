@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
@@ -66,11 +65,8 @@ class GoalCard extends React.Component<IProps, IState> {
     return (
       <Card className="card-container">
         <div className="category"  style={{backgroundColor: this.state.goal.category.color}}/>
-        <CardActionArea
-          className="title_container"
-          onClick={this.handleOpenGoal}
-        >
-          <Typography variant="h5" className="title">
+        <div className="title-container">
+        <Typography variant="h5" className="title" onClick={this.handleOpenGoal}>
             {this.props.goal.title}
           </Typography>
           {
@@ -86,7 +82,7 @@ class GoalCard extends React.Component<IProps, IState> {
               </IconButton>
             </Tooltip>
           }
-        </CardActionArea>
+        </div>
 
         <div className="container">
           <GoalProgressBar
