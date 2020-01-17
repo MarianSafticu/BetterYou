@@ -3,6 +3,7 @@ import Card from "@material-ui/core/Card";
 import "../../../../assets/scss/profile-page/FriendsListStyle.scss";
 import Friend from "../../../../models/Friend";
 import { acceptFriendBegin, declineFriendBegin } from "../../../../redux/actions/actions";
+import { connect } from "react-redux";
 
 interface IProps {
     image: string;
@@ -57,4 +58,4 @@ const mapDispatchToProps = (dispatch: any) => {
     };
   };
 
-export default FriendRequestCard;
+export default connect(null, mapDispatchToProps)(FriendRequestCard);
