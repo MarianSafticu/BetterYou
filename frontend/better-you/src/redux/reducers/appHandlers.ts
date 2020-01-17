@@ -253,3 +253,24 @@ export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]
   newState.appBarItemsList = list;
   return newState;
 }
+
+export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchDefaultGoalsSuccessHandler(oldState: AppState, goals: Goal[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.defaultGoals = goals;
+  return newState;
+}
+export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.defaultGoals = [];
+  return newState;
+}

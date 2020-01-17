@@ -116,3 +116,15 @@
   font-weight: bold;
   color: black;
 }
+
+.default_list_component {
+  margin-left: 2%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: 1.5mm outset $color1;
+}
+
+.generate_button{
+  float: right;
+  margin-right: 2%;
+}

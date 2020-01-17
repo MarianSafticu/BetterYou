@@ -60,6 +60,10 @@ export const DELETE_HABIT_ERROR = "DELETE_HABIT_ERROR";
 export const SET_APPBAR_SWIPEABLEDRAWER = "SET_APPBAR_SWIPEABLEDRAWER";
 export const SET_APPBAR_ITEMSLISTS = "SET_APPBAR_ITEMSLISTS";
 
+export const FETCH_DEFAULT_GOALS_BEGIN = "FETCH_DEFAULT_GOALS_BEGIN";
+export const FETCH_DEFAULT_GOALS_SUCCESS = "FETCH_DEFAULT_GOALS_SUCCESS";
+export const FETCH_DEFAULT_GOALS_ERROR = "FETCH_DEFAULT_GOALS_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -229,6 +233,19 @@ export interface SetAppBarItemsList {
   payload: AppBarItem[];
 }
 
+export interface FetchDefaultGoalsBegin {
+  type: typeof FETCH_DEFAULT_GOALS_BEGIN;
+  payload: undefined;
+}
+export interface FetchDefaultGoalsSuccess {
+  type: typeof FETCH_DEFAULT_GOALS_SUCCESS;
+  payload: Goal[];
+}
+export interface FetchDefaultGoalsError {
+  type: typeof FETCH_DEFAULT_GOALS_ERROR;
+  payload: string;
+}
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -265,4 +282,7 @@ export type AppActionType =
   | DeleteHabitSuccess
   | DeleteHabitError
   | SetAppBarSwipeableDrawer
-  | SetAppBarItemsList;
+  | SetAppBarItemsList
+  | FetchDefaultGoalsBegin
+  | FetchDefaultGoalsSuccess
+  | FetchDefaultGoalsError;
