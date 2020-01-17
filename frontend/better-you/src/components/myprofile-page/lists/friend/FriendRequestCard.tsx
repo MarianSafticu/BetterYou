@@ -10,13 +10,21 @@ interface IProps {
 
 class FriendRequestCard extends React.Component<IProps, {}> {
     render() {
-        {console.log("SENDER", this.props.sender)}
+        { console.log("SENDER", this.props.sender) }
 
         return (
             <Card className="friend_container">
                 <div className="card_request_div" onClick={() => { console.log(this.props.sender.username) }}>
                     <img src={this.props.image} className="friend_image_page"></img>
                     <div className="friend_name_page">{this.props.sender.profile_name}</div>
+                </div>
+                <div className="friend_card_buttons">
+                    <button className="acceptButton" onClick={function () { console.log('accept'); }}>
+                        Accept
+                    </button>
+                    <button className="declineButton" onClick={function () { console.log('decline'); }}>
+                        Decline
+                    </button>
                 </div>
 
             </Card>

@@ -16,13 +16,7 @@
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
-    
-    &:hover{
-        cursor: pointer;
-        width: 410px;
-    }
 }
-
 
 
 .friend_image_page {
@@ -50,5 +44,54 @@
   }
 
   .card_request_div {
-    color: red;
+    display: flex;
+    width: 70%;
+    align-items: center;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  .friend_card_buttons {
+    width: 30%;
+    text-align: center;
+  }
+
+  .acceptButton {
+    display: block;
+    width: 100px;
+    height: 40px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 5px;
+
+    &:hover{
+      cursor: pointer;
+      font-size: 20px;
+    }
+  }
+
+  .declineButton {
+    display: block;
+    width: 100px;
+    height: 40px;
+    background-color: red;
+    border: none;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+    &:hover{
+      cursor: pointer;
+      font-size: 20px;
+    }
   }
