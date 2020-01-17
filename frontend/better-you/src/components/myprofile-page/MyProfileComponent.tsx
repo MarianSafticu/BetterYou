@@ -20,7 +20,7 @@ import BookIcon from '@material-ui/icons/Book';
 import { getCookie } from "../../services/CookieService";
 
 import DefaultGoals from '../myprofile-page/lists/default-goals/DefaultGoals';
-import FriendList from '../myprofile-page/lists/friend/FriendsList';
+import FriendsList from '../myprofile-page/lists/friend/FriendsList';
 
 interface IProps {
     userInfo: UserDTO | undefined;
@@ -126,7 +126,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
                 <div id="content_body">
                     {this.state.friends &&
                         <div>
-                            <FriendList />
+                            <FriendsList />
                         </div>
                     }
                     {this.state.goals &&
@@ -137,7 +137,6 @@ export class MyProfileComponent extends Component<IProps, IState>{
 
                 </div>
             </div>
-            // <img src={this.state.url_picture}></img>
         );
     }
 }
