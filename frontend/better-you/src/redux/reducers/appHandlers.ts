@@ -271,7 +271,7 @@ export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]
   return newState;
 }
 
-export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string): AppState {
+export function fetchFriendsErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
   newState.loading = false;
   newState.error = error;
