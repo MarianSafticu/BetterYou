@@ -4,13 +4,13 @@ import Menu, { MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import PersonIcon from "@material-ui/icons/Person";
-import SettingsIcon from "@material-ui/icons/Settings";
+import HomeIcon from '@material-ui/icons/Home';
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { NavLink } from "react-router-dom";
 import "../../assets/scss/generic/AppBarStyle.scss";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
-import { unsetCurrentUser } from "../../redux/actions/actions";
+import { unsetCurrentUser, setCurrentUserInformationBegin } from "../../redux/actions/actions";
 import UserDTO from "../../models/UserDTO";
 
 const StyledMenu = withStyles({
@@ -81,14 +81,14 @@ function MenuProfilePicture(props: IProps) {
         <MenuItem>
           <ListItemIcon>
             <NavLink to="/dashboard" className="link">
-              <PersonIcon fontSize="small" /> My profile
+              <HomeIcon fontSize="small" /> Dashboard
             </NavLink>
           </ListItemIcon>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <NavLink to="/settings" className="link">
-              <SettingsIcon fontSize="small" /> Settings
+            <NavLink to="/profile" className="link">
+              <PersonIcon fontSize="small" /> MyProfile
             </NavLink>
           </ListItemIcon>
         </MenuItem>
@@ -106,13 +106,13 @@ function MenuProfilePicture(props: IProps) {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    logoutUser: () => dispatch(unsetCurrentUser())
+    logoutUser: () => dispatch(unsetCurrentUser()),
   };
 };
 

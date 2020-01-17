@@ -3,6 +3,7 @@ package Service;
 
 import Model.*;
 import Repository.FriendRequestRepo;
+import Repository.GoalChallengeRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
 import Repository.RecoverLinkRepo;
@@ -34,6 +35,7 @@ public class CRUDServices {
     private final RegistrationLinkRepo registrationLinkRepo;
     private final RecoverLinkRepo recoverLinkRepo;
     private final FriendRequestRepo friendRequestRepo;
+    private final GoalChallengeRepo goalChallengeRepo;
 
     /**
      * @param userRepo             repository for {@link User}
@@ -46,13 +48,15 @@ public class CRUDServices {
                         final GoalRepo goalRepo,
                         final RegistrationLinkRepo registrationLinkRepo,
                         final RecoverLinkRepo recoverLinkRepo,
-                        final FriendRequestRepo friendRequestRepo) {
+                        final FriendRequestRepo friendRequestRepo,
+                        final GoalChallengeRepo goalChallengeRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
         this.recoverLinkRepo = recoverLinkRepo;
         this.friendRequestRepo = friendRequestRepo;
+        this.goalChallengeRepo = goalChallengeRepo;
     }
 
     /**
@@ -176,7 +180,7 @@ public class CRUDServices {
 
         List<Goal> randomGoals = new ArrayList<>();
 
-        for(int i = 0; i < Math.min(numberGoals, allGoals.size()); i ++) {
+        for (int i = 0; i < Math.min(numberGoals, allGoals.size()); i++) {
             randomGoals.add(allGoals.get(i));
         }
 
@@ -568,7 +572,6 @@ public class CRUDServices {
         }
     }
 
-
     public List<FriendRequest> getUserSentFriendRequests(final long userId) {
         LOG.info("Retrieving sent friend requests for id={}", userId);
 
@@ -684,5 +687,88 @@ public class CRUDServices {
 
     public List<User> getAllUsers() {
         return userRepo.getAll();
+    }
+
+    public List<GoalChallenge> getReceivedGoalChallenges(final long userId) {
+        LOG.info("Retrieving challenges received by userId={}", userId);
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.warn("User not found");
+            throw new ServiceException("User not found");
+        }
+        return new ArrayList<>(user.getGoalChallenges());
+    }
+
+    public List<GoalChallenge> getSendGoalChallengers(final long userId) {
+        return null;
+    }
+
+    public void addGoalChallenge(final long userId, final String receiverUsername, final long goalId) {
+        LOG.info("Adding goal challenge from userId={} to username={} for goalId={}", userId, receiverUsername, goalId);
+
+        User sender = userRepo.get(userId);
+        if (sender == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("Invalid request");
+        }
+
+        User receiver = userRepo.getUserByUsername(receiverUsername);
+        if (receiver == null) {
+            LOG.warn("No user found with username={}", receiverUsername);
+            throw new ServiceException("User to be challenged not found");
+        }
+
+        if (sender.getId().equals(receiver.getId())) {
+            LOG.warn("Cannot send challenge to yourself");
+            throw new ServiceException("Cannot challenge yourslef!");
+        }
+
+        Goal goal = goalRepo.get(goalId);
+        if (goal == null) {
+            LOG.warn("No goal found with id={}", goalId);
+            throw new ServiceException("Goal not found");
+        }
+
+        GoalChallenge goalChallenge = new GoalChallenge(sender, receiver, goal);
+        try {
+            goalChallengeRepo.add(goalChallenge);
+            LOG.info("Goal challenge added successfully");
+        } catch (RepoException e) {
+            LOG.error("Error occurred while adding goal challenge: {}", e.getMessage());
+            throw new ServiceException("Unable to save goal request");
+        }
+    }
+
+    public void setAcceptanceForChallenge(final long userId,
+                                          final long challengeId,
+                                          final boolean acceptance,
+                                          final boolean isPublic,
+                                          final LocalDate endDate) {
+        LOG.info("Setting acceptance for challengeId={} to acceptance={}", challengeId, acceptance);
+
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("Invalid request");
+        }
+
+        GoalChallenge goalChallenge = goalChallengeRepo.get(challengeId);
+        if (goalChallenge == null) {
+            LOG.warn("No goalChallenge found with id={}", challengeId);
+            throw new ServiceException("No goal challenge found");
+        }
+
+        try {
+            LOG.info("Removing challenge id={}", goalChallenge.getId());
+            goalChallengeRepo.delete(challengeId);
+            if (acceptance) {
+                LOG.info("Adding challenged goalId={} to userId={}", goalChallenge.getGoal().getId(), userId);
+                goalRepo.addUserToGoal(user, goalChallenge.getGoal(), isPublic, endDate);
+            }
+            LOG.info("Challenge acceptance set!");
+        } catch (RepoException e) {
+            LOG.error("Cannot accept/reject the goal challenge: {}", e.getMessage());
+            throw new ServiceException("Cannot accept/reject the goal challenge", e);
+        }
     }
 }

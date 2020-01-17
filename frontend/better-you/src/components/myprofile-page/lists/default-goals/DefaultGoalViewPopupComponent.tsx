@@ -1,8 +1,8 @@
 import React from "react";
 import Popover from "@material-ui/core/Popover";
 import DefaultGoalViewItemComponent from "./DefaultGoalViewItemComponent";
-import Goal from "../../models/Goal";
-import "../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
+import Goal from "../../../../models/Goal";
+import "../../../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
 
 interface IProps {
   open: boolean;

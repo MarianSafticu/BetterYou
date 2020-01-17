@@ -5,6 +5,8 @@ import { call, put } from "@redux-saga/core/effects";
 import {
   setCurrentUserSuccess,
   setCurrentUserError,
+  setCurrentUserInformationSuccess,
+  setCurrentUserInformationError,
   registerUserSuccess,
   registerUserError,
   confirmAccountSuccess,
@@ -21,6 +23,7 @@ import {
   deleteGoalError,
   deleteHabitSuccess,
   deleteHabitError,
+  setCurrentUserInformationBegin,
   fetchFriendsError,
   fetchFriendsSuccess,
   fetchDefaultGoalsError,
@@ -39,6 +42,8 @@ import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import { goalCategorys } from "../../models/GoalCategorys";
+import UserInfoDTO from "../../models/UserInfoDTO";
+
 import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
 
@@ -57,6 +62,16 @@ export function* loginUserHandler(action: AppActionType): IterableIterator<any> 
         profilePicture: "../assets/photos/profile-picture-test.jpg",
         isAuthenticated: true
       };
+      const response = yield call(httpService.getUserInformation);
+      if(response){
+        const {userInfo, massage} = response;
+        const userInfoCookie: UserInfoDTO = userInfo;
+        if(userInfo && userInfoCookie.profile_name !== undefined){
+          setCookie("userInfo", userInfoCookie.profile_name);
+          yield put(setCurrentUserInformationSuccess(userInfo));}
+        if(massage)
+          yield put(setCurrentUserInformationError(massage))
+      }
       yield put(setCurrentUserSuccess(authenticatedUser));
     } else if (massage) {
       yield put(setCurrentUserError(massage));
@@ -86,6 +101,16 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
   }
 }
 
+export function* getUserInformationHandler(action:AppActionType):IterableIterator<any>{
+  const response = yield call(httpService.getUserInformation);
+  if(response){
+    const {userInfo, massage} = response;
+    if(userInfo){
+      yield put(setCurrentUserInformationSuccess(userInfo));}
+    if(massage)
+      yield put(setCurrentUserInformationError(massage))
+  }
+}
 
 export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.fetchGoals);

@@ -10,6 +10,7 @@ import AddGoalRequest from "../models/requests/AddGoalRequest";
 import FetchGoalResponse from "../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../models/requests/AddHabitRequest";
+import UserInfoDTO from "../models/UserInfoDTO";
 import FetchFriendsResponse from "../models/responses/FetchFriendsResponse";
 import GoalDTO from "../models/GoalDTO";
 
@@ -68,6 +69,20 @@ export default class HttpService implements IHttpService {
       .catch(error => {
         return error;
       });
+  }
+
+  async getUserInformation():Promise<UserInfoDTO>{
+    return await fetch(`${url}/user/info`,{
+      method:"get",
+      headers:getSafeHeaders()
+    })
+    .then(response => response.json())
+    .then(body => {
+      return body;
+    })
+    .catch(error => {
+      return error;
+    })
   }
 
   async fetchGoals(): Promise<FetchGoalResponse[]> {

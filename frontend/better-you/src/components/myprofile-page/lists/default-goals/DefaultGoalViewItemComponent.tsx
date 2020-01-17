@@ -1,14 +1,18 @@
 import React, { Component, ChangeEvent } from "react";
-import "../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
-import { Button, TextField, Fab } from "@material-ui/core";
-import Goal from "../../models/Goal";
+import "../../../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
+import { Button, TextField, Fab, Popover, Select, FormControl, InputLabel } from "@material-ui/core";
+import Goal from "../../../../models/Goal";
+import Edit from "@material-ui/icons/Edit";
+import Delete from "@material-ui/icons/Delete";
+import Save from "@material-ui/icons/Save";
+import Cancel from "@material-ui/icons/Cancel";
 import Close from "@material-ui/icons/Close";
-import Service from "../../services/Service";
-import { GoalException } from "../../exceptions/GoalException";
-import { goalCategorys } from "../../models/GoalCategorys";
+import Service from "../../../../services/Service";
+import { GoalException } from "../../../../exceptions/GoalException";
+import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
 import { connect } from "react-redux";
-import { addGoalBegin } from "../../redux/actions/actions";
-import AddGoalRequest from "../../models/requests/AddGoalRequest";
+import { addGoalBegin } from "../../../../redux/actions/actions";
+import AddGoalRequest from "../../../../models/requests/AddGoalRequest";
 
 
 interface IProps {

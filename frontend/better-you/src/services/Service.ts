@@ -113,9 +113,8 @@ export default class Service {
   validateBirthdate(user: RegisterRequest): boolean {
     let now = new Date();
     now.setDate(now.getDate() - 1);
-    let yesterday = now.getDate();
-
-    if (user.birthDate.getDate() > yesterday) return false;
+    let yesterday = now;
+    if (user.birthDate > yesterday) return false;
     return true;
   }
 
