@@ -1,34 +1,78 @@
 @import "../globals/colors";
 @import "../globals/global";
 
-.about-page-container {
-  height: calc(100% - #{$app_bar_height});
-  display: flex;
-  flex-direction: column;
-  padding: 100px;
-  text-align: center;
+@media only screen and (min-width: 768px) {
+  .about-page-container {
+    height: calc(100% - #{$app_bar_height});
+    display: flex;
+    flex-direction: column;
+    padding: 100px;
+    text-align: center;
+  }
+
+  .about-page-breakpoint {
+    height: 100%;
+  }
+
+  .page-content {
+    height: calc(100% - #{$app_bar_height});
+    padding-bottom: 10px;
+    text-align: center;
+    font-family: "Palatino Linotype";
+  }
+
+  .page-title {
+    margin-bottom: 50px;
+    text-align: center;
+    color: #ebb953;
+    font-family: "Palatino Linotype";
+    font-size: 35px;
+  }
+
+  .page-text {
+    font-family: "Palatino Linotype";
+  }
+
+  .bigger-text {
+    font-size: 30px;
+    color: #ebb953;
+  }
 }
 
-.page-content {
-  height: calc(100% - #{$app_bar_height});
-  padding-bottom: 10px;
-  text-align: center;
-  font-family: 'Palatino Linotype';
-}
+@media only screen and (max-width: 767px) {
+  .about-page-container {
+    height: calc(100% - #{$app_bar_height});
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    text-align: center;
+  }
 
-.page-title {
-  margin-bottom: 50px;
-  text-align: center;
-  color: #ebb953;
-  font-family: 'Palatino Linotype';
-  font-size: 35px;
-}
+  .about-page-breakpoint {
+    height: 100%;
+  }
 
-.page-text {
-  font-family: 'Palatino Linotype';
-}
+  .page-content {
+    height: calc(100% - #{$app_bar_height});
+    padding-bottom: 10px;
+    text-align: center;
+    font-family: "Palatino Linotype";
+  }
 
-.bigger-text {
-  font-size: 30px;
-  color: #ebb953;
+  .page-title {
+    margin-bottom: 50px;
+    text-align: center;
+    color: #ebb953;
+    font-family: "Palatino Linotype";
+    font-size: 30px;
+  }
+
+  .page-text {
+    font-family: "Palatino Linotype";
+  }
+
+  .bigger-text {
+    font-size: 25px;
+    color: #ebb953;
+  }
 }
