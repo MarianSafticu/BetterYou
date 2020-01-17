@@ -760,8 +760,7 @@ public class CRUDServices {
 
         try {
             LOG.info("Removing challenge id={}", goalChallenge.getId());
-            user.getGoalChallenges().remove(goalChallenge);
-            userRepo.update(userId, user);
+            goalChallengeRepo.delete(challengeId);
             if (acceptance) {
                 LOG.info("Adding challenged goalId={} to userId={}", goalChallenge.getGoal().getId(), userId);
                 goalRepo.addUserToGoal(user, goalChallenge.getGoal(), isPublic, endDate);
