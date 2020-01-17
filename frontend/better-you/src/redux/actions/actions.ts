@@ -50,7 +50,13 @@ import {
   FETCH_DEFAULT_GOALS_ERROR,
   CHALLENGE_FRIEND_BEGIN,
   CHALLENGE_FRIEND_SUCCESS,
-  CHALLENGE_FRIEND_ERROR
+  CHALLENGE_FRIEND_ERROR,
+  ACCEPT_FRIEND_BEGIN,
+  ACCEPT_FRIEND_SUCCESS,
+  ACCEPT_FRIEND_ERROR,
+  DECLINE_FRIEND_BEGIN,
+  DECLINE_FRIEND_SUCCESS,
+  DECLINE_FRIEND_ERROR,
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -404,3 +410,40 @@ export function challengeFriendError(error: string): AppActionType {
   }
 }
 
+export function acceptFriendBegin(username: string): AppActionType {
+  return {
+    type: ACCEPT_FRIEND_BEGIN,
+    payload: username
+  };
+}
+export function acceptFriendSuccess(username: string): AppActionType {
+  return {
+    type: ACCEPT_FRIEND_SUCCESS,
+    payload: username
+  };
+}
+export function acceptFriendError(error: string): AppActionType {
+  return {
+    type: ACCEPT_FRIEND_ERROR,
+    payload: error
+  };
+}
+
+export function declineFriendBegin(username: string): AppActionType {
+  return {
+    type: DECLINE_FRIEND_BEGIN,
+    payload: username
+  };
+}
+export function declineFriendSuccess(username: string): AppActionType {
+  return {
+    type: DECLINE_FRIEND_SUCCESS,
+    payload: username
+  };
+}
+export function declineFriendError(error: string): AppActionType {
+  return {
+    type: DECLINE_FRIEND_ERROR,
+    payload: error
+  };
+}

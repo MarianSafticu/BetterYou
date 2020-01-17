@@ -371,3 +371,43 @@ export function challengeFriendErrorHandler(oldState: AppState, error: string): 
   newState.error = error;
   return newState;
 } 
+
+// export function acceptFriendBeginHandler(oldState: AppState): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = "";
+//   newState.friends = oldState.friends;
+//   return newState;
+// }
+// export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = "";
+  
+//   let newGoals = newState.goals.slice();
+//   newGoals.splice(0, 0, goal);
+//   newState.goals = newGoals;
+
+//   return newState;
+// }
+// export function addGoalErrorHandler(oldState: AppState, error: string): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = error;
+//   newState.goals = oldState.goals;
+//   return newState;
+// }
+
+
+export function declineFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  return newState;
+}
+export function declineFriendSuccessHandler(oldState: AppState, username: string): AppState {
+  const newState = {...oldState};
+  return newState;
+}
+export function declineFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  return newState;
+}

@@ -52,6 +52,9 @@ import {
   CHALLENGE_FRIEND_BEGIN,
   CHALLENGE_FRIEND_SUCCESS,
   CHALLENGE_FRIEND_ERROR,
+  DECLINE_FRIEND_BEGIN,
+  DECLINE_FRIEND_SUCCESS,
+  DECLINE_FRIEND_ERROR,
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -104,7 +107,10 @@ import {
   fetchDefaultGoalsErrorHandler,
   challengeFriendBeginHandler,
   challengeFriendSuccessHandler,
-  challengeFriendErrorHandler
+  challengeFriendErrorHandler,
+  declineFriendBeginHandler,
+  declineFriendSuccessHandler,
+  declineFriendErrorHandler,
 } from "./appHandlers";
 import { setCurrentUserInformationError } from "../actions/actions";
 
@@ -248,6 +254,13 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case CHALLENGE_FRIEND_ERROR:
       return challengeFriendErrorHandler(state, action.payload);
       
+    case DECLINE_FRIEND_BEGIN:
+      return declineFriendBeginHandler(state);
+    case DECLINE_FRIEND_SUCCESS:
+      return declineFriendSuccessHandler(state, action.payload);
+    case DECLINE_FRIEND_ERROR:
+      return declineFriendErrorHandler(state, action.payload);
+
     default:
       return state;
   }

@@ -28,6 +28,8 @@ import {
   fetchDefaultGoalsSuccess,
   challengeFriendSuccess,
   challengeFriendError,
+  declineFriendError,
+  declineFriendSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -344,4 +346,9 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
     else if (massage) yield put(challengeFriendError(massage));
   }
 
+} 
+
+
+export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
+  //TODO: implementat
 }

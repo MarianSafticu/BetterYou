@@ -84,6 +84,14 @@ export const CHALLENGE_FRIEND_BEGIN = "CHALLENGE_FRIEND_BEGIN";
 export const CHALLENGE_FRIEND_SUCCESS = "CHALLENGE_FRIEND_SUCCESS";
 export const CHALLENGE_FRIEND_ERROR = "CHALLENGE_FRIEND_ERROR";
 
+export const ACCEPT_FRIEND_BEGIN = "ACCEPT_FRIEND_BEGIN";
+export const ACCEPT_FRIEND_SUCCESS = "ACCEPT_FRIEND_SUCCESS";
+export const ACCEPT_FRIEND_ERROR = "ACCEPT_FRIEND_ERROR";
+
+export const DECLINE_FRIEND_BEGIN = "DECLINE_FRIEND_BEGIN";
+export const DECLINE_FRIEND_SUCCESS = "DECLINE_FRIEND_SUCCESS";
+export const DECLINE_FRIEND_ERROR = "DECLINE_FRIEND_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -318,6 +326,33 @@ export interface ChallengeFriendError {
   payload: string;
 }
 
+export interface AcceptFriendBegin {
+  type: typeof ACCEPT_FRIEND_BEGIN;
+  payload: string;
+}
+export interface AcceptFriendSuccess {
+  type: typeof ACCEPT_FRIEND_SUCCESS;
+  payload: string;
+}
+export interface AcceptFriendError {
+  type: typeof ACCEPT_FRIEND_ERROR;
+  payload: string;
+}
+
+export interface DeclineFriendBegin {
+  type: typeof DECLINE_FRIEND_BEGIN;
+  payload: string;
+}
+export interface DeclineFriendSuccess {
+  type: typeof DECLINE_FRIEND_SUCCESS;
+  payload: string;
+}
+export interface DeclineFriendError {
+  type: typeof DECLINE_FRIEND_ERROR;
+  payload: string;
+}
+ 
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -369,4 +404,10 @@ export type AppActionType =
   | FetchDefaultGoalsError
   | ChallengeFriendBegin
   | ChallengeFriendSuccess
-  | ChallengeFriendError;
+  | ChallengeFriendError
+  | AcceptFriendBegin
+  | AcceptFriendSuccess
+  | AcceptFriendError
+  | DeclineFriendBegin
+  | DeclineFriendSuccess
+  | DeclineFriendError;

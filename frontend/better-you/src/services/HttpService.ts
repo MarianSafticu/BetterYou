@@ -163,7 +163,7 @@ export default class HttpService implements IHttpService {
   }
 
   async fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]> {
-    return await fetch(`${url}/friend/request/list`, { 
+    return await fetch(`${url}/friend/request/list`, {
       method: "post",
       headers: getSafeHeaders()
     })
@@ -205,5 +205,38 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
+
+  async acceptFriendRequest(usernameReceiver: string): Promise<boolean> {
+    console.log(usernameReceiver)
+    return await fetch(`${url}/friend/request/accept`, {
+      method: "post",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(usernameReceiver)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
+  async declineFriendRequest(usernameReceiver: string): Promise<boolean> {
+    console.log(usernameReceiver)
+    return await fetch(`${url}/friend/request/reject`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(usernameReceiver)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
 }
 
