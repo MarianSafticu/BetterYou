@@ -8,6 +8,8 @@ import ServerUI.Requests.Authorization;
 import ServerUI.Requests.Filter;
 import ServerUI.Requests.FilterHabits;
 import ServerUI.Requests.IdRequest;
+import ServerUI.Requests.data.ChallengeAcceptanceRequest;
+import ServerUI.Requests.data.ChallengeRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -579,6 +581,71 @@ public class RestServer {
                 }
             }
             return new ResponseEntity<>(new HabitsResponse(userHabits), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/challenge", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> challenge(@RequestHeader Authorization authorization, @RequestBody ChallengeRequest challengeRequest) {
+        try {
+            crudServices.addGoalChallenge(authService.getUserIdFromJWT(authorization.getToken()),
+                    challengeRequest.getReceiverUsername(),
+                    challengeRequest.getGoalId());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/challenge/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> acceptChallenge(@RequestHeader Authorization authorization, @RequestBody ChallengeAcceptanceRequest challengeAcceptanceRequest) {
+        try {
+            crudServices.setAcceptanceForChallenge(authService.getUserIdFromJWT(
+                    authorization.getToken()),
+                    challengeAcceptanceRequest.getId(),
+                    true,
+                    challengeAcceptanceRequest.isPublic(),
+                    challengeAcceptanceRequest.getEndDate());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/challenge/reject", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> rejectChallenge(@RequestHeader Authorization authorization, @RequestBody IdRequest idRequest) {
+        try {
+            crudServices.setAcceptanceForChallenge(
+                    authService.getUserIdFromJWT(authorization.getToken()),
+                    idRequest.getId(),
+                    false,
+                    false,
+                    null);
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/challenges", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getChallenges(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(new ChallengesListResponse(
+                    crudServices.getReceivedGoalChallenges(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
