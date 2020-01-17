@@ -9,6 +9,7 @@ import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -325,5 +326,24 @@ export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string)
   newState.loading = false;
   newState.error = error;
   newState.defaultGoals = [];
+  return newState;
+} 
+  
+export function challengeFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function challengeFriendSuccessHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  return newState;
+}
+export function challengeFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
   return newState;
 } 

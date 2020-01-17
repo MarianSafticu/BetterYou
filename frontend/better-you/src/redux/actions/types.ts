@@ -11,6 +11,7 @@ import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import Friend from "../../models/Friend";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
@@ -73,6 +74,10 @@ export const FETCH_FRIENDS_ERROR = "FETCH_FRIENDS_ERROR";
 export const FETCH_DEFAULT_GOALS_BEGIN = "FETCH_DEFAULT_GOALS_BEGIN";
 export const FETCH_DEFAULT_GOALS_SUCCESS = "FETCH_DEFAULT_GOALS_SUCCESS";
 export const FETCH_DEFAULT_GOALS_ERROR = "FETCH_DEFAULT_GOALS_ERROR";
+
+export const CHALLENGE_FRIEND_BEGIN = "CHALLENGE_FRIEND_BEGIN";
+export const CHALLENGE_FRIEND_SUCCESS = "CHALLENGE_FRIEND_SUCCESS";
+export const CHALLENGE_FRIEND_ERROR = "CHALLENGE_FRIEND_ERROR";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -282,7 +287,19 @@ export interface FetchDefaultGoalsError {
   type: typeof FETCH_DEFAULT_GOALS_ERROR;
   payload: string;
 }
- 
+
+export interface ChallengeFriendBegin {
+  type: typeof CHALLENGE_FRIEND_BEGIN;
+  payload: ChallengeFriendDTO;
+}
+export interface ChallengeFriendSuccess {
+  type: typeof CHALLENGE_FRIEND_SUCCESS;
+  payload: undefined;
+}
+export interface ChallengeFriendError {
+  type: typeof CHALLENGE_FRIEND_ERROR;
+  payload: string;
+}
 
 export type AppActionType =
   | SetCurrentUserBegin
@@ -329,4 +346,7 @@ export type AppActionType =
   | FetchFriendsError
   | FetchDefaultGoalsBegin
   | FetchDefaultGoalsSuccess
-  | FetchDefaultGoalsError;
+  | FetchDefaultGoalsError
+  | ChallengeFriendBegin
+  | ChallengeFriendSuccess
+  | ChallengeFriendError;
