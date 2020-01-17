@@ -3,6 +3,7 @@ package Service;
 
 import Model.*;
 import Repository.FriendRequestRepo;
+import Repository.GoalChallengeRepo;
 import Repository.GoalRepo;
 import Repository.HabitsRepo;
 import Repository.RecoverLinkRepo;
@@ -34,6 +35,7 @@ public class CRUDServices {
     private final RegistrationLinkRepo registrationLinkRepo;
     private final RecoverLinkRepo recoverLinkRepo;
     private final FriendRequestRepo friendRequestRepo;
+    private final GoalChallengeRepo goalChallengeRepo;
 
     /**
      * @param userRepo             repository for {@link User}
@@ -46,13 +48,15 @@ public class CRUDServices {
                         final GoalRepo goalRepo,
                         final RegistrationLinkRepo registrationLinkRepo,
                         final RecoverLinkRepo recoverLinkRepo,
-                        final FriendRequestRepo friendRequestRepo) {
+                        final FriendRequestRepo friendRequestRepo,
+                        final GoalChallengeRepo goalChallengeRepo) {
         this.userRepo = userRepo;
         this.habitsRepo = habitsRepo;
         this.goalRepo = goalRepo;
         this.registrationLinkRepo = registrationLinkRepo;
         this.recoverLinkRepo = recoverLinkRepo;
         this.friendRequestRepo = friendRequestRepo;
+        this.goalChallengeRepo = goalChallengeRepo;
     }
 
     /**
@@ -176,7 +180,7 @@ public class CRUDServices {
 
         List<Goal> randomGoals = new ArrayList<>();
 
-        for(int i = 0; i < Math.min(numberGoals, allGoals.size()); i ++) {
+        for (int i = 0; i < Math.min(numberGoals, allGoals.size()); i++) {
             randomGoals.add(allGoals.get(i));
         }
 
@@ -568,7 +572,6 @@ public class CRUDServices {
         }
     }
 
-
     public List<FriendRequest> getUserSentFriendRequests(final long userId) {
         LOG.info("Retrieving sent friend requests for id={}", userId);
 
@@ -684,5 +687,21 @@ public class CRUDServices {
 
     public List<User> getAllUsers() {
         return userRepo.getAll();
+    }
+
+    public List<GoalChallenge> getReceivedGoalChallenges(final long userId) {
+        return null;
+    }
+
+    public List<GoalChallenge> getSendGoalChallengers(final long userId) {
+        return null;
+    }
+
+    public void addGoalChallenge(final long userId, final String receiverUsername, final long goalId) {
+
+    }
+
+    public void setAcceptanceForChallenge(final long userId, final long challengeId, final boolean acceptance) {
+
     }
 }
