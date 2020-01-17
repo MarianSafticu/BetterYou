@@ -340,10 +340,7 @@ class DashboardComponent extends Component<IProp, IState> {
         </div>
 
         <div className="newsfeed" ref={this.comp2}>
-          <div className="newsfeed">
             <NewsfeedList />
-          </div>
-
         </div>
       </div>
     );

@@ -8,6 +8,7 @@ import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
+import Friend from "../../models/Friend";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -281,3 +282,48 @@ export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]
   newState.appBarItemsList = list;
   return newState;
 }
+
+
+export function fetchFriendsBeginHandler(oldState: AppState): AppState {
+const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+
+export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.friends = friends;
+  return newState;
+}
+
+export function fetchFriendsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.defaultGoals = [];
+  return newState;
+} 
+  
+export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchDefaultGoalsSuccessHandler(oldState: AppState, goals: Goal[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.defaultGoals = goals;
+  return newState;
+}
+export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.defaultGoals = [];
+  return newState;
+} 

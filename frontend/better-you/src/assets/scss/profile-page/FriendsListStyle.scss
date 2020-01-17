@@ -1,0 +1,50 @@
+@import "../globals/colors";
+
+.friend_container {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 400px;
+    max-width: 90%;
+    border-radius: 4px;
+
+    background: rgba($color: white, $alpha: 0.3) !important;
+
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    
+    &:hover{
+        cursor: pointer;
+        width: 410px;
+    }
+}
+
+
+
+.friend_image_page {
+    float: left;
+  
+    height: 100px !important;
+    width: 100px !important;
+  
+    background-color: rgba($color: #000000, $alpha: 0.4) !important;
+  
+    background-size: 50px 50px;
+  
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    margin-left: 10px !important;
+    margin-right: 5px !important;
+  }
+  
+  .friend_name_page {
+    font-weight: bold;
+    text-shadow: 1px 1px white;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 20px;
+  }

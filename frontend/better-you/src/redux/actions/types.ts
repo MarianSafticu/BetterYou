@@ -11,6 +11,7 @@ import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
+import Friend from "../../models/Friend";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -64,6 +65,14 @@ export const DELETE_HABIT_ERROR = "DELETE_HABIT_ERROR";
 
 export const SET_APPBAR_SWIPEABLEDRAWER = "SET_APPBAR_SWIPEABLEDRAWER";
 export const SET_APPBAR_ITEMSLISTS = "SET_APPBAR_ITEMSLISTS";
+
+export const FETCH_FRIENDS_BEGIN = "FETCH_FRIENDS_BEGIN";
+export const FETCH_FRIENDS_SUCCESS = "FETCH_FRIENDS_SUCCESS";
+export const FETCH_FRIENDS_ERROR = "FETCH_FRIENDS_ERROR";
+
+export const FETCH_DEFAULT_GOALS_BEGIN = "FETCH_DEFAULT_GOALS_BEGIN";
+export const FETCH_DEFAULT_GOALS_SUCCESS = "FETCH_DEFAULT_GOALS_SUCCESS";
+export const FETCH_DEFAULT_GOALS_ERROR = "FETCH_DEFAULT_GOALS_ERROR";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -247,6 +256,34 @@ export interface SetAppBarItemsList {
   payload: AppBarItem[];
 }
 
+
+export interface FetchFriendsBegin {
+  type: typeof FETCH_FRIENDS_BEGIN;
+  payload: undefined;
+}
+export interface FetchFriendsSuccess {
+  type: typeof FETCH_FRIENDS_SUCCESS;
+  payload: Friend[];
+}
+export interface FetchFriendsError {
+  type: typeof FETCH_FRIENDS_ERROR;
+   payload: string;
+}
+
+export interface FetchDefaultGoalsBegin {
+  type: typeof FETCH_DEFAULT_GOALS_BEGIN;
+  payload: undefined;
+}
+export interface FetchDefaultGoalsSuccess {
+  type: typeof FETCH_DEFAULT_GOALS_SUCCESS;
+  payload: Goal[];
+}
+export interface FetchDefaultGoalsError {
+  type: typeof FETCH_DEFAULT_GOALS_ERROR;
+  payload: string;
+}
+ 
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -286,4 +323,10 @@ export type AppActionType =
   | DeleteHabitSuccess
   | DeleteHabitError
   | SetAppBarSwipeableDrawer
-  | SetAppBarItemsList;
+  | SetAppBarItemsList
+  | FetchFriendsBegin
+  | FetchFriendsSuccess
+  | FetchFriendsError
+  | FetchDefaultGoalsBegin
+  | FetchDefaultGoalsSuccess
+  | FetchDefaultGoalsError;

@@ -1,4 +1,4 @@
-export default interface Friend {
+export default interface FetchFriendsResponse {
     id: number;
     username: string;
     profile_name: string;

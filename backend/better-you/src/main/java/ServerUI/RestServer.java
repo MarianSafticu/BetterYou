@@ -7,6 +7,7 @@ import Model.UserGoal;
 import ServerUI.Requests.Authorization;
 import ServerUI.Requests.Filter;
 import ServerUI.Requests.FilterHabits;
+import ServerUI.Requests.IdRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -163,7 +164,19 @@ public class RestServer {
     public ResponseEntity<?> getGoals(@RequestHeader Authorization authorization) {
         try {
             List<UserGoal> userGoals = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
-            return new ResponseEntity<>(new GoalsResponse(userGoals), HttpStatus.OK);
+            return new ResponseEntity<>(new UserGoalsResponse(userGoals), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/goals/random", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getRandomGoals(@RequestParam int amount) {
+        try {
+            return new ResponseEntity<>(new GoalsResponse(crudServices.getRandomGoals(amount)), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -240,14 +253,14 @@ public class RestServer {
      * This method receives a JSON with an token and a goal and return true if the goal can be deleted or an error
      * message
      *
-     * @param goalRequest- a JSON with an token and a goal
+     * @param idRequest - the id of the user goal to be deleted
      * @return true if the goal can be deleted else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteGoal(@RequestHeader Authorization authorization, @RequestBody UserGoalRequest goalRequest) {
+    public ResponseEntity<?> deleteGoal(@RequestHeader Authorization authorization, @RequestBody IdRequest idRequest) {
         try {
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.deleteUserGoal(goalRequest.getUserGoal().getId(), userId);
+            crudServices.deleteUserGoal(idRequest.getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -307,14 +320,14 @@ public class RestServer {
      * This method receives a JSON with an token and a habit and return true if the goal can be deleted or an error
      * message
      *
-     * @param habitRequest- a JSON with an token and a habit
+     * @param idRequest- a JSON with habit id to be deleted
      * @return true if the habit can be deleted else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteHabit(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> deleteHabit(@RequestHeader Authorization authorization, @RequestBody IdRequest idRequest) {
         try {
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.deleteHabit(habitRequest.getHabit(), userId);
+            crudServices.deleteHabit(idRequest.getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
@@ -509,7 +522,7 @@ public class RestServer {
     /**
      * This method receives a JSON with a token and a filter type and return all the goals of that user with the filter
      *
-     * @param filter - the filter
+     * @param filter        - the filter
      * @param authorization - a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
@@ -518,22 +531,22 @@ public class RestServer {
         try {
             List<UserGoal> userGoals = null; // = crudServices.getUsersGoals(authService.getUserIdFromJWT(authorization.getToken()));
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            if(filter.getCompleted() != null){
-                if(filter.getCompleted()){
+            if (filter.getCompleted() != null) {
+                if (filter.getCompleted()) {
                     userGoals = crudServices.getCompletedGoals(userId);
-                }else{
+                } else {
                     userGoals = crudServices.getGoalsInProgress(userId);
                 }
-            }else if(filter.getVisibility() != null){
-                if(filter.getVisibility()){
+            } else if (filter.getVisibility() != null) {
+                if (filter.getVisibility()) {
                     userGoals = crudServices.getPublicGoals(userId);
-                }else{
+                } else {
                     userGoals = crudServices.getPrivateGoals(userId);
                 }
-            }else{
+            } else {
                 userGoals = crudServices.getGoalsByCategory(userId, Category.valueOf(filter.getCategory()));
             }
-            return new ResponseEntity<>(new GoalsResponse(userGoals), HttpStatus.OK);
+            return new ResponseEntity<>(new UserGoalsResponse(userGoals), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
         } catch (Exception e) {
@@ -545,7 +558,7 @@ public class RestServer {
     /**
      * This method receives a JSON with an token and a filter and return all the habits of that user with that filter
      *
-     * @param filter - the filter
+     * @param filter        - the filter
      * @param authorization - a JSON with an token
      * @return all the goals if the token si ok or the error message
      */
@@ -554,13 +567,12 @@ public class RestServer {
         try {
             List<Habit> userHabits = null;
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            if(filter.getCategory() != null){
-                userHabits = crudServices.getHabitsByCategory(userId,Category.valueOf(filter.getCategory()));
-            }else{
-                if(filter.getBestStreak()){
+            if (filter.getCategory() != null) {
+                userHabits = crudServices.getHabitsByCategory(userId, Category.valueOf(filter.getCategory()));
+            } else {
+                if (filter.getBestStreak()) {
                     userHabits = crudServices.getBestStreakHabits(userId);
-                }
-                else{
+                } else {
                     // null case
                     // if the body was empty
                     userHabits = new ArrayList<>();

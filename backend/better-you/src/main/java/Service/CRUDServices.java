@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -168,6 +169,20 @@ public class CRUDServices {
         }
     }
 
+    public List<Goal> getRandomGoals(final int numberGoals) {
+        List<Goal> allGoals = goalRepo.getAll();
+
+        Collections.shuffle(allGoals);
+
+        List<Goal> randomGoals = new ArrayList<>();
+
+        for(int i = 0; i < Math.min(numberGoals, allGoals.size()); i ++) {
+            randomGoals.add(allGoals.get(i));
+        }
+
+        return randomGoals;
+    }
+
     /**
      * Returns an user's goals
      *
@@ -254,7 +269,7 @@ public class CRUDServices {
             LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while deleting user goal in repo: {}", e.getMessage());
-            throw new ServiceException("Error occurred while deleting goal in repo");
+            throw new ServiceException("Cannot delete", e);
         }
     }
 
@@ -341,8 +356,8 @@ public class CRUDServices {
         }
     }
 
-    public void deleteHabit(final Habit habit, final long userId) {
-        Habit originalHabit = habitsRepo.get(habit.getId());
+    public void deleteHabit(final long habitId, final long userId) {
+        Habit originalHabit = habitsRepo.get(habitId);
 
         if (originalHabit == null) {
             throw new ServiceException("Habit not found with the given id");
@@ -353,7 +368,7 @@ public class CRUDServices {
         }
 
         try {
-            habitsRepo.delete(habit.getId());
+            habitsRepo.delete(habitId);
         } catch (RepoException e) {
             LOG.error("Repo exception occurred while deleting habit: {}", e.getMessage());
             throw new ServiceException("Something went wrong while deleting habit", e);
@@ -638,27 +653,35 @@ public class CRUDServices {
             e.printStackTrace();
         }
     }
-    public List<UserGoal> getCompletedGoals(long userId){
+
+    public List<UserGoal> getCompletedGoals(long userId) {
         return goalRepo.getCompletedGoals(userRepo.get(userId));
     }
-    public List<UserGoal> getGoalsInProgress(long userId){
+
+    public List<UserGoal> getGoalsInProgress(long userId) {
         return goalRepo.getGoalsInProgress(userRepo.get(userId));
     }
-    public List<UserGoal> getGoalsByCategory(long userId, Category c){
-        return goalRepo.getUserGoalsByCategory(userRepo.get(userId),c);
+
+    public List<UserGoal> getGoalsByCategory(long userId, Category c) {
+        return goalRepo.getUserGoalsByCategory(userRepo.get(userId), c);
     }
-    public List<UserGoal> getPublicGoals(long userId){
+
+    public List<UserGoal> getPublicGoals(long userId) {
         return goalRepo.getPublicGoals(userRepo.get(userId));
     }
-    public List<UserGoal> getPrivateGoals(long userId){
+
+    public List<UserGoal> getPrivateGoals(long userId) {
         return goalRepo.getPrivateGoals(userRepo.get(userId));
     }
-    public List<Habit> getBestStreakHabits(long userId){
+
+    public List<Habit> getBestStreakHabits(long userId) {
         return habitsRepo.getBestStreakHabbits(userRepo.get(userId));
     }
-    public List<Habit> getHabitsByCategory(long userId,Category c){
-        return habitsRepo.getHabbitsByCategory(userRepo.get(userId),c);
+
+    public List<Habit> getHabitsByCategory(long userId, Category c) {
+        return habitsRepo.getHabbitsByCategory(userRepo.get(userId), c);
     }
+
     public List<User> getAllUsers() {
         return userRepo.getAll();
     }
