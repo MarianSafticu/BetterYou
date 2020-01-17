@@ -31,7 +31,7 @@ class FriendRequestCard extends React.Component<IProps, {}> {
                     </button>
                     <button className="declineButton"
                         onClick={() => {
-                            this.handleClickDecline();
+                            this.handleClickDecline(this.props.sender.username);
                         }}>
                         Decline
                     </button>
@@ -46,8 +46,8 @@ class FriendRequestCard extends React.Component<IProps, {}> {
         console.log("accept")
     }
 
-    handleClickDecline() {
-        console.log("decline");
+    handleClickDecline(username: string) {
+        this.props.declineRequest(username);
     }
 }
 
