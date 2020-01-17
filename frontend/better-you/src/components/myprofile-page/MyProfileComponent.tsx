@@ -96,13 +96,13 @@ export class MyProfileComponent extends Component<IProps, IState>{
                                 <ListItemText primary={this.state.profile_name} />
                             </ListItem>}
                         {this.state.show && <Divider />}
-                        <ListItem key="Statistici" className="item">
+                        <ListItem disabled key="Statistici" className="item">
                             <ListItemIcon>
                                 <AssessmentIcon fontSize="large" />
                             </ListItemIcon>
                             {this.state.show && <ListItemText primary="Statistics" />}
                         </ListItem>
-                        <ListItem key="Settings" className="item">
+                        <ListItem disabled key="Settings" className="item">
                             <ListItemIcon>
                                 <SettingsIcon fontSize="large" />
                             </ListItemIcon>
