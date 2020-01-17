@@ -36,6 +36,9 @@ public class GoalChallenge implements HasId<Long>{
     @JoinColumn(name = "goal_id")
     private Goal goal;
 
+    public GoalChallenge() {
+    }
+
     public GoalChallenge(User form, User to, Goal goal) {
         this.form = form;
         this.to = to;

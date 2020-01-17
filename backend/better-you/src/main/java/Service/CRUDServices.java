@@ -690,7 +690,13 @@ public class CRUDServices {
     }
 
     public List<GoalChallenge> getReceivedGoalChallenges(final long userId) {
-        return null;
+        LOG.info("Retrieving challenges received by userId={}", userId);
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.warn("User not found");
+            throw new ServiceException("User not found");
+        }
+        return new ArrayList<>(user.getGoalChallenges());
     }
 
     public List<GoalChallenge> getSendGoalChallengers(final long userId) {
@@ -701,24 +707,24 @@ public class CRUDServices {
         LOG.info("Adding goal challenge from userId={} to username={} for goalId={}", userId, receiverUsername, goalId);
 
         User sender = userRepo.get(userId);
-        if(sender == null) {
+        if (sender == null) {
             LOG.warn("No user found with id={}", userId);
             throw new ServiceException("Invalid request");
         }
 
         User receiver = userRepo.getUserByUsername(receiverUsername);
-        if(receiver == null) {
+        if (receiver == null) {
             LOG.warn("No user found with username={}", receiverUsername);
             throw new ServiceException("User to be challenged not found");
         }
 
-        if(sender.getId().equals(receiver.getId())) {
+        if (sender.getId().equals(receiver.getId())) {
             LOG.warn("Cannot send challenge to yourself");
             throw new ServiceException("Cannot challenge yourslef!");
         }
 
         Goal goal = goalRepo.get(goalId);
-        if(goal == null) {
+        if (goal == null) {
             LOG.warn("No goal found with id={}", goalId);
             throw new ServiceException("Goal not found");
         }

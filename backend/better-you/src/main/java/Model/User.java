@@ -57,6 +57,10 @@ public class User implements HasId<Long> {
     private Set<Habit> habits;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "to", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<GoalChallenge> goalChallenges;
+
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> friends;
 
@@ -196,5 +200,13 @@ public class User implements HasId<Long> {
 
     public void setPoints(long points) {
         this.points = points;
+    }
+
+    public Set<GoalChallenge> getGoalChallenges() {
+        return goalChallenges;
+    }
+
+    public void setGoalChallenges(Set<GoalChallenge> goalChallenges) {
+        this.goalChallenges = goalChallenges;
     }
 }

@@ -603,5 +603,17 @@ public class RestServer {
         }
     }
 
-
+    @RequestMapping(value = "/challenges", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getChallenges(@RequestHeader Authorization authorization) {
+        try {
+            return new ResponseEntity<>(new ChallengesListResponse(
+                    crudServices.getReceivedGoalChallenges(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
