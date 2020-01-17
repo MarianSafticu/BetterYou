@@ -739,7 +739,37 @@ public class CRUDServices {
         }
     }
 
-    public void setAcceptanceForChallenge(final long userId, final long challengeId, final boolean acceptance) {
+    public void setAcceptanceForChallenge(final long userId,
+                                          final long challengeId,
+                                          final boolean acceptance,
+                                          final boolean isPublic,
+                                          final LocalDate endDate) {
+        LOG.info("Setting acceptance for challengeId={} to acceptance={}", challengeId, acceptance);
 
+        User user = userRepo.get(userId);
+        if (user == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("Invalid request");
+        }
+
+        GoalChallenge goalChallenge = goalChallengeRepo.get(challengeId);
+        if (goalChallenge == null) {
+            LOG.warn("No goalChallenge found with id={}", challengeId);
+            throw new ServiceException("No goal challenge found");
+        }
+
+        try {
+            LOG.info("Removing challenge id={}", goalChallenge.getId());
+            user.getGoalChallenges().remove(goalChallenge);
+            userRepo.update(userId, user);
+            if (acceptance) {
+                LOG.info("Adding challenged goalId={} to userId={}", goalChallenge.getGoal().getId(), userId);
+                goalRepo.addUserToGoal(user, goalChallenge.getGoal(), isPublic, endDate);
+            }
+            LOG.info("Challenge acceptance set!");
+        } catch (RepoException e) {
+            LOG.error("Cannot accept/reject the goal challenge: {}", e.getMessage());
+            throw new ServiceException("Cannot accept/reject the goal challenge", e);
+        }
     }
 }
