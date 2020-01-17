@@ -7,6 +7,7 @@ import Model.UserGoal;
 import ServerUI.Requests.Authorization;
 import ServerUI.Requests.Filter;
 import ServerUI.Requests.FilterHabits;
+import ServerUI.Requests.IdRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -252,14 +253,14 @@ public class RestServer {
      * This method receives a JSON with an token and a goal and return true if the goal can be deleted or an error
      * message
      *
-     * @param goalRequest- a JSON with an token and a goal
+     * @param idRequest - the id of the user goal to be deleted
      * @return true if the goal can be deleted else an error message
      */
     @RequestMapping(value = "/goal", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteGoal(@RequestHeader Authorization authorization, @RequestBody UserGoalRequest goalRequest) {
+    public ResponseEntity<?> deleteGoal(@RequestHeader Authorization authorization, @RequestBody IdRequest idRequest) {
         try {
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.deleteUserGoal(goalRequest.getUserGoal().getId(), userId);
+            crudServices.deleteUserGoal(idRequest.getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -319,14 +320,14 @@ public class RestServer {
      * This method receives a JSON with an token and a habit and return true if the goal can be deleted or an error
      * message
      *
-     * @param habitRequest- a JSON with an token and a habit
+     * @param idRequest- a JSON with habit id to be deleted
      * @return true if the habit can be deleted else an error message
      */
     @RequestMapping(value = "/habit", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteHabit(@RequestHeader Authorization authorization, @RequestBody HabitRequest habitRequest) {
+    public ResponseEntity<?> deleteHabit(@RequestHeader Authorization authorization, @RequestBody IdRequest idRequest) {
         try {
             long userId = authService.getUserIdFromJWT(authorization.getToken());
-            crudServices.deleteHabit(habitRequest.getHabit(), userId);
+            crudServices.deleteHabit(idRequest.getId(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
