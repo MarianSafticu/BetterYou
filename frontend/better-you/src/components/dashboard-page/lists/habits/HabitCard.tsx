@@ -44,7 +44,7 @@ class HabitCard extends React.Component<IProps, IState> {
   render() {
     return (
       <Card className="card-container">
-        <div className="category" />
+        <div className="category"  style={{ backgroundColor: this.state.habit.category.color }}/>
         <CardActionArea className="title_container" onClick={this.handleOpenHabit}>
           <Typography variant="h5" className="title">
             {this.props.habit.title}
@@ -59,9 +59,9 @@ class HabitCard extends React.Component<IProps, IState> {
           <DateCheckbox typeRepetition={this.props.habit.repetitionType} />
         </div>
         <GeneralHabitViewPopupComponent
-            selfDistructFunction={this.handleCloseHabit}
-            open={this.state.showHabitView}
-            habit={this.state.habit} />
+          selfDistructFunction={this.handleCloseHabit}
+          open={this.state.showHabitView}
+          habit={this.state.habit} />
       </Card>
     );
   }

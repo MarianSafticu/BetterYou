@@ -46,6 +46,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
   initialGoal: Goal = {
     id: undefined,
     title: "",
+    groupId: 0,
     description: "",
     currentProgress: 0,
     progressToReach: 1,
@@ -62,6 +63,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     let goal: Goal = {
       id: undefined,
       title: "",
+      groupId: 0,
       description: "",
       currentProgress: 0,
       progressToReach: 1,
@@ -80,17 +82,23 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
       categoryError: ""
     };
 
-    if (props.goal !== null && props.goal !== undefined) {
+    if (this.props.goal !== null && this.props.goal !== undefined) {
+      if(this.props.goal.startDate.constructor.name === "String")
+        this.props.goal.startDate = new Date(this.props.goal.startDate)
+      if(this.props.goal.endDate.constructor.name === "String")
+          this.props.goal.endDate = new Date(this.props.goal.endDate)
+
       this.initialGoal = {
-        id: props.goal.id,
-        title: props.goal.title,
-        description: props.goal.description,
-        currentProgress: props.goal.currentProgress,
-        progressToReach: props.goal.progressToReach,
-        startDate: props.goal.startDate,
-        endDate: props.goal.endDate,
-        category: props.goal.category,
-        isPublic: props.goal.isPublic
+        id: this.props.goal.id,
+        groupId: this.props.goal.groupId,
+        title: this.props.goal.title,
+        description: this.props.goal.description,
+        currentProgress: this.props.goal.currentProgress,
+        progressToReach: this.props.goal.progressToReach,
+        startDate: this.props.goal.startDate,
+        endDate: this.props.goal.endDate,
+        category: this.props.goal.category,
+        isPublic: this.props.goal.isPublic
       };
 
       var isDefaultGoal: boolean = false;
@@ -99,7 +107,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
       else isDefaultGoal = this.props.isDefaultGoal;
 
       this.state = {
-        goal: props.goal,
+        goal: this.props.goal,
         edditingIsDisabled: !isDefaultGoal,
         isForNewGoal: isDefaultGoal,
         goalError: err,

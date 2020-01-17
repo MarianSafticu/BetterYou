@@ -13,6 +13,7 @@ import AddHabitRequest from "../models/requests/AddHabitRequest";
 import UserInfoDTO from "../models/UserInfoDTO";
 import FetchFriendsResponse from "../models/responses/FetchFriendsResponse";
 import GoalDTO from "../models/GoalDTO";
+import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
 
 export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -201,5 +202,20 @@ export default class HttpService implements IHttpService {
       });
   }
 
+  async challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean> {
+    console.log(challenge);
+    return await fetch(`${url}/challenge`, {
+      method: "post",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(challenge)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
 }
 

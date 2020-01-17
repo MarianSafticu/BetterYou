@@ -44,7 +44,10 @@ import {
   FETCH_FRIENDS_ERROR,
   FETCH_DEFAULT_GOALS_BEGIN,
   FETCH_DEFAULT_GOALS_SUCCESS,
-  FETCH_DEFAULT_GOALS_ERROR
+  FETCH_DEFAULT_GOALS_ERROR,
+  CHALLENGE_FRIEND_BEGIN,
+  CHALLENGE_FRIEND_SUCCESS,
+  CHALLENGE_FRIEND_ERROR
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -60,6 +63,7 @@ import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 
 export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
@@ -354,6 +358,25 @@ export function fetchDefaultGoalsSuccess(goals: Goal[]): AppActionType {
 export function fetchDefaultGoalsError(error: string): AppActionType {
   return {
     type: FETCH_DEFAULT_GOALS_ERROR,
+    payload: error
+  }
+}
+
+export function challengeFriendBegin(challenge: ChallengeFriendDTO): AppActionType {
+  return {
+    type: CHALLENGE_FRIEND_BEGIN,
+    payload: challenge
+  };
+}
+export function challengeFriendSuccess(): AppActionType {
+  return {
+    type: CHALLENGE_FRIEND_SUCCESS,
+    payload: undefined
+  }
+}
+export function challengeFriendError(error: string): AppActionType {
+  return {
+    type: CHALLENGE_FRIEND_ERROR,
     payload: error
   }
 }

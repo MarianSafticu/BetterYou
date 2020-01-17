@@ -28,6 +28,8 @@ import {
   fetchFriendsSuccess,
   fetchDefaultGoalsError,
   fetchDefaultGoalsSuccess,
+  challengeFriendSuccess,
+  challengeFriendError,
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -46,6 +48,7 @@ import UserInfoDTO from "../../models/UserInfoDTO";
 
 import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -63,13 +66,14 @@ export function* loginUserHandler(action: AppActionType): IterableIterator<any> 
         isAuthenticated: true
       };
       const response = yield call(httpService.getUserInformation);
-      if(response){
-        const {userInfo, massage} = response;
+      if (response) {
+        const { userInfo, massage } = response;
         const userInfoCookie: UserInfoDTO = userInfo;
-        if(userInfo && userInfoCookie.profile_name !== undefined){
+        if (userInfo && userInfoCookie.profile_name !== undefined) {
           setCookie("userInfo", userInfoCookie.profile_name);
-          yield put(setCurrentUserInformationSuccess(userInfo));}
-        if(massage)
+          yield put(setCurrentUserInformationSuccess(userInfo));
+        }
+        if (massage)
           yield put(setCurrentUserInformationError(massage))
       }
       yield put(setCurrentUserSuccess(authenticatedUser));
@@ -95,19 +99,20 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
   let code: string = action.payload as string;
   const response = yield call(httpService.confirmAccount, code);
   if (response) {
-    const { aBoolean , massage } = response;
+    const { aBoolean, massage } = response;
     if (aBoolean) yield put(confirmAccountSuccess(aBoolean));
     else if (massage) yield put(confirmAccountError(massage));
   }
 }
 
-export function* getUserInformationHandler(action:AppActionType):IterableIterator<any>{
+export function* getUserInformationHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.getUserInformation);
-  if(response){
-    const {userInfo, massage} = response;
-    if(userInfo){
-      yield put(setCurrentUserInformationSuccess(userInfo));}
-    if(massage)
+  if (response) {
+    const { userInfo, massage } = response;
+    if (userInfo) {
+      yield put(setCurrentUserInformationSuccess(userInfo));
+    }
+    if (massage)
       yield put(setCurrentUserInformationError(massage))
   }
 }
@@ -120,8 +125,13 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
       let goals: FetchGoalResponse[] = userGoals
       let goalsDTO: Goal[] = []
       goals.map((goal: FetchGoalResponse) => {
+        let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === goal.goal.category)[0];
+        if (category === undefined)
+          category = category[0]
+
         let goalDTO: Goal = {
           id: goal.id,
+          groupId: goal.goal.id,
           title: goal.goal.title,
           description: goal.goal.description,
           startDate: new Date(goal.startDate),
@@ -129,7 +139,7 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
           currentProgress: goal.currentProgress,
           progressToReach: goal.goal.progressToReach,
           isPublic: goal.public,
-          category: { category: goal.goal.category, color: "#e9eff2"}
+          category: category
         }
         goalsDTO.push(goalDTO);
         return goalDTO;
@@ -144,11 +154,16 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
 export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
   let goal: AddGoalRequest = action.payload as AddGoalRequest;
   const response = yield call(httpService.addGoal, goal);
-  if(response) {
-    const {id, massage} = response;
-    if(id) {
+  if (response) {
+    const { id, massage } = response;
+    if (id) {
+      let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === goal.goal.category)[0];
+      if (category === undefined)
+        category = category[0]
+
       let goalComplete: Goal = {
         id: id,
+        groupId: goal.goal.id,
         title: goal.goal.title,
         description: goal.goal.description,
         startDate: new Date(),
@@ -156,11 +171,11 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
         currentProgress: 0,
         progressToReach: goal.goal.progressToReach,
         isPublic: goal.public,
-        category: (goalCategorys as any)[goal.goal.category]
+        category: category
       }
       yield put(addGoalSuccess(goalComplete))
     }
-    else if(massage) yield put(addGoalError(massage))
+    else if (massage) yield put(addGoalError(massage))
   }
 }
 
@@ -189,13 +204,20 @@ export function* fetchHabitsHandler(action: AppActionType): IterableIterator<any
       let respHabits: FetchHabitResponse[] = habits
       let habitsDTO: Habit[] = []
       respHabits.map((habit: FetchHabitResponse) => {
+        let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === habit.category)[0];
+        if (category === undefined)
+          category = category[0]
+        let repetitionType = Repetition.Daily;
+        if (habit.repetitionType === Repetition.Weekly.toLocaleUpperCase())
+          repetitionType = Repetition.Weekly;
+
         let habitDTO: Habit = {
           id: habit.id,
           title: habit.title,
           description: habit.description,
           startDate: new Date(habit.startDate),
-          repetitionType: (Repetition as any)[habit.repetitionType],
-          category: (goalCategorys as any)[habit.category],
+          repetitionType: repetitionType,
+          category: category,
           dates: habit.dates.map(date => new Date(date))
         }
         habitsDTO.push(habitDTO);
@@ -211,21 +233,28 @@ export function* fetchHabitsHandler(action: AppActionType): IterableIterator<any
 export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
   let habit: AddHabitRequest = action.payload as AddHabitRequest;
   const response = yield call(httpService.addHabit, habit);
-  if(response) {
-    const {id, massage} = response;
-    if(id) {
+  if (response) {
+    const { id, massage } = response;
+    if (id) {
+      let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === habit.habit.category)[0];
+      if (category === undefined)
+        category = category[0]
+      let repetitionType = Repetition.Daily;
+      if (habit.habit.repetitionType === Repetition.Weekly.toLocaleUpperCase())
+        repetitionType = Repetition.Weekly;
+
       let habitComplete: Habit = {
         id: id,
         title: habit.habit.title,
         description: habit.habit.description,
         startDate: new Date(),
-        repetitionType: (Repetition as any)[habit.habit.repetitionType],
-        category: (goalCategorys as any)[habit.habit.category],
+        repetitionType: repetitionType,
+        category: category,
         dates: habit.habit.dates.map(date => new Date(date))
       }
       yield put(addHabitSuccess(habitComplete))
     }
-    else if(massage) yield put(addHabitError(massage))
+    else if (massage) yield put(addHabitError(massage))
   }
 }
 
@@ -271,31 +300,42 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
   }
 }
 
-    
-  export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
-    const response = yield call(httpService.fetchDefaultGoals);
-    if (response) {
-      const { goals, massage } = response;
-      if (goals) {
-        let defaultGoals: GoalDTO[] = goals
-        let goalsDTO: Goal[] = []
-        defaultGoals.map((goal: GoalDTO) => {
-          let goalDTO: Goal = {
-            id: goal.id,
-            title: goal.title,
-            description: goal.description,
-            startDate: new Date(),
-            endDate: new Date(),
-            currentProgress: 0,
-            progressToReach: goal.progressToReach,
-            isPublic: true,
-            category: { category: goal.category, color: "#e9eff2"}
-          }
-          goalsDTO.push(goalDTO);
-          return goalDTO;
-        });
-        yield put(fetchDefaultGoalsSuccess(goalsDTO));
-      }
-      if (massage) yield put(fetchDefaultGoalsError(massage))
+
+export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
+  const response = yield call(httpService.fetchDefaultGoals);
+  if (response) {
+    const { goals, massage } = response;
+    if (goals) {
+      let defaultGoals: GoalDTO[] = goals
+      let goalsDTO: Goal[] = []
+      defaultGoals.map((goal: GoalDTO) => {
+        let goalDTO: Goal = {
+          id: null,
+          groupId: goal.id,
+          title: goal.title,
+          description: goal.description,
+          startDate: new Date(),
+          endDate: new Date(),
+          currentProgress: 0,
+          progressToReach: goal.progressToReach,
+          isPublic: true,
+          category: { category: goal.category, color: "#e9eff2" }
+        }
+        goalsDTO.push(goalDTO);
+      });
+      yield put(fetchDefaultGoalsSuccess(goalsDTO));
+    }
+    if (massage) yield put(fetchDefaultGoalsError(massage))
   }
-} 
+}
+
+export function* challengeFriendHandler(action: AppActionType): IterableIterator<any> {
+  let challenge: ChallengeFriendDTO = action.payload as ChallengeFriendDTO;
+  const response = yield call(httpService.challengeFriend, challenge);
+  if (response) {
+    const { token, massage } = response;
+    if (token) yield put(challengeFriendSuccess());
+    else if (massage) yield put(challengeFriendError(massage));
+  }
+
+}

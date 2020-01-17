@@ -10,6 +10,7 @@ import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import GoalDTO from "../../models/GoalDTO";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 
 export default interface IHttpService {
   loginUser(requestData: LoginRequest): Promise<LoginResponse>;
@@ -24,6 +25,7 @@ export default interface IHttpService {
   deleteHabit(id: number): Promise<boolean>;
   fetchFriends(): Promise<FetchFriendsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;
+  challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean>;
 }
 
 export function getHeaders() {
