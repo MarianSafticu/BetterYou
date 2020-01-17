@@ -3,6 +3,7 @@ import "../../assets/scss/start-page/StartPageStyle.scss";
 import { Button } from "@material-ui/core";
 import NewsfeedList from "../dashboard-page/lists/newsfeed/NewsfeedList";
 import FriendsList from "../myprofile-page/lists/friend/FriendsList";
+import FriendsListRequests from "../myprofile-page/lists/friend/FriendsListRequests";
 import GoalList from "../dashboard-page/lists/goals/GoalList";
 import HabitList from "../dashboard-page/lists/habits/HabitList";
 import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";
@@ -104,7 +105,7 @@ export default class TestPageComponent extends Component<
           <GeneralHabitViewPopupComponent selfDistructFunction={this.handleCloseHabit} open={this.state.showHabit[0]} />
         </div>
         <FriendsList />
-        <FriendRequestCard />
+        <FriendsListRequests />
         <NewsfeedList />
         <GoalList />
         <div>

@@ -13,6 +13,7 @@ import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import Friend from "../../models/Friend";
+import FriendRequest from "../../models/FriendRequest";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -284,7 +285,7 @@ export interface FetchFriendRequestsBegin {
 }
 export interface FetchFriendRequestsSuccess {
   type: typeof FETCH_FRIEND_REQUESTS_SUCCESS;
-  payload: Friend[];
+  payload: FriendRequest[];
 }
 export interface FetchFriendRequestsError {
   type: typeof FETCH_FRIEND_REQUESTS_ERROR;

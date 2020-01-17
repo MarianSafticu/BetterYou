@@ -48,6 +48,7 @@ import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import FriendRequest from "../../models/FriendRequest";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -285,25 +286,22 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
 }
 
 export function* fetchFriendRequestsHandler(action: AppActionType): IterableIterator<any> {
-  const response = yield call(httpService.fetchFriends);
+  const response = yield call(httpService.fetchFriendRequests);
   if (response) {
     const { friendRequests, massage } = response;
     if (friendRequests) {
       let respFriends: FetchFriendRequestsResponse[] = friendRequests
-      let friendsDTO: Friend[] = []
-      respFriends.map((friend: FetchFriendRequestsResponse) => {
-        let friendDTO: Friend = {
-          id: friend.id,
-          username: friend.username,
-          profile_name: friend.profile_name,
-          email: friend.email,
-          birthDate: new Date(friend.birthDate),
-          points: friend.points,
-          verified: friend.verified
+      let requestsDTO: FriendRequest[] = []
+      respFriends.map((request: FetchFriendRequestsResponse) => {
+        let friendRequestDTO: FriendRequest = {
+          id: request.id,
+          sender: request.sender,
+          receiver: request.receiver,
         }
-        friendsDTO.push(friendDTO);
+        requestsDTO.push(friendRequestDTO);
+        return friendRequestDTO;
       });
-      yield put(fetchFriendRequestsSuccess(friendsDTO));
+      yield put(fetchFriendRequestsSuccess(requestsDTO));
     }
     if (massage) yield put(fetchFriendRequestsError(massage))
   }

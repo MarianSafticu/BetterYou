@@ -10,6 +10,7 @@ import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import FriendRequest from "../../models/FriendRequest";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -315,7 +316,7 @@ export function fetchFriendRequestsBeginHandler(oldState: AppState): AppState {
     return newState;
   }
   
-  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: Friend[]): AppState {
+  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
     const newState = {...oldState};
     newState.loading = false;
     newState.error = "";

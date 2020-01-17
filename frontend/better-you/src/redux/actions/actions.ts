@@ -67,6 +67,7 @@ import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import FriendRequest from "../../models/FriendRequest";
 
 export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
@@ -352,7 +353,7 @@ export function fetchFriendRequestsBegin(): AppActionType {
     payload: undefined
   };
 }
-export function fetchFriendRequestsSuccess(friendRequests: Friend[]): AppActionType {
+export function fetchFriendRequestsSuccess(friendRequests: FriendRequest[]): AppActionType {
   return {
     type: FETCH_FRIEND_REQUESTS_SUCCESS,
     payload: friendRequests
