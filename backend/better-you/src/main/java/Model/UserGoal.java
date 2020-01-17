@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "USER_GOAL")
@@ -128,5 +129,20 @@ public class UserGoal implements HasId<Long> {
 
     public void setDownvotes(int downvotes) {
         this.downvotes = downvotes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UserGoal userGoal = (UserGoal) o;
+        return id == userGoal.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

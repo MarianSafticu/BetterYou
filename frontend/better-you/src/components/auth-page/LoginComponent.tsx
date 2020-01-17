@@ -11,6 +11,10 @@ import SnackbarComponent from "../messages/SnackbarComponent";
 import UserDTO from "../../models/UserDTO";
 import LoginRequest from "../../models/requests/LoginRequest";
 
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+
 interface IProps {
   loading: boolean;
   error: string;
@@ -22,6 +26,7 @@ interface IState {
   typingUser: LoginRequest;
   error: LoginException;
   willRedirect: boolean;
+  showPassword: boolean;
 }
 
 class LoginComponent extends Component<IProps, IState> {
@@ -39,7 +44,8 @@ class LoginComponent extends Component<IProps, IState> {
         emailError: "",
         passwordError: ""
       },
-      willRedirect: false
+      willRedirect: false,
+      showPassword: false
     };
   }
 
@@ -60,6 +66,11 @@ class LoginComponent extends Component<IProps, IState> {
       }
     });
   }
+
+  onTogglePassword = () => {
+    this.setState({ showPassword: !this.state.showPassword });
+  }
+
 
   async handleOnClick() {
     let validationResult: LoginException = this.service.validateLoginUser(
@@ -97,8 +108,8 @@ class LoginComponent extends Component<IProps, IState> {
           {this.props.error ? (
             <SnackbarComponent message={this.props.error} />
           ) : (
-            <div></div>
-          )}
+              <div></div>
+            )}
           <form className="login-container" action="">
             <div className="login-input-container">
               <TextField
@@ -113,12 +124,23 @@ class LoginComponent extends Component<IProps, IState> {
               <TextField
                 className="login-input"
                 onChange={this.onChangePassword.bind(this)}
-                type="password"
+                type={this.state.showPassword ? "text" : "password"}
                 helperText={this.state.error.passwordError}
                 error={this.state.error.passwordError ? true : false}
                 label="Password:"
               />
               <br />
+              <FormGroup id = "password-button">
+                <FormControlLabel
+                  control = {<Checkbox
+                    checked={this.state.showPassword}
+                    onChange={this.onTogglePassword}
+                    value="this.state.showPassword"
+                  />}
+                  label="Show Password"
+              />
+              </FormGroup>
+
             </div>
 
             <div className="login-button-container">

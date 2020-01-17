@@ -18,7 +18,9 @@ import {
   addHabitError,
   fetchHabitsError,
   fetchFriendsError,
-  fetchFriendsSuccess
+  fetchFriendsSuccess,
+  fetchDefaultGoalsError,
+  fetchDefaultGoalsSuccess,
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -34,7 +36,7 @@ import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import { goalCategorys } from "../../models/GoalCategorys";
 import Friend from "../../models/Friend";
-
+import GoalDTO from "../../models/GoalDTO";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -218,9 +220,37 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
           verified: friend.verified
         }
         friendsDTO.push(friendDTO);
-      });
+        });
       yield put(fetchFriendsSuccess(friendsDTO));
     }
     if (massage) yield put(fetchFriendsError(massage))
   }
 }
+
+    
+  export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
+    const response = yield call(httpService.fetchDefaultGoals);
+    if (response) {
+      const { goals, massage } = response;
+      if (goals) {
+        let defaultGoals: GoalDTO[] = goals
+        let goalsDTO: Goal[] = []
+        defaultGoals.map((goal: GoalDTO) => {
+          let goalDTO: Goal = {
+            id: goal.id,
+            title: goal.title,
+            description: goal.description,
+            startDate: new Date(),
+            endDate: new Date(),
+            currentProgress: 0,
+            progressToReach: goal.progressToReach,
+            isPublic: true,
+            category: { category: goal.category, color: "#e9eff2"}
+          }
+          goalsDTO.push(goalDTO);
+        });
+        yield put(fetchDefaultGoalsSuccess(goalsDTO));
+      }
+      if (massage) yield put(fetchDefaultGoalsError(massage))
+  }
+} 

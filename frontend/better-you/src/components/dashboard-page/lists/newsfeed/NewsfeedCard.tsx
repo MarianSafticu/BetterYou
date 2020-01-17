@@ -6,6 +6,7 @@ import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined"
 import Tooltip from "@material-ui/core/Tooltip";
 import HighlightOff from "@material-ui/icons/HighlightOff";
 import IconButton from "@material-ui/core/IconButton";
+import { NavLink } from "react-router-dom";
 
 interface IProps {
   image: string;
@@ -22,11 +23,13 @@ class NewsfeedCard extends React.Component<IProps, {}> {
     if (this.props.image === "")
       return (
         <Card className="newsfeed_container">
-          <Tooltip title="Go to profile">
-            <Fab color="inherit" className="friend_image">
-              <AccountCircleOutlinedIcon />
-            </Fab>
-          </Tooltip>
+          <NavLink to={"u/" + this.props.name} id="friend_name">
+            <Tooltip title="Go to profile">
+              <Fab color="inherit" className="friend_image">
+                <AccountCircleOutlinedIcon />
+              </Fab>
+            </Tooltip>
+          </NavLink>
 
           <Tooltip title="Close">
             <IconButton aria-label="close" className="close_newsfeed_button">
@@ -35,7 +38,7 @@ class NewsfeedCard extends React.Component<IProps, {}> {
           </Tooltip>
 
           <div className="newsfeed_message">
-            <div id="friend_name">{this.props.name}</div>
+            <div>{this.props.name}</div>
             <div id="friend_action">{this.props.action}</div>
           </div>
         </Card>
@@ -43,9 +46,11 @@ class NewsfeedCard extends React.Component<IProps, {}> {
     else
       return (
         <Card className="newsfeed_container">
-          <Tooltip title="Go to profile">
-            <Fab color="inherit" className="friend_image" style={stil}></Fab>
-          </Tooltip>
+          <NavLink to={"u/" + this.props.name} id="friend_name">
+            <Tooltip title="Go to profile">
+              <Fab color="inherit" className="friend_image" style={stil}></Fab>
+            </Tooltip>
+          </NavLink>
 
           <Tooltip title="Close">
             <IconButton aria-label="close" className="close_newsfeed_button">

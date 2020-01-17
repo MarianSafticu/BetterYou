@@ -40,6 +40,9 @@ import {
   FETCH_FRIENDS_BEGIN,
   FETCH_FRIENDS_SUCCESS,
   FETCH_FRIENDS_ERROR,
+  FETCH_DEFAULT_GOALS_BEGIN,
+  FETCH_DEFAULT_GOALS_SUCCESS,
+  FETCH_DEFAULT_GOALS_ERROR,
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -80,7 +83,10 @@ import {
   setAppBarItemsListHandler,
   fetchFriendsBeginHandler,
   fetchFriendsSuccessHandler,
-  fetchFriendsErrorHandler
+  fetchFriendsErrorHandler,
+  fetchDefaultGoalsBeginHandler,
+  fetchDefaultGoalsSuccessHandler,
+  fetchDefaultGoalsErrorHandler
 } from "./appHandlers";
 
 
@@ -94,7 +100,8 @@ export const initialState: AppState = {
   habits: [],
   friends: [],
   appBarSwipeableDrawer: null,
-  appBarItemsList: []
+  appBarItemsList: [],
+  defaultGoals: [],
 };
 
 
@@ -191,6 +198,14 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return fetchFriendsSuccessHandler(state, action.payload);
     case FETCH_FRIENDS_ERROR:
       return fetchFriendsErrorHandler(state, action.payload);
+
+    case FETCH_DEFAULT_GOALS_BEGIN:
+      return fetchDefaultGoalsBeginHandler(state);
+    case FETCH_DEFAULT_GOALS_SUCCESS:
+      return fetchDefaultGoalsSuccessHandler(state, action.payload);
+    case FETCH_DEFAULT_GOALS_ERROR:
+      return fetchDefaultGoalsErrorHandler(state, action.payload);
+      
     default:
       return state;
   }

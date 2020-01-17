@@ -38,7 +38,10 @@ import {
   SET_APPBAR_ITEMSLISTS,
   FETCH_FRIENDS_BEGIN,
   FETCH_FRIENDS_SUCCESS,
-  FETCH_FRIENDS_ERROR
+  FETCH_FRIENDS_ERROR,
+  FETCH_DEFAULT_GOALS_BEGIN,
+  FETCH_DEFAULT_GOALS_SUCCESS,
+  FETCH_DEFAULT_GOALS_ERROR
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -309,6 +312,25 @@ export function fetchFriendsSuccess(friends: Friend[]): AppActionType {
 export function fetchFriendsError(error: string): AppActionType {
   return {
     type: FETCH_FRIENDS_ERROR,
+     payload: error
+  }
+}
+
+export function fetchDefaultGoalsBegin(): AppActionType {
+  return {
+    type: FETCH_DEFAULT_GOALS_BEGIN,
+    payload: undefined
+  };
+}
+export function fetchDefaultGoalsSuccess(goals: Goal[]): AppActionType {
+  return {
+    type: FETCH_DEFAULT_GOALS_SUCCESS,
+    payload: goals
+  }
+}
+export function fetchDefaultGoalsError(error: string): AppActionType {
+  return {
+    type: FETCH_DEFAULT_GOALS_ERROR,
     payload: error
   }
 }

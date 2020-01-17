@@ -12,6 +12,7 @@ import FetchGoalResponse from "../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../models/requests/AddHabitRequest";
 import FetchFriendsResponse from "../models/responses/FetchFriendsResponse";
+import GoalDTO from "../models/GoalDTO";
 
 export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -129,7 +130,7 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
-
+  
   async fetchFriends(): Promise<FetchFriendsResponse[]> {
     return await fetch(`${url}/friends`, {
       method: "get",
@@ -143,4 +144,19 @@ export default class HttpService implements IHttpService {
         return error;
       });
     }
+
+  async fetchDefaultGoals(): Promise<GoalDTO[]> {
+    return await fetch(`${url}/goals/random?amount=5`, {
+      method: "get",
+      headers: getSafeHeaders()
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
 }
+
