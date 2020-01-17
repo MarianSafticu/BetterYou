@@ -2,8 +2,8 @@ import React from "react";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
-import "../../assets/scss/dashboard-page/GoalListStyle.scss";
-import Goal from "../../models/Goal";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
+import Goal from "../../../../models/Goal";
 import DefaultGoalPopupComponent from "./DefaultGoalViewPopupComponent";
 
 interface IProps {

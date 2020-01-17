@@ -19,6 +19,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import BookIcon from '@material-ui/icons/Book';
 import { getCookie } from "../../services/CookieService";
 
+import DefaultGoals from '../myprofile-page/lists/default-goals/DefaultGoals';
+import FriendList from '../myprofile-page/lists/friend/FriendsList';
 
 interface IProps {
     userInfo: UserDTO | undefined;
@@ -28,7 +30,7 @@ interface IProps {
 
 interface IState {
     url_picture?: string,
-    profile_name?:string,
+    profile_name?: string,
     friends: boolean,
     goals: boolean,
     show: boolean,
@@ -51,7 +53,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
             friends: false,
             goals: false,
             url_picture: (this.props.userInfo !== undefined ? this.props.userInfo.profilePicture : "../assets/photos/profile-picture-test.jpg"),
-            profile_name:getCookie('userInfo'),
+            profile_name: getCookie('userInfo'),
             show: true,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
@@ -69,10 +71,10 @@ export class MyProfileComponent extends Component<IProps, IState>{
             return;
 
         if (window.innerWidth < 850) {
-            this.setState({ show: false});
+            this.setState({ show: false });
         }
         else {
-            this.setState({ show: true});
+            this.setState({ show: true });
         }
     }
 
@@ -85,14 +87,14 @@ export class MyProfileComponent extends Component<IProps, IState>{
                     ref={this.comp}
                 >
                     <List>
-                        {this.state.show && 
-                        <ListItem className="item">
-                            <img id="avatar" src={this.state.url_picture}></img>
-                        </ListItem>}
-                        {this.state.show && 
-                        <ListItem id="username">
-                            <ListItemText primary={this.state.profile_name} />
-                        </ListItem>}
+                        {this.state.show &&
+                            <ListItem className="item">
+                                <img id="avatar" src={this.state.url_picture}></img>
+                            </ListItem>}
+                        {this.state.show &&
+                            <ListItem id="username">
+                                <ListItemText primary={this.state.profile_name} />
+                            </ListItem>}
                         {this.state.show && <Divider />}
                         <ListItem key="Statistici" className="item">
                             <ListItemIcon>
@@ -123,27 +125,14 @@ export class MyProfileComponent extends Component<IProps, IState>{
                 </Drawer>
                 <div id="content_body">
                     {this.state.friends &&
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-                            facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-                            gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-                            donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                            adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-                            Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-                            imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-                            arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-                            donec massa sapien faucibus et molestie ac.
-                </p>
+                        <div>
+                            <FriendList />
+                        </div>
                     }
                     {this.state.goals &&
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-                            facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-                            gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-                            donec ultrices.
-                </p>
+                        <div>
+                            <DefaultGoals/>
+                        </div>
                     }
 
                 </div>

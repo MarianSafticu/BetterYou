@@ -1,11 +1,11 @@
 import React from "react";
 import DefaultGoalCard from "./DefaultGoalCard";
-import Goal from "../../models/Goal";
-import "../../assets/scss/dashboard-page/GoalListStyle.scss";
-import "../../assets/scss/dashboard-page/DashboardPageStyle.scss";
-import { fetchDefaultGoalsBegin } from "../../redux/actions/actions";
+import Goal from "../../../../models/Goal";
+import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
+import "../../../../assets/scss/dashboard-page/DashboardPageStyle.scss";
+import { fetchDefaultGoalsBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
-import AppState from "../../redux/store/store";
+import AppState from "../../../../redux/store/store";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 

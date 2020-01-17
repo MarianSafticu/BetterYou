@@ -1,8 +1,8 @@
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router";
-import UserDTO from "../../models/UserDTO";
-import GoalList from "./lists/goals/GoalList";
-import "../../assets/scss/dashboard-page/FriendPageStyle.scss"
+import UserDTO from "../../../../models/UserDTO";
+import GoalList from "../../../dashboard-page/lists/goals/GoalList";
+import "../../../../assets/scss/dashboard-page/FriendPageStyle.scss"
 import { Button } from "@material-ui/core";
 
 interface IProps {

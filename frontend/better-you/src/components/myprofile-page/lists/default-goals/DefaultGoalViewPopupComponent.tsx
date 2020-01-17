@@ -2,8 +2,8 @@ import React from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import DefaultGoalViewItemComponent from "./DefaultGoalViewItemComponent";
-import Goal from "../../models/Goal";
-import "../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
+import Goal from "../../../../models/Goal";
+import "../../../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
