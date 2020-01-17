@@ -698,7 +698,39 @@ public class CRUDServices {
     }
 
     public void addGoalChallenge(final long userId, final String receiverUsername, final long goalId) {
+        LOG.info("Adding goal challenge from userId={} to username={} for goalId={}", userId, receiverUsername, goalId);
 
+        User sender = userRepo.get(userId);
+        if(sender == null) {
+            LOG.warn("No user found with id={}", userId);
+            throw new ServiceException("Invalid request");
+        }
+
+        User receiver = userRepo.getUserByUsername(receiverUsername);
+        if(receiver == null) {
+            LOG.warn("No user found with username={}", receiverUsername);
+            throw new ServiceException("User to be challenged not found");
+        }
+
+        if(sender.getId().equals(receiver.getId())) {
+            LOG.warn("Cannot send challenge to yourself");
+            throw new ServiceException("Cannot challenge yourslef!");
+        }
+
+        Goal goal = goalRepo.get(goalId);
+        if(goal == null) {
+            LOG.warn("No goal found with id={}", goalId);
+            throw new ServiceException("Goal not found");
+        }
+
+        GoalChallenge goalChallenge = new GoalChallenge(sender, receiver, goal);
+        try {
+            goalChallengeRepo.add(goalChallenge);
+            LOG.info("Goal challenge added successfully");
+        } catch (RepoException e) {
+            LOG.error("Error occurred while adding goal challenge: {}", e.getMessage());
+            throw new ServiceException("Unable to save goal request");
+        }
     }
 
     public void setAcceptanceForChallenge(final long userId, final long challengeId, final boolean acceptance) {

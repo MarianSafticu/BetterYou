@@ -8,6 +8,7 @@ import ServerUI.Requests.Authorization;
 import ServerUI.Requests.Filter;
 import ServerUI.Requests.FilterHabits;
 import ServerUI.Requests.IdRequest;
+import ServerUI.Requests.data.ChallengeRequest;
 import ServerUI.Requests.data.GoalRequest;
 import ServerUI.Requests.data.HabitRequest;
 import ServerUI.Requests.data.UserGoalRequest;
@@ -586,4 +587,21 @@ public class RestServer {
             return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(value = "/challenge", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addHabit(@RequestHeader Authorization authorization, @RequestBody ChallengeRequest challengeRequest) {
+        try {
+            crudServices.addGoalChallenge(authService.getUserIdFromJWT(authorization.getToken()),
+                    challengeRequest.getReceiverUsername(),
+                    challengeRequest.getGoalId());
+            return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }
