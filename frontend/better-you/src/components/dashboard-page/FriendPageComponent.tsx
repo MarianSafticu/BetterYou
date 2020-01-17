@@ -33,7 +33,7 @@ class FriendPageComponent extends React.Component<RouteComponentProps<IProps>, I
             <div className="profile-card-container">
                 <div className="profile-card-border">
                     <div className="profile-card">
-                        <img src={this.state.user.profilePicture} />
+                        <img src={this.state.user.profilePicture} alt="" />
                         <div>
                             <h2>User: {this.state.user.username} </h2>
                             <Button> Add friend </Button>

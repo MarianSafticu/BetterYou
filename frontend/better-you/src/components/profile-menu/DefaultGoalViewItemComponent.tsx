@@ -1,25 +1,15 @@
 import React, { Component, ChangeEvent } from "react";
 import "../../assets/scss/dashboard-page/GeneralGoalViewStyle.scss";
-import { Button, TextField, Fab, Popover, Select, FormControl, InputLabel } from "@material-ui/core";
+import { Button, TextField, Fab } from "@material-ui/core";
 import Goal from "../../models/Goal";
-import Edit from "@material-ui/icons/Edit";
-import Delete from "@material-ui/icons/Delete";
-import Save from "@material-ui/icons/Save";
-import Cancel from "@material-ui/icons/Cancel";
 import Close from "@material-ui/icons/Close";
 import Service from "../../services/Service";
 import { GoalException } from "../../exceptions/GoalException";
-import { goalCategorys, GoalCategory } from "../../models/GoalCategorys";
+import { goalCategorys } from "../../models/GoalCategorys";
 import { connect } from "react-redux";
 import { addGoalBegin } from "../../redux/actions/actions";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
 
-
-/*
-curent progress
-start date
-end date
-*/
 
 interface IProps {
   onFinnishAction: Function;
@@ -61,7 +51,7 @@ class DefaultGoalViewItemComponent extends Component<
       startDate: new Date(),
       endDate: new Date(),
       isPublic: true,
-      category: goalCategorys[goalCategorys.findIndex(c => c.category.toUpperCase() == props.goal.category.category)]
+      category: goalCategorys[goalCategorys.findIndex(c => c.category.toUpperCase() === props.goal.category.category)]
     };
 
     this.state = {
@@ -207,7 +197,7 @@ class DefaultGoalViewItemComponent extends Component<
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           defaultValue={this.getStringFromData(this.state.goal.startDate)}
-          error={this.state.goalError.startDateError.length != 0}
+          error={this.state.goalError.startDateError.length !== 0}
           helperText={this.state.goalError.startDateError}
         ></TextField>
         <TextField
@@ -218,7 +208,7 @@ class DefaultGoalViewItemComponent extends Component<
           type="date"
           variant="outlined"
           defaultValue={this.getStringFromData(this.state.goal.endDate)}
-          error={this.state.goalError.endDateError.length != 0}
+          error={this.state.goalError.endDateError.length !== 0}
           helperText={this.state.goalError.endDateError}
         ></TextField>
         <TextField
@@ -237,7 +227,7 @@ class DefaultGoalViewItemComponent extends Component<
           type="number"
           InputLabelProps={{ shrink: true }}
           defaultValue={this.state.goal.progressToReach}
-          error={this.state.goalError.progressToReachError.length != 0}
+          error={this.state.goalError.progressToReachError.length !== 0}
           helperText={this.state.goalError.progressToReachError}
         ></TextField>
 

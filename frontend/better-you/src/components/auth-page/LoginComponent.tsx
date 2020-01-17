@@ -11,7 +11,7 @@ import SnackbarComponent from "../messages/SnackbarComponent";
 import UserDTO from "../../models/UserDTO";
 import LoginRequest from "../../models/requests/LoginRequest";
 
-import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 

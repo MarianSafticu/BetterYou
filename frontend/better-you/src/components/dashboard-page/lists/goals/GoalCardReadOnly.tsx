@@ -4,14 +4,8 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
-import Tooltip from "@material-ui/core/Tooltip";
-import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
-import Done from "@material-ui/icons/Done";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 import Goal from "../../../../models/Goal";
-import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponent";
 import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded';
 import ThumbDownAltRoundedIcon from '@material-ui/icons/ThumbDownAltRounded';
 

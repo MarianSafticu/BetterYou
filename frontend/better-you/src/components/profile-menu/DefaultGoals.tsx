@@ -15,9 +15,6 @@ interface IProps {
 }
 
 class DefaultGoals  extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
-  }
   componentDidMount() {
     this.props.fetchDefaultGoals();
   }

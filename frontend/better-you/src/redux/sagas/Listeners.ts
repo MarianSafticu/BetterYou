@@ -238,6 +238,7 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
           verified: friend.verified
         }
         friendsDTO.push(friendDTO);
+        return friendDTO;
         });
       yield put(fetchFriendsSuccess(friendsDTO));
     }
@@ -266,6 +267,7 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
             category: { category: goal.category, color: "#e9eff2"}
           }
           goalsDTO.push(goalDTO);
+          return goalDTO;
         });
         yield put(fetchDefaultGoalsSuccess(goalsDTO));
       }
