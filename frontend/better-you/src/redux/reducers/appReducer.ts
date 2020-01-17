@@ -43,6 +43,9 @@ import {
   FETCH_FRIENDS_BEGIN,
   FETCH_FRIENDS_SUCCESS,
   FETCH_FRIENDS_ERROR,
+  FETCH_FRIEND_REQUESTS_BEGIN,
+  FETCH_FRIEND_REQUESTS_SUCCESS,
+  FETCH_FRIEND_REQUESTS_ERROR,
   FETCH_DEFAULT_GOALS_BEGIN,
   FETCH_DEFAULT_GOALS_SUCCESS,
   FETCH_DEFAULT_GOALS_ERROR,
@@ -93,6 +96,9 @@ import {
   fetchFriendsBeginHandler,
   fetchFriendsSuccessHandler,
   fetchFriendsErrorHandler,
+  fetchFriendRequestsBeginHandler,
+  fetchFriendRequestsSuccessHandler,
+  fetchFriendRequestsErrorHandler,
   fetchDefaultGoalsBeginHandler,
   fetchDefaultGoalsSuccessHandler,
   fetchDefaultGoalsErrorHandler,
@@ -107,12 +113,13 @@ export const initialState: AppState = {
   loading: false,
   error: "",
   userInfo: undefined,
-  userInformation:undefined,
+  userInformation: undefined,
   registrationEmailSent: false,
   accountConfirmed: false,
   goals: [],
   habits: [],
   friends: [],
+  friendRequests: [],
   appBarSwipeableDrawer: null,
   appBarItemsList: [],
   defaultGoals: [],
@@ -134,10 +141,10 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case SET_CURRENT_USER_INFORMATION_BEGIN:
       return setCurrentUserInformationBeginHandler(state);
     case SET_CURRENT_USER_INFORMATION_SUCCES:
-      return setCurrentUserInformationSuccesHandler(state,action.payload);
+      return setCurrentUserInformationSuccesHandler(state, action.payload);
     case SET_CURRENT_USER_INFORMATION_ERROR:
-      return setCurrentUserInformationErrorHandler(state,action.payload);
-    
+      return setCurrentUserInformationErrorHandler(state, action.payload);
+
     case REGISTER_USER_BEGIN:
       return registerUserBeginHandler(state);
     case REGISTER_USER_SUCCESS:
@@ -219,6 +226,13 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return fetchFriendsSuccessHandler(state, action.payload);
     case FETCH_FRIENDS_ERROR:
       return fetchFriendsErrorHandler(state, action.payload);
+
+    case FETCH_FRIEND_REQUESTS_BEGIN:
+      return fetchFriendRequestsBeginHandler(state);
+    case FETCH_FRIEND_REQUESTS_SUCCESS:
+      return fetchFriendRequestsSuccessHandler(state, action.payload);
+    case FETCH_FRIEND_REQUESTS_ERROR:
+      return fetchFriendRequestsErrorHandler(state, action.payload);
 
     case FETCH_DEFAULT_GOALS_BEGIN:
       return fetchDefaultGoalsBeginHandler(state);

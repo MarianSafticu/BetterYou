@@ -42,6 +42,9 @@ import {
   FETCH_FRIENDS_BEGIN,
   FETCH_FRIENDS_SUCCESS,
   FETCH_FRIENDS_ERROR,
+  FETCH_FRIEND_REQUESTS_BEGIN,
+  FETCH_FRIEND_REQUESTS_SUCCESS,
+  FETCH_FRIEND_REQUESTS_ERROR,
   FETCH_DEFAULT_GOALS_BEGIN,
   FETCH_DEFAULT_GOALS_SUCCESS,
   FETCH_DEFAULT_GOALS_ERROR,
@@ -339,6 +342,25 @@ export function fetchFriendsSuccess(friends: Friend[]): AppActionType {
 export function fetchFriendsError(error: string): AppActionType {
   return {
     type: FETCH_FRIENDS_ERROR,
+     payload: error
+  }
+}
+
+export function fetchFriendRequestsBegin(): AppActionType {
+  return {
+    type: FETCH_FRIEND_REQUESTS_BEGIN,
+    payload: undefined
+  };
+}
+export function fetchFriendRequestsSuccess(friendRequests: Friend[]): AppActionType {
+  return {
+    type: FETCH_FRIEND_REQUESTS_SUCCESS,
+    payload: friendRequests
+  }
+}
+export function fetchFriendRequestsError(error: string): AppActionType {
+  return {
+    type: FETCH_FRIEND_REQUESTS_ERROR,
      payload: error
   }
 }

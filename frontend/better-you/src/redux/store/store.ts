@@ -16,6 +16,7 @@ export default interface AppState {
   goals: Goal[];
   habits: Habit[];
   friends: Friend[];
+  friendRequests: Friend[];
   appBarSwipeableDrawer: RefObject<any> | null;
   appBarItemsList: AppBarItem[];
   defaultGoals: Goal[];

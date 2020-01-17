@@ -1,5 +1,7 @@
 import React from "react";
 import Friend from "../../../../models/Friend";
+import { connect } from "react-redux";
+import AppState from "../../../../redux/store/store";
 
 interface IProps {
     friendRequestsList: Friend[];
@@ -36,3 +38,18 @@ class FriendsListRequests extends React.Component<IProps, {}> {
         )
     }
 }
+
+
+const mapStateToProps = (state: AppState) => {
+    return {
+      friendRequestsList: state.friends
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch: any) => {
+    return {
+      fetchFriends: () => dispatch(fetchFriendRequestsBegin())
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendsListRequests)

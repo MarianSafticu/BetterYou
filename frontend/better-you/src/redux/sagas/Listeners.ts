@@ -22,6 +22,8 @@ import {
   setCurrentUserInformationBegin,
   fetchFriendsError,
   fetchFriendsSuccess,
+  fetchFriendRequestsError,
+  fetchFriendRequestsSuccess,
   fetchDefaultGoalsError,
   fetchDefaultGoalsSuccess,
   challengeFriendSuccess,
@@ -36,6 +38,7 @@ import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
 import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
+import FetchFriendRequestsResponse from "../../models/responses/FetchFriendRequestsResponse";
 import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
@@ -281,6 +284,30 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
   }
 }
 
+export function* fetchFriendRequestsHandler(action: AppActionType): IterableIterator<any> {
+  const response = yield call(httpService.fetchFriends);
+  if (response) {
+    const { friendRequests, massage } = response;
+    if (friendRequests) {
+      let respFriends: FetchFriendRequestsResponse[] = friendRequests
+      let friendsDTO: Friend[] = []
+      respFriends.map((friend: FetchFriendRequestsResponse) => {
+        let friendDTO: Friend = {
+          id: friend.id,
+          username: friend.username,
+          profile_name: friend.profile_name,
+          email: friend.email,
+          birthDate: new Date(friend.birthDate),
+          points: friend.points,
+          verified: friend.verified
+        }
+        friendsDTO.push(friendDTO);
+      });
+      yield put(fetchFriendRequestsSuccess(friendsDTO));
+    }
+    if (massage) yield put(fetchFriendRequestsError(massage))
+  }
+}
 
 export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.fetchDefaultGoals);

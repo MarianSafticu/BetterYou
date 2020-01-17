@@ -304,9 +304,32 @@ export function fetchFriendsErrorHandler(oldState: AppState, error: string): App
   const newState = {...oldState};
   newState.loading = false;
   newState.error = error;
-  newState.defaultGoals = [];
+  newState.friends = [];
   return newState;
 } 
+
+export function fetchFriendRequestsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+    newState.loading = true;
+    newState.error = "";
+    return newState;
+  }
+  
+  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: Friend[]): AppState {
+    const newState = {...oldState};
+    newState.loading = false;
+    newState.error = "";
+    newState.friendRequests = friendRequests;
+    return newState;
+  }
+  
+  export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
+    const newState = {...oldState};
+    newState.loading = false;
+    newState.error = error;
+    newState.friendRequests = [];
+    return newState;
+  } 
   
 export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};

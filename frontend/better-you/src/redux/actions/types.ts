@@ -71,6 +71,10 @@ export const FETCH_FRIENDS_BEGIN = "FETCH_FRIENDS_BEGIN";
 export const FETCH_FRIENDS_SUCCESS = "FETCH_FRIENDS_SUCCESS";
 export const FETCH_FRIENDS_ERROR = "FETCH_FRIENDS_ERROR";
 
+export const FETCH_FRIEND_REQUESTS_BEGIN = "FETCH_FRIEND_REQUESTS_BEGIN";
+export const FETCH_FRIEND_REQUESTS_SUCCESS = "FETCH_FRIEND_REQUESTS_SUCCESS";
+export const FETCH_FRIEND_REQUESTS_ERROR = "FETCH_FRIEND_REQUESTS_ERROR";
+
 export const FETCH_DEFAULT_GOALS_BEGIN = "FETCH_DEFAULT_GOALS_BEGIN";
 export const FETCH_DEFAULT_GOALS_SUCCESS = "FETCH_DEFAULT_GOALS_SUCCESS";
 export const FETCH_DEFAULT_GOALS_ERROR = "FETCH_DEFAULT_GOALS_ERROR";
@@ -261,7 +265,6 @@ export interface SetAppBarItemsList {
   payload: AppBarItem[];
 }
 
-
 export interface FetchFriendsBegin {
   type: typeof FETCH_FRIENDS_BEGIN;
   payload: undefined;
@@ -272,6 +275,19 @@ export interface FetchFriendsSuccess {
 }
 export interface FetchFriendsError {
   type: typeof FETCH_FRIENDS_ERROR;
+   payload: string;
+}
+
+export interface FetchFriendRequestsBegin {
+  type: typeof FETCH_FRIEND_REQUESTS_BEGIN;
+  payload: undefined;
+}
+export interface FetchFriendRequestsSuccess {
+  type: typeof FETCH_FRIEND_REQUESTS_SUCCESS;
+  payload: Friend[];
+}
+export interface FetchFriendRequestsError {
+  type: typeof FETCH_FRIEND_REQUESTS_ERROR;
    payload: string;
 }
 
@@ -344,6 +360,9 @@ export type AppActionType =
   | FetchFriendsBegin
   | FetchFriendsSuccess
   | FetchFriendsError
+  | FetchFriendRequestsBegin
+  | FetchFriendRequestsSuccess
+  | FetchFriendRequestsError
   | FetchDefaultGoalsBegin
   | FetchDefaultGoalsSuccess
   | FetchDefaultGoalsError

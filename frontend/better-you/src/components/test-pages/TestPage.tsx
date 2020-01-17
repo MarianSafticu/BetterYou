@@ -104,6 +104,7 @@ export default class TestPageComponent extends Component<
           <GeneralHabitViewPopupComponent selfDistructFunction={this.handleCloseHabit} open={this.state.showHabit[0]} />
         </div>
         <FriendsList />
+        <FriendRequestCard />
         <NewsfeedList />
         <GoalList />
         <div>
