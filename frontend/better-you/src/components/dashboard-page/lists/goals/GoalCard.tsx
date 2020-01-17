@@ -17,6 +17,7 @@ import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
 import { fetchFriendsBegin, challengeFriendBegin } from "../../../../redux/actions/actions";
 import ChallengeFriendDTO from "../../../../models/ChallengeFriendDTO";
+import { goalCategorys } from "../../../../models/GoalCategorys";
 
 interface IProps {
   goal: Goal,
@@ -67,12 +68,17 @@ class GoalCard extends React.Component<IProps, IState> {
 
   constructor(prop: IProps) {
     super(prop);
+    var goal = this.props.goal;
+    if(goal.category === undefined)
+      goal.category = goalCategorys[0]
     this.state = {
       goal: this.props.goal,
       showGoalView: false,
       input_progress: 1,
       isChalangeFriendOpen: false
     };
+
+    console.log(this.props.goal)
   }
 
   isReaadOnly = (): boolean => {
@@ -128,7 +134,6 @@ class GoalCard extends React.Component<IProps, IState> {
         >
           <div className="title" onClick={this.handleOpneGoal}>
             {this.props.goal.title}
-            {this.props.goal.groupId}
           </div>
 
           <Button style={{ float: "right", height: "50px", width: "25%" }} onClick={this.handleOpenChalangeFriend}>
@@ -187,7 +192,7 @@ class GoalCard extends React.Component<IProps, IState> {
           <GeneralGoalViewPopupComponent
             selfDistructFunction={this.handleCloseGoal}
             open={this.state.showGoalView}
-            goal={this.state.goal}
+            goal={this.props.goal}
           />
           <Popover
             anchorOrigin={{
