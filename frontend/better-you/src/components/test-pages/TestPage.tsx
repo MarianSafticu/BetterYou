@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../../assets/scss/start-page/StartPageStyle.scss";
 import { Button } from "@material-ui/core";
 import NewsfeedList from "../dashboard-page/lists/newsfeed/NewsfeedList";
-import FriendsList from "../dashboard-page/lists/friends/FriendsList";
+import FriendsList from "../myprofile-page/lists/FriendsList";
 import GoalList from "../dashboard-page/lists/goals/GoalList";
 import HabitList from "../dashboard-page/lists/habits/HabitList";
 import MenuProfilePicture from "../dashboard-page/MenuProfilePicture";

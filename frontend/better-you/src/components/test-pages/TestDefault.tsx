@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../../assets/scss/start-page/StartPageStyle.scss";
-import DefaultGoals from "../profile-menu/DefaultGoals";
+import DefaultGoals from "../myprofile-page/lists/default-goals/DefaultGoals";
 
 interface TestPageComponentProps {}
 

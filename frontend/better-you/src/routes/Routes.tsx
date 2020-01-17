@@ -11,7 +11,7 @@ import DashboardComponent from "../components/dashboard-page/DashboardComponent"
 import LoggedOutRoute from "./custom/LoggedOutRoute";
 import { MyProfileComponent } from "../components/myprofile-page/MyProfileComponent";
 import TestDefault from "../components/test-pages/TestDefault";
-import FriendPageComponent from "../components/dashboard-page/FriendPageComponent";
+import FriendPageComponent from "../components/myprofile-page/lists/friend/FriendPageComponent";
 
 export default class Routes extends Component {
   render() {
