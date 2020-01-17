@@ -65,6 +65,10 @@ export const FETCH_FRIENDS_BEGIN = "FETCH_FRIENDS_BEGIN";
 export const FETCH_FRIENDS_SUCCESS = "FETCH_FRIENDS_SUCCESS";
 export const FETCH_FRIENDS_ERROR = "FETCH_FRIENDS_ERROR";
 
+export const FETCH_DEFAULT_GOALS_BEGIN = "FETCH_DEFAULT_GOALS_BEGIN";
+export const FETCH_DEFAULT_GOALS_SUCCESS = "FETCH_DEFAULT_GOALS_SUCCESS";
+export const FETCH_DEFAULT_GOALS_ERROR = "FETCH_DEFAULT_GOALS_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -234,6 +238,7 @@ export interface SetAppBarItemsList {
   payload: AppBarItem[];
 }
 
+
 export interface FetchFriendsBegin {
   type: typeof FETCH_FRIENDS_BEGIN;
   payload: undefined;
@@ -244,8 +249,22 @@ export interface FetchFriendsSuccess {
 }
 export interface FetchFriendsError {
   type: typeof FETCH_FRIENDS_ERROR;
+   payload: string;
+}
+
+export interface FetchDefaultGoalsBegin {
+  type: typeof FETCH_DEFAULT_GOALS_BEGIN;
+  payload: undefined;
+}
+export interface FetchDefaultGoalsSuccess {
+  type: typeof FETCH_DEFAULT_GOALS_SUCCESS;
+  payload: Goal[];
+}
+export interface FetchDefaultGoalsError {
+  type: typeof FETCH_DEFAULT_GOALS_ERROR;
   payload: string;
 }
+ 
 
 export type AppActionType =
   | SetCurrentUserBegin
@@ -286,4 +305,7 @@ export type AppActionType =
   | SetAppBarItemsList
   | FetchFriendsBegin
   | FetchFriendsSuccess
-  | FetchFriendsError;
+  | FetchFriendsError
+  | FetchDefaultGoalsBegin
+  | FetchDefaultGoalsSuccess
+  | FetchDefaultGoalsError;
