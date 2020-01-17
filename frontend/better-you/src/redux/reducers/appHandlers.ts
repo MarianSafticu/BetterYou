@@ -45,7 +45,7 @@ export function unsetCurrentUserHandler(oldState: AppState): AppState {
 
 export function setCurrentUserInformationBeginHandler(oldState:AppState):AppState{
   const newState = {...oldState};
-  newState.loading = false;
+  newState.loading = true;
   newState.error = "";
   newState.userInformation = undefined;
   return newState;
@@ -59,6 +59,7 @@ export function setCurrentUserInformationSuccesHandler(oldState:AppState,userInf
 }
 export function setCurrentUserInformationErrorHandler(oldState:AppState, error:string):AppState{
   const newState = { ...oldState};
+  newState.loading=false;
   newState.error = error;
   newState.userInformation = undefined;
   return newState;

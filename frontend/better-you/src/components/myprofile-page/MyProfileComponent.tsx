@@ -27,7 +27,7 @@ interface IProps {
 
 interface IState {
     url_picture?: string,
-    username?: string,
+    profile_name?:string,
     friends: boolean,
     goals: boolean,
     show: boolean,
@@ -49,8 +49,8 @@ export class MyProfileComponent extends Component<IProps, IState>{
         this.state = {
             friends: false,
             goals: false,
-            url_picture: (props.userInfo !== undefined ? props.userInfo.profilePicture : "../assets/photos/profile-picture-test.jpg"),
-            username: (props.userInformation !== undefined ? props.userInformation.profile_name : "Profile Name"),
+            url_picture: (this.props.userInfo !== undefined ? this.props.userInfo.profilePicture : "../assets/photos/profile-picture-test.jpg"),
+            profile_name:this.props.userInformation !=undefined ? this.props.userInformation.profile_name : "Profile Name",
             show: true,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
@@ -90,7 +90,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
                         </ListItem>}
                         {this.state.show && 
                         <ListItem id="username">
-                            <ListItemText primary={this.state.username} />
+                            <ListItemText primary={this.state.profile_name} />
                         </ListItem>}
                         {this.state.show && <Divider />}
                         <ListItem key="Statistici" className="item">

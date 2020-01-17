@@ -10,8 +10,10 @@ import { NavLink } from "react-router-dom";
 import "../../assets/scss/generic/AppBarStyle.scss";
 import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
-import { unsetCurrentUser } from "../../redux/actions/actions";
+import { unsetCurrentUser, setCurrentUserInformationBegin } from "../../redux/actions/actions";
 import UserDTO from "../../models/UserDTO";
+import UserInfoDTO from "../../models/UserInfoDTO";
+import { getUserInformationHandler } from "../../redux/sagas/Listeners";
 
 const StyledMenu = withStyles({
   paper: {
@@ -37,7 +39,9 @@ const StyledMenu = withStyles({
 interface IProps {
   image?: string;
   userInfo: UserDTO | undefined;
+  userInformation : UserInfoDTO | undefined;
   logoutUser: Function;
+  getUserInformation : Function;
 }
 
 function MenuProfilePicture(props: IProps) {
@@ -63,6 +67,10 @@ function MenuProfilePicture(props: IProps) {
     props.logoutUser();
   };
 
+  const handleProfileAction = () => {
+    props.getUserInformation();
+  }
+
   return (
     <div>
       <a
@@ -87,7 +95,7 @@ function MenuProfilePicture(props: IProps) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <NavLink to="/profile" className="link">
+            <NavLink to="/profile" className="link" onClick={handleProfileAction}>
               <PersonIcon fontSize="small" /> MyProfile
             </NavLink>
           </ListItemIcon>
@@ -106,13 +114,15 @@ function MenuProfilePicture(props: IProps) {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    userInformation : state.userInformation
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    logoutUser: () => dispatch(unsetCurrentUser())
+    logoutUser: () => dispatch(unsetCurrentUser()),
+    getUserInformation : () => dispatch(setCurrentUserInformationBegin())
   };
 };
 

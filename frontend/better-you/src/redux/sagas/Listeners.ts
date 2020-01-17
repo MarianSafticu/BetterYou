@@ -82,10 +82,10 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
 export function* getUserInformationHandler(action:AppActionType):IterableIterator<any>{
   const response = yield call(httpService.getUserInformation);
   if(response){
-    const {userInformation, massage} = response;
-    if(userInformation){
-      yield put(setCurrentUserInformationSuccess(userInformation));}
-    else if(massage)
+    const {userInfo, massage} = response;
+    if(userInfo){
+      yield put(setCurrentUserInformationSuccess(userInfo));}
+    if(massage)
       yield put(setCurrentUserInformationError(massage))
   }
 }
