@@ -7,6 +7,7 @@ import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
+import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 
 
@@ -39,9 +40,36 @@ export function unsetCurrentUserHandler(oldState: AppState): AppState {
   newState.error = "";
   newState.userInfo = undefined;
   newState.registrationEmailSent = false;
+  newState.userInformation = undefined;
+  newState.userInfo = undefined;
   deleteCookie("token");
   return newState;
 }
+
+export function setCurrentUserInformationBeginHandler(oldState:AppState):AppState{
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  newState.userInformation = undefined;
+  return newState;
+}
+export function setCurrentUserInformationSuccesHandler(oldState:AppState,userInformation:UserInfoDTO):AppState{
+  const newState = { ...oldState};
+  newState.loading=false;
+  newState.error = "";
+  newState.userInformation = userInformation;
+  return newState;
+}
+export function setCurrentUserInformationErrorHandler(oldState:AppState, error:string):AppState{
+  const newState = { ...oldState};
+  newState.loading=false;
+  newState.error = error;
+  newState.userInformation = undefined;
+  return newState;
+}
+
+
+
 
 
 export function registerUserBeginHandler(oldState: AppState): AppState {

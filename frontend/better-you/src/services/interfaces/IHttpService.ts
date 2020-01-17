@@ -7,6 +7,7 @@ import { getCookie } from "../CookieService";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
+import UserInfoDTO from "../../models/UserInfoDTO";
 import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import GoalDTO from "../../models/GoalDTO";
 
@@ -14,6 +15,7 @@ export default interface IHttpService {
   loginUser(requestData: LoginRequest): Promise<LoginResponse>;
   registerUser(requestData: RegisterRequest): Promise<RegisterResponse>;
   confirmAccount(confirmationCode: string): Promise<boolean>;
+  getUserInformation():Promise<UserInfoDTO>;
   fetchGoals(): Promise<FetchGoalResponse[]>;
   addGoal(goal: AddGoalRequest): Promise<number>;
   fetchHabits(): Promise<FetchHabitResponse[]>;
