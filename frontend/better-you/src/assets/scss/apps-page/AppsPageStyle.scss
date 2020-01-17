@@ -1,25 +1,6 @@
 @import "../globals/colors";
 @import "../globals/global";
 
-@media only screen and (max-width: 767px) {
-  .apps-page-container {
-    height: calc(100% - #{$app_bar_height});
-    display: flex;
-    flex-direction: column;
-  }
-
-  .page-content {
-    height: calc(100% - #{$app_bar_height});
-    padding: 30px;
-    text-align: center;
-  }
-
-  .image-content {
-    width: 70%;
-  }
-}
-
-
 @media only screen and (min-width: 768px) {
   .apps-page-container {
     height: calc(100% - #{$app_bar_height});
@@ -36,5 +17,23 @@
   .image-content {
     width: 20%;
     margin: 20px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .apps-page-container {
+    height: calc(100% - #{$app_bar_height});
+    display: flex;
+    flex-direction: row;
+  }
+
+  .page-content {
+    height: calc(100% - #{$app_bar_height});
+    padding: 10px;
+  }
+
+  .image-content {
+    width: 60%;
+    margin-top: 5%;
   }
 }

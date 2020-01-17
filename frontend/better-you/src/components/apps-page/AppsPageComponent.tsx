@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "../../assets/scss/apps-page/AppsPageStyle.scss";
 
 export default class AppsPageComponent extends Component {
