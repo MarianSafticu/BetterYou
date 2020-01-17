@@ -11,6 +11,7 @@ import AppState from "../../../../redux/store/store";
 const goalsList: Goal[] = [
   {
     id: 1,
+    groupId: 4,
     title: "Citeste 10 carti",
     description: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -23,6 +24,7 @@ const goalsList: Goal[] = [
   },
   {
     id: 2,
+    groupId: 5,
     title: "Citeste 11 carti",
     description: "bbb",
     currentProgress: 15,
@@ -34,6 +36,7 @@ const goalsList: Goal[] = [
   },
   {
     id: 3,
+    groupId: 6,
     title: "Citeste 12 carti",
     description: "ccc",
     currentProgress: 66,

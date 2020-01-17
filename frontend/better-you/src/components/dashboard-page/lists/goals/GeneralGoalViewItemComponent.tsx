@@ -44,6 +44,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
   service: Service;
   initialGoal: Goal = {
     title: "",
+    groupId: 0,
     description: "",
     currentProgress: 0,
     progressToReach: 1,
@@ -59,6 +60,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     var goal: Goal = {
       id: null,
       title: "",
+      groupId: 0,
       description: "",
       currentProgress: 0,
       progressToReach: 1,
@@ -81,6 +83,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     if (props.goal !== null && props.goal !== undefined) {
       this.initialGoal = {
         id: props.goal.id,
+        groupId: props.goal.groupId,
         title: props.goal.title,
         description: props.goal.description,
         currentProgress: props.goal.currentProgress,
@@ -370,6 +373,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
     this.state.goal.progressToReach = this.initialGoal.progressToReach;
     this.state.goal.startDate = this.initialGoal.startDate;
     this.state.goal.isPublic = this.initialGoal.isPublic;
+    this.state.goal.groupId = this.initialGoal.groupId;
     this.props.onFinnishAction();
   };
 
