@@ -121,6 +121,10 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
       let goals: FetchGoalResponse[] = userGoals
       let goalsDTO: Goal[] = []
       goals.map((goal: FetchGoalResponse) => {
+        let category = goalCategorys.filter(x => x.category === goal.goal.category)[0];
+        if(category === undefined)
+          category = category[0]
+
         let goalDTO: Goal = {
           id: goal.id,
           groupId: goal.goal.id,
@@ -131,7 +135,7 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
           currentProgress: goal.currentProgress,
           progressToReach: goal.goal.progressToReach,
           isPublic: goal.public,
-          category: { category: goal.goal.category, color: "#e9eff2" }
+          category: category
         }
         goalsDTO.push(goalDTO);
       });
@@ -148,6 +152,10 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
   if (response) {
     const { id, massage } = response;
     if (id) {
+      let category = goalCategorys.filter(x => x.category === goal.goal.category)[0];
+      if(category === undefined)
+        category = category[0]
+
       let goalComplete: Goal = {
         id: id,
         groupId: goal.goal.id,
@@ -158,7 +166,7 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
         currentProgress: 0,
         progressToReach: goal.goal.progressToReach,
         isPublic: goal.public,
-        category: (<any>goalCategorys)[goal.goal.category]
+        category: category
       }
       yield put(addGoalSuccess(goalComplete))
     }

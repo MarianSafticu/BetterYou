@@ -102,9 +102,6 @@ interface IProps {
 class GoalList extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
-    this.state = {
-      goals: goalsList
-    }
   }
 
   componentDidMount() {
@@ -123,6 +120,9 @@ class GoalList extends React.Component<IProps, {}> {
       <div className="container">
         {
           this.props.goals.map((goal, index) => {
+            if(goal.category === undefined)
+              goal.category = goalCategorys[0];
+
             if (this.props.isReadOnly === true)
               return <div key={index}>
                 <GoalCardReadOnly goal={goal} />

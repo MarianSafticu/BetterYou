@@ -66,18 +66,14 @@ const friends: Friend[] = [
 
 class GoalCard extends React.Component<IProps, IState> {
 
-  constructor(prop: IProps) {
-    super(prop);
-    var goal = this.props.goal;
-    if(goal.category === undefined)
-      goal.category = goalCategorys[0]
+  constructor(props: IProps) {
+    super(props);
     this.state = {
       goal: this.props.goal,
       showGoalView: false,
       input_progress: 1,
       isChalangeFriendOpen: false
     };
-
     console.log(this.props.goal)
   }
 
