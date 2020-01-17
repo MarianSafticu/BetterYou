@@ -118,6 +118,8 @@ class HabitList extends React.Component<IProps, {}> {
         {this.props.habits.map(function(habit, index) {
           if(habit.category === undefined)
             habit.category = goalCategorys[0];
+          if(habit.repetitionType === undefined)
+            habit.repetitionType = Repetition.Daily;
           return (
             <div key={index}>
               <HabitCard habit={habit} />

@@ -122,7 +122,7 @@ export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any>
       let goalsDTO: Goal[] = []
       goals.map((goal: FetchGoalResponse) => {
         let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === goal.goal.category)[0];
-        if(category === undefined)
+        if (category === undefined)
           category = category[0]
 
         let goalDTO: Goal = {
@@ -153,7 +153,7 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
     const { id, massage } = response;
     if (id) {
       let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === goal.goal.category)[0];
-      if(category === undefined)
+      if (category === undefined)
         category = category[0]
 
       let goalComplete: Goal = {
@@ -194,15 +194,18 @@ export function* fetchHabitsHandler(action: AppActionType): IterableIterator<any
       let habitsDTO: Habit[] = []
       respHabits.map((habit: FetchHabitResponse) => {
         let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === habit.category)[0];
-        if(category === undefined)
+        if (category === undefined)
           category = category[0]
+        let repetitionType = Repetition.Daily;
+        if (habit.repetitionType === Repetition.Weekly.toLocaleUpperCase())
+          repetitionType = Repetition.Weekly;
 
         let habitDTO: Habit = {
           id: habit.id,
           title: habit.title,
           description: habit.description,
           startDate: new Date(habit.startDate),
-          repetitionType: (<any>Repetition)[habit.repetitionType],
+          repetitionType: repetitionType,
           category: category,
           dates: habit.dates.map(date => new Date(date))
         }
@@ -222,15 +225,18 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
     const { id, massage } = response;
     if (id) {
       let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === habit.habit.category)[0];
-      if(category === undefined)
+      if (category === undefined)
         category = category[0]
+      let repetitionType = Repetition.Daily;
+      if (habit.habit.repetitionType === Repetition.Weekly.toLocaleUpperCase())
+        repetitionType = Repetition.Weekly;
 
       let habitComplete: Habit = {
         id: id,
         title: habit.habit.title,
         description: habit.habit.description,
         startDate: new Date(),
-        repetitionType: (<any>Repetition)[habit.habit.repetitionType],
+        repetitionType: repetitionType,
         category: category,
         dates: habit.habit.dates.map(date => new Date(date))
       }
@@ -302,7 +308,7 @@ export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterat
     }
     if (massage) yield put(fetchDefaultGoalsError(massage))
   }
-} 
+}
 
 export function* challengeFriendHandler(action: AppActionType): IterableIterator<any> {
   let challenge: ChallengeFriendDTO = action.payload as ChallengeFriendDTO;
