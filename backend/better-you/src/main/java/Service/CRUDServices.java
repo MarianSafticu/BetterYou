@@ -269,7 +269,7 @@ public class CRUDServices {
             LOG.info("Successfully updated goal {}", userGoalId);
         } catch (RepoException e) {
             LOG.error("Error occurred while deleting user goal in repo: {}", e.getMessage());
-            throw new ServiceException("Error occurred while deleting goal in repo");
+            throw new ServiceException("Cannot delete", e);
         }
     }
 
@@ -356,8 +356,8 @@ public class CRUDServices {
         }
     }
 
-    public void deleteHabit(final Habit habit, final long userId) {
-        Habit originalHabit = habitsRepo.get(habit.getId());
+    public void deleteHabit(final long habitId, final long userId) {
+        Habit originalHabit = habitsRepo.get(habitId);
 
         if (originalHabit == null) {
             throw new ServiceException("Habit not found with the given id");
@@ -368,7 +368,7 @@ public class CRUDServices {
         }
 
         try {
-            habitsRepo.delete(habit.getId());
+            habitsRepo.delete(habitId);
         } catch (RepoException e) {
             LOG.error("Repo exception occurred while deleting habit: {}", e.getMessage());
             throw new ServiceException("Something went wrong while deleting habit", e);

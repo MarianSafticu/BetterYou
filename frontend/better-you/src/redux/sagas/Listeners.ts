@@ -21,6 +21,8 @@ import {
   deleteGoalError,
   deleteHabitSuccess,
   deleteHabitError,
+  fetchFriendsError,
+  fetchFriendsSuccess,
   fetchDefaultGoalsError,
   fetchDefaultGoalsSuccess,
 } from "../actions/actions";
@@ -32,12 +34,13 @@ import RegisterRequest from "../../models/requests/RegisterRequest";
 import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
+import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import { goalCategorys } from "../../models/GoalCategorys";
+import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
-
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -217,29 +220,55 @@ export function* deleteHabitHandler(action: AppActionType): IterableIterator<any
   }
 }
 
-export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
-  const response = yield call(httpService.fetchDefaultGoals);
+export function* fetchFriendsHandler(action: AppActionType): IterableIterator<any> {
+  const response = yield call(httpService.fetchFriends);
   if (response) {
-    const { goals, massage } = response;
-    if (goals) {
-      let defaultGoals: GoalDTO[] = goals
-      let goalsDTO: Goal[] = []
-      defaultGoals.map((goal: GoalDTO) => {
-        let goalDTO: Goal = {
-          id: goal.id,
-          title: goal.title,
-          description: goal.description,
-          startDate: new Date(),
-          endDate: new Date(),
-          currentProgress: 0,
-          progressToReach: goal.progressToReach,
-          isPublic: true,
-          category: { category: goal.category, color: "#e9eff2"}
+    const { friends, massage } = response;
+    if (friends) {
+      let respFriends: FetchFriendsResponse[] = friends
+      let friendsDTO: Friend[] = []
+      respFriends.map((friend: FetchFriendsResponse) => {
+        let friendDTO: Friend = {
+          id: friend.id,
+          username: friend.username,
+          profile_name: friend.profile_name,
+          email: friend.email,
+          birthDate: new Date(friend.birthDate),
+          points: friend.points,
+          verified: friend.verified
         }
-        goalsDTO.push(goalDTO);
-      });
-      yield put(fetchDefaultGoalsSuccess(goalsDTO));
+        friendsDTO.push(friendDTO);
+        });
+      yield put(fetchFriendsSuccess(friendsDTO));
     }
-    if (massage) yield put(fetchDefaultGoalsError(massage))
+    if (massage) yield put(fetchFriendsError(massage))
   }
 }
+
+    
+  export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
+    const response = yield call(httpService.fetchDefaultGoals);
+    if (response) {
+      const { goals, massage } = response;
+      if (goals) {
+        let defaultGoals: GoalDTO[] = goals
+        let goalsDTO: Goal[] = []
+        defaultGoals.map((goal: GoalDTO) => {
+          let goalDTO: Goal = {
+            id: goal.id,
+            title: goal.title,
+            description: goal.description,
+            startDate: new Date(),
+            endDate: new Date(),
+            currentProgress: 0,
+            progressToReach: goal.progressToReach,
+            isPublic: true,
+            category: { category: goal.category, color: "#e9eff2"}
+          }
+          goalsDTO.push(goalDTO);
+        });
+        yield put(fetchDefaultGoalsSuccess(goalsDTO));
+      }
+      if (massage) yield put(fetchDefaultGoalsError(massage))
+  }
+} 

@@ -7,6 +7,7 @@ import { getCookie } from "../CookieService";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
+import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import GoalDTO from "../../models/GoalDTO";
 
 export default interface IHttpService {
@@ -19,6 +20,7 @@ export default interface IHttpService {
   fetchHabits(): Promise<FetchHabitResponse[]>;
   addHabit(habit: AddHabitRequest): Promise<number>;
   deleteHabit(id: number): Promise<boolean>;
+  fetchFriends(): Promise<FetchFriendsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;
 }
 
