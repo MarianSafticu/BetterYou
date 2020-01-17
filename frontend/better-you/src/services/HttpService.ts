@@ -13,6 +13,7 @@ import FetchHabitResponse from "../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../models/requests/AddHabitRequest";
 import UserInfoDTO from "../models/UserInfoDTO";
 import FetchFriendsResponse from "../models/responses/FetchFriendsResponse";
+import FetchFriendRequestsResponse from "../models/responses/FetchFriendRequestsResponse";
 import GoalDTO from "../models/GoalDTO";
 import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
 
@@ -22,7 +23,7 @@ export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404
 
 export default class HttpService implements IHttpService {
   private static instance: HttpService;
-  private constructor() {}
+  private constructor() { }
   static getInstance() {
     if (!HttpService.instance) HttpService.instance = new HttpService();
     return HttpService.instance;
@@ -73,18 +74,18 @@ export default class HttpService implements IHttpService {
       });
   }
 
-  async getUserInformation():Promise<UserInfoDTO>{
-    return await fetch(`${url}/user/info`,{
-      method:"get",
-      headers:getSafeHeaders()
+  async getUserInformation(): Promise<UserInfoDTO> {
+    return await fetch(`${url}/user/info`, {
+      method: "get",
+      headers: getSafeHeaders()
     })
-    .then(response => response.json())
-    .then(body => {
-      return body;
-    })
-    .catch(error => {
-      return error;
-    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      })
   }
 
   async fetchGoals(): Promise<FetchGoalResponse[]> {
@@ -146,7 +147,7 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
-  
+
   async fetchFriends(): Promise<FetchFriendsResponse[]> {
     return await fetch(`${url}/friends`, {
       method: "get",
@@ -159,7 +160,21 @@ export default class HttpService implements IHttpService {
       .catch(error => {
         return error;
       });
-    }
+  }
+
+  async fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]> {
+    return await fetch(`${url}/friend/request/list`, {
+      method: "post",
+      headers: getSafeHeaders()
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
 
   async fetchDefaultGoals(): Promise<GoalDTO[]> {
     return await fetch(`${url}/goals/random?amount=5`, {
@@ -190,5 +205,38 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
+
+  async acceptFriendRequest(usernameReceiver: string): Promise<boolean> {
+    console.log(usernameReceiver)
+    return await fetch(`${url}/friend/request/accept`, {
+      method: "post",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(usernameReceiver)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
+  async declineFriendRequest(usernameReceiver: string): Promise<boolean> {
+    console.log(usernameReceiver)
+    return await fetch(`${url}/friend/request/reject`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(usernameReceiver)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
 }
 

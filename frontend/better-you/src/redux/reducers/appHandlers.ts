@@ -10,6 +10,7 @@ import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import FriendRequest from "../../models/FriendRequest";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -304,9 +305,32 @@ export function fetchFriendsErrorHandler(oldState: AppState, error: string): App
   const newState = {...oldState};
   newState.loading = false;
   newState.error = error;
-  newState.defaultGoals = [];
+  newState.friends = [];
   return newState;
 } 
+
+export function fetchFriendRequestsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+    newState.loading = true;
+    newState.error = "";
+    return newState;
+  }
+  
+  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
+    const newState = {...oldState};
+    newState.loading = false;
+    newState.error = "";
+    newState.friendRequests = friendRequests;
+    return newState;
+  }
+  
+  export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
+    const newState = {...oldState};
+    newState.loading = false;
+    newState.error = error;
+    newState.friendRequests = [];
+    return newState;
+  } 
   
 export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
@@ -347,3 +371,43 @@ export function challengeFriendErrorHandler(oldState: AppState, error: string): 
   newState.error = error;
   return newState;
 } 
+
+// export function acceptFriendBeginHandler(oldState: AppState): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = "";
+//   newState.friends = oldState.friends;
+//   return newState;
+// }
+// export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = "";
+  
+//   let newGoals = newState.goals.slice();
+//   newGoals.splice(0, 0, goal);
+//   newState.goals = newGoals;
+
+//   return newState;
+// }
+// export function addGoalErrorHandler(oldState: AppState, error: string): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = error;
+//   newState.goals = oldState.goals;
+//   return newState;
+// }
+
+
+export function declineFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  return newState;
+}
+export function declineFriendSuccessHandler(oldState: AppState, username: string): AppState {
+  const newState = {...oldState};
+  return newState;
+}
+export function declineFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  return newState;
+}

@@ -22,10 +22,14 @@ import {
   setCurrentUserInformationBegin,
   fetchFriendsError,
   fetchFriendsSuccess,
+  fetchFriendRequestsError,
+  fetchFriendRequestsSuccess,
   fetchDefaultGoalsError,
   fetchDefaultGoalsSuccess,
   challengeFriendSuccess,
   challengeFriendError,
+  declineFriendError,
+  declineFriendSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -36,6 +40,7 @@ import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import FetchGoalResponse from "../../models/responses/FetchGoalResponse";
 import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
 import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
+import FetchFriendRequestsResponse from "../../models/responses/FetchFriendRequestsResponse";
 import Habit from "../../models/Habit";
 import { Repetition } from "../../models/Repetition";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
@@ -45,6 +50,7 @@ import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import FriendRequest from "../../models/FriendRequest";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -281,6 +287,27 @@ export function* fetchFriendsHandler(action: AppActionType): IterableIterator<an
   }
 }
 
+export function* fetchFriendRequestsHandler(action: AppActionType): IterableIterator<any> {
+  const response = yield call(httpService.fetchFriendRequests);
+  if (response) {
+    const { friendRequests, massage } = response;
+    if (friendRequests) {
+      let respFriends: FetchFriendRequestsResponse[] = friendRequests
+      let requestsDTO: FriendRequest[] = []
+      respFriends.map((request: FetchFriendRequestsResponse) => {
+        let friendRequestDTO: FriendRequest = {
+          id: request.id,
+          sender: request.sender,
+          receiver: request.receiver,
+        }
+        requestsDTO.push(friendRequestDTO);
+        return friendRequestDTO;
+      });
+      yield put(fetchFriendRequestsSuccess(requestsDTO));
+    }
+    if (massage) yield put(fetchFriendRequestsError(massage))
+  }
+}
 
 export function* fetchDefaultGoalsHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.fetchDefaultGoals);
@@ -319,4 +346,18 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
     else if (massage) yield put(challengeFriendError(massage));
   }
 
+} 
+
+
+export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
+  //TODO: implementat
+  let username: string = action.payload as string;
+  const response = yield call(httpService.declineFriendRequest, username);
+
+  if(response){
+    const { isDeclined, massage } = response;
+    if(isDeclined){
+      //TODO: implementat
+    }
+  }
 }

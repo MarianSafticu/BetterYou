@@ -9,6 +9,7 @@ import FetchHabitResponse from "../../models/responses/FetchHabitResponse";
 import AddHabitRequest from "../../models/requests/AddHabitRequest";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
+import FetchFriendRequestsResponse from "../../models/responses/FetchFriendRequestsResponse";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 
@@ -22,8 +23,10 @@ export default interface IHttpService {
   fetchHabits(): Promise<FetchHabitResponse[]>;
   addHabit(habit: AddHabitRequest): Promise<number>;
   fetchFriends(): Promise<FetchFriendsResponse[]>;
+  fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;
   challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean>;
+  declineFriendRequest(usernameReceiver: string): Promise<boolean>;
 }
 
 export function getHeaders() {
