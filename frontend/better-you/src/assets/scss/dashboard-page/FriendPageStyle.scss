@@ -1,0 +1,69 @@
+@import "../globals/colors";
+@import "../globals/global";
+
+.profile-card-container{
+    width: 90vw;
+    margin: auto;
+    height: calc(100vh - #{$app_bar_height});
+    flex : 1;
+    overflow-y:scroll;
+}
+
+.goallist-container-div{
+    background: linear-gradient($color5, $color6);
+}
+
+.profile-card-border{
+    width: 100%;
+    min-height: 25vh;
+    border-radius: 25px 25px 0 0;
+    background: linear-gradient($color6, $color5);
+}
+.profile-card{
+    margin: 0px 7px 0px 7px;
+    border-radius: 25px 25px 25px 25px;
+
+    height: 100%;
+    background: linear-gradient($color5, $color6);
+    overflow: hidden; /* will contain if #first is longer than #second */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-card>div{
+    width: 50%;
+    align-items: center;
+    padding-right: 10vw;
+    margin: auto;
+}
+.profile-card>div>button{
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 25px;
+}
+
+.profile-card>img{
+    width: 50vw;
+    height: 50vw;
+
+    max-width: 150px;
+    max-height: 150px;
+    margin: auto;
+
+    border: 1px solid  gray;
+    border-radius: 50%;
+}
+
+@media screen and (max-width:  #{$mobile_witdh_threshold}) {
+    .profile-card-container{
+        width: 100%;
+    }
+    .profile-card>div>button{
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 25px;
+    }
+}
