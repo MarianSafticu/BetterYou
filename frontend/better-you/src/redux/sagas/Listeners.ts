@@ -51,7 +51,6 @@ export function* loginUserHandler(action: AppActionType): IterableIterator<any> 
         profilePicture: "../assets/photos/profile-picture-test.jpg",
         isAuthenticated: true
       };
-      // getUserInformationHandler(setCurrentUserInformationBegin());
       const response = yield call(httpService.getUserInformation);
       if(response){
         const {userInfo, massage} = response;

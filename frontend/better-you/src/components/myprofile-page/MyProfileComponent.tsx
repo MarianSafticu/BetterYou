@@ -51,7 +51,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
             friends: false,
             goals: false,
             url_picture: (this.props.userInfo !== undefined ? this.props.userInfo.profilePicture : "../assets/photos/profile-picture-test.jpg"),
-            profile_name:this.props.userInformation !=undefined ? this.props.userInformation.profile_name : "Profile Name",
+            profile_name:getCookie('userInfo'),
             show: true,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
@@ -77,7 +77,6 @@ export class MyProfileComponent extends Component<IProps, IState>{
     }
 
     render() {
-        console.log("IN profile COMP", this.props.userInformation, getCookie("userInfo"))
         return (
             <div>
                 <Drawer
@@ -92,7 +91,7 @@ export class MyProfileComponent extends Component<IProps, IState>{
                         </ListItem>}
                         {this.state.show && 
                         <ListItem id="username">
-                            <ListItemText primary={this.props.userInformation !=undefined ? this.props.userInformation.profile_name : "Profile Name"} />
+                            <ListItemText primary={this.state.profile_name} />
                         </ListItem>}
                         {this.state.show && <Divider />}
                         <ListItem key="Statistici" className="item">
