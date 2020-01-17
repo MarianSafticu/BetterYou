@@ -56,7 +56,7 @@ class DefaultGoalCard extends React.Component<IProps, IState> {
           <DefaultGoalPopupComponent
             selfDistructFunction={this.handleCloseGoal}
             open={this.state.showGoalView}
-            goal={this.state.goal}
+            goal={this.props.goal}
           />
         </div>
       </Card>
