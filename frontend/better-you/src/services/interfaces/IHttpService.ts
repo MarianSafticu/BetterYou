@@ -26,6 +26,7 @@ export default interface IHttpService {
   fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;
   challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean>;
+  declineFriendRequest(usernameReceiver: string): Promise<boolean>;
 }
 
 export function getHeaders() {

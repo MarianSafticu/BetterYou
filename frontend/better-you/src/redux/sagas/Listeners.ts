@@ -351,4 +351,13 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
 
 export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
   //TODO: implementat
+  let username: string = action.payload as string;
+  const response = yield call(httpService.declineFriendRequest, username);
+
+  if(response){
+    const { isDeclined, massage } = response;
+    if(isDeclined){
+      //TODO: implementat
+    }
+  }
 }
