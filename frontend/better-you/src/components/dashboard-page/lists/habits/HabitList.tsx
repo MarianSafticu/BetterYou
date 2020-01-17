@@ -116,6 +116,8 @@ class HabitList extends React.Component<IProps, {}> {
     return (
       <div className="container">
         {this.props.habits.map(function(habit, index) {
+          if(habit.category === undefined)
+            habit.category = goalCategorys[0];
           return (
             <div key={index}>
               <HabitCard habit={habit} />

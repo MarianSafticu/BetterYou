@@ -74,7 +74,6 @@ class GoalCard extends React.Component<IProps, IState> {
       input_progress: 1,
       isChalangeFriendOpen: false
     };
-    console.log(this.props.goal)
   }
 
   isReaadOnly = (): boolean => {
