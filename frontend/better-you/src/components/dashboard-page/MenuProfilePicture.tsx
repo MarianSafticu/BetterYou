@@ -12,8 +12,6 @@ import { connect } from "react-redux";
 import AppState from "../../redux/store/store";
 import { unsetCurrentUser, setCurrentUserInformationBegin } from "../../redux/actions/actions";
 import UserDTO from "../../models/UserDTO";
-import UserInfoDTO from "../../models/UserInfoDTO";
-import { getUserInformationHandler } from "../../redux/sagas/Listeners";
 
 const StyledMenu = withStyles({
   paper: {
@@ -39,9 +37,7 @@ const StyledMenu = withStyles({
 interface IProps {
   image?: string;
   userInfo: UserDTO | undefined;
-  userInformation : UserInfoDTO | undefined;
   logoutUser: Function;
-  // getUserInformation : Function;
 }
 
 function MenuProfilePicture(props: IProps) {
@@ -67,10 +63,6 @@ function MenuProfilePicture(props: IProps) {
     props.logoutUser();
   };
 
-  const handleProfileAction = () => {
-    // props.getUserInformation();
-  }
-
   return (
     <div>
       <a
@@ -95,7 +87,7 @@ function MenuProfilePicture(props: IProps) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <NavLink to="/profile" className="link" onClick={handleProfileAction}>
+            <NavLink to="/profile" className="link">
               <PersonIcon fontSize="small" /> MyProfile
             </NavLink>
           </ListItemIcon>
@@ -115,14 +107,12 @@ function MenuProfilePicture(props: IProps) {
 const mapStateToProps = (state: AppState) => {
   return {
     userInfo: state.userInfo,
-    userInformation : state.userInformation
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     logoutUser: () => dispatch(unsetCurrentUser()),
-    // getUserInformation : () => dispatch(setCurrentUserInformationBegin())
   };
 };
 
