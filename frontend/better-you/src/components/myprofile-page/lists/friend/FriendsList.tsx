@@ -4,6 +4,7 @@ import Friend from "../../../../models/Friend";
 import { fetchFriendsBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
 import AppState from "../../../../redux/store/store";
+import SearchComponent from "./SearchComponent";
 
 
 interface IProps {
@@ -40,6 +41,7 @@ class FriendsList extends React.Component<IProps, {}> {
                         )
                     })
                 }
+                <SearchComponent/>
             </div>
         )
     }

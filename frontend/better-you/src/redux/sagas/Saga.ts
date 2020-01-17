@@ -17,7 +17,8 @@ import {
   CHALLENGE_FRIEND_BEGIN,
   FETCH_FRIEND_REQUESTS_BEGIN,
   ACCEPT_FRIEND_BEGIN,
-  DECLINE_FRIEND_BEGIN
+  DECLINE_FRIEND_BEGIN,
+  FETCH_USERS_BEGIN
 } from "../actions/types";
 import {
   loginUserHandler,
@@ -37,6 +38,7 @@ import {
   challengeFriendHandler,
   fetchFriendRequestsHandler,
   declineFriendHandler,
+  fetchUsersHandler
 } from "./Listeners";
 
 export function* generalSaga(): IterableIterator<any> {
@@ -57,4 +59,5 @@ export function* generalSaga(): IterableIterator<any> {
   yield takeEvery(FETCH_DEFAULT_GOALS_BEGIN, fetchDefaultGoalsHandler);
   yield takeEvery(CHALLENGE_FRIEND_BEGIN, challengeFriendHandler);
   yield takeEvery(DECLINE_FRIEND_BEGIN, declineFriendHandler);
+  yield takeEvery(FETCH_USERS_BEGIN, fetchUsersHandler);
 }

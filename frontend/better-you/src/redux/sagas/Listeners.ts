@@ -29,7 +29,9 @@ import {
   challengeFriendSuccess,
   challengeFriendError,
   declineFriendError,
-  declineFriendSuccess
+  declineFriendSuccess,
+  fetchUsersError,
+  fetchUsersSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -359,5 +361,17 @@ export function* declineFriendHandler(action: AppActionType): IterableIterator<a
     if(isDeclined){
       //TODO: implementat
     }
+  }
+}
+
+export function* fetchUsersHandler(action: AppActionType): IterableIterator<any> {
+  let prefix: string = action.payload as string;
+  const response = yield call(httpService.fetchUsers, prefix);
+  if (response) {
+    const { users, massage } = response;
+    if (users) {
+      yield put(fetchUsersSuccess(users));
+    }
+    if (massage) yield put(fetchUsersError(massage))
   }
 }

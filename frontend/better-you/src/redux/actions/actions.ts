@@ -57,6 +57,9 @@ import {
   DECLINE_FRIEND_BEGIN,
   DECLINE_FRIEND_SUCCESS,
   DECLINE_FRIEND_ERROR,
+  FETCH_USERS_BEGIN,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_ERROR,
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -446,4 +449,22 @@ export function declineFriendError(error: string): AppActionType {
     type: DECLINE_FRIEND_ERROR,
     payload: error
   };
+}
+export function fetchUsersBegin(prefix: string): AppActionType {
+  return {
+    type: FETCH_USERS_BEGIN,
+    payload: prefix
+  };
+}
+export function fetchUsersSuccess(users: UserInfoDTO[]): AppActionType {
+  return {
+    type: FETCH_USERS_SUCCESS,
+    payload: users
+  }
+}
+export function fetchUsersError(error: string): AppActionType {
+  return {
+    type: FETCH_USERS_ERROR,
+    payload: error
+  }
 }

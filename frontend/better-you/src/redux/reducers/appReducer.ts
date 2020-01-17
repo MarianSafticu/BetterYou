@@ -55,6 +55,9 @@ import {
   DECLINE_FRIEND_BEGIN,
   DECLINE_FRIEND_SUCCESS,
   DECLINE_FRIEND_ERROR,
+  FETCH_USERS_BEGIN,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_ERROR
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -111,6 +114,9 @@ import {
   declineFriendBeginHandler,
   declineFriendSuccessHandler,
   declineFriendErrorHandler,
+  fetchUsersBeginHandler,
+  fetchUsersSuccessHandler,
+  fetchUsersErrorHandler
 } from "./appHandlers";
 import { setCurrentUserInformationError } from "../actions/actions";
 
@@ -129,6 +135,7 @@ export const initialState: AppState = {
   appBarSwipeableDrawer: null,
   appBarItemsList: [],
   defaultGoals: [],
+  users: [],
 };
 
 
@@ -260,6 +267,13 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return declineFriendSuccessHandler(state, action.payload);
     case DECLINE_FRIEND_ERROR:
       return declineFriendErrorHandler(state, action.payload);
+
+    case FETCH_USERS_BEGIN:
+      return fetchUsersBeginHandler(state);
+    case FETCH_USERS_SUCCESS:
+      return fetchUsersSuccessHandler(state, action.payload);
+    case FETCH_USERS_ERROR:
+      return fetchUsersErrorHandler(state, action.payload);  
 
     default:
       return state;

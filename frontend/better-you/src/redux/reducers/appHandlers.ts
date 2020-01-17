@@ -411,3 +411,24 @@ export function declineFriendErrorHandler(oldState: AppState, error: string): Ap
   const newState = {...oldState};
   return newState;
 }
+
+export function fetchUsersBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchUsersSuccessHandler(oldState: AppState, users: UserInfoDTO[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.users = users;
+  return newState;
+}
+export function fetchUsersErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.users = [];
+  return newState;
+} 
