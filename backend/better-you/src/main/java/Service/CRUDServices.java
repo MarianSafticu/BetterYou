@@ -257,7 +257,7 @@ public class CRUDServices {
             userRepo.updateUserGoal(userId, userGoal.getId(), userGoal.getEndDate(), userGoal.isPublic(), userGoal.getCurrentProgress());
         } catch (RepoException e) {
             LOG.error("Error occurred while updating goal in repo: {}", e.getMessage());
-            throw new ServiceException("Error occurred while updating goal in repo");
+            throw new ServiceException(e.getMessage());
         }
     }
 
