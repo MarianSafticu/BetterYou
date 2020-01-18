@@ -18,7 +18,7 @@ class FriendRequestCard extends React.Component<IProps, {}> {
         { console.log("SENDER", this.props.sender) }
 
         return (
-            <Card className="friend_container">
+            <Card className="friend_container_request">
                 <div className="card_request_div" onClick={() => { console.log(this.props.sender.username) }}>
                     <img src={this.props.image} className="friend_image_page"></img>
                     <div className="friend_name_page">{this.props.sender.profile_name}</div>

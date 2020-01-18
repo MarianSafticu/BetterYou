@@ -238,6 +238,5 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
-
 }
 
