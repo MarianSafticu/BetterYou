@@ -6,6 +6,9 @@ import Model.UserGoal;
 public class UserGoalRequest {
     private UserGoal userGoal;
 
+    public UserGoalRequest() {
+    }
+
     public UserGoalRequest(UserGoal userGoal) {
         this.userGoal = userGoal;
     }

@@ -28,6 +28,8 @@ import {
   fetchDefaultGoalsSuccess,
   challengeFriendSuccess,
   challengeFriendError,
+  acceptFriendError,
+  acceptFriendSuccess,
   declineFriendError,
   declineFriendSuccess,
   fetchUsersError,
@@ -39,7 +41,9 @@ import {
   editGoalSuccess,
   editGoalError,
   editHabitError,
-  editHabitSuccess
+  editHabitSuccess,
+  fetchChallengesSuccess,
+  addFriendSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -63,6 +67,7 @@ import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
 import EditGoalRequest from "../../models/requests/EditGoalRequest";
 import EditHabitRequest from "../../models/requests/EditHabitRequest";
+import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -416,18 +421,34 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
     else if (massage) yield put(challengeFriendError(massage));
   }
 
-} 
+}
 
+export function* acceptFriendHandler(action: AppActionType): IterableIterator<any> {
+  let username: UsernameRequestDTO = action.payload as UsernameRequestDTO;
+  const response = yield call(httpService.acceptFriendRequest, username);
+
+  if (response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(acceptFriendSuccess(username.usernameSender));
+    }
+    else if (massage) {
+      yield put(acceptFriendError(massage));
+    }
+  }
+}
 
 export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
-  //TODO: implementat
-  let username: string = action.payload as string;
+  let username: UsernameRequestDTO = action.payload as UsernameRequestDTO;
   const response = yield call(httpService.declineFriendRequest, username);
 
-  if(response){
-    const { isDeclined, massage } = response;
-    if(isDeclined){
-      //TODO: implementat
+  if (response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(declineFriendSuccess(username.usernameSender));
+    }
+    else if (massage) {
+      yield put(declineFriendError(massage));
     }
   }
 }
@@ -439,6 +460,33 @@ export function* fetchUsersHandler(action: AppActionType): IterableIterator<any>
     const { users, massage } = response;
     if (users) {
       yield put(fetchUsersSuccess(users));
+    }
+    if (massage) yield put(fetchUsersError(massage))
+  }
+}
+
+export function* fetchChallengesHandler(action: AppActionType): IterableIterator<any> {
+  let prefix: string = action.payload as string;
+  const response = yield call(httpService.fetchChallenges);
+  if (response) {
+    console.log(response);
+    const { challenges, massage } = response;
+    if (challenges) {
+      yield put(fetchChallengesSuccess(challenges));
+    }
+    if (massage) yield put(fetchUsersError(massage))
+  }
+}
+
+export function* addFriendHandler(action: AppActionType): IterableIterator<any> {
+  let usernameReceiver: string = action.payload as string;
+
+  const response = yield call(httpService.addFriend, usernameReceiver);
+  if (response) {
+    console.log(response);
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(addFriendSuccess());
     }
     if (massage) yield put(fetchUsersError(massage))
   }

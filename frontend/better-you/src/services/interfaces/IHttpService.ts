@@ -14,6 +14,8 @@ import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import EditGoalRequest from "../../models/requests/EditGoalRequest";
 import EditHabitRequest from "../../models/requests/EditHabitRequest";
+import UsernameRequestDTO from "../../models/UsernameRequestDTO";
+import ChallengeDTO from "../../models/ChallengeDTO";
 
 export default interface IHttpService {
   loginUser(requestData: LoginRequest): Promise<LoginResponse>;
@@ -32,8 +34,11 @@ export default interface IHttpService {
   fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;
   challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean>;
-  declineFriendRequest(usernameReceiver: string): Promise<boolean>;
+  declineFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean>;
+  acceptFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean>;
   fetchUsers(prefix: string): Promise<UserInfoDTO[]>;
+  fetchChallenges(): Promise<ChallengeDTO[]>;
+  addFriend(usernameReceiver: string): Promise<boolean>;
 }
 
 export function getHeaders() {

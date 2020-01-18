@@ -5,6 +5,10 @@ public class Filter {
     private Boolean completed;
     private Boolean visibility;
 
+    public Filter() {
+
+    }
+
     public Filter(String category, Boolean completed, Boolean visibility) {
         this.category = category;
         this.completed = completed;
