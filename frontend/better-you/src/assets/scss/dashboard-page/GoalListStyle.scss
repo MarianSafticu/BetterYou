@@ -24,6 +24,22 @@
     margin-bottom: 10px;
   }
 
+  .card-container-habit {
+    position: relative;
+    width: 450px;
+    max-width: 85vw;
+    border-radius: 4px;
+
+    // max-height: 100px;
+
+    background: rgba($color: white, $alpha: 0.3) !important;
+
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
   .container-readOnly {
     margin-left: 50px;
   }
@@ -97,6 +113,19 @@
     background: rgba($color: white, $alpha: 0.3) !important;
 
     height: 80px;
+
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-container-habit {
+    position: relative;
+    width: 100%;
+    border-radius: 4px;
+
+    background: rgba($color: white, $alpha: 0.3) !important;
 
     margin-top: 10px;
     margin-left: 10px;
@@ -246,7 +275,7 @@
   cursor: pointer;
   padding-left: 20px;
   padding-right: 10px;
-  padding-bottom: 10px;
+  // padding-bottom: 10px;
   padding-top: 10px;
   font-weight: bold;
   color: black;
