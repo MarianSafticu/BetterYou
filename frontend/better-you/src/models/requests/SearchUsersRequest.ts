@@ -1,5 +1,4 @@
 export default interface SearchUsersRequest {
-    usernamePrefix: string, 
-    token: string
-  }
-  
+  usernamePrefix: string, 
+  token: string
+}

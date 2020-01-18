@@ -41,7 +41,7 @@ class FriendPageComponent extends React.Component<IProps, IState> {
         this.state = {
             user: user
         }
-        console.log(this.props.match.params.username)
+        //console.log(this.props.match.params.username)
     }
 
     makeFriendRequest = () => {
@@ -61,7 +61,7 @@ class FriendPageComponent extends React.Component<IProps, IState> {
                     </div>
                 </div>
                 <div className="goallist-container-div">
-                    <GoalList isReadOnly={true} />
+                    <GoalList isReadOnly={true} forUser={this.state.user.username}/>
                 </div>
             </div>
           </div>

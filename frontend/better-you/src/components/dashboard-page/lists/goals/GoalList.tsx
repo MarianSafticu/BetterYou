@@ -4,14 +4,17 @@ import Goal from "../../../../models/Goal";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import { goalCategorys } from "../../../../models/GoalCategorys";
 import GoalCardReadOnly from "./GoalCardReadOnly";
-import { fetchGoalsBegin } from "../../../../redux/actions/actions";
+import { fetchGoalsBegin, fetchFriendGoalsBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
 import AppState from "../../../../redux/store/store";
 
 interface IProps {
   goals: Goal[];
   fetchGoals: Function;
+  fetchFriendGoals: Function;
   isReadOnly?: boolean | null;
+  forUser?: string,
+  errorFetch: string
 }
 
 class GoalList extends React.Component<IProps, {}> {
@@ -20,11 +23,13 @@ class GoalList extends React.Component<IProps, {}> {
   }
 
   componentDidMount() {
-    this.props.fetchGoals();
+    if (this.props.forUser === undefined)
+      this.props.fetchGoals();
+    else this.props.fetchFriendGoals(this.props.forUser);
   }
 
   markGoalAsComplete = (goal: Goal) => {
-    console.log(goal)
+    //console.log(goal)
     // var list = this.state.goals;
     // list = list.filter(x => x.id !== goal.id)
     // this.setState({goals: list})
@@ -34,8 +39,15 @@ class GoalList extends React.Component<IProps, {}> {
     return (
       <div className="container">
         {
+          this.props.errorFetch.length !== 0
+          &&
+          <h1 style={{width:"100%", textAlign: "center"}}>
+            {this.props.errorFetch}
+          </h1>
+        }
+        {
           this.props.goals.map((goal, index) => {
-            if(goal.category === undefined)
+            if (goal.category === undefined)
               goal.category = goalCategorys[0];
 
             if (this.props.isReadOnly === true)
@@ -48,6 +60,13 @@ class GoalList extends React.Component<IProps, {}> {
           }
           )
         }
+        {
+          this.props.goals.length === 0 &&  this.props.errorFetch.length === 0
+          &&
+          <h1 style={{width:"100%", textAlign: "center"}}>
+            This user has no goals
+          </h1>
+        }
       </div>
     );
   }
@@ -55,13 +74,15 @@ class GoalList extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    goals: state.goals
+    goals: state.goals,
+    errorFetch: state.error
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    fetchGoals: () => dispatch(fetchGoalsBegin())
+    fetchGoals: () => dispatch(fetchGoalsBegin()),
+    fetchFriendGoals: (username: string) => dispatch(fetchFriendGoalsBegin(username))
   }
 }
 
