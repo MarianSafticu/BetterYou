@@ -126,6 +126,9 @@ export default class HttpService implements IHttpService {
   }
 
   async editGoal(goal: EditGoalRequest): Promise<boolean> {
+
+    console.log(goal)
+
     return await fetch(`${url}/goal`, {
       method: "put",
       headers: getSafeHeaders(),

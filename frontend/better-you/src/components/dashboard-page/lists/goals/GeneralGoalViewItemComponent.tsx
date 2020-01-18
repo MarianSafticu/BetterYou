@@ -346,7 +346,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
   }
 
   onSaveAdd = () => {
-    if(this.state.edditingIsDisabled) {
+    if(this.state.isForNewGoal) {
       let goal: AddGoalRequest = {
         public: this.state.goal.isPublic,
         endDate: this.getStringFromData(this.state.goal.endDate),
