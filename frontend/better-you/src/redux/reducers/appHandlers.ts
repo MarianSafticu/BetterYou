@@ -1,15 +1,12 @@
 import AppState from "../store/store";
-import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import { deleteCookie } from "../../services/CookieService";
-import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
-import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
 
 
@@ -48,6 +45,7 @@ export function unsetCurrentUserHandler(oldState: AppState): AppState {
   return newState;
 }
 
+
 export function setCurrentUserInformationBeginHandler(oldState:AppState):AppState{
   const newState = {...oldState};
   newState.loading = true;
@@ -69,9 +67,6 @@ export function setCurrentUserInformationErrorHandler(oldState:AppState, error:s
   newState.userInformation = undefined;
   return newState;
 }
-
-
-
 
 
 export function registerUserBeginHandler(oldState: AppState): AppState {
@@ -185,14 +180,23 @@ export function editGoalErrorHandler(oldState: AppState, error: string): AppStat
 
 export function deleteGoalBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function deleteGoalSuccessHandler(oldState: AppState, id: number): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals.filter(goal => goal.id !== id);
   return newState;
 }
 export function deleteGoalErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
@@ -262,16 +266,26 @@ export function editHabitErrorHandler(oldState: AppState, error: string): AppSta
 
 export function deleteHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function deleteHabitSuccessHandler(oldState: AppState, id: number): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.habits = oldState.habits.filter(habit => habit.id !== id);
   return newState;
 }
 export function deleteHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
+
 
 export function setAppBarSwipeableDrawerHandler(oldState: AppState, refObj: RefObject<unknown> | null):AppState {
   const newState = { ...oldState };
@@ -287,12 +301,11 @@ export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]
 
 
 export function fetchFriendsBeginHandler(oldState: AppState): AppState {
-const newState = {...oldState};
+  const newState = {...oldState};
   newState.loading = true;
   newState.error = "";
   return newState;
 }
-
 export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]): AppState {
   const newState = {...oldState};
   newState.loading = false;
@@ -300,7 +313,6 @@ export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]
   newState.friends = friends;
   return newState;
 }
-
 export function fetchFriendsErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
   newState.loading = false;
@@ -309,29 +321,29 @@ export function fetchFriendsErrorHandler(oldState: AppState, error: string): App
   return newState;
 } 
 
+
 export function fetchFriendRequestsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
-    newState.loading = true;
-    newState.error = "";
-    return newState;
-  }
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.friendRequests = friendRequests;
+  return newState;
+}
+export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.friendRequests = [];
+  return newState;
+} 
   
-  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
-    const newState = {...oldState};
-    newState.loading = false;
-    newState.error = "";
-    newState.friendRequests = friendRequests;
-    return newState;
-  }
-  
-  export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
-    const newState = {...oldState};
-    newState.loading = false;
-    newState.error = error;
-    newState.friendRequests = [];
-    return newState;
-  } 
-  
+
 export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
   newState.loading = true;
@@ -353,6 +365,7 @@ export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string)
   return newState;
 } 
   
+
 export function challengeFriendBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
   newState.loading = true;
