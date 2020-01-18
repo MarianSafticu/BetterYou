@@ -575,6 +575,6 @@ export function fetchFriendGoalsErrorHandler(oldState: AppState, error: string):
   const newState = {...oldState};
   newState.loading = false;
   newState.error = error;
-  newState.challenges = [];
+  newState.goals = [];
   return newState;
 } 
