@@ -21,4 +21,5 @@ export default interface AppState {
   appBarSwipeableDrawer: RefObject<any> | null;
   appBarItemsList: AppBarItem[];
   defaultGoals: Goal[];
+  users: UserInfoDTO[];
 }

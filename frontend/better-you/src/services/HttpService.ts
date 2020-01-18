@@ -17,6 +17,7 @@ import FetchFriendRequestsResponse from "../models/responses/FetchFriendRequests
 import GoalDTO from "../models/GoalDTO";
 import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
 import UsernameRequestDTO from "../models/UsernameRequestDTO";
+import SearchUsersRequest from "../models/requests/SearchUsersRequest";
 
 export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -232,6 +233,27 @@ export default class HttpService implements IHttpService {
     })
       .then(response => response.json())
       .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
+  async fetchUsers(prefix: string): Promise<UserInfoDTO[]> {
+    var sur: SearchUsersRequest = {
+      usernamePrefix: prefix,
+      token: ""
+    }
+    console.log(prefix);
+    return await fetch(`${url}/users`, {
+      method: "post",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(sur)
+    })
+      .then(response => response.json())
+      .then(body => {
+        console.log(body)
         return body;
       })
       .catch(error => {

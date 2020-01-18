@@ -92,6 +92,10 @@ export const DECLINE_FRIEND_BEGIN = "DECLINE_FRIEND_BEGIN";
 export const DECLINE_FRIEND_SUCCESS = "DECLINE_FRIEND_SUCCESS";
 export const DECLINE_FRIEND_ERROR = "DECLINE_FRIEND_ERROR";
 
+export const FETCH_USERS_BEGIN = "FETCH_USERS_BEGIN";
+export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
+export const FETCH_USERS_ERROR = "FETCH_USERS_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -351,7 +355,18 @@ export interface DeclineFriendError {
   type: typeof DECLINE_FRIEND_ERROR;
   payload: string;
 }
- 
+export interface FetchUsersBegin {
+  type: typeof FETCH_USERS_BEGIN;
+  payload: string;
+}
+export interface FetchUsersSuccess {
+  type: typeof FETCH_USERS_SUCCESS;
+  payload: UserInfoDTO[];
+}
+export interface FetchUsersError {
+  type: typeof FETCH_USERS_ERROR;
+  payload: string;
+} 
 
 export type AppActionType =
   | SetCurrentUserBegin
@@ -410,4 +425,7 @@ export type AppActionType =
   | AcceptFriendError
   | DeclineFriendBegin
   | DeclineFriendSuccess
-  | DeclineFriendError;
+  | DeclineFriendError
+  | FetchUsersBegin
+  | FetchUsersSuccess
+  | FetchUsersError;
