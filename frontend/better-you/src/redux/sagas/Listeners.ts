@@ -53,6 +53,7 @@ import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
+import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -352,14 +353,16 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
 
 
 export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
-  //TODO: implementat
-  let username: string = action.payload as string;
+  let username: UsernameRequestDTO = action.payload as UsernameRequestDTO;
   const response = yield call(httpService.declineFriendRequest, username);
 
   if (response) {
-    const { isDeclined, massage } = response;
-    if (isDeclined) {
-      //TODO: implementat
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(declineFriendSuccess(username.usernameSender));
+    }
+    else if (massage) {
+      yield put(declineFriendError(massage));
     }
   }
 }

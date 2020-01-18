@@ -16,6 +16,7 @@ import FetchFriendsResponse from "../models/responses/FetchFriendsResponse";
 import FetchFriendRequestsResponse from "../models/responses/FetchFriendRequestsResponse";
 import GoalDTO from "../models/GoalDTO";
 import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
+import UsernameRequestDTO from "../models/UsernameRequestDTO";
 import SearchUsersRequest from "../models/requests/SearchUsersRequest";
 
 export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
@@ -223,10 +224,10 @@ export default class HttpService implements IHttpService {
       });
   }
 
-  async declineFriendRequest(usernameReceiver: string): Promise<boolean> {
-    console.log(usernameReceiver)
+  async declineFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean> {
+    console.log(JSON.stringify(usernameReceiver))
     return await fetch(`${url}/friend/request/reject`, {
-      method: "delete",
+      method: "post",
       headers: getSafeHeaders(),
       body: JSON.stringify(usernameReceiver)
     })

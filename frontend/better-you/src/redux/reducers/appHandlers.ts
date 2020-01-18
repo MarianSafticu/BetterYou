@@ -401,14 +401,21 @@ export function challengeFriendErrorHandler(oldState: AppState, error: string): 
 
 export function declineFriendBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
   return newState;
 }
 export function declineFriendSuccessHandler(oldState: AppState, username: string): AppState {
   const newState = {...oldState};
+  newState.friendRequests = newState.friendRequests.filter(req => req.sender.username !== username)
+  newState.error = "";
+  newState.loading = false;
   return newState;
 }
 export function declineFriendErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
   return newState;
 }
 
