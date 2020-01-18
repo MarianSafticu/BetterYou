@@ -9,9 +9,13 @@ import IconButton from "@material-ui/core/IconButton";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Habit from "../../../../models/Habit";
 import GeneralHabitViewPopupComponent from "./GeneralHabitViewPopupComponent";
+import { connect } from "react-redux";
+import AppState from "../../../../redux/store/store";
+import { deleteHabitBegin } from "../../../../redux/actions/actions";
 
 interface IProps {
-  habit: Habit,
+  habit: Habit;
+  deleteHabit: Function;
 }
 
 interface IState {
@@ -41,20 +45,25 @@ class HabitCard extends React.Component<IProps, IState> {
       showHabitView: false,
     });
   }
+
+  handleDeleteHabit = () => {
+    this.props.deleteHabit(this.props.habit.id);
+  }
+
   render() {
     return (
       <Card className="card-container">
         <div className="category"  style={{ backgroundColor: this.state.habit.category.color }}/>
-        <CardActionArea className="title_container" onClick={this.handleOpenHabit}>
+        <div className="title_container" onClick={this.handleOpenHabit}>
           <Typography variant="h5" className="title">
             {this.props.habit.title}
           </Typography>
           <Tooltip title="Delete">
-            <IconButton aria-label="delete" className="delete_button">
+            <IconButton aria-label="delete" className="delete_button" onClick={this.handleDeleteHabit}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-        </CardActionArea>
+        </div>
         <div className="container">
           <DateCheckbox typeRepetition={this.props.habit.repetitionType} />
         </div>
@@ -67,4 +76,13 @@ class HabitCard extends React.Component<IProps, IState> {
   }
 }
 
-export default HabitCard;
+const mapStateToProps = (state: AppState) => ({
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    deleteHabit: (id: number) => dispatch(deleteHabitBegin(id))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HabitCard);

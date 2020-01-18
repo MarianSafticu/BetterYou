@@ -19,14 +19,17 @@ import Service from "../../../../services/Service";
 import { GoalException } from "../../../../exceptions/GoalException";
 import { goalCategorys } from "../../../../models/GoalCategorys";
 import { connect } from "react-redux";
-import { addGoalBegin } from "../../../../redux/actions/actions";
+import { addGoalBegin, deleteGoalBegin, editGoalBegin } from "../../../../redux/actions/actions";
 import AddGoalRequest from "../../../../models/requests/AddGoalRequest";
+import EditGoalRequest from "../../../../models/requests/EditGoalRequest";
 
 interface IProps {
   onFinnishAction: Function;
   goal?: Goal;
   isDefaultGoal?: boolean;
   addGoal: Function;
+  editGoal: Function;
+  deleteGoal: Function;
 }
 
 interface IState {
@@ -343,18 +346,32 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
   }
 
   onSaveAdd = () => {
-    let goal: AddGoalRequest = {
-      public: this.state.goal.isPublic,
-      endDate: this.getStringFromData(this.state.goal.endDate),
-      goal: {
-        title: this.state.goal.title,
-        description: this.state.goal.description,
-        progressToReach: this.state.goal.progressToReach,
-        category: this.state.goal.category.category.toLocaleUpperCase()
+    if(this.state.edditingIsDisabled) {
+      let goal: AddGoalRequest = {
+        public: this.state.goal.isPublic,
+        endDate: this.getStringFromData(this.state.goal.endDate),
+        goal: {
+          title: this.state.goal.title,
+          description: this.state.goal.description,
+          progressToReach: this.state.goal.progressToReach,
+          category: this.state.goal.category.category.toLocaleUpperCase()
+        }
       }
+      this.props.addGoal(goal);
+      if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();  
     }
-    this.props.addGoal(goal);
-    if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();
+    else {
+      let goalRequest: EditGoalRequest = {
+        userGoal: {
+          id: this.state.goal.id!,
+          endDate: this.getStringFromData(this.state.goal.endDate),
+          public: this.state.goal.isPublic,
+          currentProgress: this.state.goal.currentProgress
+        }
+      }
+      this.props.editGoal(goalRequest);
+      if (this.verifyGoal(this.state.goal)) this.props.onFinnishAction();
+    }
   };
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.setState({
@@ -390,7 +407,9 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
   };
 
   onDeleteHandle = () => {
-    console.log("I WANT TO DELETE THIS CRAP");
+    this.props.deleteGoal(this.state.goal.id);
+    this.onClosePopoverDelete();
+    this.props.onFinnishAction();
   };
 
   render() {
@@ -639,7 +658,9 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addGoal: (goal: AddGoalRequest) => dispatch(addGoalBegin(goal))
+    addGoal: (goal: AddGoalRequest) => dispatch(addGoalBegin(goal)),
+    editGoal: (goal: EditGoalRequest) => dispatch(editGoalBegin(goal)),
+    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id))
   };
 };
 

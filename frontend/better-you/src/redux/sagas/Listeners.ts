@@ -34,6 +34,14 @@ import {
   declineFriendSuccess,
   fetchUsersError,
   fetchUsersSuccess,
+  deleteGoalSuccess,
+  deleteGoalError,
+  deleteHabitSuccess,
+  deleteHabitError,
+  editGoalSuccess,
+  editGoalError,
+  editHabitError,
+  editHabitSuccess,
   fetchChallengesSuccess,
   addFriendSuccess,
   fetchFriendGoalsSuccess
@@ -58,6 +66,8 @@ import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
+import EditGoalRequest from "../../models/requests/EditGoalRequest";
+import EditHabitRequest from "../../models/requests/EditHabitRequest";
 import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 
 const httpService: IHttpService = HttpService.getInstance();
@@ -115,6 +125,7 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
   }
 }
 
+
 export function* getUserInformationHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.getUserInformation);
   if (response) {
@@ -126,6 +137,7 @@ export function* getUserInformationHandler(action: AppActionType): IterableItera
       yield put(setCurrentUserInformationError(massage))
   }
 }
+
 
 export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.fetchGoals);
@@ -190,12 +202,38 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
 
 
 export function* editGoalHandler(action: AppActionType): IterableIterator<any> {
-
+  let goal: EditGoalRequest = action.payload as EditGoalRequest;
+  const response = yield call(httpService.editGoal, goal);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      let newGoal: Goal = {
+        id: goal.userGoal.id,
+        groupId: 0,
+        title: "",
+        description: "",
+        startDate: new Date(),
+        endDate: new Date(goal.userGoal.endDate),
+        currentProgress: goal.userGoal.currentProgress,
+        progressToReach: 0,
+        isPublic: goal.userGoal.public,
+        category: goalCategorys[0]
+      }
+      yield put(editGoalSuccess(newGoal));
+    }
+    else if(massage) yield put(editGoalError(massage));
+  }
 }
 
 
 export function* deleteGoalHandler(action: AppActionType): IterableIterator<any> {
-
+  let id: number = action.payload as number;
+  const response = yield call(httpService.deleteGoal, id);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) yield put(deleteGoalSuccess(id));
+    else if (massage) yield put(deleteGoalError(massage))
+  }
 }
 
 
@@ -246,7 +284,7 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
         repetitionType = Repetition.Weekly;
 
       let habitComplete: Habit = {
-        id: id,
+        id: habit.habit.id,
         title: habit.habit.title,
         description: habit.habit.description,
         startDate: new Date(),
@@ -262,12 +300,42 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
 
 
 export function* editHabitHandler(action: AppActionType): IterableIterator<any> {
+  let habit: EditHabitRequest = action.payload as EditHabitRequest;
+  const response = yield call(httpService.editHabit, habit);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === habit.habit.category)[0];
+      if (category === undefined)
+        category = category[0]
+      let repetitionType = Repetition.Daily;
+      if (habit.habit.repetitionType === Repetition.Weekly.toLocaleUpperCase())
+        repetitionType = Repetition.Weekly;
 
+      let newHabit: Habit = {
+        id: habit.habit.id,
+        title: habit.habit.title,
+        description: habit.habit.description,
+        startDate: new Date(habit.habit.startDate),
+        repetitionType: repetitionType,
+        category: category,
+        dates: habit.habit.dates.map(date => new Date(date))
+      }
+      yield put(editHabitSuccess(newHabit));
+    }
+    else if(massage) yield put(editHabitError(massage));
+  }
 }
 
 
 export function* deleteHabitHandler(action: AppActionType): IterableIterator<any> {
-
+  let id: number = action.payload as number;
+  const response = yield call(httpService.deleteHabit, id);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) yield put(deleteHabitSuccess(id));
+    else if (massage) yield put(deleteHabitError(massage))
+  }
 }
 
 export function* fetchFriendsHandler(action: AppActionType): IterableIterator<any> {

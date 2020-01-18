@@ -12,6 +12,8 @@ import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import FetchFriendRequestsResponse from "../../models/responses/FetchFriendRequestsResponse";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import EditGoalRequest from "../../models/requests/EditGoalRequest";
+import EditHabitRequest from "../../models/requests/EditHabitRequest";
 import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 import ChallengeDTO from "../../models/ChallengeDTO";
 
@@ -22,8 +24,12 @@ export default interface IHttpService {
   getUserInformation():Promise<UserInfoDTO>;
   fetchGoals(): Promise<FetchGoalResponse[]>;
   addGoal(goal: AddGoalRequest): Promise<number>;
+  editGoal(goal: EditGoalRequest): Promise<boolean>;
+  deleteGoal(id: number): Promise<boolean>;
   fetchHabits(): Promise<FetchHabitResponse[]>;
   addHabit(habit: AddHabitRequest): Promise<number>;
+  editHabit(habit: EditHabitRequest): Promise<boolean>;
+  deleteHabit(id: number): Promise<boolean>;
   fetchFriends(): Promise<FetchFriendsResponse[]>;
   fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;

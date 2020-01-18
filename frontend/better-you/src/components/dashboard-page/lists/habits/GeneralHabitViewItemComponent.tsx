@@ -7,26 +7,28 @@ import Delete from "@material-ui/icons/Delete";
 import Close from "@material-ui/icons/Close";
 import Service from "../../../../services/Service";
 import { HabitException } from "../../../../exceptions/HabitException";
-import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
+import { goalCategorys } from "../../../../models/GoalCategorys";
 import { Repetition } from "../../../../models/Repetition";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import AddHabitRequest from "../../../../models/requests/AddHabitRequest";
-import { addHabitBegin } from "../../../../redux/actions/actions";
+import { addHabitBegin, deleteHabitBegin, editHabitBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
+import EditHabitRequest from "../../../../models/requests/EditHabitRequest";
 
 interface IProps {
   onFinnishAction: Function;
   habit?: Habit;
   isDefaultHabit?: boolean;
   addHabit: Function;
+  editHabit: Function;
+  deleteHabit: Function;
 }
 
 interface IState {
   habit: Habit;
   edditingIsDisabled: boolean;
   isForNewHabit: boolean;
-  // onSaveHandle: Function;
   habitError: HabitException;
   textFieldVariant: "filled" | "outlined";
   showDelete: boolean;
@@ -270,20 +272,39 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
   onChangeDateCalendar: any;
 
   onSaveAdd = () => {
-    let habitReq: AddHabitRequest = {
-      habit: {
-        title: this.state.habit.title,
-        description: this.state.habit.description,
-        startDate: this.getStringFromData(this.state.habit.startDate),
-        repetitionType: this.state.habit.repetitionType.toUpperCase(),
-        category: this.state.habit.category.category.toUpperCase(),
-        bestStreak: 0,
-        currentStreak: 0,
-        dates: []  
+    if(this.state.edditingIsDisabled) {
+      let habitReq: AddHabitRequest = {
+        habit: {
+          title: this.state.habit.title,
+          description: this.state.habit.description,
+          startDate: this.getStringFromData(this.state.habit.startDate),
+          repetitionType: this.state.habit.repetitionType.toUpperCase(),
+          category: this.state.habit.category.category.toUpperCase(),
+          bestStreak: 0,
+          currentStreak: 0,
+          dates: []  
+        }
       }
+      this.props.addHabit(habitReq);
+      if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
     }
-    this.props.addHabit(habitReq);
-    if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
+    else {
+      let habitRequest: EditHabitRequest = {
+        habit: {
+          id: this.state.habit.id,
+          title: this.state.habit.title,
+          description: this.state.habit.description,
+          startDate: this.getStringFromData(this.state.habit.startDate),
+          repetitionType: this.state.habit.repetitionType.toString().toUpperCase(),
+          category: this.state.habit.category.category.toString().toUpperCase(),
+          bestStreak: 0,
+          currentStreak: 0,
+          dates: this.state.habit.dates.map(date => this.getStringFromData(date))
+        }
+      }
+      this.props.editHabit(habitRequest);
+      if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
+    }
   };
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.setState({
@@ -314,7 +335,9 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     });
   };
   onDeleteHandle = () => {
-    console.log("I WANT TO DELETE THIS CRAP");
+    this.props.deleteHabit(this.state.habit.id);
+    this.onClosePopoverDelete();
+    this.props.onFinnishAction();
   };
 
   render() {
@@ -520,7 +543,9 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addHabit: (habit: AddHabitRequest) => dispatch(addHabitBegin(habit))
+    addHabit: (habit: AddHabitRequest) => dispatch(addHabitBegin(habit)),
+    editHabit: (habit: EditHabitRequest) => dispatch(editHabitBegin(habit)),
+    deleteHabit: (id: number) => dispatch(deleteHabitBegin(id))
   };
 };
 

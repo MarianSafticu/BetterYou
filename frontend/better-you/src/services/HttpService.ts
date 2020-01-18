@@ -18,6 +18,8 @@ import GoalDTO from "../models/GoalDTO";
 import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
 import UsernameRequestDTO from "../models/UsernameRequestDTO";
 import SearchUsersRequest from "../models/requests/SearchUsersRequest";
+import EditGoalRequest from "../models/requests/EditGoalRequest";
+import EditHabitRequest from "../models/requests/EditHabitRequest";
 import AddFriendRequest from "../models/requests/AddFriendRequest";
 import ChallengeDTO from "../models/ChallengeDTO";
 import UsernameRequest from "../models/requests/UsernameRequest";
@@ -123,6 +125,36 @@ export default class HttpService implements IHttpService {
       });
   }
 
+  async editGoal(goal: EditGoalRequest): Promise<boolean> {
+    return await fetch(`${url}/goal`, {
+      method: "put",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(goal)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      })
+  }
+
+  async deleteGoal(id: number): Promise<boolean> {
+    return await fetch(`${url}/goal`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(id)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
   async fetchHabits(): Promise<FetchHabitResponse[]> {
     return await fetch(`${url}/habits`, {
       method: "post",
@@ -138,7 +170,6 @@ export default class HttpService implements IHttpService {
   }
 
   async addHabit(habit: AddHabitRequest): Promise<number> {
-    console.log(JSON.stringify(habit))
     return await fetch(`${url}/habit`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -151,6 +182,35 @@ export default class HttpService implements IHttpService {
       .catch(error => {
         return error;
       });
+  }
+
+  async editHabit(habit: EditHabitRequest): Promise<boolean> {
+    return await fetch(`${url}/habit`, {
+      method: "put",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(habit)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      })
+  }
+
+  async deleteHabit(id: number): Promise<boolean> {
+    return await fetch(`${url}/habit`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(id)
+    }).then(response => response.json())
+    .then(body => {
+      return body;
+    })
+    .catch(error => {
+      return error;
+    });
   }
 
   async fetchFriends(): Promise<FetchFriendsResponse[]> {
@@ -196,7 +256,6 @@ export default class HttpService implements IHttpService {
   }
 
   async challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean> {
-    console.log(challenge);
     return await fetch(`${url}/challenge`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -247,7 +306,6 @@ export default class HttpService implements IHttpService {
       usernamePrefix: prefix,
       token: ""
     }
-    console.log(prefix);
     return await fetch(`${url}/users`, {
       method: "post",
       headers: getSafeHeaders(),
