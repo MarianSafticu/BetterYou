@@ -101,6 +101,10 @@ export const FETCH_CHALLENGES_BEGIN = "FETCH_CHALLENGES_BEGIN";
 export const FETCH_CHALLENGES_SUCCESS = "FETCH_CHALLENGES_SUCCESS";
 export const FETCH_CHALLENGES_ERROR = "FETCH_CHALLENGES_ERROR";
 
+export const CHECK_FRIEND_BEGIN = "CHECK_FRIEND_BEGIN";
+export const CHECK_FRIEND_SUCCESS = "CHECK_FRIEND_SUCCESS";
+export const CHECK_FRIEND_ERROR = "CHECK_FRIEND_ERROR";
+
 export const ADD_FRIEND_BEGIN = "ADD_FRIEND_BEGIN";
 export const ADD_FRIEND_SUCCESS = "ADD_FRIEND_SUCCESS";
 export const ADD_FRIEND_ERROR = "ADD_FRIEND_ERROR";
@@ -391,6 +395,18 @@ export interface FetchChallengesError {
   payload: string;
 } 
 
+export interface CheckFriendBegin {
+  type: typeof CHECK_FRIEND_BEGIN;
+  payload: string;
+}
+export interface CheckFriendSuccess {
+  type: typeof CHECK_FRIEND_SUCCESS;
+  payload: boolean;
+}
+export interface CheckFriendError {
+  type: typeof CHECK_FRIEND_ERROR;
+  payload: string;
+} 
 
 export interface AddFriendBegin {
   type: typeof ADD_FRIEND_BEGIN;
@@ -460,6 +476,9 @@ export type AppActionType =
   | AcceptFriendBegin
   | AcceptFriendSuccess
   | AcceptFriendError
+  | CheckFriendBegin
+  | CheckFriendSuccess
+  | CheckFriendError
   | DeclineFriendBegin
   | DeclineFriendSuccess
   | DeclineFriendError

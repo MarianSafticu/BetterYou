@@ -63,6 +63,9 @@ import {
   FETCH_CHALLENGES_BEGIN,
   FETCH_CHALLENGES_SUCCESS,
   FETCH_CHALLENGES_ERROR,
+  CHECK_FRIEND_BEGIN,
+  CHECK_FRIEND_SUCCESS,
+  CHECK_FRIEND_ERROR,
   ADD_FRIEND_BEGIN,
   ADD_FRIEND_SUCCESS,
   ADD_FRIEND_ERROR,
@@ -496,6 +499,25 @@ export function fetchChallengesError(error: string): AppActionType {
   }
 }
 
+export function checkFriendBegin(usernameReceiver: string): AppActionType {
+  return {
+    type: CHECK_FRIEND_BEGIN,
+    payload: usernameReceiver
+  };
+}
+export function checkFriendSuccess(isFriend: boolean): AppActionType {
+  return {
+    type: CHECK_FRIEND_SUCCESS,
+    payload: isFriend
+  }
+}
+export function checkFriendError(error: string): AppActionType {
+  return {
+    type: CHECK_FRIEND_ERROR,
+    payload: error
+  }
+}
+
 
 export function addFriendBegin(usernameReceiver: string): AppActionType {
   return {
@@ -505,7 +527,7 @@ export function addFriendBegin(usernameReceiver: string): AppActionType {
 }
 export function addFriendSuccess(): AppActionType {
   return {
-    type:ADD_FRIEND_SUCCESS,
+    type: ADD_FRIEND_SUCCESS,
     payload: undefined
   }
 }

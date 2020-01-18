@@ -4,17 +4,19 @@ import UserDTO from "../../../../models/UserDTO";
 import GoalList from "../../../dashboard-page/lists/goals/GoalList";
 import "../../../../assets/scss/dashboard-page/FriendPageStyle.scss"
 import { Button } from "@material-ui/core";
-import { acceptFriendBegin, addFriendBegin } from "../../../../redux/actions/actions";
+import { checkFriendBegin, addFriendBegin } from "../../../../redux/actions/actions";
 import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
 
-interface IProps extends RouteComponentProps<any>{
+interface IProps extends RouteComponentProps<any> {
     username: string,
-    addFriend: Function
+    addFriend: Function,
+    checkFriend: Function
 }
 
 interface IState {
-    user: UserDTO
+    user: UserDTO,
+    isFriend: boolean
 }
 
 
@@ -27,9 +29,15 @@ class FriendPageComponent extends React.Component<IProps, IState> {
         super(props);
         var user = this.getUser(this.props.match.params.username)
         this.state = {
-            user: user
+            user: user,
+            isFriend: false
         }
-        console.log(this.props.match.params.username)
+
+        this.setState({
+            isFriend: this.props.checkFriend()
+        })
+
+
     }
 
     makeFriendRequest = () => {
@@ -44,7 +52,18 @@ class FriendPageComponent extends React.Component<IProps, IState> {
                         <img src={this.state.user.profilePicture} />
                         <div>
                             <h2>User: {this.state.user.username} </h2>
-                            <Button onClick={this.makeFriendRequest}> Add friend </Button>
+                            {/* {() => {
+                                console.log("CHECK: ", this.state.isFriend)
+
+                                if (this.state.isFriend === false) {
+                                    return (
+                                        <Button onClick={this.makeFriendRequest}> Add friend </Button>
+                                    )
+                                }
+                            }} */}
+                            {this.state.isFriend === false ? 
+                                        <Button onClick={this.makeFriendRequest}> Add friend </Button>
+                                    : console.log("True")}
                         </div>
                     </div>
                 </div>
@@ -58,11 +77,12 @@ class FriendPageComponent extends React.Component<IProps, IState> {
 const mapStateToProps = (state: AppState) => {
     return {
     }
-  }
-  
-  const mapDispatchToProps = (dispatch: any) => {
+}
+
+const mapDispatchToProps = (dispatch: any) => {
     return {
-      addFriend: (username: string) => dispatch(addFriendBegin(username))
+        addFriend: (username: string) => dispatch(addFriendBegin(username)),
+        checkFriend: (username: string) => dispatch(checkFriendBegin(username))
     }
-  }
-export default  connect(mapStateToProps, mapDispatchToProps)(withRouter(FriendPageComponent));
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(FriendPageComponent));

@@ -478,6 +478,34 @@ export function fetchChallengesErrorHandler(oldState: AppState, error: string): 
   return newState;
 } 
 
+export function checkFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  newState.isFriend = false;
+  return newState;
+}
+export function checkFriendSuccessHandler(oldState: AppState, isFriend: boolean): AppState {
+  const newState = {...oldState};
+
+  if(isFriend === true){
+    newState.isFriend = true;
+  } else {
+    newState.isFriend = false;
+  }
+
+  newState.loading = false;
+  newState.error = "";
+  return newState;
+}
+export function checkFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.isFriend = false;
+  return newState;
+} 
+
 export function addFriendBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
   newState.loading = true;

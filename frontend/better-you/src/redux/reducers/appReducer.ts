@@ -64,6 +64,9 @@ import {
   FETCH_CHALLENGES_BEGIN,
   FETCH_CHALLENGES_SUCCESS,
   FETCH_CHALLENGES_ERROR,
+  CHECK_FRIEND_BEGIN,
+  CHECK_FRIEND_SUCCESS,
+  CHECK_FRIEND_ERROR,
   ADD_FRIEND_BEGIN,
   ADD_FRIEND_SUCCESS,
   ADD_FRIEND_ERROR
@@ -132,6 +135,9 @@ import {
   fetchChallengesBeginHandler,
   fetchChallengesSuccessHandler,
   fetchChallengesErrorHandler,
+  checkFriendBeginHandler,
+  checkFriendSuccessHandler,
+  checkFriendErrorHandler,
   addFriendBeginHandler,
   addFriendSuccessHandler,
   addFriendErrorHandler
@@ -149,6 +155,7 @@ export const initialState: AppState = {
   goals: [],
   habits: [],
   friends: [],
+  isFriend: false,
   friendRequests: [],
   appBarSwipeableDrawer: null,
   appBarItemsList: [],
@@ -307,6 +314,13 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return fetchChallengesSuccessHandler(state, action.payload);
     case FETCH_CHALLENGES_ERROR:
       return fetchChallengesErrorHandler(state, action.payload);
+
+    case CHECK_FRIEND_BEGIN:
+      return checkFriendBeginHandler(state);
+    case CHECK_FRIEND_SUCCESS:
+      return checkFriendSuccessHandler(state, action.payload);
+    case CHECK_FRIEND_ERROR:
+      return checkFriendErrorHandler(state, action.payload);
 
     case ADD_FRIEND_BEGIN:
       return addFriendBeginHandler(state);

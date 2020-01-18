@@ -275,8 +275,8 @@ export default class HttpService implements IHttpService {
       });
 
   }
-  async addFriend(usernameReceiver: string): Promise<boolean>{
-    var request:AddFriendRequest = {
+  async addFriend(usernameReceiver: string): Promise<boolean> {
+    var request: AddFriendRequest = {
       usernameReceiver: usernameReceiver
     }
 
@@ -293,6 +293,23 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
+
+  async checkIfFriend(usernameReceiver: string): Promise<boolean> {
+    var request: AddFriendRequest = {
+      usernameReceiver: usernameReceiver
+    }
+
+    return await fetch(`${url}/friend/mine`, {
+      method: "post",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(request)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
 }
-
-

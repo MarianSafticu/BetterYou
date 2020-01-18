@@ -397,6 +397,18 @@ export function* fetchUsersHandler(action: AppActionType): IterableIterator<any>
   }
 }
 
+export function* checkFriendHandler(action: AppActionType): IterableIterator<any> {
+  let prefix: string = action.payload as string;
+  const response = yield call(httpService.fetchUsers, prefix);
+  if (response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(fetchUsersSuccess(aBoolean));
+    }
+    if (massage) yield put(fetchUsersError(massage))
+  }
+}
+
 export function* fetchChallengesHandler(action: AppActionType): IterableIterator<any> {
   let prefix: string = action.payload as string;
   const response = yield call(httpService.fetchChallenges);

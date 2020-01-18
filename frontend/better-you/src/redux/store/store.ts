@@ -24,4 +24,5 @@ export default interface AppState {
   defaultGoals: Goal[];
   users: UserInfoDTO[];
   challenges: ChallengeDTO[];
+  isFriend: boolean;
 }
