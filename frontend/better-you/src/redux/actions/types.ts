@@ -105,6 +105,10 @@ export const ADD_FRIEND_BEGIN = "ADD_FRIEND_BEGIN";
 export const ADD_FRIEND_SUCCESS = "ADD_FRIEND_SUCCESS";
 export const ADD_FRIEND_ERROR = "ADD_FRIEND_ERROR";
 
+export const FETCH_FRIEND_GOALS_BEGIN = "FETCH_FRIEND_GOALS_BEGIN";
+export const FETCH_FRIEND_GOALS_SUCCESS = "FETCH_FRIEND_GOALS_SUCCESS";
+export const FETCH_FRIEND_GOALS_ERROR = "FETCH_FRIEND_GOALS_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -405,6 +409,20 @@ export interface AddFriendError {
   payload: string;
 } 
 
+
+export interface FetchFriendGoalsBegin {
+  type: typeof FETCH_FRIEND_GOALS_BEGIN;
+  payload: string;
+}
+export interface FetchFriendGoalsSuccess {
+  type: typeof FETCH_FRIEND_GOALS_SUCCESS;
+  payload: Goal[];
+}
+export interface FetchFriendGoalsError {
+  type: typeof FETCH_FRIEND_GOALS_ERROR;
+  payload: string;
+} 
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -471,4 +489,7 @@ export type AppActionType =
   | FetchChallengesError
   | AddFriendBegin
   | AddFriendSuccess
-  | AddFriendError;
+  | AddFriendError
+  | FetchFriendGoalsBegin
+  | FetchFriendGoalsSuccess
+  | FetchFriendGoalsError;

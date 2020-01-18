@@ -39,6 +39,7 @@ export default interface IHttpService {
   fetchUsers(prefix: string): Promise<UserInfoDTO[]>;
   fetchChallenges(): Promise<ChallengeDTO[]>;
   addFriend(usernameReceiver: string): Promise<boolean>;
+  fetchFriendGoals(username:string): Promise<FetchGoalResponse[]>;
 }
 
 export function getHeaders() {
