@@ -26,7 +26,7 @@ class FriendRequestCard extends React.Component<IProps, {}> {
                 <div className="friend_card_buttons">
                     <button className="acceptButton"
                         onClick={() => {
-                            this.handleClickAccept();
+                            this.handleClickAccept(this.props.sender.username);
                         }}>
                         Accept
                     </button>
@@ -43,8 +43,11 @@ class FriendRequestCard extends React.Component<IProps, {}> {
     }
 
 
-    handleClickAccept() {
-        console.log("accept")
+    handleClickAccept(username: string) {
+        let user: UsernameRequestDTO = {
+            usernameSender: username
+        }
+        this.props.acceptRequest(user);
     }
 
     handleClickDecline(username: string) {

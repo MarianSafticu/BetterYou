@@ -52,6 +52,9 @@ import {
   CHALLENGE_FRIEND_BEGIN,
   CHALLENGE_FRIEND_SUCCESS,
   CHALLENGE_FRIEND_ERROR,
+  ACCEPT_FRIEND_BEGIN,
+  ACCEPT_FRIEND_SUCCESS,
+  ACCEPT_FRIEND_ERROR,
   DECLINE_FRIEND_BEGIN,
   DECLINE_FRIEND_SUCCESS,
   DECLINE_FRIEND_ERROR,
@@ -111,6 +114,9 @@ import {
   challengeFriendBeginHandler,
   challengeFriendSuccessHandler,
   challengeFriendErrorHandler,
+  acceptFriendBeginHandler,
+  acceptFriendSuccessHandler,
+  acceptFriendErrorHandler,
   declineFriendBeginHandler,
   declineFriendSuccessHandler,
   declineFriendErrorHandler,
@@ -253,14 +259,21 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return fetchDefaultGoalsSuccessHandler(state, action.payload);
     case FETCH_DEFAULT_GOALS_ERROR:
       return fetchDefaultGoalsErrorHandler(state, action.payload);
-      
+
     case CHALLENGE_FRIEND_BEGIN:
       return challengeFriendBeginHandler(state);
     case CHALLENGE_FRIEND_SUCCESS:
       return challengeFriendSuccessHandler(state);
     case CHALLENGE_FRIEND_ERROR:
       return challengeFriendErrorHandler(state, action.payload);
-      
+
+    case ACCEPT_FRIEND_BEGIN:
+      return acceptFriendBeginHandler(state);
+    case ACCEPT_FRIEND_SUCCESS:
+      return acceptFriendSuccessHandler(state, action.payload);
+    case ACCEPT_FRIEND_ERROR:
+      return acceptFriendErrorHandler(state, action.payload);
+
     case DECLINE_FRIEND_BEGIN:
       return declineFriendBeginHandler(state);
     case DECLINE_FRIEND_SUCCESS:
@@ -273,7 +286,7 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case FETCH_USERS_SUCCESS:
       return fetchUsersSuccessHandler(state, action.payload);
     case FETCH_USERS_ERROR:
-      return fetchUsersErrorHandler(state, action.payload);  
+      return fetchUsersErrorHandler(state, action.payload);
 
     default:
       return state;

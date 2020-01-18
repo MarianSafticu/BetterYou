@@ -28,6 +28,8 @@ import {
   fetchDefaultGoalsSuccess,
   challengeFriendSuccess,
   challengeFriendError,
+  acceptFriendError,
+  acceptFriendSuccess,
   declineFriendError,
   declineFriendSuccess,
   fetchUsersError,
@@ -351,6 +353,20 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
 
 }
 
+export function* acceptFriendHandler(action: AppActionType): IterableIterator<any> {
+  let username: UsernameRequestDTO = action.payload as UsernameRequestDTO;
+  const response = yield call(httpService.acceptFriendRequest, username);
+
+  if (response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(acceptFriendSuccess(username.usernameSender));
+    }
+    else if (massage) {
+      yield put(acceptFriendError(massage));
+    }
+  }
+}
 
 export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
   let username: UsernameRequestDTO = action.payload as UsernameRequestDTO;

@@ -208,7 +208,7 @@ export default class HttpService implements IHttpService {
       });
   }
 
-  async acceptFriendRequest(usernameReceiver: string): Promise<boolean> {
+  async acceptFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean> {
     console.log(usernameReceiver)
     return await fetch(`${url}/friend/request/accept`, {
       method: "post",
@@ -225,7 +225,6 @@ export default class HttpService implements IHttpService {
   }
 
   async declineFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean> {
-    console.log(JSON.stringify(usernameReceiver))
     return await fetch(`${url}/friend/request/reject`, {
       method: "post",
       headers: getSafeHeaders(),
