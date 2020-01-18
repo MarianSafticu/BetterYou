@@ -1,11 +1,9 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
-import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button, Popover, List, ListItem, Divider } from "@material-ui/core";
+import { TextField, Button, Popover, List, ListItem, Divider } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -15,9 +13,9 @@ import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponen
 import Friend from "../../../../models/Friend";
 import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
-import { fetchFriendsBegin, challengeFriendBegin } from "../../../../redux/actions/actions";
+import { fetchFriendsBegin, challengeFriendBegin, deleteGoalBegin, editGoalBegin } from "../../../../redux/actions/actions";
 import ChallengeFriendDTO from "../../../../models/ChallengeFriendDTO";
-import { goalCategorys } from "../../../../models/GoalCategorys";
+import EditGoalRequest from "../../../../models/requests/EditGoalRequest";
 
 interface IProps {
   goal: Goal,
@@ -25,7 +23,9 @@ interface IProps {
   markGoalAsCompleate?: Function,
   friends: Friend[],
   fetchFriends: Function,
-  chalangeFriend: Function
+  chalangeFriend: Function;
+  deleteGoal: Function;
+  updateProgress: Function;
 }
 interface IState {
   goal: Goal,
@@ -33,36 +33,6 @@ interface IState {
   input_progress: number,
   isChalangeFriendOpen: boolean
 }
-
-const friends: Friend[] = [
-  {
-    birthDate: new Date(),
-    email: "",
-    id: 10,
-    points: 100,
-    profile_name: "profile name 1",
-    username: "username 1",
-    verified: true
-  },
-  {
-    birthDate: new Date(),
-    email: "",
-    id: 10,
-    points: 100,
-    profile_name: "profile name 1",
-    username: "username 1",
-    verified: true
-  },
-  {
-    birthDate: new Date(),
-    email: "",
-    id: 10,
-    points: 100,
-    profile_name: "profile name 1",
-    username: "username 1",
-    verified: true
-  },
-]
 
 class GoalCard extends React.Component<IProps, IState> {
 
@@ -119,13 +89,16 @@ class GoalCard extends React.Component<IProps, IState> {
     this.handleCloseChalangeFriend();
   }
 
+  handleDeleteGoal = () => {
+    this.props.deleteGoal(this.props.goal.id);
+  }
+
   render() {
     return (
       <Card className="card-container">
         <div className="category" style={{ backgroundColor: this.state.goal.category.color }} />
         <div
           className="MuiButtonBase-root MuiCardActionArea-root title_container"
-
         >
           <div className="title" onClick={this.handleOpneGoal}>
             {this.props.goal.title}
@@ -139,7 +112,7 @@ class GoalCard extends React.Component<IProps, IState> {
             !this.isReaadOnly()
             &&
             <Tooltip title="Delete">
-              <IconButton aria-label="delete" className="delete_button">
+              <IconButton aria-label="delete" className="delete_button" onClick={this.handleDeleteGoal}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -176,11 +149,7 @@ class GoalCard extends React.Component<IProps, IState> {
             &&
             <Tooltip title="Modify" aria-label="add">
               <Fab color="inherit" className="add_button_progress">
-                <Done
-                  onClick={e => {
-                    this.handleClick();
-                  }}
-                />
+                <Done onClick={this.handleClick} />
               </Fab>
             </Tooltip>
           }
@@ -231,65 +200,43 @@ class GoalCard extends React.Component<IProps, IState> {
     );
   }
 
-  handleClick() {
+  handleClick = () => {
     var goal = this.state.goal;
     goal.currentProgress = goal.currentProgress + this.state.input_progress;
     if (goal.currentProgress < 0)
       goal.currentProgress = 0;
     else if (goal.currentProgress >= goal.progressToReach) {
       goal.currentProgress = goal.progressToReach;
-      /*if (this.props.markGoalAsCompleate !== undefined)
-        this.setState({ openDialog: true })
-      return*/
+    }
+    this.setState({ goal: goal })
+
+    let newGoal: EditGoalRequest = {
+      userGoal: {
+        id: this.props.goal.id!,
+        endDate: this.getStringFromData(this.props.goal.endDate),
+        public: this.props.goal.isPublic,
+        currentProgress: this.props.goal.currentProgress + this.state.input_progress
+      }
+    }
+    this.props.updateProgress(newGoal);
+  }
+
+  getStringFromData = (data: Date) => {
+    var str = data.toLocaleDateString();
+    var strs = str.split("/", 3);
+
+    if (strs.length < 3) {
+      data = new Date();
+      str = data.toLocaleDateString();
+      strs = str.split("/", 3);
     }
 
-    this.setState({ goal: goal })
-  }
-  handleClick2() {
-    /*this.setState(state => {
-      var newGoal = this.state.goal;
+    if (strs[0].length === 1) strs[0] = "0" + strs[0];
+    if (strs[1].length === 1) strs[1] = "0" + strs[1];
 
-      if (state.goal.currentProgress + state.input_progress < 0) {
-        newGoal.currentProgress = 0;
-        this.state.goal.currentProgress = 0;
-        return {
-          goal: newGoal,
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      }
-      if (
-        state.goal.currentProgress + state.input_progress <=
-        this.props.goal.progressToReach
-      ) {
-        newGoal.currentProgress =
-          state.goal.currentProgress + state.input_progress;
-        this.state.goal.currentProgress =
-          state.goal.currentProgress + state.input_progress;
-        return {
-          goal: newGoal,
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      } else {
-        this.state.goal.currentProgress = this.state.goal.progressToReach;
-        return {
-          goal: {
-            title: this.props.goal.title,
-            description: this.props.goal.description,
-            currentProgress: this.props.goal.progressToReach,
-            category: newGoal.category,
-            endDate: newGoal.endDate,
-            progressToReach: newGoal.progressToReach,
-            startDate: newGoal.startDate,
-            isPublic: newGoal.isPublic
-          },
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      }
-    });*/
-  }
+    var strss: string = strs[2] + "-" + strs[0] + "-" + strs[1];
+    return strss;
+  };
 }
 
 
@@ -300,7 +247,9 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = (dispatch: any) => {
   return {
     fetchFriends: () => dispatch(fetchFriendsBegin()),
-    chalangeFriend: (challenge: ChallengeFriendDTO) => dispatch(challengeFriendBegin(challenge))
+    chalangeFriend: (challenge: ChallengeFriendDTO) => dispatch(challengeFriendBegin(challenge)),
+    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id)),
+    updateProgress: (goal: EditGoalRequest) => dispatch(editGoalBegin(goal))
   };
 };
 
