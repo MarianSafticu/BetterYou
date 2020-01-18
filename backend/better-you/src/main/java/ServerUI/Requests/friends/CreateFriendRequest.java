@@ -7,6 +7,9 @@ public class CreateFriendRequest {
     public CreateFriendRequest(String token, String usernameReceiver) {
         this.usernameReceiver = usernameReceiver;
     }
+    public CreateFriendRequest(String usernameReceiver) {
+        this.usernameReceiver = usernameReceiver;
+    }
 
     public String getUsernameReceiver() {
         return usernameReceiver;
