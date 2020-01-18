@@ -1,5 +1,5 @@
 import React from "react";
-import DateCheckbox from "./DateCheckbox"
+import DateCheckbox from "./DateCheckbox";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
@@ -19,10 +19,9 @@ interface IProps {
 }
 
 interface IState {
-  habit: Habit,
-  showHabitView: boolean
+  habit: Habit;
+  showHabitView: boolean;
 }
-
 
 class HabitCard extends React.Component<IProps, IState> {
   constructor(prop: IProps) {
@@ -36,41 +35,47 @@ class HabitCard extends React.Component<IProps, IState> {
     this.setState({
       habit: this.props.habit,
       showHabitView: true
-    })
-  }
+    });
+  };
 
   handleCloseHabit = () => {
     this.setState({
       habit: this.props.habit,
-      showHabitView: false,
+      showHabitView: false
     });
-  }
-
+  };
+        
   handleDeleteHabit = () => {
     this.props.deleteHabit(this.props.habit.id);
   }
-
+        
   render() {
     return (
       <Card className="card-container">
-        <div className="category"  style={{ backgroundColor: this.state.habit.category.color }}/>
-        <div className="title_container" onClick={this.handleOpenHabit}>
-          <Typography variant="h5" className="title">
+        <div
+          className="category"
+          style={{ backgroundColor: this.state.habit.category.color }}
+        />
+
+        <div className="MuiButtonBase-root MuiCardActionArea-root title_container">
+          <div className="title" onClick={this.handleOpenHabit}>
             {this.props.habit.title}
-          </Typography>
+          </div>
+
           <Tooltip title="Delete">
             <IconButton aria-label="delete" className="delete_button" onClick={this.handleDeleteHabit}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
         </div>
-        <div className="container">
+        <div>
           <DateCheckbox typeRepetition={this.props.habit.repetitionType} />
         </div>
         <GeneralHabitViewPopupComponent
           selfDistructFunction={this.handleCloseHabit}
           open={this.state.showHabitView}
-          habit={this.state.habit} />
+          habit={this.state.habit}
+        />
       </Card>
     );
   }

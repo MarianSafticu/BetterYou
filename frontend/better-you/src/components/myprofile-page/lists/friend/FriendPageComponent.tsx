@@ -2,7 +2,7 @@ import React from "react";
 import { RouteComponentProps, withRouter } from "react-router";
 import UserDTO from "../../../../models/UserDTO";
 import GoalList from "../../../dashboard-page/lists/goals/GoalList";
-import "../../../../assets/scss/dashboard-page/FriendPageStyle.scss"
+import "../../../../assets/scss/dashboard-page/FriendPageStyle.scss";
 import { Button } from "@material-ui/core";
 import { acceptFriendBegin, addFriendBegin } from "../../../../redux/actions/actions";
 import AppState from "../../../../redux/store/store";
@@ -14,9 +14,21 @@ interface IProps extends RouteComponentProps<any>{
 }
 
 interface IState {
-    user: UserDTO
+  user: UserDTO;
 }
 
+class FriendPageComponent extends React.Component<
+  RouteComponentProps<IProps>,
+  IState
+> {
+  getUser = (username: string): UserDTO => {
+    return {
+      username: username,
+      profilePicture:
+        "https://c8.alamy.com/comp/P9MYWR/man-avatar-profile-P9MYWR.jpg",
+      isAuthenticated: true
+    };
+  };
 
 class FriendPageComponent extends React.Component<IProps, IState> {
     getUser = (username: string): UserDTO => {
@@ -52,9 +64,16 @@ class FriendPageComponent extends React.Component<IProps, IState> {
                     <GoalList isReadOnly={true} />
                 </div>
             </div>
-        )
-    }
+          </div>
+        </div>
+        <div className="goallist-container-div">
+          <GoalList isReadOnly={true} />
+        </div>
+      </div>
+    );
+  }
 }
+
 const mapStateToProps = (state: AppState) => {
     return {
     }

@@ -83,32 +83,29 @@ class DashboardComponent extends Component<IProp, IState> {
     window.addEventListener("resize", this.updateDimensions);
     this.updateDimensions();
 
-    this.props.setAppBarItemsList([{
-      text: "Goals/News",
-      link: "",
-      func: this.onSwitchComponenTHandler
-    }])
+    this.props.setAppBarItemsList([
+      {
+        text: "Goals/News",
+        link: "",
+        func: this.onSwitchComponenTHandler
+      }
+    ]);
   }
 
   updateDimensions() {
-    if (this.comp1.current == null)
-      return;
-    if (this.comp2.current == null)
-      return;
-    if (this.thisDiv.current == null)
-      return;
+    if (this.comp1.current == null) return;
+    if (this.comp2.current == null) return;
+    if (this.thisDiv.current == null) return;
 
     if (window.innerWidth < 770) {
       if (this.compToShow % 2 == 0) {
         this.comp1.current.removeAttribute("hidden");
         this.comp2.current.setAttribute("hidden", "true");
-      }
-      else {
+      } else {
         this.comp1.current.setAttribute("hidden", "true");
         this.comp2.current.removeAttribute("hidden");
       }
-    }
-    else {
+    } else {
       this.comp1.current.removeAttribute("hidden");
       this.comp2.current.removeAttribute("hidden");
     }
@@ -118,7 +115,7 @@ class DashboardComponent extends Component<IProp, IState> {
     this.compToShow = (this.compToShow + 1) % 2;
     this.updateDimensions();
     this.setState({ compToShow: this.compToShow });
-  }
+  };
 
   toggleChecked = () => {
     this.setState({ checked: !this.state.checked });
@@ -251,11 +248,15 @@ class DashboardComponent extends Component<IProp, IState> {
                 <Grid item>Habits</Grid>
               </Grid>
             </div>
+
             <div id="filter_sort">
-              <Button id="filter" onClick={this.handleClickFiltrate}>
+              <Button id="button_filter" onClick={this.handleClickFiltrate}>
                 Filter
               </Button>
-              <Button onClick={this.handleClickSort}>Sort</Button>
+              <Button id="button_sort" onClick={this.handleClickSort}>
+                Sort
+              </Button>
+
               <Dialog
                 disableBackdropClick
                 disableEscapeKeyDown
@@ -301,16 +302,19 @@ class DashboardComponent extends Component<IProp, IState> {
                 </DialogActions>
               </Dialog>
             </div>
+
             <div>
               {this.state.checked ? (
                 <div>
                   <Button
+                    id="button_add"
                     onClick={() => {
                       this.handleShowHabit(0);
                     }}
                   >
                     <AddCircleIcon id="icon_add" fontSize="large" />
                   </Button>
+
                   <GeneralHabitViewPopupComponent
                     selfDistructFunction={this.handleCloseHabit}
                     open={this.state.showHabit[0]}
@@ -319,12 +323,14 @@ class DashboardComponent extends Component<IProp, IState> {
               ) : (
                 <div>
                   <Button
+                    id="button_add"
                     onClick={() => {
                       this.handleShowGoal(0);
                     }}
                   >
                     <AddCircleIcon id="icon_add" fontSize="large" />
                   </Button>
+
                   <GeneralGoalViewPopupComponent
                     selfDistructFunction={this.handleCloseGoal}
                     open={this.state.showGoal[0]}
@@ -333,6 +339,7 @@ class DashboardComponent extends Component<IProp, IState> {
               )}
             </div>
           </div>
+
           <div className="list">
             {!this.state.checked && <GoalList />}
             {this.state.checked && <HabitList />}
@@ -340,13 +347,12 @@ class DashboardComponent extends Component<IProp, IState> {
         </div>
 
         <div className="newsfeed" ref={this.comp2}>
-            <NewsfeedList />
+          <NewsfeedList />
         </div>
       </div>
     );
   }
 }
-
 
 const mapStateToProps = (state: AppState) => ({
   appBarSwipeableDrawer: state.appBarSwipeableDrawer
@@ -354,7 +360,8 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setAppBarItemsList: (list: AppBarItem[]) => dispatch(setAppBarItemsList(list))
+    setAppBarItemsList: (list: AppBarItem[]) =>
+      dispatch(setAppBarItemsList(list))
   };
 };
 
