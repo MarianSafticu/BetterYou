@@ -13,8 +13,9 @@ import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponen
 import Friend from "../../../../models/Friend";
 import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
-import { fetchFriendsBegin, challengeFriendBegin, deleteGoalBegin } from "../../../../redux/actions/actions";
+import { fetchFriendsBegin, challengeFriendBegin, deleteGoalBegin, editGoalBegin } from "../../../../redux/actions/actions";
 import ChallengeFriendDTO from "../../../../models/ChallengeFriendDTO";
+import EditGoalRequest from "../../../../models/requests/EditGoalRequest";
 
 interface IProps {
   goal: Goal,
@@ -24,6 +25,7 @@ interface IProps {
   fetchFriends: Function,
   chalangeFriend: Function;
   deleteGoal: Function;
+  updateProgress: Function;
 }
 interface IState {
   goal: Goal,
@@ -147,11 +149,7 @@ class GoalCard extends React.Component<IProps, IState> {
             &&
             <Tooltip title="Modify" aria-label="add">
               <Fab color="inherit" className="add_button_progress">
-                <Done
-                  onClick={e => {
-                    this.handleClick();
-                  }}
-                />
+                <Done onClick={this.handleClick} />
               </Fab>
             </Tooltip>
           }
@@ -202,7 +200,7 @@ class GoalCard extends React.Component<IProps, IState> {
     );
   }
 
-  handleClick() {
+  handleClick = () => {
     var goal = this.state.goal;
     goal.currentProgress = goal.currentProgress + this.state.input_progress;
     if (goal.currentProgress < 0)
@@ -210,9 +208,35 @@ class GoalCard extends React.Component<IProps, IState> {
     else if (goal.currentProgress >= goal.progressToReach) {
       goal.currentProgress = goal.progressToReach;
     }
-
     this.setState({ goal: goal })
+
+    let newGoal: EditGoalRequest = {
+      userGoal: {
+        id: this.props.goal.id!,
+        endDate: this.getStringFromData(this.props.goal.endDate),
+        public: this.props.goal.isPublic,
+        currentProgress: this.props.goal.currentProgress + this.state.input_progress
+      }
+    }
+    this.props.updateProgress(newGoal);
   }
+
+  getStringFromData = (data: Date) => {
+    var str = data.toLocaleDateString();
+    var strs = str.split("/", 3);
+
+    if (strs.length < 3) {
+      data = new Date();
+      str = data.toLocaleDateString();
+      strs = str.split("/", 3);
+    }
+
+    if (strs[0].length === 1) strs[0] = "0" + strs[0];
+    if (strs[1].length === 1) strs[1] = "0" + strs[1];
+
+    var strss: string = strs[2] + "-" + strs[0] + "-" + strs[1];
+    return strss;
+  };
 }
 
 
@@ -224,7 +248,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     fetchFriends: () => dispatch(fetchFriendsBegin()),
     chalangeFriend: (challenge: ChallengeFriendDTO) => dispatch(challengeFriendBegin(challenge)),
-    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id))
+    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id)),
+    updateProgress: (goal: EditGoalRequest) => dispatch(editGoalBegin(goal))
   };
 };
 

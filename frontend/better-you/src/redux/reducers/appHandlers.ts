@@ -190,7 +190,7 @@ export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState
         isPublic: goal.isPublic,
         category: goal.category
       }
-      return updates;
+      g = {...updates};
     }
     return g;
   });
