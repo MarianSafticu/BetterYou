@@ -385,11 +385,6 @@ export function* declineFriendHandler(action: AppActionType): IterableIterator<a
   }
 }
 
-export function* acceptFriendHandler(action: AppActionType): IterableIterator<any> {
-  let prefix: string = action.payload as string;
-  const response = yield call(httpService.fetchUsers, prefix);
-}
-
 export function* fetchUsersHandler(action: AppActionType): IterableIterator<any> {
   let prefix: string = action.payload as string;
   const response = yield call(httpService.fetchUsers, prefix);
