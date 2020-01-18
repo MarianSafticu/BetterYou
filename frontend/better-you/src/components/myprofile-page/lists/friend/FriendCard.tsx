@@ -11,7 +11,7 @@ interface IProps {
 class FriendCard extends React.Component<IProps, {}> {
   render() {
     return(
-      <Card className="friend_container" onClick={() => {console.log(this.props.username)}}>
+      <Card className="friend_container">
         <img src={this.props.image} className="friend_image_page"></img>
         <div className="friend_name_page">{this.props.name}</div>
       </Card>

@@ -348,7 +348,7 @@ export function* challengeFriendHandler(action: AppActionType): IterableIterator
     else if (massage) yield put(challengeFriendError(massage));
   }
 
-} 
+}
 
 
 export function* declineFriendHandler(action: AppActionType): IterableIterator<any> {
@@ -356,12 +356,17 @@ export function* declineFriendHandler(action: AppActionType): IterableIterator<a
   let username: string = action.payload as string;
   const response = yield call(httpService.declineFriendRequest, username);
 
-  if(response){
+  if (response) {
     const { isDeclined, massage } = response;
-    if(isDeclined){
+    if (isDeclined) {
       //TODO: implementat
     }
   }
+}
+
+export function* acceptFriendHandler(action: AppActionType): IterableIterator<any> {
+  let prefix: string = action.payload as string;
+  const response = yield call(httpService.fetchUsers, prefix);
 }
 
 export function* fetchUsersHandler(action: AppActionType): IterableIterator<any> {
