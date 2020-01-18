@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import AppState from "../../../../redux/store/store";
 import SearchComponent from "./SearchComponent";
 
-
 interface IProps {
     friendsList: Friend[];
     fetchFriends: Function;
