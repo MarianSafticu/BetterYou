@@ -101,6 +101,10 @@ export const FETCH_CHALLENGES_BEGIN = "FETCH_CHALLENGES_BEGIN";
 export const FETCH_CHALLENGES_SUCCESS = "FETCH_CHALLENGES_SUCCESS";
 export const FETCH_CHALLENGES_ERROR = "FETCH_CHALLENGES_ERROR";
 
+export const ADD_FRIEND_BEGIN = "ADD_FRIEND_BEGIN";
+export const ADD_FRIEND_SUCCESS = "ADD_FRIEND_SUCCESS";
+export const ADD_FRIEND_ERROR = "ADD_FRIEND_ERROR";
+
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
   payload: LoginRequest;
@@ -387,6 +391,20 @@ export interface FetchChallengesError {
   payload: string;
 } 
 
+
+export interface AddFriendBegin {
+  type: typeof ADD_FRIEND_BEGIN;
+  payload: string;
+}
+export interface AddFriendSuccess {
+  type: typeof ADD_FRIEND_SUCCESS;
+  payload: undefined;
+}
+export interface AddFriendError {
+  type: typeof ADD_FRIEND_ERROR;
+  payload: string;
+} 
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -450,4 +468,7 @@ export type AppActionType =
   | FetchUsersError
   | FetchChallengesBegin
   | FetchChallengesSuccess
-  | FetchChallengesError;
+  | FetchChallengesError
+  | AddFriendBegin
+  | AddFriendSuccess
+  | AddFriendError;

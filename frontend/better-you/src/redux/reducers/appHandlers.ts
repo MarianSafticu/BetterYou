@@ -461,3 +461,23 @@ export function fetchChallengesErrorHandler(oldState: AppState, error: string): 
   newState.challenges = [];
   return newState;
 } 
+
+export function addFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function addFriendSuccessHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  return newState;
+}
+export function addFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.challenges = [];
+  return newState;
+} 

@@ -31,6 +31,7 @@ export default interface IHttpService {
   declineFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean>;
   fetchUsers(prefix: string): Promise<UserInfoDTO[]>;
   fetchChallenges(): Promise<ChallengeDTO[]>;
+  addFriend(usernameReceiver: string): Promise<boolean>;
 }
 
 export function getHeaders() {

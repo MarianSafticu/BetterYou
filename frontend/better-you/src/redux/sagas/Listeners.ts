@@ -31,7 +31,9 @@ import {
   declineFriendError,
   declineFriendSuccess,
   fetchUsersError,
-  fetchUsersSuccess
+  fetchUsersSuccess,
+  fetchChallengesSuccess,
+  addFriendSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -389,9 +391,23 @@ export function* fetchChallengesHandler(action: AppActionType): IterableIterator
   const response = yield call(httpService.fetchChallenges);
   if (response) {
     console.log(response);
-    const { users, massage } = response;
-    if (users) {
-      yield put(fetchUsersSuccess(users));
+    const { challenges, massage } = response;
+    if (challenges) {
+      yield put(fetchChallengesSuccess(challenges));
+    }
+    if (massage) yield put(fetchUsersError(massage))
+  }
+}
+
+export function* addFriendHandler(action: AppActionType): IterableIterator<any> {
+  let usernameReceiver: string = action.payload as string;
+
+  const response = yield call(httpService.addFriend, usernameReceiver);
+  if (response) {
+    console.log(response);
+    const { aBoolean, massage } = response;
+    if (aBoolean) {
+      yield put(addFriendSuccess());
     }
     if (massage) yield put(fetchUsersError(massage))
   }

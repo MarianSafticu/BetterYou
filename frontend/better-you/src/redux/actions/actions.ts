@@ -63,6 +63,9 @@ import {
   FETCH_CHALLENGES_BEGIN,
   FETCH_CHALLENGES_SUCCESS,
   FETCH_CHALLENGES_ERROR,
+  ADD_FRIEND_BEGIN,
+  ADD_FRIEND_SUCCESS,
+  ADD_FRIEND_ERROR,
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -489,6 +492,26 @@ export function fetchChallengesSuccess(challenges: ChallengeDTO[]): AppActionTyp
 export function fetchChallengesError(error: string): AppActionType {
   return {
     type: FETCH_CHALLENGES_ERROR,
+    payload: error
+  }
+}
+
+
+export function addFriendBegin(usernameReceiver: string): AppActionType {
+  return {
+    type: ADD_FRIEND_BEGIN,
+    payload: usernameReceiver
+  };
+}
+export function addFriendSuccess(): AppActionType {
+  return {
+    type:ADD_FRIEND_SUCCESS,
+    payload: undefined
+  }
+}
+export function addFriendError(error: string): AppActionType {
+  return {
+    type: ADD_FRIEND_ERROR,
     payload: error
   }
 }

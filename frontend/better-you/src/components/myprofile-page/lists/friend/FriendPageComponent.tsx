@@ -4,13 +4,13 @@ import UserDTO from "../../../../models/UserDTO";
 import GoalList from "../../../dashboard-page/lists/goals/GoalList";
 import "../../../../assets/scss/dashboard-page/FriendPageStyle.scss"
 import { Button } from "@material-ui/core";
-import { acceptFriendBegin } from "../../../../redux/actions/actions";
+import { acceptFriendBegin, addFriendBegin } from "../../../../redux/actions/actions";
 import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
 
 interface IProps extends RouteComponentProps<any>{
     username: string,
-    invideFriend: Function
+    addFriend: Function
 }
 
 interface IState {
@@ -33,7 +33,7 @@ class FriendPageComponent extends React.Component<IProps, IState> {
     }
 
     makeFriendRequest = () => {
-        this.props.invideFriend();
+        this.props.addFriend(this.state.user.username);
     }
 
     render() {
@@ -62,7 +62,7 @@ const mapStateToProps = (state: AppState) => {
   
   const mapDispatchToProps = (dispatch: any) => {
     return {
-      fetchFriends: (username: string) => dispatch(acceptFriendBegin(username))
+      addFriend: (username: string) => dispatch(addFriendBegin(username))
     }
   }
 export default  connect(mapStateToProps, mapDispatchToProps)(withRouter(FriendPageComponent));

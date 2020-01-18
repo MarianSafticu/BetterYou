@@ -60,7 +60,10 @@ import {
   FETCH_USERS_ERROR,
   FETCH_CHALLENGES_BEGIN,
   FETCH_CHALLENGES_SUCCESS,
-  FETCH_CHALLENGES_ERROR
+  FETCH_CHALLENGES_ERROR,
+  ADD_FRIEND_BEGIN,
+  ADD_FRIEND_SUCCESS,
+  ADD_FRIEND_ERROR
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -122,7 +125,10 @@ import {
   fetchUsersErrorHandler,
   fetchChallengesBeginHandler,
   fetchChallengesSuccessHandler,
-  fetchChallengesErrorHandler
+  fetchChallengesErrorHandler,
+  addFriendBeginHandler,
+  addFriendSuccessHandler,
+  addFriendErrorHandler
 } from "./appHandlers";
 import { setCurrentUserInformationError } from "../actions/actions";
 
@@ -260,14 +266,14 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return fetchDefaultGoalsSuccessHandler(state, action.payload);
     case FETCH_DEFAULT_GOALS_ERROR:
       return fetchDefaultGoalsErrorHandler(state, action.payload);
-      
+
     case CHALLENGE_FRIEND_BEGIN:
       return challengeFriendBeginHandler(state);
     case CHALLENGE_FRIEND_SUCCESS:
       return challengeFriendSuccessHandler(state);
     case CHALLENGE_FRIEND_ERROR:
       return challengeFriendErrorHandler(state, action.payload);
-      
+
     case DECLINE_FRIEND_BEGIN:
       return declineFriendBeginHandler(state);
     case DECLINE_FRIEND_SUCCESS:
@@ -280,14 +286,22 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case FETCH_USERS_SUCCESS:
       return fetchUsersSuccessHandler(state, action.payload);
     case FETCH_USERS_ERROR:
-      return fetchUsersErrorHandler(state, action.payload);  
+      return fetchUsersErrorHandler(state, action.payload);
 
-      case FETCH_CHALLENGES_BEGIN:
-        return fetchChallengesBeginHandler(state);
-      case FETCH_CHALLENGES_SUCCESS:
-        return fetchChallengesSuccessHandler(state, action.payload);
-      case FETCH_CHALLENGES_ERROR:
-        return fetchChallengesErrorHandler(state, action.payload);  
+    case FETCH_CHALLENGES_BEGIN:
+      return fetchChallengesBeginHandler(state);
+    case FETCH_CHALLENGES_SUCCESS:
+      return fetchChallengesSuccessHandler(state, action.payload);
+    case FETCH_CHALLENGES_ERROR:
+      return fetchChallengesErrorHandler(state, action.payload);
+
+    case ADD_FRIEND_BEGIN:
+      return addFriendBeginHandler(state);
+    case ADD_FRIEND_SUCCESS:
+      return addFriendSuccessHandler(state);
+    case ADD_FRIEND_ERROR:
+      return addFriendErrorHandler(state, action.payload);
+
 
     default:
       return state;
