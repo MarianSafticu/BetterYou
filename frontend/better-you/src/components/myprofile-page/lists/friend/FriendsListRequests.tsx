@@ -20,7 +20,6 @@ class FriendsListRequests extends React.Component<IProps, {}> {
 
     componentDidMount() {
         this.props.fetchFriendRequests();
-        console.log("FRIENDREQ: ", this.props.friendRequestsList)
     }
 
     render() {
