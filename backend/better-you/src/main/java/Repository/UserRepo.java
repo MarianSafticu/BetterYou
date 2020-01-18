@@ -127,7 +127,7 @@ public class UserRepo extends AbstractRepo<Long, User> {
      */
     public void updateUserGoal(Long user_id, Long goal_id, LocalDate end, Boolean isPublic, Integer currentProgress) throws RepoException {
         User u = get(user_id);
-        List<UserGoal> uglist = u.getUserGoals().stream().filter((UserGoal x) -> x.getId() == goal_id).collect(Collectors.toList());
+        List<UserGoal> uglist = u.getUserGoals().stream().filter((UserGoal x) -> x.getId().equals(goal_id)).collect(Collectors.toList());
         if (uglist.isEmpty()) {
             throw new RepoException("The user doesn't have the goal or the goal is not in the database\n");
         }

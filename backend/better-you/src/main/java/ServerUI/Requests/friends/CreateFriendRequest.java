@@ -2,7 +2,11 @@ package ServerUI.Requests.friends;
 
 
 public class CreateFriendRequest {
-    private final String usernameReceiver;
+    private String usernameReceiver;
+
+    public CreateFriendRequest() {
+
+    }
 
     public CreateFriendRequest(String token, String usernameReceiver) {
         this.usernameReceiver = usernameReceiver;

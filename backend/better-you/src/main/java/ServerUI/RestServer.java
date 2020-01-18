@@ -240,7 +240,7 @@ public class RestServer {
     @RequestMapping(value = "/goal", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateGoal(@RequestHeader Authorization authorization, @RequestBody UserGoalRequest userGoalRequest) {
         try {
-            validationService.validateUserGoal(userGoalRequest.getUserGoal());
+            //validationService.validateUserGoal(userGoalRequest.getUserGoal());
             long userId = authService.getUserIdFromJWT(authorization.getToken());
             crudServices.updateUserGoal(userGoalRequest.getUserGoal(), userId);
             return new ResponseEntity<>(new BooleanResponse(true), HttpStatus.OK);
