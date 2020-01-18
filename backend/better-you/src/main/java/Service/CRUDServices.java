@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -770,5 +771,46 @@ public class CRUDServices {
             LOG.error("Cannot accept/reject the goal challenge: {}", e.getMessage());
             throw new ServiceException("Cannot accept/reject the goal challenge", e);
         }
+    }
+
+    public List<UserGoal> getFriendGoals(long userId, String username) {
+        LOG.info("Retrieving user goals for friend username={}", username);
+
+        User requester = userRepo.get(userId);
+        if (requester == null) {
+            LOG.warn("Invalid token");
+            throw new ServiceException("Invalid user id");
+        }
+
+        User friend = userRepo.getUserByUsername(username);
+        if (friend == null) {
+            LOG.warn("No user found with username={}", username);
+            throw new ServiceException("No user found with username=" + username);
+        }
+
+        if (!friend.getFriends().contains(requester)) {
+            LOG.warn("userId={} is not friend with username={}", userId, username);
+            throw new ServiceException("Not friend with " + username);
+        }
+
+        return friend.getUserGoals().stream().filter(UserGoal::isPublic).collect(Collectors.toList());
+    }
+
+    public boolean areFriends(long userId, String username) {
+        LOG.info("Retrieving user goals for friend username={}", username);
+
+        User requester = userRepo.get(userId);
+        if (requester == null) {
+            LOG.warn("Invalid token");
+            throw new ServiceException("Invalid user id");
+        }
+
+        User friend = userRepo.getUserByUsername(username);
+        if (friend == null) {
+            LOG.warn("No user found with username={}", username);
+            throw new ServiceException("No user found with username=" + username);
+        }
+
+        return friend.getFriends().contains(requester);
     }
 }

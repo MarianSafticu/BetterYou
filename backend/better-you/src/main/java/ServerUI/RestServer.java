@@ -22,6 +22,7 @@ import ServerUI.Requests.auth.register.RegisterRequest;
 import ServerUI.Requests.friends.AcceptFriendRequest;
 import ServerUI.Requests.friends.CreateFriendRequest;
 import ServerUI.Requests.friends.SearchUsersRequest;
+import ServerUI.Requests.friends.UsernameRequest;
 import ServerUI.Responses.*;
 import Service.ServiceException;
 import Service.AuthService;
@@ -645,6 +646,36 @@ public class RestServer {
         try {
             return new ResponseEntity<>(new ChallengesListResponse(
                     crudServices.getReceivedGoalChallenges(authService.getUserIdFromJWT(authorization.getToken()))),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/goals", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFriendGoals(@RequestHeader Authorization authorization, @RequestBody UsernameRequest usernameRequest) {
+        try {
+            return new ResponseEntity<>(
+                    new UserGoalsResponse(crudServices.getFriendGoals(authService.getUserIdFromJWT(authorization.getToken()),
+                            usernameRequest.getUsername())),
+                    HttpStatus.OK);
+        } catch (ServiceException e) {
+            return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error("Unhandled exception reached REST controller: {}", e.getMessage());
+            return new ResponseEntity<>(new ErrorResponse("Server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/friend/mine", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> areFriends(@RequestHeader Authorization authorization, @RequestBody UsernameRequest usernameRequest) {
+        try {
+            return new ResponseEntity<>(
+                    new AreFriendsResponse(crudServices.areFriends(authService.getUserIdFromJWT(authorization.getToken()),
+                            usernameRequest.getUsername())),
                     HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.OK);
