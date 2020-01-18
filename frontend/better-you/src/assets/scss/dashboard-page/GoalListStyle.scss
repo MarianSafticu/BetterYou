@@ -91,7 +91,7 @@
 @media only screen and (max-width: 767px) {
   .card-container {
     position: relative;
-    width: 100%;
+    width: 90%;
     border-radius: 4px;
 
     background: rgba($color: white, $alpha: 0.3) !important;
@@ -118,9 +118,14 @@
   .title {
     color: $color3;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: medium !important;
 
     float: left;
     padding-left: 10px;
+
+    width: 160px;
+    overflow: auto;
+    max-height: 25px;
   }
 
   .delete_button {

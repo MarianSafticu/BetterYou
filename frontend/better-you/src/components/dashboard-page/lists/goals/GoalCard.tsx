@@ -5,7 +5,18 @@ import Typography from "@material-ui/core/Typography";
 import GoalProgressBar from "./GoalProgressBar";
 import "../../../../assets/scss/dashboard-page/GoalListStyle.scss";
 import Tooltip from "@material-ui/core/Tooltip";
-import { TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button, Popover, List, ListItem, Divider } from "@material-ui/core";
+import {
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Popover,
+  List,
+  ListItem,
+  Divider
+} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import Done from "@material-ui/icons/Done";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -15,23 +26,26 @@ import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponen
 import Friend from "../../../../models/Friend";
 import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
-import { fetchFriendsBegin, challengeFriendBegin } from "../../../../redux/actions/actions";
+import {
+  fetchFriendsBegin,
+  challengeFriendBegin
+} from "../../../../redux/actions/actions";
 import ChallengeFriendDTO from "../../../../models/ChallengeFriendDTO";
 import { goalCategorys } from "../../../../models/GoalCategorys";
 
 interface IProps {
-  goal: Goal,
-  isReadOnly?: boolean | null,
-  markGoalAsCompleate?: Function,
-  friends: Friend[],
-  fetchFriends: Function,
-  chalangeFriend: Function
+  goal: Goal;
+  isReadOnly?: boolean | null;
+  markGoalAsCompleate?: Function;
+  friends: Friend[];
+  fetchFriends: Function;
+  chalangeFriend: Function;
 }
 interface IState {
-  goal: Goal,
-  showGoalView: boolean,
-  input_progress: number,
-  isChalangeFriendOpen: boolean
+  goal: Goal;
+  showGoalView: boolean;
+  input_progress: number;
+  isChalangeFriendOpen: boolean;
 }
 
 const friends: Friend[] = [
@@ -61,11 +75,10 @@ const friends: Friend[] = [
     profile_name: "profile name 1",
     username: "username 1",
     verified: true
-  },
-]
+  }
+];
 
 class GoalCard extends React.Component<IProps, IState> {
-
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -77,16 +90,17 @@ class GoalCard extends React.Component<IProps, IState> {
   }
 
   isReaadOnly = (): boolean => {
-    if (this.props.isReadOnly !== null &&
+    if (
+      this.props.isReadOnly !== null &&
       this.props.isReadOnly !== undefined &&
-      this.props.isReadOnly)
+      this.props.isReadOnly
+    )
       return true;
     return false;
-  }
+  };
 
   handleOpneGoal = () => {
-    if (this.isReaadOnly())
-      return
+    if (this.isReaadOnly()) return;
     this.setState({
       goal: this.state.goal,
       showGoalView: true,
@@ -107,43 +121,42 @@ class GoalCard extends React.Component<IProps, IState> {
     this.setState({
       isChalangeFriendOpen: true
     });
-  }
+  };
   handleCloseChalangeFriend = () => {
     this.setState({
       isChalangeFriendOpen: false
     });
-  }
+  };
 
   handleChalangeFriend = (friend: Friend) => {
-    this.props.chalangeFriend({receiverUsername: friend.username, goalId: this.props.goal.groupId})
+    this.props.chalangeFriend({
+      receiverUsername: friend.username,
+      goalId: this.props.goal.groupId
+    });
     this.handleCloseChalangeFriend();
-  }
+  };
 
   render() {
     return (
       <Card className="card-container">
-        <div className="category" style={{ backgroundColor: this.state.goal.category.color }} />
         <div
-          className="MuiButtonBase-root MuiCardActionArea-root title_container"
-
-        >
+          className="category"
+          style={{ backgroundColor: this.state.goal.category.color }}
+        />
+        <div className="MuiButtonBase-root MuiCardActionArea-root title_container">
           <div className="title" onClick={this.handleOpneGoal}>
             {this.props.goal.title}
           </div>
 
-          <Button style={{ float: "right", height: "50px", width: "25%" }} onClick={this.handleOpenChalangeFriend}>
-            challenge
-          </Button>
+          <Button onClick={this.handleOpenChalangeFriend}>challenge</Button>
 
-          {
-            !this.isReaadOnly()
-            &&
+          {!this.isReaadOnly() && (
             <Tooltip title="Delete">
               <IconButton aria-label="delete" className="delete_button">
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-          }
+          )}
         </div>
 
         <div className="container">
@@ -152,9 +165,7 @@ class GoalCard extends React.Component<IProps, IState> {
             progressToReach={this.props.goal.progressToReach}
           />
 
-          {
-            !this.isReaadOnly()
-            &&
+          {!this.isReaadOnly() && (
             <Tooltip
               title="Modify progress with the specified number"
               aria-label="add"
@@ -170,10 +181,8 @@ class GoalCard extends React.Component<IProps, IState> {
                 }}
               />
             </Tooltip>
-          }
-          {
-            !this.isReaadOnly()
-            &&
+          )}
+          {!this.isReaadOnly() && (
             <Tooltip title="Modify" aria-label="add">
               <Fab color="inherit" className="add_button_progress">
                 <Done
@@ -183,7 +192,7 @@ class GoalCard extends React.Component<IProps, IState> {
                 />
               </Fab>
             </Tooltip>
-          }
+          )}
           <GeneralGoalViewPopupComponent
             selfDistructFunction={this.handleCloseGoal}
             open={this.state.showGoalView}
@@ -200,30 +209,43 @@ class GoalCard extends React.Component<IProps, IState> {
             }}
             anchorEl={null}
             open={this.state.isChalangeFriendOpen}
-            onClose={this.handleCloseChalangeFriend}>
-            <div style={{ width: "500px", maxWidth: "100vw", height: "50vh", overflowY: "scroll", alignContent: "center", textAlign: "center" }}>
-              {
-                this.props.friends.length === 0
-                &&
-                <p style={{ margin: "auto" }}>You have no friends to challenge</p>
-              }
-              {
-                this.props.friends.length !== 0
-                &&
+            onClose={this.handleCloseChalangeFriend}
+          >
+            <div
+              style={{
+                width: "500px",
+                maxWidth: "100vw",
+                height: "50vh",
+                overflowY: "scroll",
+                alignContent: "center",
+                textAlign: "center"
+              }}
+            >
+              {this.props.friends.length === 0 && (
+                <p style={{ margin: "auto" }}>
+                  You have no friends to challenge
+                </p>
+              )}
+              {this.props.friends.length !== 0 && (
                 <div style={{ padding: "20px" }}>
                   Chose the friend you want to challenge
-                <List >
-                    {this.props.friends.map((x) =>
+                  <List>
+                    {this.props.friends.map(x => (
                       <div>
-                        <ListItem style={{ cursor: "pointer" }} onClick={() => { this.handleChalangeFriend(x) }}>
+                        <ListItem
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            this.handleChalangeFriend(x);
+                          }}
+                        >
                           {x.username}
                         </ListItem>
                         <Divider />
                       </div>
-                    )}
+                    ))}
                   </List>
                 </div>
-              }
+              )}
             </div>
           </Popover>
         </div>
@@ -234,8 +256,7 @@ class GoalCard extends React.Component<IProps, IState> {
   handleClick() {
     var goal = this.state.goal;
     goal.currentProgress = goal.currentProgress + this.state.input_progress;
-    if (goal.currentProgress < 0)
-      goal.currentProgress = 0;
+    if (goal.currentProgress < 0) goal.currentProgress = 0;
     else if (goal.currentProgress >= goal.progressToReach) {
       goal.currentProgress = goal.progressToReach;
       /*if (this.props.markGoalAsCompleate !== undefined)
@@ -243,7 +264,7 @@ class GoalCard extends React.Component<IProps, IState> {
       return*/
     }
 
-    this.setState({ goal: goal })
+    this.setState({ goal: goal });
   }
   handleClick2() {
     /*this.setState(state => {
@@ -292,7 +313,6 @@ class GoalCard extends React.Component<IProps, IState> {
   }
 }
 
-
 const mapStateToProps = (state: AppState) => ({
   friends: state.friends
 });
@@ -300,7 +320,8 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = (dispatch: any) => {
   return {
     fetchFriends: () => dispatch(fetchFriendsBegin()),
-    chalangeFriend: (challenge: ChallengeFriendDTO) => dispatch(challengeFriendBegin(challenge))
+    chalangeFriend: (challenge: ChallengeFriendDTO) =>
+      dispatch(challengeFriendBegin(challenge))
   };
 };
 

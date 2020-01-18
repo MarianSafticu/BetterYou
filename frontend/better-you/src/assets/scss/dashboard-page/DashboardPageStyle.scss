@@ -132,11 +132,19 @@
   .list_component {
     max-width: #{$mobile_witdh_threshold};
     flex: 0 0 96%;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
+
+  .list {
+  }
+
   .newsfeed {
     max-width: #{$mobile_witdh_threshold};
     flex: 0 0 96%;
+    overflow-y: scroll;
   }
+
   #switch_add_bar {
     display: flex;
   }
@@ -156,7 +164,7 @@
 
   #button_filter {
     height: 40px;
-    width: 100px;
+    width: 80px;
     margin-left: 30px;
     margin-right: 5px;
     float: left;
@@ -164,7 +172,7 @@
 
   #button_sort {
     height: 40px;
-    width: 100px;
+    width: 80px;
     margin-right: 5px;
     float: right;
   }
