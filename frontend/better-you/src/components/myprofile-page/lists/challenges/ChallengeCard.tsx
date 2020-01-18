@@ -5,10 +5,12 @@ import Friend from "../../../../models/Friend";
 import { acceptFriendBegin, declineFriendBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
 import UsernameRequestDTO from "../../../../models/UsernameRequestDTO";
+import ChallengeDTO from "../../../../models/ChallengeDTO";
+import { NavLink } from "react-router-dom";
 
 interface IProps {
     image: string;
-    sender: Friend;
+    challenge: ChallengeDTO;
     acceptRequest: Function;
     declineRequest: Function;
 }
@@ -17,20 +19,21 @@ class ChallengeCard extends React.Component<IProps, {}> {
     render() {
         return (
             <Card className="friend_container_request">
-                <div className="card_request_div" onClick={() => { console.log(this.props.sender.username) }}>
+                <div className="card_request_div" onClick={() => { console.log(this.props.challenge.form.username) }}>
                     <img src={this.props.image} className="friend_image_page"></img>
-                    <div className="friend_name_page">{this.props.sender.profile_name}</div>
+                    <NavLink to={"/u/"+this.props.challenge.form.username} className="friend_name_page">{this.props.challenge.form.profile_name}</NavLink>
                 </div>
                 <div className="friend_card_buttons">
                     <button className="acceptButton"
                         onClick={() => {
-                            this.handleClickAccept();
+                            //this.handleClickAccept();
                         }}>
                         Accept
                     </button>
                     <button className="declineButton"
                         onClick={() => {
-                            this.handleClickDecline(this.props.sender.username);
+                            //if(this.props.challenge.form.username !== undefined)
+                            //    this.handleClickDecline(this.props.challenge.form.username);
                         }}>
                         Decline
                     </button>

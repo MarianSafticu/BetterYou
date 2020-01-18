@@ -471,9 +471,9 @@ export function* fetchChallengesHandler(action: AppActionType): IterableIterator
   const response = yield call(httpService.fetchChallenges);
   if (response) {
     console.log(response);
-    const { challenges, massage } = response;
-    if (challenges) {
-      yield put(fetchChallengesSuccess(challenges));
+    const { goalChallenges, massage } = response;
+    if (goalChallenges) {
+      yield put(fetchChallengesSuccess(goalChallenges));
     }
     if (massage) yield put(fetchUsersError(massage))
   }

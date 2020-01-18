@@ -6,6 +6,7 @@ import AppState from "../../../../redux/store/store";
 import { NavLink } from "react-router-dom";
 import ChallengeCard from "./ChallengeCard";
 import ChallengeDTO from "../../../../models/ChallengeDTO";
+import { List, ListItem } from "@material-ui/core";
 
 
 interface IProps {
@@ -30,14 +31,17 @@ class ChallengeList extends React.Component<IProps, {}> {
     render() {
         return (
             <div>
+                <List>
                 {
-                    this.props.challenges.map((friend, i) => {
+                    this.props.challenges.map((challenges, i) => {
                         return (
-                            <div key={i}>
-                            </div>
+                            <ListItem key={i}>
+                                <ChallengeCard image="" challenge={challenges}/>
+                            </ListItem>
                         )
                     })
                 }
+                </List>
             </div>
         )
     }
