@@ -497,3 +497,24 @@ export function addFriendErrorHandler(oldState: AppState, error: string): AppSta
   newState.challenges = [];
   return newState;
 } 
+
+export function fetchFriendGoalsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchFriendGoalsSuccessHandler(oldState: AppState, goals: Goal[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = goals;
+  return newState;
+}
+export function fetchFriendGoalsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.challenges = [];
+  return newState;
+} 

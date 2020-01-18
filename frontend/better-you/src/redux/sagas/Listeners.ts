@@ -35,7 +35,8 @@ import {
   fetchUsersError,
   fetchUsersSuccess,
   fetchChallengesSuccess,
-  addFriendSuccess
+  addFriendSuccess,
+  fetchFriendGoalsSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -421,5 +422,39 @@ export function* addFriendHandler(action: AppActionType): IterableIterator<any> 
       yield put(addFriendSuccess());
     }
     if (massage) yield put(fetchUsersError(massage))
+  }
+}
+
+export function*fetchFriendGoalsHandler(action: AppActionType): IterableIterator<any> {
+  let username: string = action.payload as string;
+
+  const response = yield call(httpService.fetchFriendGoals, username);
+  if (response) {
+    const { userGoals, massage } = response;
+    if (userGoals) {
+      let goals: FetchGoalResponse[] = userGoals
+      let goalsDTO: Goal[] = []
+      goals.map((goal: FetchGoalResponse) => {
+        let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === goal.goal.category)[0];
+        if (category === undefined)
+          category = category[0]
+
+        let goalDTO: Goal = {
+          id: goal.id,
+          groupId: goal.goal.id,
+          title: goal.goal.title,
+          description: goal.goal.description,
+          startDate: new Date(goal.startDate),
+          endDate: new Date(goal.endDate),
+          currentProgress: goal.currentProgress,
+          progressToReach: goal.goal.progressToReach,
+          isPublic: goal.public,
+          category: category
+        }
+        goalsDTO.push(goalDTO);
+      });
+      yield put(fetchGoalsSuccess(goalsDTO));
+    }
+    if (massage) yield put(fetchGoalsError(massage))
   }
 }

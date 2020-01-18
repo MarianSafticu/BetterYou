@@ -66,6 +66,9 @@ import {
   ADD_FRIEND_BEGIN,
   ADD_FRIEND_SUCCESS,
   ADD_FRIEND_ERROR,
+  FETCH_FRIEND_GOALS_BEGIN,
+  FETCH_FRIEND_GOALS_SUCCESS,
+  FETCH_FRIEND_GOALS_ERROR,
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -515,3 +518,23 @@ export function addFriendError(error: string): AppActionType {
     payload: error
   }
 }
+
+export function fetchFriendGoalsBegin(username: string): AppActionType {
+  return {
+    type: FETCH_FRIEND_GOALS_BEGIN,
+    payload: username
+  };
+}
+export function fetchFriendGoalsSuccess(goals: Goal[]): AppActionType {
+  return {
+    type: FETCH_FRIEND_GOALS_SUCCESS,
+    payload: goals
+  }
+}
+export function fetchFriendGoalsError(error: string): AppActionType {
+  return {
+    type: FETCH_FRIEND_GOALS_ERROR,
+    payload: error
+  }
+}
+
