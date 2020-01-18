@@ -4,6 +4,10 @@ package ServerUI.Requests.friends;
 public class SearchUsersRequest {
     private String usernamePrefix;
 
+    public SearchUsersRequest() {
+
+    }
+
     public SearchUsersRequest(String usernamePrefix, String token) {
         this.usernamePrefix = usernamePrefix;
     }

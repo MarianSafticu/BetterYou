@@ -5,6 +5,7 @@ import Friend from "../../../../models/Friend";
 import { acceptFriendBegin, declineFriendBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
 import UsernameRequestDTO from "../../../../models/UsernameRequestDTO";
+import { NavLink } from "react-router-dom";
 
 interface IProps {
     image: string;
@@ -19,14 +20,17 @@ class FriendRequestCard extends React.Component<IProps, {}> {
 
         return (
             <Card className="friend_container_request">
-                <div className="card_request_div" onClick={() => { console.log(this.props.sender.username) }}>
-                    <img src={this.props.image} className="friend_image_page"></img>
-                    <div className="friend_name_page">{this.props.sender.profile_name}</div>
+                <div className="card_request_div">
+                    <NavLink className="nav_link_friend" to={"u/" + this.props.sender.username} id="friend_name">
+
+                        <img src={this.props.image} className="friend_image_page"></img>
+                        <div className="friend_name_page">{this.props.sender.profile_name}</div>
+                    </NavLink>
                 </div>
                 <div className="friend_card_buttons">
                     <button className="acceptButton"
                         onClick={() => {
-                            this.handleClickAccept();
+                            this.handleClickAccept(this.props.sender.username);
                         }}>
                         Accept
                     </button>
@@ -43,8 +47,11 @@ class FriendRequestCard extends React.Component<IProps, {}> {
     }
 
 
-    handleClickAccept() {
-        console.log("accept")
+    handleClickAccept(username: string) {
+        let user: UsernameRequestDTO = {
+            usernameSender: username
+        }
+        this.props.acceptRequest(user);
     }
 
     handleClickDecline(username: string) {
@@ -60,6 +67,6 @@ const mapDispatchToProps = (dispatch: any) => {
         acceptRequest: (username: string) => dispatch(acceptFriendBegin(username)),
         declineRequest: (username: string) => dispatch(declineFriendBegin(username))
     };
-  };
+};
 
 export default connect(null, mapDispatchToProps)(FriendRequestCard);

@@ -2,7 +2,11 @@ package ServerUI.Requests.friends;
 
 
 public class AcceptFriendRequest {
-    private final String usernameSender;
+    private String usernameSender;
+
+    public AcceptFriendRequest() {
+
+    }
 
     public AcceptFriendRequest(String token, String usernameSender) {
         this.usernameSender = usernameSender;

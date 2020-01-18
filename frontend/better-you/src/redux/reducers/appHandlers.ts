@@ -9,6 +9,7 @@ import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
+import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
 import ChallengeDTO from "../../models/ChallengeDTO";
@@ -373,31 +374,46 @@ export function challengeFriendErrorHandler(oldState: AppState, error: string): 
   return newState;
 } 
 
-// export function acceptFriendBeginHandler(oldState: AppState): AppState {
-//   const newState = { ...oldState };
-//   newState.loading = false;
-//   newState.error = "";
-//   newState.friends = oldState.friends;
-//   return newState;
-// }
-// export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
-//   const newState = { ...oldState };
-//   newState.loading = false;
-//   newState.error = "";
+export function acceptFriendBeginHandler(oldState: AppState): AppState {
+  const newState = { ...oldState };
+  newState.loading = true;
+  newState.error = "";
+  newState.friends = oldState.friends;
+  return newState;
+}
+export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
   
-//   let newGoals = newState.goals.slice();
-//   newGoals.splice(0, 0, goal);
-//   newState.goals = newGoals;
+  let friend: Friend = {
+    id: 0,
+    username: username,
+    profile_name: username,
+    email: "",
+    birthDate: new Date("2000-01-01"),
+    points: 0,
+    verified: true
+}
 
-//   return newState;
-// }
-// export function addGoalErrorHandler(oldState: AppState, error: string): AppState {
-//   const newState = { ...oldState };
-//   newState.loading = false;
-//   newState.error = error;
-//   newState.goals = oldState.goals;
-//   return newState;
-// }
+  let newFriends = newState.friends.slice();
+  newFriends.splice(0, 0, friend);
+  newState.friends = newFriends;
+
+  newState.friendRequests = newState.friendRequests.filter(req => req.sender.username !== username)
+
+  newState.loading = false;
+  newState.error = "";
+
+  return newState;
+}
+export function acceptFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = error;
+  newState.friends = oldState.friends;
+  return newState;
+}
 
 
 export function declineFriendBeginHandler(oldState: AppState): AppState {

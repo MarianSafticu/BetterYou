@@ -7,7 +7,6 @@ import AppState from "../../../../redux/store/store";
 import SearchComponent from "./SearchComponent";
 import { NavLink } from "react-router-dom";
 
-
 interface IProps {
     friendsList: Friend[];
     fetchFriends: Function;

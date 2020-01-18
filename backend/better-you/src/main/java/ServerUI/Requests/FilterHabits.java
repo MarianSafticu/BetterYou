@@ -4,6 +4,10 @@ public class FilterHabits {
     private String category;
     private Boolean bestStreak;
 
+    public FilterHabits() {
+
+    }
+
     public FilterHabits(String category, Boolean bestStreak) {
         this.category = category;
         this.bestStreak = bestStreak;

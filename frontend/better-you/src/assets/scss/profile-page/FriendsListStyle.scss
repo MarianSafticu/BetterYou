@@ -21,6 +21,7 @@
       cursor: pointer;
       width: 420px;
     }
+
 }
 
 .friend_container_request {
@@ -39,9 +40,50 @@
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.nav_link_friend {
+  position: relative;
+
+  text-decoration: none;
+
+  font-weight: bold;
+  text-shadow: 1px 1px white;
+  text-align: center;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+
+  width: 400px;
+  border-radius: 4px;
+
+  &:hover{
+    cursor: pointer;
+    width: 420px;
+  }
 
 }
 
+.nav_link_request {
+  position: relative;
+
+  text-decoration: none;
+
+  font-weight: bold;
+  text-shadow: 1px 1px white;
+  text-align: center;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+
+  width: 400px;
+  border-radius: 4px;
+
+
+  &:hover{
+    cursor: pointer;
+  }
+}
 
 .friend_image_page {
     float: left;
