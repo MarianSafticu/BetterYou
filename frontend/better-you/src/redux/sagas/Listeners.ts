@@ -200,9 +200,21 @@ export function* editGoalHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.editGoal, goal);
   if(response) {
     const { aBoolean, massage } = response;
-    if (aBoolean) 
-    // yield put(editGoalSuccess(goal));
-      console.log("hello there");
+    if (aBoolean) {
+      let newGoal: Goal = {
+        id: goal.userGoal.id,
+        groupId: 0,
+        title: "",
+        description: "",
+        startDate: new Date(),
+        endDate: new Date(goal.userGoal.endDate),
+        currentProgress: goal.userGoal.currentProgress,
+        progressToReach: 0,
+        isPublic: goal.userGoal.public,
+        category: goalCategorys[0]
+      }
+      yield put(editGoalSuccess(newGoal));
+    }
     else if(massage) yield put(editGoalError(massage));
   }
 }

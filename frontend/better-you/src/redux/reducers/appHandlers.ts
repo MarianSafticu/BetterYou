@@ -178,7 +178,19 @@ export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState
 
   let newGoals = newState.goals.map((g: Goal) => {
     if(g.id === goal.id) {
-      g = {...goal};
+      let updates: Goal = {
+        id: g.id,
+        groupId: g.groupId,
+        title: g.title,
+        description: g.description,
+        startDate: g.startDate,
+        endDate: new Date(goal.endDate),
+        currentProgress: goal.currentProgress,
+        progressToReach: g.progressToReach,
+        isPublic: goal.isPublic,
+        category: goal.category
+      }
+      return updates;
     }
     return g;
   });

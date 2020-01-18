@@ -97,7 +97,6 @@ class GoalCard extends React.Component<IProps, IState> {
         <div className="category" style={{ backgroundColor: this.state.goal.category.color }} />
         <div
           className="MuiButtonBase-root MuiCardActionArea-root title_container"
-
         >
           <div className="title" onClick={this.handleOpneGoal}>
             {this.props.goal.title}
