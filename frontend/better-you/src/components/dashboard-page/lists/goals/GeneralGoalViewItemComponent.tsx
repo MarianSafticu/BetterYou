@@ -19,7 +19,7 @@ import Service from "../../../../services/Service";
 import { GoalException } from "../../../../exceptions/GoalException";
 import { goalCategorys } from "../../../../models/GoalCategorys";
 import { connect } from "react-redux";
-import { addGoalBegin } from "../../../../redux/actions/actions";
+import { addGoalBegin, deleteGoalBegin } from "../../../../redux/actions/actions";
 import AddGoalRequest from "../../../../models/requests/AddGoalRequest";
 
 interface IProps {
@@ -27,6 +27,7 @@ interface IProps {
   goal?: Goal;
   isDefaultGoal?: boolean;
   addGoal: Function;
+  deleteGoal: Function;
 }
 
 interface IState {
@@ -390,7 +391,9 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
   };
 
   onDeleteHandle = () => {
-    console.log("I WANT TO DELETE THIS CRAP");
+    this.props.deleteGoal(this.state.goal.id);
+    this.onClosePopoverDelete();
+    this.props.onFinnishAction();
   };
 
   render() {
@@ -639,7 +642,8 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addGoal: (goal: AddGoalRequest) => dispatch(addGoalBegin(goal))
+    addGoal: (goal: AddGoalRequest) => dispatch(addGoalBegin(goal)),
+    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id))
   };
 };
 
