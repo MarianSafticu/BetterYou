@@ -44,14 +44,14 @@ class HabitCard extends React.Component<IProps, IState> {
       showHabitView: false
     });
   };
-        
+
   handleDeleteHabit = () => {
     this.props.deleteHabit(this.props.habit.id);
-  }
-        
+  };
+
   render() {
     return (
-      <Card className="card-container">
+      <Card className="card-container-habit">
         <div
           className="category"
           style={{ backgroundColor: this.state.habit.category.color }}
@@ -63,7 +63,11 @@ class HabitCard extends React.Component<IProps, IState> {
           </div>
 
           <Tooltip title="Delete">
-            <IconButton aria-label="delete" className="delete_button" onClick={this.handleDeleteHabit}>
+            <IconButton
+              aria-label="delete"
+              className="delete_button"
+              onClick={this.handleDeleteHabit}
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -81,8 +85,7 @@ class HabitCard extends React.Component<IProps, IState> {
   }
 }
 
-const mapStateToProps = (state: AppState) => ({
-});
+const mapStateToProps = (state: AppState) => ({});
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
