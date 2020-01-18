@@ -20,8 +20,10 @@ export default interface IHttpService {
   getUserInformation():Promise<UserInfoDTO>;
   fetchGoals(): Promise<FetchGoalResponse[]>;
   addGoal(goal: AddGoalRequest): Promise<number>;
+  deleteGoal(id: number): Promise<boolean>;
   fetchHabits(): Promise<FetchHabitResponse[]>;
   addHabit(habit: AddHabitRequest): Promise<number>;
+  deleteHabit(id: number): Promise<boolean>;
   fetchFriends(): Promise<FetchFriendsResponse[]>;
   fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;

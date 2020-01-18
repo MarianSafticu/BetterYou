@@ -15,9 +15,8 @@ import GeneralGoalViewPopupComponent from "../goals/GeneralGoalViewPopupComponen
 import Friend from "../../../../models/Friend";
 import AppState from "../../../../redux/store/store";
 import { connect } from "react-redux";
-import { fetchFriendsBegin, challengeFriendBegin } from "../../../../redux/actions/actions";
+import { fetchFriendsBegin, challengeFriendBegin, deleteGoalBegin } from "../../../../redux/actions/actions";
 import ChallengeFriendDTO from "../../../../models/ChallengeFriendDTO";
-import { goalCategorys } from "../../../../models/GoalCategorys";
 
 interface IProps {
   goal: Goal,
@@ -25,7 +24,8 @@ interface IProps {
   markGoalAsCompleate?: Function,
   friends: Friend[],
   fetchFriends: Function,
-  chalangeFriend: Function
+  chalangeFriend: Function;
+  deleteGoal: Function;
 }
 interface IState {
   goal: Goal,
@@ -33,36 +33,6 @@ interface IState {
   input_progress: number,
   isChalangeFriendOpen: boolean
 }
-
-const friends: Friend[] = [
-  {
-    birthDate: new Date(),
-    email: "",
-    id: 10,
-    points: 100,
-    profile_name: "profile name 1",
-    username: "username 1",
-    verified: true
-  },
-  {
-    birthDate: new Date(),
-    email: "",
-    id: 10,
-    points: 100,
-    profile_name: "profile name 1",
-    username: "username 1",
-    verified: true
-  },
-  {
-    birthDate: new Date(),
-    email: "",
-    id: 10,
-    points: 100,
-    profile_name: "profile name 1",
-    username: "username 1",
-    verified: true
-  },
-]
 
 class GoalCard extends React.Component<IProps, IState> {
 
@@ -119,6 +89,10 @@ class GoalCard extends React.Component<IProps, IState> {
     this.handleCloseChalangeFriend();
   }
 
+  handleDeleteGoal = () => {
+    this.props.deleteGoal(this.props.goal.id);
+  }
+
   render() {
     return (
       <Card className="card-container">
@@ -139,7 +113,7 @@ class GoalCard extends React.Component<IProps, IState> {
             !this.isReaadOnly()
             &&
             <Tooltip title="Delete">
-              <IconButton aria-label="delete" className="delete_button">
+              <IconButton aria-label="delete" className="delete_button" onClick={this.handleDeleteGoal}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -238,57 +212,9 @@ class GoalCard extends React.Component<IProps, IState> {
       goal.currentProgress = 0;
     else if (goal.currentProgress >= goal.progressToReach) {
       goal.currentProgress = goal.progressToReach;
-      /*if (this.props.markGoalAsCompleate !== undefined)
-        this.setState({ openDialog: true })
-      return*/
     }
 
     this.setState({ goal: goal })
-  }
-  handleClick2() {
-    /*this.setState(state => {
-      var newGoal = this.state.goal;
-
-      if (state.goal.currentProgress + state.input_progress < 0) {
-        newGoal.currentProgress = 0;
-        this.state.goal.currentProgress = 0;
-        return {
-          goal: newGoal,
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      }
-      if (
-        state.goal.currentProgress + state.input_progress <=
-        this.props.goal.progressToReach
-      ) {
-        newGoal.currentProgress =
-          state.goal.currentProgress + state.input_progress;
-        this.state.goal.currentProgress =
-          state.goal.currentProgress + state.input_progress;
-        return {
-          goal: newGoal,
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      } else {
-        this.state.goal.currentProgress = this.state.goal.progressToReach;
-        return {
-          goal: {
-            title: this.props.goal.title,
-            description: this.props.goal.description,
-            currentProgress: this.props.goal.progressToReach,
-            category: newGoal.category,
-            endDate: newGoal.endDate,
-            progressToReach: newGoal.progressToReach,
-            startDate: newGoal.startDate,
-            isPublic: newGoal.isPublic
-          },
-          input_progress: this.state.input_progress,
-          showGoalView: this.state.showGoalView
-        };
-      }
-    });*/
   }
 }
 
@@ -300,7 +226,8 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = (dispatch: any) => {
   return {
     fetchFriends: () => dispatch(fetchFriendsBegin()),
-    chalangeFriend: (challenge: ChallengeFriendDTO) => dispatch(challengeFriendBegin(challenge))
+    chalangeFriend: (challenge: ChallengeFriendDTO) => dispatch(challengeFriendBegin(challenge)),
+    deleteGoal: (id: number) => dispatch(deleteGoalBegin(id))
   };
 };
 

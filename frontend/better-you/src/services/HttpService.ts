@@ -119,6 +119,21 @@ export default class HttpService implements IHttpService {
       });
   }
 
+  async deleteGoal(id: number): Promise<boolean> {
+    return await fetch(`${url}/goal`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(id)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
+
   async fetchHabits(): Promise<FetchHabitResponse[]> {
     return await fetch(`${url}/habits`, {
       method: "post",
@@ -134,7 +149,6 @@ export default class HttpService implements IHttpService {
   }
 
   async addHabit(habit: AddHabitRequest): Promise<number> {
-    console.log(JSON.stringify(habit))
     return await fetch(`${url}/habit`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -147,6 +161,20 @@ export default class HttpService implements IHttpService {
       .catch(error => {
         return error;
       });
+  }
+
+  async deleteHabit(id: number): Promise<boolean> {
+    return await fetch(`${url}/habit`, {
+      method: "delete",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(id)
+    }).then(response => response.json())
+    .then(body => {
+      return body;
+    })
+    .catch(error => {
+      return error;
+    });
   }
 
   async fetchFriends(): Promise<FetchFriendsResponse[]> {
@@ -192,7 +220,6 @@ export default class HttpService implements IHttpService {
   }
 
   async challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean> {
-    console.log(challenge);
     return await fetch(`${url}/challenge`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -208,7 +235,6 @@ export default class HttpService implements IHttpService {
   }
 
   async acceptFriendRequest(usernameReceiver: string): Promise<boolean> {
-    console.log(usernameReceiver)
     return await fetch(`${url}/friend/request/accept`, {
       method: "post",
       headers: getSafeHeaders(),
@@ -224,7 +250,6 @@ export default class HttpService implements IHttpService {
   }
 
   async declineFriendRequest(usernameReceiver: string): Promise<boolean> {
-    console.log(usernameReceiver)
     return await fetch(`${url}/friend/request/reject`, {
       method: "delete",
       headers: getSafeHeaders(),
@@ -244,7 +269,6 @@ export default class HttpService implements IHttpService {
       usernamePrefix: prefix,
       token: ""
     }
-    console.log(prefix);
     return await fetch(`${url}/users`, {
       method: "post",
       headers: getSafeHeaders(),

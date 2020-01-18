@@ -31,7 +31,11 @@ import {
   declineFriendError,
   declineFriendSuccess,
   fetchUsersError,
-  fetchUsersSuccess
+  fetchUsersSuccess,
+  deleteGoalSuccess,
+  deleteGoalError,
+  deleteHabitSuccess,
+  deleteHabitError
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -109,6 +113,7 @@ export function* confirmAccountHandler(action: AppActionType): IterableIterator<
   }
 }
 
+
 export function* getUserInformationHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.getUserInformation);
   if (response) {
@@ -120,6 +125,7 @@ export function* getUserInformationHandler(action: AppActionType): IterableItera
       yield put(setCurrentUserInformationError(massage))
   }
 }
+
 
 export function* fetchGoalsHandler(action: AppActionType): IterableIterator<any> {
   const response = yield call(httpService.fetchGoals);
@@ -189,7 +195,13 @@ export function* editGoalHandler(action: AppActionType): IterableIterator<any> {
 
 
 export function* deleteGoalHandler(action: AppActionType): IterableIterator<any> {
-
+  let id: number = action.payload as number;
+  const response = yield call(httpService.deleteGoal, id);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) yield put(deleteGoalSuccess(id));
+    else if (massage) yield put(deleteGoalError(massage))
+  }
 }
 
 
@@ -261,7 +273,13 @@ export function* editHabitHandler(action: AppActionType): IterableIterator<any> 
 
 
 export function* deleteHabitHandler(action: AppActionType): IterableIterator<any> {
-
+  let id: number = action.payload as number;
+  const response = yield call(httpService.deleteHabit, id);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) yield put(deleteHabitSuccess(id));
+    else if (massage) yield put(deleteHabitError(massage))
+  }
 }
 
 export function* fetchFriendsHandler(action: AppActionType): IterableIterator<any> {
