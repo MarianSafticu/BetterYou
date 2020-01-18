@@ -18,6 +18,8 @@ import GoalDTO from "../models/GoalDTO";
 import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
 import UsernameRequestDTO from "../models/UsernameRequestDTO";
 import SearchUsersRequest from "../models/requests/SearchUsersRequest";
+import AddFriendRequest from "../models/requests/AddFriendRequest";
+import ChallengeDTO from "../models/ChallengeDTO";
 
 export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -259,5 +261,38 @@ export default class HttpService implements IHttpService {
         return error;
       });
   }
+  async fetchChallenges(): Promise<ChallengeDTO[]> {
+    return await fetch(`${url}/challenges`, {
+      method: "get",
+      headers: getSafeHeaders()
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+
+  }
+  async addFriend(usernameReceiver: string): Promise<boolean>{
+    var request:AddFriendRequest = {
+      usernameReceiver: usernameReceiver
+    }
+
+    return await fetch(`${url}/friend/request`, {
+      method: "post",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(request)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      });
+  }
 }
+
 

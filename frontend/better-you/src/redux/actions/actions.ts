@@ -60,6 +60,12 @@ import {
   FETCH_USERS_BEGIN,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_ERROR,
+  FETCH_CHALLENGES_BEGIN,
+  FETCH_CHALLENGES_SUCCESS,
+  FETCH_CHALLENGES_ERROR,
+  ADD_FRIEND_BEGIN,
+  ADD_FRIEND_SUCCESS,
+  ADD_FRIEND_ERROR,
 } from "./types";
 import UserDTO from "../../models/UserDTO";
 import Goal from "../../models/Goal";
@@ -77,6 +83,7 @@ import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
+import ChallengeDTO from "../../models/ChallengeDTO";
 
 export function setCurrentUserBegin(userInfo: LoginRequest): AppActionType {
   return {
@@ -106,22 +113,22 @@ export function unsetCurrentUser(): AppActionType {
 }
 
 
-export function setCurrentUserInformationBegin():AppActionType{
+export function setCurrentUserInformationBegin(): AppActionType {
   return {
-    type : SET_CURRENT_USER_INFORMATION_BEGIN,
-    payload : undefined
+    type: SET_CURRENT_USER_INFORMATION_BEGIN,
+    payload: undefined
   };
 }
-export function setCurrentUserInformationSuccess(userInfo : UserInfoDTO):AppActionType{
+export function setCurrentUserInformationSuccess(userInfo: UserInfoDTO): AppActionType {
   return {
-    type : SET_CURRENT_USER_INFORMATION_SUCCES,
-    payload : userInfo
+    type: SET_CURRENT_USER_INFORMATION_SUCCES,
+    payload: userInfo
   };
 }
-export function setCurrentUserInformationError(error:string):AppActionType{
+export function setCurrentUserInformationError(error: string): AppActionType {
   return {
-    type : SET_CURRENT_USER_INFORMATION_ERROR,
-    payload : error
+    type: SET_CURRENT_USER_INFORMATION_ERROR,
+    payload: error
   }
 }
 
@@ -352,7 +359,7 @@ export function fetchFriendsSuccess(friends: Friend[]): AppActionType {
 export function fetchFriendsError(error: string): AppActionType {
   return {
     type: FETCH_FRIENDS_ERROR,
-     payload: error
+    payload: error
   }
 }
 
@@ -371,7 +378,7 @@ export function fetchFriendRequestsSuccess(friendRequests: FriendRequest[]): App
 export function fetchFriendRequestsError(error: string): AppActionType {
   return {
     type: FETCH_FRIEND_REQUESTS_ERROR,
-     payload: error
+    payload: error
   }
 }
 
@@ -465,6 +472,46 @@ export function fetchUsersSuccess(users: UserInfoDTO[]): AppActionType {
 export function fetchUsersError(error: string): AppActionType {
   return {
     type: FETCH_USERS_ERROR,
+    payload: error
+  }
+}
+
+
+export function fetchChallengesBegin(): AppActionType {
+  return {
+    type: FETCH_CHALLENGES_BEGIN,
+    payload: undefined
+  };
+}
+export function fetchChallengesSuccess(challenges: ChallengeDTO[]): AppActionType {
+  return {
+    type: FETCH_CHALLENGES_SUCCESS,
+    payload: challenges
+  }
+}
+export function fetchChallengesError(error: string): AppActionType {
+  return {
+    type: FETCH_CHALLENGES_ERROR,
+    payload: error
+  }
+}
+
+
+export function addFriendBegin(usernameReceiver: string): AppActionType {
+  return {
+    type: ADD_FRIEND_BEGIN,
+    payload: usernameReceiver
+  };
+}
+export function addFriendSuccess(): AppActionType {
+  return {
+    type:ADD_FRIEND_SUCCESS,
+    payload: undefined
+  }
+}
+export function addFriendError(error: string): AppActionType {
+  return {
+    type: ADD_FRIEND_ERROR,
     payload: error
   }
 }

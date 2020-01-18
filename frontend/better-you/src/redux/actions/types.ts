@@ -14,6 +14,7 @@ import UserInfoDTO from "../../models/UserInfoDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import Friend from "../../models/Friend";
 import FriendRequest from "../../models/FriendRequest";
+import ChallengeDTO from "../../models/ChallengeDTO";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -95,6 +96,14 @@ export const DECLINE_FRIEND_ERROR = "DECLINE_FRIEND_ERROR";
 export const FETCH_USERS_BEGIN = "FETCH_USERS_BEGIN";
 export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
 export const FETCH_USERS_ERROR = "FETCH_USERS_ERROR";
+
+export const FETCH_CHALLENGES_BEGIN = "FETCH_CHALLENGES_BEGIN";
+export const FETCH_CHALLENGES_SUCCESS = "FETCH_CHALLENGES_SUCCESS";
+export const FETCH_CHALLENGES_ERROR = "FETCH_CHALLENGES_ERROR";
+
+export const ADD_FRIEND_BEGIN = "ADD_FRIEND_BEGIN";
+export const ADD_FRIEND_SUCCESS = "ADD_FRIEND_SUCCESS";
+export const ADD_FRIEND_ERROR = "ADD_FRIEND_ERROR";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -368,6 +377,34 @@ export interface FetchUsersError {
   payload: string;
 } 
 
+
+export interface FetchChallengesBegin {
+  type: typeof FETCH_CHALLENGES_BEGIN;
+  payload: undefined;
+}
+export interface FetchChallengesSuccess {
+  type: typeof FETCH_CHALLENGES_SUCCESS;
+  payload: ChallengeDTO[];
+}
+export interface FetchChallengesError {
+  type: typeof FETCH_CHALLENGES_ERROR;
+  payload: string;
+} 
+
+
+export interface AddFriendBegin {
+  type: typeof ADD_FRIEND_BEGIN;
+  payload: string;
+}
+export interface AddFriendSuccess {
+  type: typeof ADD_FRIEND_SUCCESS;
+  payload: undefined;
+}
+export interface AddFriendError {
+  type: typeof ADD_FRIEND_ERROR;
+  payload: string;
+} 
+
 export type AppActionType =
   | SetCurrentUserBegin
   | SetCurrentUserSuccess
@@ -428,4 +465,10 @@ export type AppActionType =
   | DeclineFriendError
   | FetchUsersBegin
   | FetchUsersSuccess
-  | FetchUsersError;
+  | FetchUsersError
+  | FetchChallengesBegin
+  | FetchChallengesSuccess
+  | FetchChallengesError
+  | AddFriendBegin
+  | AddFriendSuccess
+  | AddFriendError;
