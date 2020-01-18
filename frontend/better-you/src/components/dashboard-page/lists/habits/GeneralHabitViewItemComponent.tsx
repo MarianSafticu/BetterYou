@@ -272,20 +272,39 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
   onChangeDateCalendar: any;
 
   onSaveAdd = () => {
-    let habitReq: AddHabitRequest = {
-      habit: {
-        title: this.state.habit.title,
-        description: this.state.habit.description,
-        startDate: this.getStringFromData(this.state.habit.startDate),
-        repetitionType: this.state.habit.repetitionType.toUpperCase(),
-        category: this.state.habit.category.category.toUpperCase(),
-        bestStreak: 0,
-        currentStreak: 0,
-        dates: []  
+    if(this.state.edditingIsDisabled) {
+      let habitReq: AddHabitRequest = {
+        habit: {
+          title: this.state.habit.title,
+          description: this.state.habit.description,
+          startDate: this.getStringFromData(this.state.habit.startDate),
+          repetitionType: this.state.habit.repetitionType.toUpperCase(),
+          category: this.state.habit.category.category.toUpperCase(),
+          bestStreak: 0,
+          currentStreak: 0,
+          dates: []  
+        }
       }
+      this.props.addHabit(habitReq);
+      if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
     }
-    this.props.addHabit(habitReq);
-    if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
+    else {
+      let habitRequest: EditHabitRequest = {
+        habit: {
+          id: this.state.habit.id,
+          title: this.state.habit.title,
+          description: this.state.habit.description,
+          startDate: this.getStringFromData(this.state.habit.startDate),
+          repetitionType: this.state.habit.repetitionType.toString().toUpperCase(),
+          category: this.state.habit.category.category.toString().toUpperCase(),
+          bestStreak: 0,
+          currentStreak: 0,
+          dates: this.state.habit.dates.map(date => this.getStringFromData(date))
+        }
+      }
+      this.props.editHabit(habitRequest);
+      if (this.verifyHabit(this.state.habit)) this.props.onFinnishAction();
+    }
   };
   onDeleteShowHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     this.setState({

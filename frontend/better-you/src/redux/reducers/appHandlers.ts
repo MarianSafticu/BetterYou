@@ -281,7 +281,7 @@ export function editHabitSuccessHandler(oldState: AppState, habit: Habit): AppSt
 
   let newHabits = newState.habits.map((h: Habit) => {
     if(h.id === habit.id) {
-      h = {...habit};
+      h = {...habit}
     }
     return h;
   });

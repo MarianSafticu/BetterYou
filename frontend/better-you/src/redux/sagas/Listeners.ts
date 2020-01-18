@@ -38,7 +38,8 @@ import {
   deleteHabitError,
   editGoalSuccess,
   editGoalError,
-  editHabitError
+  editHabitError,
+  editHabitSuccess
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -265,7 +266,7 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
         repetitionType = Repetition.Weekly;
 
       let habitComplete: Habit = {
-        id: id,
+        id: habit.habit.id,
         title: habit.habit.title,
         description: habit.habit.description,
         startDate: new Date(),
@@ -285,9 +286,25 @@ export function* editHabitHandler(action: AppActionType): IterableIterator<any> 
   const response = yield call(httpService.editHabit, habit);
   if(response) {
     const { aBoolean, massage } = response;
-    if (aBoolean) 
-    // yield put(editHabitSuccess(habit));
-      console.log("hello there");
+    if (aBoolean) {
+      let category = goalCategorys.filter(x => x.category.toLocaleUpperCase() === habit.habit.category)[0];
+      if (category === undefined)
+        category = category[0]
+      let repetitionType = Repetition.Daily;
+      if (habit.habit.repetitionType === Repetition.Weekly.toLocaleUpperCase())
+        repetitionType = Repetition.Weekly;
+
+      let newHabit: Habit = {
+        id: habit.habit.id,
+        title: habit.habit.title,
+        description: habit.habit.description,
+        startDate: new Date(habit.habit.startDate),
+        repetitionType: repetitionType,
+        category: category,
+        dates: habit.habit.dates.map(date => new Date(date))
+      }
+      yield put(editHabitSuccess(newHabit));
+    }
     else if(massage) yield put(editHabitError(massage));
   }
 }

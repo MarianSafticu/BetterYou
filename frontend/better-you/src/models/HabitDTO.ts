@@ -1,4 +1,5 @@
 export default interface HabitDTO {
+    id?: number;
     title: string;
     description: string;
     startDate: string;
