@@ -19,14 +19,16 @@ import Service from "../../../../services/Service";
 import { GoalException } from "../../../../exceptions/GoalException";
 import { goalCategorys } from "../../../../models/GoalCategorys";
 import { connect } from "react-redux";
-import { addGoalBegin, deleteGoalBegin } from "../../../../redux/actions/actions";
+import { addGoalBegin, deleteGoalBegin, editGoalBegin } from "../../../../redux/actions/actions";
 import AddGoalRequest from "../../../../models/requests/AddGoalRequest";
+import EditGoalRequest from "../../../../models/requests/EditGoalRequest";
 
 interface IProps {
   onFinnishAction: Function;
   goal?: Goal;
   isDefaultGoal?: boolean;
   addGoal: Function;
+  editGoal: Function;
   deleteGoal: Function;
 }
 
@@ -643,6 +645,7 @@ class GeneralGoalViewItemComponent extends Component<IProps, IState> {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     addGoal: (goal: AddGoalRequest) => dispatch(addGoalBegin(goal)),
+    editGoal: (goal: EditGoalRequest) => dispatch(editGoalBegin(goal)),
     deleteGoal: (id: number) => dispatch(deleteGoalBegin(id))
   };
 };

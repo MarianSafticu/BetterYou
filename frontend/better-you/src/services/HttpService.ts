@@ -17,6 +17,8 @@ import FetchFriendRequestsResponse from "../models/responses/FetchFriendRequests
 import GoalDTO from "../models/GoalDTO";
 import ChallengeFriendDTO from "../models/ChallengeFriendDTO";
 import SearchUsersRequest from "../models/requests/SearchUsersRequest";
+import EditGoalRequest from "../models/requests/EditGoalRequest";
+import EditHabitRequest from "../models/requests/EditHabitRequest";
 
 export const url: string = "http://ec2-3-83-10-197.compute-1.amazonaws.com:12404/app/better-you";
 // const url: string = "http://192.168.43.105:12404/app/better-you";
@@ -119,6 +121,21 @@ export default class HttpService implements IHttpService {
       });
   }
 
+  async editGoal(goal: EditGoalRequest): Promise<boolean> {
+    return await fetch(`${url}/goal`, {
+      method: "put",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(goal)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      })
+  }
+
   async deleteGoal(id: number): Promise<boolean> {
     return await fetch(`${url}/goal`, {
       method: "delete",
@@ -161,6 +178,21 @@ export default class HttpService implements IHttpService {
       .catch(error => {
         return error;
       });
+  }
+
+  async editHabit(habit: EditHabitRequest): Promise<boolean> {
+    return await fetch(`${url}/habit`, {
+      method: "put",
+      headers: getSafeHeaders(),
+      body: JSON.stringify(habit)
+    })
+      .then(response => response.json())
+      .then(body => {
+        return body;
+      })
+      .catch(error => {
+        return error;
+      })
   }
 
   async deleteHabit(id: number): Promise<boolean> {

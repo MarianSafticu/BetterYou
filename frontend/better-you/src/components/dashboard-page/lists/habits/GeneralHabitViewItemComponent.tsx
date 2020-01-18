@@ -12,14 +12,16 @@ import { Repetition } from "../../../../models/Repetition";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import AddHabitRequest from "../../../../models/requests/AddHabitRequest";
-import { addHabitBegin, deleteHabitBegin } from "../../../../redux/actions/actions";
+import { addHabitBegin, deleteHabitBegin, editHabitBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
+import EditHabitRequest from "../../../../models/requests/EditHabitRequest";
 
 interface IProps {
   onFinnishAction: Function;
   habit?: Habit;
   isDefaultHabit?: boolean;
   addHabit: Function;
+  editHabit: Function;
   deleteHabit: Function;
 }
 
@@ -523,6 +525,7 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     addHabit: (habit: AddHabitRequest) => dispatch(addHabitBegin(habit)),
+    editHabit: (habit: EditHabitRequest) => dispatch(editHabitBegin(habit)),
     deleteHabit: (id: number) => dispatch(deleteHabitBegin(id))
   };
 };

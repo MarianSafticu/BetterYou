@@ -35,7 +35,10 @@ import {
   deleteGoalSuccess,
   deleteGoalError,
   deleteHabitSuccess,
-  deleteHabitError
+  deleteHabitError,
+  editGoalSuccess,
+  editGoalError,
+  editHabitError
 } from "../actions/actions";
 import { setCookie } from "../../services/CookieService";
 import UserDTO from "../../models/UserDTO";
@@ -57,6 +60,8 @@ import Friend from "../../models/Friend";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
+import EditGoalRequest from "../../models/requests/EditGoalRequest";
+import EditHabitRequest from "../../models/requests/EditHabitRequest";
 
 const httpService: IHttpService = HttpService.getInstance();
 
@@ -190,7 +195,15 @@ export function* addGoalHandler(action: AppActionType): IterableIterator<any> {
 
 
 export function* editGoalHandler(action: AppActionType): IterableIterator<any> {
-
+  let goal: EditGoalRequest = action.payload as EditGoalRequest;
+  const response = yield call(httpService.editGoal, goal);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) 
+    // yield put(editGoalSuccess(goal));
+      console.log("hello there");
+    else if(massage) yield put(editGoalError(massage));
+  }
 }
 
 
@@ -268,7 +281,15 @@ export function* addHabitHandler(action: AppActionType): IterableIterator<any> {
 
 
 export function* editHabitHandler(action: AppActionType): IterableIterator<any> {
-
+  let habit: EditHabitRequest = action.payload as EditHabitRequest;
+  const response = yield call(httpService.editHabit, habit);
+  if(response) {
+    const { aBoolean, massage } = response;
+    if (aBoolean) 
+    // yield put(editHabitSuccess(habit));
+      console.log("hello there");
+    else if(massage) yield put(editHabitError(massage));
+  }
 }
 
 

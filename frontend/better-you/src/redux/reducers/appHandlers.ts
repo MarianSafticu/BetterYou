@@ -139,7 +139,7 @@ export function fetchGoalsErrorHandler(oldState: AppState, error: string): AppSt
 
 export function addGoalBeginHandler(oldState: AppState): AppState {
   const newState = { ...oldState };
-  newState.loading = false;
+  newState.loading = true;
   newState.error = "";
   newState.goals = oldState.goals;
   return newState;
@@ -166,14 +166,31 @@ export function addGoalErrorHandler(oldState: AppState, error: string): AppState
 
 export function editGoalBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+
+  let newGoals = newState.goals.map((g: Goal) => {
+    if(g.id === goal.id) {
+      g = {...goal};
+    }
+    return g;
+  });
+  newState.goals = newGoals;
+
   return newState;
 }
 export function editGoalErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
@@ -252,14 +269,31 @@ export function addHabitErrorHandler(oldState: AppState, error: string): AppStat
 
 export function editHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  newState.habits = oldState.habits;
   return newState;
 }
 export function editHabitSuccessHandler(oldState: AppState, habit: Habit): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+
+  let newHabits = newState.habits.map((h: Habit) => {
+    if(h.id === habit.id) {
+      h = {...habit};
+    }
+    return h;
+  });
+  newState.habits = newHabits;
+
   return newState;
 }
 export function editHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.habits = oldState.habits;
   return newState;
 }
 
