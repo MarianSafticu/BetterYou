@@ -9,6 +9,8 @@ import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import FriendRequest from "../../models/FriendRequest";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -303,9 +305,32 @@ export function fetchFriendsErrorHandler(oldState: AppState, error: string): App
   const newState = {...oldState};
   newState.loading = false;
   newState.error = error;
-  newState.defaultGoals = [];
+  newState.friends = [];
   return newState;
 } 
+
+export function fetchFriendRequestsBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+    newState.loading = true;
+    newState.error = "";
+    return newState;
+  }
+  
+  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
+    const newState = {...oldState};
+    newState.loading = false;
+    newState.error = "";
+    newState.friendRequests = friendRequests;
+    return newState;
+  }
+  
+  export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
+    const newState = {...oldState};
+    newState.loading = false;
+    newState.error = error;
+    newState.friendRequests = [];
+    return newState;
+  } 
   
 export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
@@ -325,5 +350,92 @@ export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string)
   newState.loading = false;
   newState.error = error;
   newState.defaultGoals = [];
+  return newState;
+} 
+  
+export function challengeFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function challengeFriendSuccessHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  return newState;
+}
+export function challengeFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  return newState;
+} 
+
+// export function acceptFriendBeginHandler(oldState: AppState): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = "";
+//   newState.friends = oldState.friends;
+//   return newState;
+// }
+// export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = "";
+  
+//   let newGoals = newState.goals.slice();
+//   newGoals.splice(0, 0, goal);
+//   newState.goals = newGoals;
+
+//   return newState;
+// }
+// export function addGoalErrorHandler(oldState: AppState, error: string): AppState {
+//   const newState = { ...oldState };
+//   newState.loading = false;
+//   newState.error = error;
+//   newState.goals = oldState.goals;
+//   return newState;
+// }
+
+
+export function declineFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function declineFriendSuccessHandler(oldState: AppState, username: string): AppState {
+  const newState = {...oldState};
+  newState.friendRequests = newState.friendRequests.filter(req => req.sender.username !== username)
+  newState.error = "";
+  newState.loading = false;
+  return newState;
+}
+export function declineFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  return newState;
+}
+
+export function fetchUsersBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchUsersSuccessHandler(oldState: AppState, users: UserInfoDTO[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.users = users;
+  return newState;
+}
+export function fetchUsersErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.users = [];
   return newState;
 } 

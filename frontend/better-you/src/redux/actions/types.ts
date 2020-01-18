@@ -11,7 +11,9 @@ import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
+import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import Friend from "../../models/Friend";
+import FriendRequest from "../../models/FriendRequest";
 
 export const SET_CURRENT_USER_BEGIN = "SET_CURRENT_USER_BEGIN";
 export const SET_CURRENT_USER_SUCCESS = "SET_CURRENT_USER_SUCCESS";
@@ -70,9 +72,29 @@ export const FETCH_FRIENDS_BEGIN = "FETCH_FRIENDS_BEGIN";
 export const FETCH_FRIENDS_SUCCESS = "FETCH_FRIENDS_SUCCESS";
 export const FETCH_FRIENDS_ERROR = "FETCH_FRIENDS_ERROR";
 
+export const FETCH_FRIEND_REQUESTS_BEGIN = "FETCH_FRIEND_REQUESTS_BEGIN";
+export const FETCH_FRIEND_REQUESTS_SUCCESS = "FETCH_FRIEND_REQUESTS_SUCCESS";
+export const FETCH_FRIEND_REQUESTS_ERROR = "FETCH_FRIEND_REQUESTS_ERROR";
+
 export const FETCH_DEFAULT_GOALS_BEGIN = "FETCH_DEFAULT_GOALS_BEGIN";
 export const FETCH_DEFAULT_GOALS_SUCCESS = "FETCH_DEFAULT_GOALS_SUCCESS";
 export const FETCH_DEFAULT_GOALS_ERROR = "FETCH_DEFAULT_GOALS_ERROR";
+
+export const CHALLENGE_FRIEND_BEGIN = "CHALLENGE_FRIEND_BEGIN";
+export const CHALLENGE_FRIEND_SUCCESS = "CHALLENGE_FRIEND_SUCCESS";
+export const CHALLENGE_FRIEND_ERROR = "CHALLENGE_FRIEND_ERROR";
+
+export const ACCEPT_FRIEND_BEGIN = "ACCEPT_FRIEND_BEGIN";
+export const ACCEPT_FRIEND_SUCCESS = "ACCEPT_FRIEND_SUCCESS";
+export const ACCEPT_FRIEND_ERROR = "ACCEPT_FRIEND_ERROR";
+
+export const DECLINE_FRIEND_BEGIN = "DECLINE_FRIEND_BEGIN";
+export const DECLINE_FRIEND_SUCCESS = "DECLINE_FRIEND_SUCCESS";
+export const DECLINE_FRIEND_ERROR = "DECLINE_FRIEND_ERROR";
+
+export const FETCH_USERS_BEGIN = "FETCH_USERS_BEGIN";
+export const FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS";
+export const FETCH_USERS_ERROR = "FETCH_USERS_ERROR";
 
 export interface SetCurrentUserBegin {
   type: typeof SET_CURRENT_USER_BEGIN;
@@ -256,7 +278,6 @@ export interface SetAppBarItemsList {
   payload: AppBarItem[];
 }
 
-
 export interface FetchFriendsBegin {
   type: typeof FETCH_FRIENDS_BEGIN;
   payload: undefined;
@@ -267,6 +288,19 @@ export interface FetchFriendsSuccess {
 }
 export interface FetchFriendsError {
   type: typeof FETCH_FRIENDS_ERROR;
+   payload: string;
+}
+
+export interface FetchFriendRequestsBegin {
+  type: typeof FETCH_FRIEND_REQUESTS_BEGIN;
+  payload: undefined;
+}
+export interface FetchFriendRequestsSuccess {
+  type: typeof FETCH_FRIEND_REQUESTS_SUCCESS;
+  payload: FriendRequest[];
+}
+export interface FetchFriendRequestsError {
+  type: typeof FETCH_FRIEND_REQUESTS_ERROR;
    payload: string;
 }
 
@@ -282,7 +316,57 @@ export interface FetchDefaultGoalsError {
   type: typeof FETCH_DEFAULT_GOALS_ERROR;
   payload: string;
 }
- 
+
+export interface ChallengeFriendBegin {
+  type: typeof CHALLENGE_FRIEND_BEGIN;
+  payload: ChallengeFriendDTO;
+}
+export interface ChallengeFriendSuccess {
+  type: typeof CHALLENGE_FRIEND_SUCCESS;
+  payload: undefined;
+}
+export interface ChallengeFriendError {
+  type: typeof CHALLENGE_FRIEND_ERROR;
+  payload: string;
+}
+
+export interface AcceptFriendBegin {
+  type: typeof ACCEPT_FRIEND_BEGIN;
+  payload: string;
+}
+export interface AcceptFriendSuccess {
+  type: typeof ACCEPT_FRIEND_SUCCESS;
+  payload: string;
+}
+export interface AcceptFriendError {
+  type: typeof ACCEPT_FRIEND_ERROR;
+  payload: string;
+}
+
+export interface DeclineFriendBegin {
+  type: typeof DECLINE_FRIEND_BEGIN;
+  payload: string;
+}
+export interface DeclineFriendSuccess {
+  type: typeof DECLINE_FRIEND_SUCCESS;
+  payload: string;
+}
+export interface DeclineFriendError {
+  type: typeof DECLINE_FRIEND_ERROR;
+  payload: string;
+}
+export interface FetchUsersBegin {
+  type: typeof FETCH_USERS_BEGIN;
+  payload: string;
+}
+export interface FetchUsersSuccess {
+  type: typeof FETCH_USERS_SUCCESS;
+  payload: UserInfoDTO[];
+}
+export interface FetchUsersError {
+  type: typeof FETCH_USERS_ERROR;
+  payload: string;
+} 
 
 export type AppActionType =
   | SetCurrentUserBegin
@@ -327,6 +411,21 @@ export type AppActionType =
   | FetchFriendsBegin
   | FetchFriendsSuccess
   | FetchFriendsError
+  | FetchFriendRequestsBegin
+  | FetchFriendRequestsSuccess
+  | FetchFriendRequestsError
   | FetchDefaultGoalsBegin
   | FetchDefaultGoalsSuccess
-  | FetchDefaultGoalsError;
+  | FetchDefaultGoalsError
+  | ChallengeFriendBegin
+  | ChallengeFriendSuccess
+  | ChallengeFriendError
+  | AcceptFriendBegin
+  | AcceptFriendSuccess
+  | AcceptFriendError
+  | DeclineFriendBegin
+  | DeclineFriendSuccess
+  | DeclineFriendError
+  | FetchUsersBegin
+  | FetchUsersSuccess
+  | FetchUsersError;
