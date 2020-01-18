@@ -11,6 +11,7 @@ import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
+import ChallengeDTO from "../../models/ChallengeDTO";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -437,5 +438,26 @@ export function fetchUsersErrorHandler(oldState: AppState, error: string): AppSt
   newState.loading = false;
   newState.error = error;
   newState.users = [];
+  return newState;
+} 
+
+export function fetchChallengesBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchChallengesSuccessHandler(oldState: AppState, challenges: ChallengeDTO[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.challenges = challenges;
+  return newState;
+}
+export function fetchChallengesErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.challenges = [];
   return newState;
 } 

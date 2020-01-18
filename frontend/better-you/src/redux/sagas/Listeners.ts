@@ -383,3 +383,16 @@ export function* fetchUsersHandler(action: AppActionType): IterableIterator<any>
     if (massage) yield put(fetchUsersError(massage))
   }
 }
+
+export function* fetchChallengesHandler(action: AppActionType): IterableIterator<any> {
+  let prefix: string = action.payload as string;
+  const response = yield call(httpService.fetchChallenges);
+  if (response) {
+    console.log(response);
+    const { users, massage } = response;
+    if (users) {
+      yield put(fetchUsersSuccess(users));
+    }
+    if (massage) yield put(fetchUsersError(massage))
+  }
+}

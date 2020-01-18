@@ -6,6 +6,7 @@ import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
+import ChallengeDTO from "../../models/ChallengeDTO";
 
 export default interface AppState {
   loading: boolean;
@@ -22,4 +23,5 @@ export default interface AppState {
   appBarItemsList: AppBarItem[];
   defaultGoals: Goal[];
   users: UserInfoDTO[];
+  challenges: ChallengeDTO[];
 }

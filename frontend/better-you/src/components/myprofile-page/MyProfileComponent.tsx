@@ -17,6 +17,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import SettingsIcon from "@material-ui/icons/Settings";
+import ColorizeIcon from '@material-ui/icons/Colorize';
+import SportsKabaddiIcon from '@material-ui/icons/SportsKabaddi';
 import BookIcon from "@material-ui/icons/Book";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { getCookie } from "../../services/CookieService";
@@ -24,6 +26,7 @@ import { getCookie } from "../../services/CookieService";
 import DefaultGoals from "../myprofile-page/lists/default-goals/DefaultGoals";
 import FriendsList from "../myprofile-page/lists/friend/FriendsList";
 import FriendsListRequests from "./lists/friend/FriendsListRequests";
+import ChallengeList from "./lists/challenges/ChallengeList";
 
 interface IProps {
   userInfo: UserDTO | undefined;
@@ -37,19 +40,24 @@ interface IState {
   friends: boolean;
   friends_request: boolean,
   goals: boolean;
+  challenges: boolean
 }
 
 export class MyProfileComponent extends Component<IProps, IState> {
   handleClickFriends = () => {
-    this.setState({ friends: true, goals: false, friends_request: false });
+    this.setState({ friends: true, goals: false, friends_request: false, challenges: false });
   };
 
   handleClickGoals = () => {
-    this.setState({ friends: false, goals: true, friends_request: false });
+    this.setState({ friends: false, goals: true, friends_request: false, challenges: false });
   };
 
   handleClickFriendsRequest = () => {
-    this.setState({ friends: false, goals: false, friends_request: true });
+    this.setState({ friends: false, goals: false, friends_request: true, challenges: false });
+  }
+
+  handleClickChallengesRequest = () => {
+    this.setState({ friends: false, goals: false, friends_request: false, challenges: true });
   }
 
   constructor(props: IProps) {
@@ -63,6 +71,7 @@ export class MyProfileComponent extends Component<IProps, IState> {
           ? this.props.userInfo.profilePicture
           : "../assets/photos/profile-picture-test.jpg",
       profile_name: getCookie("userInfo"),
+      challenges: false
     };
   }
 
@@ -70,7 +79,7 @@ export class MyProfileComponent extends Component<IProps, IState> {
     return (
       <div>
         <Breakpoint large up>
-        <Drawer id="menu" variant="permanent">
+          <Drawer id="menu" variant="permanent">
             <List>
               <ListItem className="item">
                 <img id="avatar" src={this.state.url_picture}></img>
@@ -120,6 +129,21 @@ export class MyProfileComponent extends Component<IProps, IState> {
                 </ListItemIcon>
                 <ListItemText primary="Default Goals" />
               </ListItem>
+
+
+
+              <Divider />
+
+              <ListItem
+                button
+                key="Challenges"
+                className="item"
+                onClick={this.handleClickChallengesRequest}>
+                <ListItemIcon>
+                  <SportsKabaddiIcon fontSize="large" />
+                </ListItemIcon>
+                <ListItemText primary="Challenges" />
+              </ListItem>
             </List>
           </Drawer>
           <div id="content_body">
@@ -143,6 +167,11 @@ export class MyProfileComponent extends Component<IProps, IState> {
                   <FriendsListRequests />
                 </div>
               </div>}
+            {this.state.challenges && (
+              <div>
+                <ChallengeList />
+              </div>
+            )}
           </div>
         </Breakpoint>
 
@@ -209,26 +238,46 @@ export class MyProfileComponent extends Component<IProps, IState> {
                 </ListItemIcon>
                 <ListItemText primary="Default Goals" />
               </ListItem>
+
+
+
+              <Divider />
+
+              <ListItem
+                button
+                key="Challenges"
+                className="item"
+                onClick={this.handleClickChallengesRequest}>
+                <ListItemIcon>
+                  <SportsKabaddiIcon fontSize="large" />
+                </ListItemIcon>
+                <ListItemText primary="Challenges" />
+              </ListItem>
             </List>
           </Drawer>
           <div id="content_body">
-              {this.state.friends && (
-                <div>
-                  <FriendsList />
-                </div>
-              )}
+            {this.state.friends && (
+              <div>
+                <FriendsList />
+              </div>
+            )}
 
-              {this.state.goals && (
-                <div>
-                  <DefaultGoals />
-                </div>
-              )}
+            {this.state.goals && (
+              <div>
+                <DefaultGoals />
+              </div>
+            )}
 
-              {this.state.friends_request && (
-                <div>
-                  <FriendsListRequests/>
-                </div>
-              )}
+            {this.state.friends_request && (
+              <div>
+                <FriendsListRequests />
+              </div>
+            )}
+            {this.state.challenges && (
+              <div>
+                <ChallengeList />
+              </div>
+            )}
           </div>
         </Breakpoint>
         <Breakpoint small down>
@@ -273,7 +322,7 @@ export class MyProfileComponent extends Component<IProps, IState> {
                   <PersonAddIcon fontSize="large" />
                 </ListItemIcon>
               </ListItem>
-              
+
               <ListItem
                 button
                 key="Goals"
@@ -283,6 +332,19 @@ export class MyProfileComponent extends Component<IProps, IState> {
                 <ListItemIcon>
                   <BookIcon fontSize="large" />
                 </ListItemIcon>
+              </ListItem>
+
+              <Divider />
+
+              <ListItem
+                button
+                key="Challenges"
+                className="item"
+                onClick={this.handleClickChallengesRequest}>
+                <ListItemIcon>
+                  <SportsKabaddiIcon fontSize="large" />
+                </ListItemIcon>
+                <ListItemText primary="Challenges" />
               </ListItem>
             </List>
           </Drawer>
@@ -297,11 +359,16 @@ export class MyProfileComponent extends Component<IProps, IState> {
                 <DefaultGoals />
               </div>
             )}
-              {this.state.friends_request && (
-                <div>
-                  <FriendsListRequests/>
-                </div>
-              )}
+            {this.state.friends_request && (
+              <div>
+                <FriendsListRequests />
+              </div>
+            )}
+            {this.state.challenges && (
+              <div>
+                <ChallengeList />
+              </div>
+            )}
           </div>
         </Breakpoint>
       </div>
