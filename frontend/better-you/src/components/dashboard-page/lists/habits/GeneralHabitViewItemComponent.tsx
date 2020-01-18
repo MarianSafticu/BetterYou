@@ -7,12 +7,12 @@ import Delete from "@material-ui/icons/Delete";
 import Close from "@material-ui/icons/Close";
 import Service from "../../../../services/Service";
 import { HabitException } from "../../../../exceptions/HabitException";
-import { goalCategorys, GoalCategory } from "../../../../models/GoalCategorys";
+import { goalCategorys } from "../../../../models/GoalCategorys";
 import { Repetition } from "../../../../models/Repetition";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import AddHabitRequest from "../../../../models/requests/AddHabitRequest";
-import { addHabitBegin } from "../../../../redux/actions/actions";
+import { addHabitBegin, deleteHabitBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
 
 interface IProps {
@@ -20,13 +20,13 @@ interface IProps {
   habit?: Habit;
   isDefaultHabit?: boolean;
   addHabit: Function;
+  deleteHabit: Function;
 }
 
 interface IState {
   habit: Habit;
   edditingIsDisabled: boolean;
   isForNewHabit: boolean;
-  // onSaveHandle: Function;
   habitError: HabitException;
   textFieldVariant: "filled" | "outlined";
   showDelete: boolean;
@@ -314,7 +314,9 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
     });
   };
   onDeleteHandle = () => {
-    console.log("I WANT TO DELETE THIS CRAP");
+    this.props.deleteHabit(this.state.habit.id);
+    this.onClosePopoverDelete();
+    this.props.onFinnishAction();
   };
 
   render() {
@@ -520,7 +522,8 @@ class GeneralHabitViewItemComponent extends Component<IProps, IState> {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    addHabit: (habit: AddHabitRequest) => dispatch(addHabitBegin(habit))
+    addHabit: (habit: AddHabitRequest) => dispatch(addHabitBegin(habit)),
+    deleteHabit: (id: number) => dispatch(deleteHabitBegin(id))
   };
 };
 
