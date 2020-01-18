@@ -12,6 +12,7 @@ import FetchFriendsResponse from "../../models/responses/FetchFriendsResponse";
 import FetchFriendRequestsResponse from "../../models/responses/FetchFriendRequestsResponse";
 import GoalDTO from "../../models/GoalDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
+import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 
 export default interface IHttpService {
   loginUser(requestData: LoginRequest): Promise<LoginResponse>;
@@ -26,7 +27,7 @@ export default interface IHttpService {
   fetchFriendRequests(): Promise<FetchFriendRequestsResponse[]>;
   fetchDefaultGoals(): Promise<GoalDTO[]>;
   challengeFriend(challenge: ChallengeFriendDTO): Promise<boolean>;
-  declineFriendRequest(usernameReceiver: string): Promise<boolean>;
+  declineFriendRequest(usernameReceiver: UsernameRequestDTO): Promise<boolean>;
 }
 
 export function getHeaders() {

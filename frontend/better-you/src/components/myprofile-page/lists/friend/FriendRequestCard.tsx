@@ -4,6 +4,7 @@ import "../../../../assets/scss/profile-page/FriendsListStyle.scss";
 import Friend from "../../../../models/Friend";
 import { acceptFriendBegin, declineFriendBegin } from "../../../../redux/actions/actions";
 import { connect } from "react-redux";
+import UsernameRequestDTO from "../../../../models/UsernameRequestDTO";
 
 interface IProps {
     image: string;
@@ -47,7 +48,10 @@ class FriendRequestCard extends React.Component<IProps, {}> {
     }
 
     handleClickDecline(username: string) {
-        this.props.declineRequest(username);
+        let user: UsernameRequestDTO = {
+            usernameSender: username
+        }
+        this.props.declineRequest(user);
     }
 }
 
