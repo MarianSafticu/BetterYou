@@ -1,16 +1,16 @@
 import AppState from "../store/store";
-import LoginRequest from "../../models/requests/LoginRequest";
 import UserDTO from "../../models/UserDTO";
 import { deleteCookie } from "../../services/CookieService";
-import AddGoalRequest from "../../models/requests/AddGoalRequest";
 import Goal from "../../models/Goal";
 import Habit from "../../models/Habit";
 import { RefObject } from "react";
 import AppBarItem from "../../models/AppBarItem";
 import UserInfoDTO from "../../models/UserInfoDTO";
 import Friend from "../../models/Friend";
+import UsernameRequestDTO from "../../models/UsernameRequestDTO";
 import ChallengeFriendDTO from "../../models/ChallengeFriendDTO";
 import FriendRequest from "../../models/FriendRequest";
+import ChallengeDTO from "../../models/ChallengeDTO";
 
 
 export function setCurrentUserBeginHandler(oldState: AppState): AppState {
@@ -48,6 +48,7 @@ export function unsetCurrentUserHandler(oldState: AppState): AppState {
   return newState;
 }
 
+
 export function setCurrentUserInformationBeginHandler(oldState:AppState):AppState{
   const newState = {...oldState};
   newState.loading = true;
@@ -69,9 +70,6 @@ export function setCurrentUserInformationErrorHandler(oldState:AppState, error:s
   newState.userInformation = undefined;
   return newState;
 }
-
-
-
 
 
 export function registerUserBeginHandler(oldState: AppState): AppState {
@@ -144,7 +142,7 @@ export function fetchGoalsErrorHandler(oldState: AppState, error: string): AppSt
 
 export function addGoalBeginHandler(oldState: AppState): AppState {
   const newState = { ...oldState };
-  newState.loading = false;
+  newState.loading = true;
   newState.error = "";
   newState.goals = oldState.goals;
   return newState;
@@ -171,28 +169,66 @@ export function addGoalErrorHandler(oldState: AppState, error: string): AppState
 
 export function editGoalBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+
+  let newGoals = newState.goals.map((g: Goal) => {
+    if(g.id === goal.id) {
+      let updates: Goal = {
+        id: g.id,
+        groupId: g.groupId,
+        title: g.title,
+        description: g.description,
+        startDate: g.startDate,
+        endDate: new Date(goal.endDate),
+        currentProgress: goal.currentProgress,
+        progressToReach: g.progressToReach,
+        isPublic: goal.isPublic,
+        category: goal.category
+      }
+      g = {...updates};
+    }
+    return g;
+  });
+  newState.goals = newGoals;
+
   return newState;
 }
 export function editGoalErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
 
 export function deleteGoalBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function deleteGoalSuccessHandler(oldState: AppState, id: number): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals.filter(goal => goal.id !== id);
   return newState;
 }
 export function deleteGoalErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
 
@@ -248,30 +284,57 @@ export function addHabitErrorHandler(oldState: AppState, error: string): AppStat
 
 export function editHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  newState.habits = oldState.habits;
   return newState;
 }
 export function editHabitSuccessHandler(oldState: AppState, habit: Habit): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+
+  let newHabits = newState.habits.map((h: Habit) => {
+    if(h.id === habit.id) {
+      h = {...habit}
+    }
+    return h;
+  });
+  newState.habits = newHabits;
+
   return newState;
 }
 export function editHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.habits = oldState.habits;
   return newState;
 }
 
 
 export function deleteHabitBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.goals = oldState.goals;
   return newState;
 }
 export function deleteHabitSuccessHandler(oldState: AppState, id: number): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.habits = oldState.habits.filter(habit => habit.id !== id);
   return newState;
 }
 export function deleteHabitErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.goals = oldState.goals;
   return newState;
 }
+
 
 export function setAppBarSwipeableDrawerHandler(oldState: AppState, refObj: RefObject<unknown> | null):AppState {
   const newState = { ...oldState };
@@ -287,12 +350,11 @@ export function setAppBarItemsListHandler(oldState: AppState, list: AppBarItem[]
 
 
 export function fetchFriendsBeginHandler(oldState: AppState): AppState {
-const newState = {...oldState};
+  const newState = {...oldState};
   newState.loading = true;
   newState.error = "";
   return newState;
 }
-
 export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]): AppState {
   const newState = {...oldState};
   newState.loading = false;
@@ -300,7 +362,6 @@ export function fetchFriendsSuccessHandler(oldState: AppState, friends: Friend[]
   newState.friends = friends;
   return newState;
 }
-
 export function fetchFriendsErrorHandler(oldState: AppState, error: string): AppState {
   const newState = {...oldState};
   newState.loading = false;
@@ -309,29 +370,29 @@ export function fetchFriendsErrorHandler(oldState: AppState, error: string): App
   return newState;
 } 
 
+
 export function fetchFriendRequestsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
-    newState.loading = true;
-    newState.error = "";
-    return newState;
-  }
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.friendRequests = friendRequests;
+  return newState;
+}
+export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.friendRequests = [];
+  return newState;
+} 
   
-  export function fetchFriendRequestsSuccessHandler(oldState: AppState, friendRequests: FriendRequest[]): AppState {
-    const newState = {...oldState};
-    newState.loading = false;
-    newState.error = "";
-    newState.friendRequests = friendRequests;
-    return newState;
-  }
-  
-  export function fetchFriendRequestsErrorHandler(oldState: AppState, error: string): AppState {
-    const newState = {...oldState};
-    newState.loading = false;
-    newState.error = error;
-    newState.friendRequests = [];
-    return newState;
-  } 
-  
+
 export function fetchDefaultGoalsBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
   newState.loading = true;
@@ -353,6 +414,7 @@ export function fetchDefaultGoalsErrorHandler(oldState: AppState, error: string)
   return newState;
 } 
   
+
 export function challengeFriendBeginHandler(oldState: AppState): AppState {
   const newState = {...oldState};
   newState.loading = true;
@@ -372,31 +434,46 @@ export function challengeFriendErrorHandler(oldState: AppState, error: string): 
   return newState;
 } 
 
-// export function acceptFriendBeginHandler(oldState: AppState): AppState {
-//   const newState = { ...oldState };
-//   newState.loading = false;
-//   newState.error = "";
-//   newState.friends = oldState.friends;
-//   return newState;
-// }
-// export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
-//   const newState = { ...oldState };
-//   newState.loading = false;
-//   newState.error = "";
+export function acceptFriendBeginHandler(oldState: AppState): AppState {
+  const newState = { ...oldState };
+  newState.loading = true;
+  newState.error = "";
+  newState.friends = oldState.friends;
+  return newState;
+}
+export function acceptFriendSuccessHandler(oldState: AppState, username: string): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = "";
   
-//   let newGoals = newState.goals.slice();
-//   newGoals.splice(0, 0, goal);
-//   newState.goals = newGoals;
+  let friend: Friend = {
+    id: 0,
+    username: username,
+    profile_name: username,
+    email: "",
+    birthDate: new Date("2000-01-01"),
+    points: 0,
+    verified: true
+}
 
-//   return newState;
-// }
-// export function addGoalErrorHandler(oldState: AppState, error: string): AppState {
-//   const newState = { ...oldState };
-//   newState.loading = false;
-//   newState.error = error;
-//   newState.goals = oldState.goals;
-//   return newState;
-// }
+  let newFriends = newState.friends.slice();
+  newFriends.splice(0, 0, friend);
+  newState.friends = newFriends;
+
+  newState.friendRequests = newState.friendRequests.filter(req => req.sender.username !== username)
+
+  newState.loading = false;
+  newState.error = "";
+
+  return newState;
+}
+export function acceptFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = { ...oldState };
+  newState.loading = false;
+  newState.error = error;
+  newState.friends = oldState.friends;
+  return newState;
+}
 
 
 export function declineFriendBeginHandler(oldState: AppState): AppState {
@@ -437,5 +514,46 @@ export function fetchUsersErrorHandler(oldState: AppState, error: string): AppSt
   newState.loading = false;
   newState.error = error;
   newState.users = [];
+  return newState;
+} 
+
+export function fetchChallengesBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function fetchChallengesSuccessHandler(oldState: AppState, challenges: ChallengeDTO[]): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  newState.challenges = challenges;
+  return newState;
+}
+export function fetchChallengesErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.challenges = [];
+  return newState;
+} 
+
+export function addFriendBeginHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = true;
+  newState.error = "";
+  return newState;
+}
+export function addFriendSuccessHandler(oldState: AppState): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = "";
+  return newState;
+}
+export function addFriendErrorHandler(oldState: AppState, error: string): AppState {
+  const newState = {...oldState};
+  newState.loading = false;
+  newState.error = error;
+  newState.challenges = [];
   return newState;
 } 

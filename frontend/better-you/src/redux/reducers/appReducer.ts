@@ -52,12 +52,21 @@ import {
   CHALLENGE_FRIEND_BEGIN,
   CHALLENGE_FRIEND_SUCCESS,
   CHALLENGE_FRIEND_ERROR,
+  ACCEPT_FRIEND_BEGIN,
+  ACCEPT_FRIEND_SUCCESS,
+  ACCEPT_FRIEND_ERROR,
   DECLINE_FRIEND_BEGIN,
   DECLINE_FRIEND_SUCCESS,
   DECLINE_FRIEND_ERROR,
   FETCH_USERS_BEGIN,
   FETCH_USERS_SUCCESS,
-  FETCH_USERS_ERROR
+  FETCH_USERS_ERROR,
+  FETCH_CHALLENGES_BEGIN,
+  FETCH_CHALLENGES_SUCCESS,
+  FETCH_CHALLENGES_ERROR,
+  ADD_FRIEND_BEGIN,
+  ADD_FRIEND_SUCCESS,
+  ADD_FRIEND_ERROR
 } from "../actions/types";
 import {
   setCurrentUserBeginHandler,
@@ -111,12 +120,21 @@ import {
   challengeFriendBeginHandler,
   challengeFriendSuccessHandler,
   challengeFriendErrorHandler,
+  acceptFriendBeginHandler,
+  acceptFriendSuccessHandler,
+  acceptFriendErrorHandler,
   declineFriendBeginHandler,
   declineFriendSuccessHandler,
   declineFriendErrorHandler,
   fetchUsersBeginHandler,
   fetchUsersSuccessHandler,
-  fetchUsersErrorHandler
+  fetchUsersErrorHandler,
+  fetchChallengesBeginHandler,
+  fetchChallengesSuccessHandler,
+  fetchChallengesErrorHandler,
+  addFriendBeginHandler,
+  addFriendSuccessHandler,
+  addFriendErrorHandler
 } from "./appHandlers";
 import { setCurrentUserInformationError } from "../actions/actions";
 
@@ -136,6 +154,7 @@ export const initialState: AppState = {
   appBarItemsList: [],
   defaultGoals: [],
   users: [],
+  challenges: []
 };
 
 
@@ -253,14 +272,21 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
       return fetchDefaultGoalsSuccessHandler(state, action.payload);
     case FETCH_DEFAULT_GOALS_ERROR:
       return fetchDefaultGoalsErrorHandler(state, action.payload);
-      
+
     case CHALLENGE_FRIEND_BEGIN:
       return challengeFriendBeginHandler(state);
     case CHALLENGE_FRIEND_SUCCESS:
       return challengeFriendSuccessHandler(state);
     case CHALLENGE_FRIEND_ERROR:
       return challengeFriendErrorHandler(state, action.payload);
-      
+
+    case ACCEPT_FRIEND_BEGIN:
+      return acceptFriendBeginHandler(state);
+    case ACCEPT_FRIEND_SUCCESS:
+      return acceptFriendSuccessHandler(state, action.payload);
+    case ACCEPT_FRIEND_ERROR:
+      return acceptFriendErrorHandler(state, action.payload);
+
     case DECLINE_FRIEND_BEGIN:
       return declineFriendBeginHandler(state);
     case DECLINE_FRIEND_SUCCESS:
@@ -273,7 +299,22 @@ const appReducer = (state = initialState, action: AppActionType): AppState => {
     case FETCH_USERS_SUCCESS:
       return fetchUsersSuccessHandler(state, action.payload);
     case FETCH_USERS_ERROR:
-      return fetchUsersErrorHandler(state, action.payload);  
+      return fetchUsersErrorHandler(state, action.payload);
+
+    case FETCH_CHALLENGES_BEGIN:
+      return fetchChallengesBeginHandler(state);
+    case FETCH_CHALLENGES_SUCCESS:
+      return fetchChallengesSuccessHandler(state, action.payload);
+    case FETCH_CHALLENGES_ERROR:
+      return fetchChallengesErrorHandler(state, action.payload);
+
+    case ADD_FRIEND_BEGIN:
+      return addFriendBeginHandler(state);
+    case ADD_FRIEND_SUCCESS:
+      return addFriendSuccessHandler(state);
+    case ADD_FRIEND_ERROR:
+      return addFriendErrorHandler(state, action.payload);
+
 
     default:
       return state;
