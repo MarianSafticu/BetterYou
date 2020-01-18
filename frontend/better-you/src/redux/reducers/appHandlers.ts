@@ -179,6 +179,8 @@ export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState
   newState.loading = false;
   newState.error = "";
 
+  console.log(goal);
+
   let newGoals = newState.goals.map((g: Goal) => {
     if(g.id === goal.id) {
       let updates: Goal = {
@@ -191,7 +193,7 @@ export function editGoalSuccessHandler(oldState: AppState, goal: Goal): AppState
         currentProgress: goal.currentProgress,
         progressToReach: g.progressToReach,
         isPublic: goal.isPublic,
-        category: goal.category
+        category: g.category
       }
       g = {...updates};
     }

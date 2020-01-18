@@ -5,10 +5,6 @@ export interface GoalCategory{
 
 export const goalCategorys: GoalCategory[] = [
 {
-    category: "none",
-    color: "#e9eff2"
-},
-{
     category: "educational",
     color: "#fcec03"
 },

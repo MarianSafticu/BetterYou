@@ -113,7 +113,7 @@ class GoalCard extends React.Component<IProps, IState> {
       <Card className="card-container">
         <div
           className="category"
-          style={{ backgroundColor: this.state.goal.category.color }}
+          style={{ backgroundColor: this.props.goal.category.color }}
         />
         <div className="MuiButtonBase-root MuiCardActionArea-root title_container">
           <div className="title" onClick={this.handleOpneGoal}>

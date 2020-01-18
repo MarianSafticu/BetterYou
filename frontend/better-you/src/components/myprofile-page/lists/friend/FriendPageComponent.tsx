@@ -56,11 +56,7 @@ class FriendPageComponent extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className="goallist-container-div">
-          <GoalList isReadOnly={true} />
-        </div>
-
-        <div className="goallist-container-div">
-          <GoalList isReadOnly={true} />
+          <GoalList isReadOnly={true} forUser={this.state.user.username}/>
         </div>
       </div>
     );
